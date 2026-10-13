@@ -1,0 +1,20 @@
+\subsection{Kiến trúc ba lớp và chia module}
+\label{sec:layered-architecture}
+
+\begin{guide}
+\guidepart{Nội dung}
+\begin{compactitem}
+    \item Presentation Layer: UI component và quản lý trạng thái (Provider, Bloc, Redux, \ldots tùy framework chọn ở mục~\ref{sec:platform-selection}).
+    \item Business Logic Layer (Domain): xác thực người dùng, kiểm tra dữ liệu form, quy tắc nghiệp vụ riêng cho Video, Audio, News và Game.
+    \item Data Layer: lưu trữ cục bộ (Local Storage) và nguồn dữ liệu từ xa (Remote Data Sources).
+    \item Cách chia module: mỗi phân hệ là một module riêng, cùng các module dùng chung (tài khoản, trình phát media, mạng).
+\end{compactitem}
+\guidepart{Câu hỏi cần trả lời}
+\begin{compactitem}
+    \item Các lớp phụ thuộc nhau theo chiều nào? Lớp Domain có phụ thuộc vào framework giao diện không?
+    \item Dữ liệu nào được lưu cục bộ, dữ liệu nào luôn lấy từ server, và hai nguồn được đồng bộ ra sao?
+    \item Muốn thêm một phân hệ mới (ví dụ podcast) thì cần thay đổi những module nào?
+\end{compactitem}
+\guidepart{Hình/bảng nên có}
+Sơ đồ kiến trúc 3 lớp, sơ đồ phụ thuộc giữa các module.
+\end{guide}

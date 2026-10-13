@@ -1,9 +1,47 @@
 % References (biblatex + biber, style IEEE). Cite with \cite{key}.
-% Sample entry, cited in sections/1-introduction/overview.tex. Remove it once the report has real references.
+% Standards and guidelines named in the outline, cited from the "Hướng dẫn viết" boxes. Add urldate = {YYYY-MM-DD}
+% (the day you read the page) to @online entries once the report cites them in its own text.
+% @online entries need organization (the website name): without it the IEEE style puts the space inside the closing quote.
 
-@online{android-guide,
-  author  = {{Google}},
-  title   = {Guide to app architecture},
-  url     = {https://developer.android.com/topic/architecture},
-  urldate = {2026-10-13}
+@manual{ieee1016,
+  organization = {{IEEE}},
+  title        = {{IEEE Standard for Information Technology--Systems Design--Software Design Descriptions}},
+  note         = {IEEE Std 1016-2009},
+  year         = {2009},
+  doi          = {10.1109/IEEESTD.2009.5167255}
+}
+
+@online{material3,
+  title        = {{Material Design 3}},
+  organization = {Google},
+  url          = {https://m3.material.io/}
+}
+
+@online{apple-hig,
+  title        = {{Human Interface Guidelines}},
+  organization = {Apple Developer},
+  url          = {https://developer.apple.com/design/human-interface-guidelines/}
+}
+
+@online{wcag22,
+  title        = {{Web Content Accessibility Guidelines (WCAG) 2.2}},
+  organization = {World Wide Web Consortium ({W3C})},
+  date         = {2023-10-05},
+  url          = {https://www.w3.org/TR/WCAG22/}
+}
+
+@online{nielsen-heuristics,
+  author       = {Nielsen, Jakob},
+  title        = {10 Usability Heuristics for User Interface Design},
+  organization = {Nielsen Norman Group},
+  date         = {1994-04-24},
+  url          = {https://www.nngroup.com/articles/ten-usability-heuristics/}
+}
+
+@book{saffer2013,
+  author    = {Saffer, Dan},
+  title     = {Microinteractions: Designing with Details},
+  publisher = {O'Reilly Media},
+  location  = {Sebastopol, CA},
+  year      = {2013}
 }
