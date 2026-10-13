@@ -14,7 +14,11 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Front matter
+% The titlepage environment resets the page counter, so the title page and the table of contents would both be page 1:
+% two PDF pages labeled "1" and links to page 1 jumping to the title page. Number the title page "a" (never printed) instead.
+\pagenumbering{alph}
 \input{frontmatter/titlepage}
+\pagenumbering{arabic}
 \pagebreak
 \tableofcontents
 \pagebreak
