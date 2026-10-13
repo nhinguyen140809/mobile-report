@@ -14,13 +14,17 @@ Submission/Release của từng giai đoạn được lưu tại trang [Releases
 ├── metadata.tex              # tên môn học, mã môn, tên đề tài, giai đoạn, giảng viên, sinh viên, năm
 ├── refs.bib                  # tài liệu tham khảo (biblatex + biber, style IEEE)
 ├── styles/
-│   └── preamble.tex          # khai báo package, layout trang, header/footer, định dạng heading
+│   ├── preamble.tex          # khai báo package, layout trang, header/footer, định dạng heading
+│   └── guide.tex             # khung "Hướng dẫn viết" trong mỗi subsection
 ├── frontmatter/              # trang bìa, lời cảm ơn
 ├── sections/
-│   ├── 1-introduction/
+│   ├── 1-project-overview/   # Phần 1: tổng quan tài liệu và chiến lược sản phẩm
 │   │   ├── main.tex          # \section{...} và \input các subsection của section
-│   │   └── overview.tex
-│   └── ...
+│   │   ├── document-control.tex
+│   │   └── ...
+│   ├── 2-product-scope/      # Phần 2: phạm vi sản phẩm và yêu cầu tính năng
+│   ├── 3-ui-ux-design/       # Phần 3: thiết kế trải nghiệm người dùng và giao diện
+│   └── 4-technical-architecture/  # Phần 4: kiến trúc kỹ thuật và phát triển ứng dụng
 ├── figures/                  # hình minh họa, chia folder theo section; file source nằm trong folder src/ của từng section
 ├── scripts/build.py          # script compile
 ├── .latexmkrc                # cấu hình build dùng chung cho local, VS Code và CI
@@ -33,41 +37,64 @@ Convention:
 - Mỗi section cấp 1 là một thư mục `sections/<order>-<name>/`. File `main.tex` của section chứa lệnh `\section{}` và `\input` các subsection, mỗi subsection nằm trong một file riêng.
 - Hình minh họa đặt trong `figures/<section name>/`. Preamble đã khai báo `\graphicspath{{figures/}}`, vì vậy đường dẫn trong `\includegraphics` chỉ cần tính từ `figures/`.
 - Mọi đường dẫn trong `\input` và `\include` đều tính từ thư mục gốc của repo, kể cả khi lệnh nằm trong file của một section.
+- Tiêu đề viết hoa chữ cái đầu như một câu bình thường (`Phân tích thị trường và đối thủ cạnh tranh`, không viết `Phân tích Thị trường`). Thuật ngữ quen dùng bằng tiếng Anh (MVP, User Flows, Design System, Accessibility, ...) giữ nguyên tiếng Anh, không dịch và không ghi thêm bản dịch trong ngoặc.
+- Mỗi section và subsection có `\label{sec:<tên file>}` ngay dưới tiêu đề, ví dụ `\label{sec:user-personas}` cho `user-personas.tex`. Tham chiếu tới một mục bằng `mục~\ref{sec:user-personas}`, tới một phần bằng `Phần~\ref{sec:ui-ux-design}`.
 - Tên môn học, mã môn, tên đề tài, giai đoạn, giảng viên, sinh viên và năm chỉ được khai báo tại `metadata.tex`. Trang bìa, footer của mỗi trang và PDF properties đều lấy thông tin từ file này. Chẳng hạn, trước khi nộp giai đoạn 2, chỉ cần sửa `\newcommand{\reportphase}{Giai đoạn 2}` thay vì tìm và sửa từng vị trí.
 - Với hình vẽ bằng công cụ như draw.io hay Excalidraw, cần commit cả file source để có thể chỉnh sửa về sau (xem mục [Figures và file source của diagram](#figures-và-file-source-của-diagram)).
 - Commit message theo Conventional Commits với tập `type` và `scope` riêng cho project, xem [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Section `1-introduction` hiện tại chỉ là nội dung mẫu để minh họa cách chèn hình, `\ref` và `\cite`. Khi viết report, thay nội dung của section này và xóa entry mẫu `android-guide` trong `refs.bib`.
-
-Ví dụ, để thêm section 2 về thiết kế hệ thống:
+Ví dụ, để thêm section 5 về kiểm thử:
 
 ```latex
-% sections/2-system-design/main.tex
-\section{Thiết kế hệ thống}
-\input{sections/2-system-design/architecture}
-\input{sections/2-system-design/database}
+% sections/5-testing/main.tex
+\section{Kiểm thử}
+\label{sec:testing}
 
-% sections/2-system-design/architecture.tex
-\subsection{Kiến trúc tổng quan}
+\input{sections/5-testing/test-plan}
+\input{sections/5-testing/results}
+
+% sections/5-testing/test-plan.tex
+\subsection{Kế hoạch kiểm thử}
+\label{sec:test-plan}
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{system-design/architecture.pdf} % file tại figures/system-design/architecture.pdf
-    \caption{Kiến trúc tổng quan của ứng dụng}
-    \label{fig:architecture}
+    \includegraphics[width=0.8\linewidth]{testing/test-flow.pdf} % file tại figures/testing/test-flow.pdf
+    \caption{Quy trình kiểm thử}
+    \label{fig:test-flow}
 \end{figure}
 ```
 
-Sau đó, thêm `\include{sections/2-system-design/main}` vào phần Sections của `main.tex` tại vị trí tương ứng.
+Sau đó, thêm `\include{sections/5-testing/main}` vào phần Sections của `main.tex` tại vị trí tương ứng.
+
+### Khung "Hướng dẫn viết"
+
+Mỗi section và subsection hiện có một khung **Hướng dẫn viết** (môi trường `guide`, định nghĩa trong `styles/guide.tex`). Khung ghi phần đó cần trình bày nội dung gì, phải trả lời những câu hỏi nào và nên có hình hoặc bảng gì. Khi viết, đặt nội dung bên dưới khung. Viết xong subsection nào thì xóa khung của subsection đó:
+
+```latex
+\subsection{User Personas}
+\label{sec:user-personas}
+
+\begin{guide}   % xóa cả khối guide khi subsection đã viết xong
+...
+\end{guide}
+
+Nội dung của subsection.
+```
+
+Để xem report khi không có các khung, đổi `\showguidestrue` thành `\showguidesfalse` trong `metadata.tex`. Trước khi tạo checkpoint, nên xóa hẳn các khung thay vì chỉ ẩn để source không còn ghi chú nội bộ.
+
+Các khung có trích dẫn một số chuẩn được nhắc tới trong outline, đã khai báo sẵn trong `refs.bib` (IEEE 1016, Material Design 3, Apple Human Interface Guidelines, WCAG 2.2, 10 nguyên lý của Nielsen, mô hình micro-interaction của Saffer). Mục References chỉ in các tài liệu được `\cite`, nên khi xóa hoặc ẩn khung, cần trích dẫn lại trong nội dung những tài liệu thực sự được dùng.
 
 ### Figures và file source của diagram
 
 Khi compile bằng `pdflatex`, LaTeX chỉ nhận hình ở định dạng PDF, PNG và JPG. Diagram nên được export sang PDF vì đây là định dạng vector, phóng to không bị vỡ. Tuy nhiên, file export không thể chỉnh sửa lại, nên file source của diagram cần được commit kèm theo (nếu có) và đặt trong thư mục `src/` của thư mục hình tương ứng:
 
 ```text
-figures/system-design/
-├── architecture.pdf          # file export, dùng trong \includegraphics{system-design/architecture.pdf}
+figures/ui-ux-design/
+├── user-flow.pdf             # file export, dùng trong \includegraphics{ui-ux-design/user-flow.pdf}
 └── src/
-    └── architecture.drawio   # file source, mở bằng draw.io để chỉnh sửa, sau đó export ghi đè file PDF
+    └── user-flow.drawio      # file source, mở bằng draw.io để chỉnh sửa, sau đó export ghi đè file PDF
 ```
 
 Một số lưu ý khi export:
@@ -141,7 +168,7 @@ python scripts/build.py clean    # xóa thư mục build/ và main.pdf
 
 File PDF được tạo tại `main.pdf` ở thư mục gốc để dễ tìm, còn các file trung gian trong quá trình compile (`.aux`, `.log`, `.bbl`, ...) nằm trong `build/` để source tree không lẫn các file sinh ra. Cả hai đều đã được đưa vào `.gitignore`.
 
-Khi compile lỗi, script in ra các dòng lỗi kèm tên file và số dòng, ví dụ `sections/1-introduction/overview.tex:12: Undefined control sequence`. Log đầy đủ nằm tại `build/main.log`.
+Khi compile lỗi, script in ra các dòng lỗi kèm tên file và số dòng, ví dụ `sections/1-project-overview/problem-statement.tex:12: Undefined control sequence`. Log đầy đủ nằm tại `build/main.log`.
 
 Build cũng được xem là failed khi có `\ref` hoặc `\cite` không resolve được (hiển thị thành "??" trong PDF), label bị định nghĩa trùng, hoặc ký tự không có trong font. Khi đó PDF vẫn được tạo, nhưng cả script lẫn CI đều báo lỗi để những lỗi này không lọt vào submission. Ví dụ, nếu dùng `\cite{wang2024}` trong khi `refs.bib` không có key `wang2024`, script sẽ in ra `Citation 'wang2024' on page 4 undefined`.
 
@@ -167,7 +194,7 @@ Script, VS Code và CI đều dùng `pdflatex` qua `.latexmkrc`. Nếu mở proj
 
 `latexmk` tự động đọc file `.latexmkrc` trong working directory, vì vậy script, VS Code và CI đều build với cùng một cấu hình: dùng `pdflatex` và `biber`, xuất PDF ra thư mục gốc và đặt file trung gian vào `build/`. Khi cần thay đổi cách build, chỉ cần sửa file này.
 
-Ngoài ra, file này tạo sẵn folder tree bên trong `build/`. Lệnh `\include{sections/1-introduction/main}` ghi file `.aux` vào `build/sections/1-introduction/`. `pdflatex` của MiKTeX tự tạo thư mục này, nhưng `pdflatex` của TeX Live (dùng trên CI, macOS và Linux) thì không, dẫn đến lỗi `I can't write on file`. Tương tự, TeX Live không hỗ trợ option `-aux-directory` để tách file trung gian khỏi PDF, nên `.latexmkrc` bật `$emulate_aux`: `latexmk` build toàn bộ vào `build/`, sau đó copy PDF ra thư mục gốc.
+Ngoài ra, file này tạo sẵn folder tree bên trong `build/`. Lệnh `\include{sections/1-project-overview/main}` ghi file `.aux` vào `build/sections/1-project-overview/`. `pdflatex` của MiKTeX tự tạo thư mục này, nhưng `pdflatex` của TeX Live (dùng trên CI, macOS và Linux) thì không, dẫn đến lỗi `I can't write on file`. Tương tự, TeX Live không hỗ trợ option `-aux-directory` để tách file trung gian khỏi PDF, nên `.latexmkrc` bật `$emulate_aux`: `latexmk` build toàn bộ vào `build/`, sau đó copy PDF ra thư mục gốc.
 
 ## CI/CD
 
