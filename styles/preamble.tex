@@ -13,6 +13,19 @@
 \usepackage{vntex}
 \usepackage[english]{babel}
 \usepackage{csquotes}
+% csquotes knows the quote glyphs of T1 but not of T5, which puts them in the same slots (see t5enc.def). Without these,
+% csquotes warns "No space factor codes for 'T5' encoding" and biblatex misplaces spaces and periods around quoted titles.
+\DeclareQuoteGlyph{T5}{13}% = \quotesinglbase
+\DeclareQuoteGlyph{T5}{14}% = \guilsinglleft
+\DeclareQuoteGlyph{T5}{15}% = \guilsinglright
+\DeclareQuoteGlyph{T5}{16}% = \textquotedblleft
+\DeclareQuoteGlyph{T5}{17}% = \textquotedblright
+\DeclareQuoteGlyph{T5}{18}% = \quotedblbase
+\DeclareQuoteGlyph{T5}{19}% = \guillemotleft
+\DeclareQuoteGlyph{T5}{20}% = \guillemotright
+\DeclareQuoteGlyph{T5}{34}% = \textquotedbl
+\DeclareQuoteGlyph{T5}{39}% = \textquoteright
+\DeclareQuoteGlyph{T5}{96}% = \textquoteleft
 \usepackage{etoolbox}
 % \usepackage{enumitem}
 \usepackage{booktabs}
@@ -108,6 +121,12 @@ sensitive=false, morecomment=[l]{--}, morecomment=[s]{/*}{*/}, morestring=[b]', 
   }
 }
 \addbibresource{refs.bib}
+% Long titles and URLs in the narrow bibliography column overflow into the margin otherwise:
+% allow extra interword stretch and line breaks after any character of a URL.
+\appto{\bibsetup}{\emergencystretch=3em}
+\setcounter{biburlnumpenalty}{9000}
+\setcounter{biburllcpenalty}{9000}
+\setcounter{biburlucpenalty}{9000}
 
 \usepackage{hyperref}
 \usepackage{indentfirst}
