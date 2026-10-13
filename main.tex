@@ -1,0 +1,41 @@
+% The template uses vntex with the T5 font encoding, which only works with pdfLaTeX.
+% XeLaTeX and LuaLaTeX silently drop Vietnamese letters (Đ, ạ, ệ, ...), so stop early with a clear message instead.
+\RequirePackage{iftex}
+\ifpdftex\else
+  \errmessage{This template uses vntex (T5 font encoding) and must be compiled with pdfLaTeX, not XeLaTeX or LuaLaTeX. On Overleaf: Menu > Compiler > pdfLaTeX}
+  \expandafter\stop
+\fi
+
+\documentclass[a4paper, 12pt]{article}
+\input{metadata}
+\input{styles/preamble}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Front matter
+\input{frontmatter/titlepage}
+\pagebreak
+\tableofcontents
+\pagebreak
+
+\addcontentsline{toc}{section}{\listfigurename}
+\listoffigures
+\addcontentsline{toc}{section}{\listtablename}
+\listoftables
+\pagebreak
+
+\renewcommand{\arraystretch}{1.5} % line spacing in table
+\setlength{\LTpre}{0pt}
+\setlength{\LTpost}{0pt}
+
+\include{frontmatter/acknowledgement}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Sections
+\include{sections/1-introduction/main}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Back matter
+\printbibliography[heading=bibintoc, title={References}]
+\end{document}
