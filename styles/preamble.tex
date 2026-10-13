@@ -37,8 +37,9 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta, positioning}
 \usepackage{listings}
-% headheight fits the logo in the page header, otherwise fancyhdr warns on every page
-\geometry{top=2cm, bottom=3cm, left=2cm, right=2cm, headheight=44pt}
+% top/bottom are the margins of the body text. The header (logo, 9.5mm tall) sits headsep above the body
+% and the footer baseline footskip below it, so that both stay about 15mm away from the paper edge.
+\geometry{top=3cm, bottom=2.5cm, left=2cm, right=2cm, headheight=10mm, headsep=5mm, footskip=10mm}
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
@@ -121,12 +122,10 @@ sensitive=false, morecomment=[l]{--}, morecomment=[s]{/*}{*/}, morestring=[b]', 
 \AtBeginDocument{\renewcommand{\listtablename}{Danh sách bảng biểu}}
 \pagestyle{fancy}
 \fancyhead{}
-\fancyhead[L]{ \begin{tabular}{ll}\begin{picture}(10,15)(0,0)\put(0,-6){\includegraphics[width=8mm, height=8mm]{hcmut.png}}
-%\put(0,-8){\epsfig{width=10mm,figure=hcmut.eps}}
-\end{picture}&
-%\includegraphics[width=8mm, height=8mm]{hcmut.png} & %
-\begin{tabular}{l}\small \textbf{Trường Đại học Bách khoa - ĐHQG-HCM}\\\end{tabular}\end{tabular} }
-\fancyhead[R]{ \begin{tabular}{l}\tiny \bf \\ \tiny \bf\end{tabular} }
+% Logo and university name, built without tabular so that \arraystretch (changed in main.tex) cannot move the header.
+% The logo sits 2.5mm below the text baseline, and the declared 4mm depth keeps a 1.5mm gap above the header rule.
+\fancyhead[L]{\raisebox{-2.5mm}[5.5mm][4mm]{\includegraphics[width=8mm, height=8mm]{hcmut.png}}\hspace{2mm}%
+\small\textbf{Trường Đại học Bách khoa - ĐHQG-HCM}}
 \fancyfoot{} % clear all footer fields
 \fancyfoot[L]{\scriptsize \textbf{\coursename{} (\coursecode)}}
 \fancyfoot[R]{\scriptsize Page {\thepage}/\pageref{LastPage}}
