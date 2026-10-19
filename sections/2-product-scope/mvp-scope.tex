@@ -19,7 +19,7 @@
 Bảng phạm vi MVP: Phân hệ -- Tính năng -- Mức ưu tiên (Must, Should, Could) -- Trong hay ngoài MVP.
 \end{guide}
 
-Nội dung dưới đây trình bày \textbf{ba phương án phạm vi MVP} để nhóm thảo luận và chốt trong buổi tối nay, kèm đề xuất của người soạn. Nguyên tắc chung cho cả ba phương án: bốn phân hệ đều phải hiện diện (đề bài yêu cầu cả 4), và MVP phải \textit{kiểm chứng được USP} --~nghĩa là ít nhất một trụ Winning Zone của từng nhóm trụ phải chạy được end-to-end, thay vì chỉ là một app ``xem được nhạc được''. Mã tính năng tham chiếu bảng~\ref{tab:feature-pool}; các tính năng đều truy vết được về pain point ở mục~\ref{sec:problem-statement} hoặc nhân tố Winning Zone ở bảng~\ref{tab:winning-zone}.
+Sau buổi thảo luận nhóm, \textbf{Phương án 2 (``Cân bằng'') đã được chốt} làm phạm vi MVP chính thức. Bản demo HTML_OneSpace_ v4 đã xác nhận khả thi của toàn bộ tính năng trong phương án này. Dưới đây vẫn giữ đủ ba phương án để thể hiện phân tích so sánh (đối với yêu cầu môn học), kèm nguyên tắc chung: bốn phân hệ đều phải hiện diện (đề bài yêu cầu cả 4), và MVP phải \textit{kiểm chứng được USP}~--~nghĩa là ít nhất một trụ Winning Zone của từng nhóm trụ phải chạy được end-to-end, thay vì chỉ là một app ``xem được nhạc được''. Mã tính năng tham chiếu bảng~\ref{tab:feature-pool}; các tính năng đều truy vết được về pain point ở mục~\ref{sec:problem-statement} hoặc nhân tố Winning Zone ở bảng~\ref{tab:winning-zone}.
 
 \textbf{Phương án 1~--~``Trục xanh'' (seamless spine).} Mỗi phân hệ một luồng cơ bản, chỉ giữ các trụ USP thiết yếu. Nhỏ nhất, an toàn nhất về tiến độ.
 
@@ -37,7 +37,7 @@ Nội dung dưới đây trình bày \textbf{ba phương án phạm vi MVP} đ�
 
 Đánh giá: kiểm chứng được W1 (dock xuyên suốt), W2 (PIP, nghe nhạc khi đọc), W4 (đoán bài hát) và W5 (điểm thưởng nền). Thiếu W3 (converting) và W6~--~USP thiếu một trụ, khó hiện trọn lời hứa ``chuyển hoá hình thức nội dung''.
 
-\textbf{Phương án 2~--~``Cân bằng'' (đề xuất).} Phương án 1 cộng thêm phần ``linh hồn'' của sản phẩm: converting một chiều, quiz tin tức và gamification mức vừa.
+\textbf{Phương án 2~--~``Cân bằng'' (\textbf{đã chốt}).} Phương án 1 cộng thêm phần ``linh hồn'' của sản phẩm: converting một chiều, quiz tin tức và gamification mức vừa. Toàn bộ tính năng trong phương án này đã được xác nhận khả thi qua demo OneSpace v4.
 
 \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{1.9cm} >{\raggedright\arraybackslash}X}
     \toprule
@@ -51,9 +51,9 @@ Nội dung dưới đây trình bày \textbf{ba phương án phạm vi MVP} đ�
     \bottomrule
 \end{tabularx}
 
-Đánh giá: đủ cả W1--W5; khối lượng tăng vừa phải vì converting chỉ chọn \textit{một} chiều. Điểm cần quyết trong buổi họp: chiều converting nào vào MVP~--~\textit{nghe tin} (TTS) hay \textit{trích mp3 từ video} (F-VID-10 + F-MUS-07)? Cả hai đều hợp lệ; đề xuất ban đầu là nghe tin TTS vì không chạm vấn đề trích xuất nội dung video, nhưng nếu nhóm muốn nhấn đúng ý tưởng gốc ``nhấn giữ video ra mp3'' thì hoán đổi vị trí cho nhau. Hai tính năng này có thể hoán đổi cho nhau trong cùng phương án mà không đổi tổng khối lượng nhiều.
+Đánh giá: đủ cả W1--W5; khối lượng tăng vừa phải vì converting chọn cả hai chiều (nghe tin TTS + trích mp3)~--~cả hai đều đã chạy được trong demo v4. Phương án 2 là \textbf{phạm vi MVP chính thức} của OneSpace.
 
-\textbf{Phương án 3~--~``Tham vọng''.} Phương án 2 cộng thêm các trụ cột cuối: chỉ chọn nếu tiến độ cho phép, vì mỗi mục đều là một Major Projects.
+\textbf{Phương án 3~--~``Tham vọng'' (stretch goals).} Phương án 2 cộng thêm các trụ cột cuối; giữ làm \textbf{danh sách dự phòng} nếu tiến độ cho phép, vì mỗi mục đều là một Major Projects~--~chỉ làm sau khi tất cả tính năng của Phương án 2 hoàn tất và ổn định.
 
 \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{1.9cm} >{\raggedright\arraybackslash}X}
     \toprule
@@ -307,18 +307,18 @@ FOREGROUND\_SERVICE + mediaPlayback & Nhạc nền (F-MUS-03) & Tại lần đ�
 
 \textit{(6) Ước lượng thô khối lượng (đơn vị tuần-người, sai số lớn, chỉ để so sánh phương án).} Media engine + dock + audio focus: 3--4 tuần-người, làm trước vì giữ trụ W1--W2; bốn phân hệ UI: khoảng 1,5--2 mỗi phân hệ; hệ điểm + nhiệm vụ + pet mức tối giản: 1,5--2; TTS nghe tin: 1--2; mỗi minigame cụ thể: 1--2; PIP + ma trận case C1--C9: 1--1,5. Với quy mô nhóm 3--4 người làm 8--10 tuần, Phương án 2 nằm vừa vặn nếu không trượt vào các mục của Phương án 3.
 
-\textbf{Việc nhóm cần chốt trong buổi thảo luận tối nay} (danh sách này là agenda đề xuất):
+\textbf{Kết quả chốt phạm vi MVP:}
 
 \begin{enumerate}
-    \item Chọn phương án MVP (1, 2 hay 3), hoặc điều chỉnh danh mục của một phương án.
-    \item Chốt \textbf{nguồn nội dung thực tế} cho cả 4 phân hệ: tự dựng catalog mẫu trong phạm vi môn học, hay dùng API công khai (ví dụ public news API, kho clip tự upload)? Đây là quyết định kéo theo tính hợp pháp của trích mp3 và việc TTS đọc bài báo.
-    \item Chốt chiều \textbf{converting} cho MVP: nghe tin TTS, trích mp3 từ video, hoặc cả hai nếu dư thời gian.
-    \item Chốt \textbf{mức gamification}: điểm + nhiệm vụ + streak là bắt buộc; pet v1 hay v2; cửa hàng đổi quà gồm những gì.
-    \item Chốt có hay không \textbf{chế độ khách} (F-COM-18) và chiều đăng nhập (OTP, Google Sign-In, hay cả hai).
-    \item Chốt ngưỡng các chỉ số trong bảng~\ref{tab:mvp-metrics}: tiêu chí ``MVP thành công'' của nhóm.
-    \item Phân công: mỗi thành viên nhận module nào trong Phần~\ref{sec:technical-architecture} để câu chuyện MVP tách việc được rõ ngay trong buổi.
-    \item Chốt \textbf{popup xung đột} (case C1): tập lựa chọn gồm những gì, và chính sách nhớ là theo từng cặp nội dung hay toàn cục.
-    \item Chốt \textbf{PIP} (case C3): tự thu nhỏ khi rời tab hay phải bấm nút; và xác nhận quy tắc ``tối đa 2 luồng có tiếng'' (case C9).
-    \item Chốt \textbf{mức duck mặc định} (case C5), hành vi sau cuộc gọi, khi rút tai nghe và khi mất mạng.
+    \item \textbf{Chọn phương án MVP:} \sout{1, 2 hay 3}~→~\textbf{Phương án 2 (Cân bằng)}, đã xác nhận bằng demo OneSpace v4.
+    \item \textbf{Nguồn nội dung:} tự dựng catalog mẫu trong phạm vi môn học (không dùng API có bản quyền), logo video do nhóm quay hoặc dùng nguồn công khai; câu hỏi quiz soạn sẵn khi đăng nội dung.
+    \item \textbf{Converting:} cả hai chiều~--~nghe tin TTS (F-NEWS-05) \textbf{và} trích mp3 từ video (F-VID-10), cả hai đã chạy trong demo v4.
+    \item \textbf{Mức gamification:} điểm + nhiệm vụ + streak bắt buộc; \textbf{pet ở mức tối giản} (trứng nở sau 3 nhiệm vụ, đổi đồ ăn bằng điểm); cửa hàng đổi quà gồm: mở game mới, đồ pet, khung avatar.
+    \item \textbf{Chế độ khách (F-COM-18):} có, cho dùng thử 4 phân hệ; lưu dữ liệu yêu cầu tạo tài khoản tại thời điểm đó.
+    \item Ngưỡng chỉ số trong bảng~\ref{tab:mvp-metrics}: giữ nguyên mức đề xuất, đối chiếu với khảo sát khi có.
+    \item Phân công theo module Phần~\ref{sec:technical-architecture}.
+    \item \textbf{Popup xung đột (C1):} ba lựa chọn (tắt tiếng video / dừng video / không phát mới), nhớ theo cặp nội dung, có thể đổi trong Cài đặt.
+    \item \textbf{PIP (C3):} tự thu nhỏ khi rời tab (không cần bấm nút); xác nhận quy tắc ``tối đa 2 luồng có tiếng''.
+    \item \textbf{Duck mặc định 30\%} (C5); hành vi sau cuộc gọi/rút tai nghe/mất mạng: giữ như bảng~\ref{tab:switch-matrix}.
     \item Chốt \textbf{kinh tế điểm khởi điểm} (bảng~\ref{tab:point-economy}), cấu hình tối thiểu (đề nghị Android 8.0/API 26) và danh sách máy test thực tế.
 \end{enumerate}
