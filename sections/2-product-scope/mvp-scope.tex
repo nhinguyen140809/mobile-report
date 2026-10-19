@@ -278,6 +278,10 @@ Thành viên phụ trách module nghỉ giữa chừng & Trung bình & Module tr
 
 \textit{(4) Quyền hệ thống tối thiểu (chỉ xin đúng lúc).} Gắn với trụ Security \& Privacy ở mục~\ref{sec:quality-pillars}: bảng~\ref{tab:permissions} liệt kê toàn bộ quyền ứng dụng cần --~danh sách này chính là ``bản cam kết không xin thừa'' để viết vào màn cài đặt và thuyết trình.
 
+\begin{table}[H]
+\caption{Quyền hệ thống tối thiểu}
+\label{tab:permissions}
+\centering
 \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.1cm} >{\raggedright\arraybackslash}p{4.9cm} >{\raggedright\arraybackslash}p{3.7cm} >{\raggedright\arraybackslash}p{3.0cm}}
 \toprule
 \textbf{Quyền} & \textbf{Tính năng nào cần} & \textbf{Xin khi nào} & \textbf{Nếu người dùng từ chối} \\
@@ -290,6 +294,7 @@ FOREGROUND\_SERVICE + mediaPlayback & Nhạc nền (F-MUS-03) & Tại lần đ�
 \multicolumn{4}{l}{\textit{Không đề xuất xin quyền đọc thư viện media hay ghi ngoài bộ nhớ riêng: kho mp3 trích chỉ nằm trong thư mục riêng của ứng dụng.}} \\
 \bottomrule
 \end{tabularx}
+\end{table}
 
 \textit{(5) Ranh giới thiết kế để không chặn tương lai.} Bốn quy tắc để MVP hôm nay không làm hỏng các hướng doanh thu hoặc mở rộng của v2:
 
