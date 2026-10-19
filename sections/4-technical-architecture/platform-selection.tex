@@ -1,19 +1,84 @@
 \subsection{Lựa chọn nền tảng và framework}
 \label{sec:platform-selection}
 
-\begin{guide}
-\guidepart{Nội dung}
-\begin{compactitem}
-    \item Phân tích các lựa chọn Native (Android với Kotlin, iOS với Swift) và Cross-Platform (Flutter với Dart, React Native với TypeScript, Kotlin Multiplatform).
-    \item Bảng so sánh theo tiêu chí: hiệu năng, khả năng tái sử dụng code (code reusability), cách dựng giao diện (Native UI Controllers hay widget riêng của framework), thư viện hỗ trợ phát video và nhạc, kinh nghiệm của nhóm.
-    \item Lựa chọn cuối cùng và lý do.
-\end{compactitem}
-\guidepart{Câu hỏi cần trả lời}
-\begin{compactitem}
-    \item Framework được chọn có hỗ trợ tốt phát nhạc nền, phát video và đồ họa cho minigame không?
-    \item Nhóm có bao nhiêu thời gian và kinh nghiệm với từng lựa chọn?
-    \item Có phần nào vẫn phải viết bằng code native (platform channel, native module) không?
-\end{compactitem}
-\guidepart{Hình/bảng nên có}
-Bảng so sánh các nền tảng và framework theo tiêu chí.
-\end{guide}
+\subsubsection{Bảng so sánh}
+\label{sec:platform-comparison}
+
+Bảng~\ref{tab:platform-comparison} so sánh năm phương án theo các tiêu chí ảnh hưởng trực tiếp đến trải nghiệm media đa nhiệm của OneSpace. Các đánh giá hiệu năng là \textbf{định tính}; không nên tuyên bố framework này luôn nhanh hơn framework kia nếu chưa có benchmark tương ứng.
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{2.2cm} >{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}p{4.4cm}}
+\caption{So sánh các nền tảng và framework}
+\label{tab:platform-comparison}\\
+\toprule
+\textbf{Tiêu chí} & \textbf{Android Native} & \textbf{iOS Native} & \textbf{Flutter} & \textbf{React Native / KMP} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Tiêu chí} & \textbf{Android Native} & \textbf{iOS Native} & \textbf{Flutter} & \textbf{React Native / KMP} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Ngôn ngữ & Kotlin & Swift & Dart & TypeScript / Kotlin \\
+UI & Jetpack Compose & SwiftUI / UIKit & Flutter Widgets & Native-backed / Compose MP \\
+Hiệu năng & Rất tốt & Rất tốt & Tốt & Tốt \\
+Code tái sử dụng & Thấp (chỉ Android) & Thấp (chỉ iOS) & Cao (2 nền) & Cao (2+ nền) \\
+Background media & Trực tiếp qua API & Qua iOS API & Plugin/native module & Native module \\
+Video player & AndroidX Media3 & AVPlayer & video\_player, plugin & Video library / native \\
+Minigame & Compose Canvas & SwiftUI / SpriteKit & Flutter / Flame engine & Skia / native \\
+Kinh nghiệm nhóm & \textbf{Cao} & Chưa có & Chưa có & Chưa có \\
+Phạm vi & Android & iOS & Android + iOS & Android + iOS \\
+Nhu cầu tích hợp native & Không cần & Không cần & Platform channel cho audio nền & Native module cho audio nền \\
+\end{longtable}
+
+\subsubsection{Quyết định cuối cùng}
+\label{sec:platform-choice}
+
+Chọn: \textbf{Kotlin + Jetpack Compose + AndroidX Media3}.
+
+Năm lý do:
+
+\begin{enumerate}
+\item Nhóm đã có kinh nghiệm Android nên giảm thời gian học framework mới.
+\item Compose giao diện theo state-driven model, phù hợp floating video và mini-player~--~hai thành phần cốt lõi của trải nghiệm đa nhiệm OneSpace.
+\item AndroidX Media3 hỗ trợ ExoPlayer, MediaSession và tích hợp phát nhạc nền đầy đủ.
+\item Xử lý trực tiếp Activity Lifecycle, AudioManager, Picture-in-Picture và notification~--~không qua lớp trung gian.
+\item Tránh lớp tích hợp native bổ sung thường cần khi dùng framework cross-platform.
+\end{enumerate}
+
+Quan trọng: nhóm vẫn \textbf{phân tích} iOS Native và cross-platform trong bảng~\ref{tab:platform-comparison} để chứng minh quyết định có cơ sở so sánh, nhưng \textbf{không ghi iOS là nền tảng được hỗ trợ} trong MVP vì không có phiên bản iOS thực tế. Tương ứng câu trả lời cho guide box: không có phần nào cần platform channel hay native module vì toàn bộ hệ thống (audio focus, PiP, notification, background service) được gọi trực tiếp qua Android API.
+
+\subsubsection{Technology Stack}
+\label{sec:tech-stack}
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{3.8cm} >{\raggedright\arraybackslash}p{11.2cm}}
+\caption{Technology Stack của OneSpace}
+\label{tab:tech-stack}\\
+\toprule
+\textbf{Thành phần} & \textbf{Công nghệ} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Thành phần} & \textbf{Công nghệ} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Programming & Kotlin \\
+UI & Jetpack Compose + Material 3 \\
+Navigation & Navigation Compose \\
+State & ViewModel + StateFlow \\
+Dependency Injection & Hilt \\
+Networking & Retrofit + OkHttp \\
+Serialization & Kotlinx Serialization \\
+Local Database & Room \\
+Preferences & DataStore \\
+Video / Audio & AndroidX Media3 (ExoPlayer) \\
+Background Audio & MediaSessionService \\
+Image Loading & Coil \\
+Background Sync & WorkManager \\
+Mini Game & Compose Canvas hoặc custom rendering \\
+Testing & JUnit, Compose UI Test \\
+\end{longtable}
+
+Về minigame: nên chọn \textbf{2048} hoặc \textbf{Tic-Tac-Toe} (hoặc Snake, đã có trong bảng~\ref{tab:feature-pool}). Không cần game engine phức tạp vì mục tiêu chính của dự án là đa nhiệm, không phải đồ họa game~--~khớp với ghi chú F-GAME-14 (``beat tiles'') và F-GAME-12/13 (2048, Snake) đã xếp vào MVP.
