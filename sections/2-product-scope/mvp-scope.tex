@@ -19,55 +19,39 @@
 Bảng phạm vi MVP: Phân hệ -- Tính năng -- Mức ưu tiên (Must, Should, Could) -- Trong hay ngoài MVP.
 \end{guide}
 
-Sau buổi thảo luận nhóm, \textbf{Phương án 2 (``Cân bằng'') đã được chốt} làm phạm vi MVP chính thức. Bản demo HTML của OneSpace (v4) đã xác nhận khả thi của toàn bộ tính năng trong phương án này. Dưới đây vẫn giữ đủ ba phương án để thể hiện phân tích so sánh (đối với yêu cầu môn học), kèm nguyên tắc chung: bốn phân hệ đều phải hiện diện (đề bài yêu cầu cả 4), và MVP phải \textit{kiểm chứng được USP}~--~nghĩa là ít nhất một trụ Winning Zone của từng nhóm trụ phải chạy được end-to-end, thay vì chỉ là một app ``xem được nhạc được''. Mã tính năng tham chiếu bảng~\ref{tab:feature-pool}; các tính năng đều truy vết được về pain point ở mục~\ref{sec:problem-statement} hoặc nhân tố Winning Zone ở bảng~\ref{tab:winning-zone}.
+Phạm vi MVP của OneSpace gồm toàn bộ tính năng trong bảng~\ref{tab:mvp-scope-full}, được xác nhận khả thi qua bản demo HTML v4. Nguyên tắc: bốn phân hệ đều phải hiện diện (đề bài yêu cầu cả 4), và MVP phải \textit{kiểm chứng được USP}~--~ít nhất một trụ Winning Zone của từng nhóm trụ phải chạy được end-to-end. Mã tính năng tham chiếu bảng~\ref{tab:feature-pool}; các tính năng đều truy vết được về pain point ở mục~\ref{sec:problem-statement} hoặc nhân tố Winning Zone ở bảng~\ref{tab:winning-zone}.
 
-\textbf{Phương án 1~--~``Trục xanh'' (seamless spine).} Mỗi phân hệ một luồng cơ bản, chỉ giữ các trụ USP thiết yếu. Nhỏ nhất, an toàn nhất về tiến độ.
-
-\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{1.9cm} >{\raggedright\arraybackslash}X}
+\begin{table}[H]
+\centering
+\caption{Phạm vi MVP của OneSpace}
+\label{tab:mvp-scope-full}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{1.8cm} >{\raggedright\arraybackslash}X}
     \toprule
     \textbf{Phân hệ} & \textbf{Tính năng trong MVP} \\
     \midrule
-    Video & Xem video cơ bản (F-VID-01), feed theo chuyên mục (F-VID-02 bản rút gọn), picture-in-picture (F-VID-08), tua nhanh (F-VID-17) \\
-    Music & Player nhạc (F-MUS-01), mini player dock (F-MUS-02), audio focus (F-MUS-10) \\
-    News & Feed theo chuyên mục (F-NEWS-01), trình đọc sạch (F-NEWS-02), nghe nhạc khi đọc (F-NEWS-09) \\
-    Games & Hub minigame (F-GAME-01), đoán bài hát (F-GAME-02), một game phổ biến nhanh (Snake hoặc 2048 -- F-GAME-12/13) để có thứ chơi không cần nội dung, điểm thưởng (F-GAME-09) \\
-    Dùng chung & Tài khoản (F-COM-01), onboarding (F-COM-02), hệ điểm + nhiệm vụ + streak (F-COM-04, F-COM-05, F-COM-06), cửa sổ xung đột âm thanh (F-COM-14), cài đặt sáng/tối (F-COM-13) \\
+    Video & Xem video cơ bản (F-VID-01); feed theo chuyên mục (F-VID-02); picture-in-picture (F-VID-08); tua nhanh double-tap (F-VID-17); watchlist và lịch sử tiếp tục từ chỗ dừng (F-VID-04, F-VID-05); chất lượng tự động (F-VID-06); trích mp3 vào kho cá nhân (F-VID-10) \\
+    Music & Player nhạc đầy đủ (F-MUS-01); mini player dock xuyên suốt (F-MUS-02); audio focus động (F-MUS-10); playlist và queue (F-MUS-04, F-MUS-05); kho nhạc cá nhân chứa mp3 trích (F-MUS-07) \\
+    News & Feed theo chuyên mục (F-NEWS-01); trình đọc sạch đổi cỡ chữ (F-NEWS-02); nghe nhạc khi đọc (F-NEWS-09); lưu bài (F-NEWS-03); \textbf{nghe tin TTS} (F-NEWS-05); quiz sinh từ chính bài báo (F-NEWS-10) \\
+    Games & Hub minigame (F-GAME-01); \textbf{đoán bài hát} từ kho nhạc (F-GAME-02); quiz tin tức nối với F-NEWS-10 (F-GAME-03); ``beat tiles'' theo bài đang phát (F-GAME-14); một game phổ biến nhanh (Snake hoặc 2048~-- F-GAME-12/13); điểm thưởng khi thắng (F-GAME-09) \\
+    Dùng chung & Tài khoản (F-COM-01); onboarding chọn sở thích (F-COM-02); hệ điểm + nhiệm vụ hằng ngày + streak (F-COM-04/05/06); cửa sổ xác nhận khi xung đột âm thanh (F-COM-14); thú cưng mức tối giản~-- trứng nở sau 3 nhiệm vụ (F-COM-07); cửa hàng đổi quà (F-COM-15); khung avatar (F-COM-09); cài đặt sáng/tối + tiết kiệm dữ liệu (F-COM-13) \\
     \bottomrule
 \end{tabularx}
+\end{table}
 
-Đánh giá: kiểm chứng được W1 (dock xuyên suốt), W2 (PIP, nghe nhạc khi đọc), W4 (đoán bài hát) và W5 (điểm thưởng nền). Thiếu W3 (converting) và W6~--~USP thiếu một trụ, khó hiện trọn lời hứa ``chuyển hoá hình thức nội dung''.
+Phạm vi này phủ đủ cả năm trụ Winning Zone từ W1 (dock xuyên suốt) đến W5 (gamification xuyên phân hệ); trụ W6 (tổng kết cá nhân kiểu wrapped) được giữ cho giai đoạn sau vì không ảnh hưởng kiểm chứng USP lõi.
 
-\textbf{Phương án 2~--~``Cân bằng'' (\textbf{đã chốt}).} Phương án 1 cộng thêm phần ``linh hồn'' của sản phẩm: converting một chiều, quiz tin tức và gamification mức vừa. Toàn bộ tính năng trong phương án này đã được xác nhận khả thi qua demo OneSpace v4.
+\textbf{Mục tiêu mở rộng cho giai đoạn sau MVP} (chỉ bắt đầu sau khi mọi tính năng trong bảng~\ref{tab:mvp-scope-full} hoàn tất và ổn định):
 
-\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{1.9cm} >{\raggedright\arraybackslash}X}
-    \toprule
-    \textbf{Phân hệ} & \textbf{Tính năng thêm so với Phương án 1} \\
-    \midrule
-    Video & Watchlist và lịch sử (F-VID-04, F-VID-05), chất lượng tự động (F-VID-06) \\
-    Music & Playlist và queue (F-MUS-04, F-MUS-05), kho nhạc cá nhân nếu chọn trích mp3 (F-MUS-07) \\
-    News & Lưu bài (F-NEWS-03), \textbf{nghe tin TTS (F-NEWS-05)}, quiz từ bài báo (F-NEWS-10) \\
-    Games & Quiz tin tức dùng chung dữ liệu với F-NEWS-10 (F-GAME-03), ``beat tiles'' theo bài đang phát (F-GAME-14) \\
-    Dùng chung & Thú cưng ở mức tối giản (F-COM-07), cửa hàng đổi quà (F-COM-15), khung avatar (F-COM-09) \\
-    \bottomrule
-\end{tabularx}
+\begin{itemize}
+    \item Phát nhạc nền ngoài app: notification và màn hình khoá (F-MUS-03).
+    \item Siêu playlist trộn nhạc + audio tin + mp3 trích phát liên tiếp (F-MUS-09).
+    \item Bảng xếp hạng tuần (F-GAME-07).
+    \item Song song game + video trên hai nửa màn hình (F-GAME-08).
+    \item Tổng kết tháng kiểu wrapped, xuất thẻ chia sẻ (F-COM-10).
+    \item Tìm kiếm xuyên nội dung~-- một ô search cho cả bốn phân hệ (F-COM-11).
+\end{itemize}
 
-Đánh giá: đủ cả W1--W5; khối lượng tăng vừa phải vì converting chọn cả hai chiều (nghe tin TTS + trích mp3)~--~cả hai đều đã chạy được trong demo v4. Phương án 2 là \textbf{phạm vi MVP chính thức} của OneSpace.
-
-\textbf{Phương án 3~--~``Tham vọng'' (stretch goals).} Phương án 2 cộng thêm các trụ cột cuối; giữ làm \textbf{danh sách dự phòng} nếu tiến độ cho phép, vì mỗi mục đều là một Major Projects~--~chỉ làm sau khi tất cả tính năng của Phương án 2 hoàn tất và ổn định.
-
-\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{1.9cm} >{\raggedright\arraybackslash}X}
-    \toprule
-    \textbf{Phân hệ} & \textbf{Tính năng thêm so với Phương án 2} \\
-    \midrule
-    Music & Phát nền ngoài app với notification và màn hình khoá (F-MUS-03), siêu playlist trộn nội dung (F-MUS-09) \\
-    Games & Bảng xếp hạng (F-GAME-07), song song game + video (F-GAME-08) \\
-    Dùng chung & Tổng kết tháng kiểu wrapped (F-COM-10), tìm kiếm xuyên nội dung (F-COM-11) \\
-    \bottomrule
-\end{tabularx}
-
-Đánh giá: đây gần như là ``bản 1.0 hoàn chỉnh''; rủi ro lớn nhất là làm dở các tính năng nặng (phát nền, leaderboard) làm rớt chất lượng phần lõi. Nếu nhóm chọn phương án này, nên nội bộ tách milestone: ``MVP thật'' là phương án 2, các mục phương án 3 tính là stretch goals.
-
-\textbf{Ngoài phạm vi ở mọi phương án (out of scope v1).} Các mục dưới đây bị loại khỏi giai đoạn đầu, lý do ghi kèm để trả lời câu hỏi ``vì sao không làm'':
+\textbf{Ngoài phạm vi ở giai đoạn đầu (out of scope v1).} Các mục dưới đây bị loại khỏi giai đoạn đầu, lý do ghi kèm:
 
 \begin{itemize}
     \item Lời bài hát (F-MUS-14): bản quyền phức tạp và rủi ro pháp lý cao nhất danh mục.
@@ -206,7 +190,7 @@ Chốt ``tối đa 2 luồng có tiếng'' thành quy tắc chính thức \\
     \item \textbf{Rút tai nghe:} nhạc và TTS dừng ngay (chuẩn Android), không tự phát loa ngoài; PIP video dừng kèm toast nhắc.
     \item \textbf{Mất mạng giữa video:} khung hình đứng + đếm ngược 5--15 giây tự thử lại; tin đã tải đọc tiếp; game offline chơi tiếp, điểm ghi cục bộ rồi đồng bộ khi có mạng.
     \item \textbf{Hệ điều hành hủy ứng dụng:} state store đã ghi trước; mở lại khôi phục đủ 4 vị trí (bài nhạc, tin đang đọc, ván dở, video dở) trong 2 giây, không phải thao tác lại từ đầu.
-    \item \textbf{Người dùng thoát hẳn ứng dụng:} nhạc tiếp tục (nếu phương án có F-MUS-03); video, TTS dừng; game pause và lưu.
+    \item \textbf{Người dùng thoát hẳn ứng dụng:} nhạc tiếp tục nếu đã kích hoạt F-MUS-03 (mở rộng); video, TTS dừng; game pause và lưu.
 \end{itemize}
 
 \textbf{Mở rộng tự do (không nằm trong bộ câu hỏi định hướng).} Các khối dưới đây do người soạn đề xuất thêm để buổi chốt đầy hơn; nhóm có quyền bỏ qua nếu thấy dư.
@@ -270,7 +254,7 @@ Bản quyền trích mp3 và nguồn nội dung & Cao & Bị khiếu nại, gỡ
 TTS tiếng Việt chất lượng kém & Trung bình & Trụ W3 nghe tệ, làm hỏng cảm giác liền mạch & Chọn engine có mẫu giọng tiếng Việt ổn, thử 20 bài thực tế trước khi chốt; fallback hiển thị bản chữ kèm \\
 OEM dừng ứng dụng nền (tiết kiệm pin của Xiaomi, Oppo, Samsung\ldots) & Cao & Nhạc nền chết, case B$\rightarrow$C gãy nơi máy thật & Dùng foreground service đúng chuẩn; màn hướng dẫn ``loại trừ tối ưu pin'' sau lần nhạc bị kill đầu tiên; test trên 2--3 máy OEM thật \\
 Hiệu năng chơi game kèm video trên máy yếu & Trung bình & Case C4 giật, chấm điểm demo thấp & PIP tự hạ độ phân giải; quy định matrix test máy RAM 3 GB; feature giữ nhãn Could \\
-Scope creep (pet, wrapped, leaderboard lôi kéo thêm) & Cao & MVP trễ, phần lõi rớt chất lượng & Chốt ``freeze'' danh sách theo phương án đã chọn trong buổi họp; mọi đề nghị mới vào danh sách v2, không bổ giữa chừng \\
+    \item \textbf{Scope creep} (pet, wrapped, leaderboard lôi kéo thêm) & Cao & MVP trễ, phần lõi rớt chất lượng & Chốt ``freeze'' danh sách MVP tại bảng~\ref{tab:mvp-scope-full}; mọi đề nghị mới vào danh sách mở rộng, không bổ giữa chừng \\
 Gian lận điểm khi có bảng xếp hạng (F-GAME-07) & Trung bình & Leaderboard vô nghĩa & v1 ghi điểm cục bộ + xác thực đơn giản khi đồng bộ; chống gian lận nghiêm túc để sau \\
 Mảnh ghép Android quá rộng (phiên bản, màn hình) & Trung bình & Lỗi chỉ xuất hiện trên máy người thẩm định & Chốt sớm cấu hình tối thiểu (đề nghị Android 8.0/API 26 trở lên), danh sách 3 máy test cố định \\
 Thành viên phụ trách module nghỉ giữa chừng & Trung bình & Module trễ, người khác khó nhảy vào & Mỗi module có OWNER và tài liệu ngắn theo chuẩn chung; review chéo ít nhất 2 người hiểu mỗi module \\
@@ -305,20 +289,16 @@ FOREGROUND\_SERVICE + mediaPlayback & Nhạc nền (F-MUS-03) & Tại lần đ�
     \item \textbf{Nội dung trừu tượng hoá thành ``content ID'' chung} -- v2 thêm nguồn tin hoặc kho phim mới không phải sửa feature pool.
 \end{itemize}
 
-\textit{(6) Ước lượng thô khối lượng (đơn vị tuần-người, sai số lớn, chỉ để so sánh phương án).} Media engine + dock + audio focus: 3--4 tuần-người, làm trước vì giữ trụ W1--W2; bốn phân hệ UI: khoảng 1,5--2 mỗi phân hệ; hệ điểm + nhiệm vụ + pet mức tối giản: 1,5--2; TTS nghe tin: 1--2; mỗi minigame cụ thể: 1--2; PIP + ma trận case C1--C9: 1--1,5. Với quy mô nhóm 3--4 người làm 8--10 tuần, Phương án 2 nằm vừa vặn nếu không trượt vào các mục của Phương án 3.
+\textit{(6) Ước lượng khối lượng (đơn vị tuần-người, sai số lớn).} Media engine + dock + audio focus: 3--4 tuần-người, làm trước vì giữ trụ W1--W2; bốn phân hệ UI: khoảng 1,5--2 mỗi phân hệ; hệ điểm + nhiệm vụ + pet mức tối giản: 1,5--2; TTS nghe tin: 1--2; mỗi minigame cụ thể: 1--2; PIP + ma trận case C1--C9: 1--1,5. Với quy mô nhóm 3 người làm 8--10 tuần, phạm vi MVP nằm vừa vặn nếu không trượt vào mục tiêu mở rộng.
 
-\textbf{Kết quả chốt phạm vi MVP:}
+\textbf{Quyết định sản phẩm đã chốt} (kèm theo bảng MVP, không lặp lại):
 
 \begin{enumerate}
-    \item \textbf{Chọn phương án MVP:} Phương án 2 (Cân bằng), đã xác nhận bằng demo OneSpace v4.
-    \item \textbf{Nguồn nội dung:} tự dựng catalog mẫu trong phạm vi môn học (không dùng API có bản quyền), logo video do nhóm quay hoặc dùng nguồn công khai; câu hỏi quiz soạn sẵn khi đăng nội dung.
-    \item \textbf{Converting:} cả hai chiều~--~nghe tin TTS (F-NEWS-05) \textbf{và} trích mp3 từ video (F-VID-10), cả hai đã chạy trong demo v4.
-    \item \textbf{Mức gamification:} điểm + nhiệm vụ + streak bắt buộc; \textbf{pet ở mức tối giản} (trứng nở sau 3 nhiệm vụ, đổi đồ ăn bằng điểm); cửa hàng đổi quà gồm: mở game mới, đồ pet, khung avatar.
-    \item \textbf{Chế độ khách (F-COM-18):} có, cho dùng thử 4 phân hệ; lưu dữ liệu yêu cầu tạo tài khoản tại thời điểm đó.
-    \item Ngưỡng chỉ số trong bảng~\ref{tab:mvp-metrics}: giữ nguyên mức đề xuất, đối chiếu với khảo sát khi có.
-    \item Phân công theo module Phần~\ref{sec:technical-architecture}.
-    \item \textbf{Popup xung đột (C1):} ba lựa chọn (tắt tiếng video / dừng video / không phát mới), nhớ theo cặp nội dung, có thể đổi trong Cài đặt.
-    \item \textbf{PIP (C3):} tự thu nhỏ khi rời tab (không cần bấm nút); xác nhận quy tắc ``tối đa 2 luồng có tiếng''.
-    \item \textbf{Duck mặc định 30\%} (C5); hành vi sau cuộc gọi/rút tai nghe/mất mạng: giữ như bảng~\ref{tab:switch-matrix}.
-    \item Chốt \textbf{kinh tế điểm khởi điểm} (bảng~\ref{tab:point-economy}), cấu hình tối thiểu (đề nghị Android 8.0/API 26) và danh sách máy test thực tế.
+    \item \textbf{Nguồn nội dung:} tự dựng catalog mẫu trong phạm vi môn học; câu hỏi quiz soạn sẵn khi đăng nội dung.
+    \item \textbf{Converting:} cả hai chiều~--~nghe tin TTS (F-NEWS-05) \textbf{và} trích mp3 (F-VID-10).
+    \item \textbf{Mức gamification:} điểm + nhiệm vụ + streak; \textbf{pet mức tối giản} (trứng nở sau 3 nhiệm vụ); cửa hàng đổi quà gồm: mở game mới, đồ pet, khung avatar.
+    \item \textbf{Chế độ khách (F-COM-18):} có; lưu dữ liệu yêu cầu tạo tài khoản tại thời điểm đó.
+    \item \textbf{Popup xung đột (C1):} ba lựa chọn, nhớ theo cặp nội dung, đổi được trong Cài đặt.
+    \item \textbf{PIP (C3):} tự thu nhỏ khi rời tab; tối đa 2 luồng có tiếng.
+    \item \textbf{Duck mặc định 30\%} (C5); hành vi sau cuộc gọi/rút tai nghe/mất mạng giữ như bảng~\ref{tab:switch-matrix}.
 \end{enumerate}
