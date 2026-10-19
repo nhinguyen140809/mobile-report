@@ -16,3 +16,191 @@
 \guidepart{Hình/bảng nên có}
 Ma trận Impact vs. Effort $2 \times 2$, bảng chấm điểm từng tính năng.
 \end{guide}
+
+Nội dung dưới đây là \textbf{bản tổng hợp tính năng ứng viên (brainstorm)} dành cho buổi thảo luận của nhóm: chủ đích là mở hết các hướng có thể nghĩ tới, ghi lại cả các biến thể và ý tưởng phụ, thay vì chốt sớm một hướng duy nhất. Impact và Effort của từng tính năng là \textit{đề xuất} của người soạn để nhóm thảo luận và chốt lại; bảng~\ref{tab:feature-pool} không phải kết luận.
+
+\textbf{Thang điểm đề xuất.} Cả hai trục cùng chấm theo thang 1--5:
+
+\begin{itemize}
+    \item \textbf{Impact:} 1 = gần như không ai dùng; 3 = hữu ích rõ ràng với một nhóm người dùng; 5 = trụ cột của lý do chọn ứng dụng, gắn trực tiếp pain point ở mục~\ref{sec:problem-statement} hoặc một nhân tố Winning Zone trong bảng~\ref{tab:winning-zone}.
+    \item \textbf{Effort:} 1 = vài ngày của một người; 3 = khoảng một tuần của một người hoặc ngang tương đương; 5 = rủi ro kỹ thuật cao (media engine, xử lý audio nền, bản quyền, ML).
+\end{itemize}
+
+Từ hai số này, mỗi tính năng được xếp vào một nhóm của ma trận Impact $\times$ Effort: \textbf{Quick Wins} (Impact cao, Effort thấp~--~làm trước), \textbf{Major Projects} (Impact cao, Effort cao~--~xếp lịch và cân nhắc kỹ), \textbf{Fill-ins} (Impact thấp, Effort thấp~--~làm khi dư thời gian), \textbf{Thankless Tasks} (Impact thấp, Effort cao~--~loại hoặc hoãn, ghi rõ lý do). Các tính năng mang nhân tố Winning Zone được đánh dấu \texttt{[W1]}--\texttt{[W6]} theo thứ tự các dòng trong bảng~\ref{tab:winning-zone}.
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{1.9cm} >{\raggedright\arraybackslash}p{6.1cm} >{\centering\arraybackslash}p{0.55cm} >{\centering\arraybackslash}p{0.55cm} >{\raggedright\arraybackslash}p{2.2cm} >{\raggedright\arraybackslash}p{2.9cm}}
+\caption{Danh mục tính năng ứng viên và điểm đề xuất (brainstorm)}
+\label{tab:feature-pool}\\
+\toprule
+\textbf{Mã} & \textbf{Tính năng} & \textbf{I} & \textbf{E} & \textbf{Nhóm đề xuất} & \textbf{Ghi chú, biến thể, ràng buộc} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mã} & \textbf{Tính năng} & \textbf{I} & \textbf{E} & \textbf{Nhóm đề xuất} & \textbf{Ghi chú, biến thể, ràng buộc} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+
+\multicolumn{6}{l}{\textbf{Phân hệ A -- Streaming Video}} \\
+\midrule
+\texttt{F-VID-01} & Xem video streaming cơ bản (player HLS/MP4) & 5 & 4 & Major Projects & Nền tảng của phân hệ; cần chốt nguồn nội dung (kho mẫu tự dựng hay API công khai) \\
+\texttt{F-VID-02} & Feed ``Dành cho bạn'' theo sở thích & 4 & 3 & Major Projects & Bản đơn giản: lọc theo chuyên mục đã chọn, chưa cần thuật toán \\
+\texttt{F-VID-03} & Tìm kiếm video & 4 & 2 & Quick Wins & Phạm vi: tiêu đề, hashtag \\
+\texttt{F-VID-04} & Danh sách xem sau (watchlist) & 3 & 1 & Quick Wins & \\
+\texttt{F-VID-05} & Lịch sử xem và tiếp tục từ chỗ dừng & 3 & 1 & Quick Wins & \\
+\texttt{F-VID-06} & Chất lượng tự động theo băng thông (adaptive streaming) & 4 & 3 & Major Projects & Kèm chọn tay 240p--1080p \\
+\texttt{F-VID-07} & Tải video xem offline & 3 & 4 & Thankless (hoãn) & Phụ thuộc bản quyền nguồn nội dung; để v2 \\
+\texttt{F-VID-08} & Picture-in-picture: video thu nhỏ góc màn hình khi rời trang & 5 & 3 & Major Projects \texttt{[W2]} & Trụ USP; cân nhắc API PIP sẵn của Android hay tự dựng \\
+\texttt{F-VID-09} & Chế độ chỉ phát âm thanh của video (audio-only) & 3 & 2 & Fill-ins & Tiết kiệm dữ liệu; là biến thể nhẹ của converting \\
+\texttt{F-VID-10} & Nhấn giữ video để trích thành tệp mp3 cho kho cá nhân & 5 & 4 & Major Projects \texttt{[W3]} & Cần chốt tính hợp pháp theo nguồn nội dung \\
+\texttt{F-VID-11} & Chia sẻ link video ra ngoài app & 2 & 1 & Fill-ins & \\
+\texttt{F-VID-12} & Thả tim video & 2 & 1 & Fill-ins & \\
+\texttt{F-VID-13} & Bình luận video & 2 & 3 & Thankless (hoãn) & Cần nội dung kiểm duyệt; không phải trọng tâm ở giai đoạn này \\
+\texttt{F-VID-14} & Theo dõi kênh/tác giả nội bộ & 3 & 2 & Fill-ins & \\
+\texttt{F-VID-15} & Playlist video theo chủ đề & 3 & 2 & Fill-ins & Biến thể: playlist trộn cả video và nhạc, xem F-MUS-09 \\
+\texttt{F-VID-16} & Phụ đề & 3 & 3 & Major (cân nhắc) & Liên quan accessibility ở mục~\ref{sec:accessibility}; công sức lấy nguồn phụ đề \\
+\texttt{F-VID-17} & Tua nhanh double-tap và đổi tốc độ phát & 4 & 1 & Quick Wins & \\
+\texttt{F-VID-18} & Gợi ý ``chơi game liên quan video này'': thẻ game cuối video, câu hỏi soạn sẵn lúc đăng nội dung & 4 & 2 & Quick Wins \texttt{[W4]} & Điều kiện: catalog môn học tự dựng nên câu hỏi đi kèm từng video khi đăng (2--3 câu); thẻ chỉ hiện với video có dữ liệu -- đã chạy được trong demo v4 \\
+\texttt{F-VID-19} & Tự động sinh quiz từ nội dung video bất kỳ (transcript + AI) & 3 & 5 & Thankless (hoãn v2) & Rủi ro câu hỏi sai hoặc generic; ngoài khả năng v1, cùng nhóm rủi ro với karaoke F-GAME-04 \\
+\midrule
+
+\multicolumn{6}{l}{\textbf{Phân hệ B -- Listening to Music}} \\
+\midrule
+\texttt{F-MUS-01} & Player nhạc đầy đủ (phát/dừng/chuyển/tua/repeat/shuffle) & 5 & 3 & Major Projects & Nền tảng của phân hệ \\
+\texttt{F-MUS-02} & Mini player dock xuyên suốt mọi màn hình & 5 & 3 & Major Projects \texttt{[W1]} & Thành phần dính nhất của USP; nhiều feature khác dựa vào nó \\
+\texttt{F-MUS-03} & Phát nhạc nền: điều khiển từ notification và màn hình khoá & 5 & 4 & Major Projects & Rủi ro lớn nhất: foreground service và các OEM dừng app; gắn mục~\ref{sec:lifecycle-state} \\
+\texttt{F-MUS-04} & Tự tạo/sửa/xoá playlist & 4 & 2 & Quick Wins & \\
+\texttt{F-MUS-05} & Hàng phát (queue): thêm tiếp theo, phát cuối, kéo sắp lại & 4 & 2 & Quick Wins & \\
+\texttt{F-MUS-06} & Tìm kiếm nhạc (bài hát/nghệ sĩ/album) & 4 & 2 & Quick Wins & \\
+\texttt{F-MUS-07} & Kho nhạc cá nhân chứa các tệp trích từ video & 4 & 3 & Major Projects \texttt{[W3]} & Gắn trực tiếp F-VID-10 \\
+\texttt{F-MUS-08} & Gợi ý nhạc theo sở thích & 4 & 3 & Major Projects & Bắt đầu bằng lọc theo sở thích khai báo \\
+\texttt{F-MUS-09} & ``Siêu playlist'' trộn nhạc, audio tin tức và video & 4 & 3 & Major Projects \texttt{[W1 W2]} & Ý tưởng khác biệt nhất để demo; dữ liệu chơi tuần tự qua một engine duy nhất \\
+\texttt{F-MUS-10} & Xử lý audio focus: duck/pause khi có luồng âm thanh khác & 5 & 3 & Major Projects \texttt{[W2]} & Chạy cặp với F-COM-14 \\
+\texttt{F-MUS-11} & Equalizer, hiệu chỉnh âm thanh & 2 & 3 & Thankless (hoãn) & \\
+\texttt{F-MUS-12} & Tải bài hát offline & 3 & 4 & Thankless (hoãn) & Vướng bản quyền tương tự F-VID-07 \\
+\texttt{F-MUS-13} & Đồng bộ vị trí phát nhiều thiết bị & 2 & 4 & Thankless (loại khỏi v1) & Cần backend đồng bộ thật sự \\
+\texttt{F-MUS-14} & Lời bài hát (lyrics) & 3 & 5 & Thankless (loại) & Bản quyền phức tạp nhất trong danh sách \\
+\midrule
+
+\multicolumn{6}{l}{\textbf{Phân hệ C -- Reading News}} \\
+\midrule
+\texttt{F-NEWS-01} & Feed tin theo chuyên mục và sở thích & 5 & 3 & Major Projects & Nguồn tin: cần chốt (API báo, RSS hợp lệ, hay nguồn tổng hợp tự phép) \\
+\texttt{F-NEWS-02} & Trình đọc sạch, đổi cỡ chữ, chế độ tối & 4 & 2 & Quick Wins & \\
+\texttt{F-NEWS-03} & Lưu bài đọc sau & 3 & 1 & Quick Wins & \\
+\texttt{F-NEWS-04} & Tìm kiếm bài báo & 3 & 2 & Fill-ins & \\
+\texttt{F-NEWS-05} & Chuyển bài báo thành audio (TTS)~--~``nghe tin'' & 5 & 4 & Major Projects \texttt{[W3]} & Hai hướng cần chốt: TTS on-device (miễn phí, chất lượng vừa) hay API cloud (chất lượng, tốn phí theo ký tự) \\
+\texttt{F-NEWS-06} & Sắp xếp mới nhất / phổ biến & 3 & 1 & Quick Wins & \\
+\texttt{F-NEWS-07} & Thông báo tin nóng theo chủ đề & 3 & 2 & Fill-ins & Cẩn thận spam notification; cho tắt từng chủ đề \\
+\texttt{F-NEWS-08} & Tóm tắt AI một đoạn cho mỗi bài & 4 & 4 & Major (cân nhắc) & Phụ thuộc cấu trúc nguồn bài; để cuối nếu còn thời gian \\
+\texttt{F-NEWS-09} & Nghe nhạc khi đọc tin (dock vẫn phát) & 5 & 1 & Quick Wins \texttt{[W1 W2]} & Gần như miễn phí nhờ dock; là minh chứng ``liền mạch'' dễ demo nhất \\
+\texttt{F-NEWS-10} & Quiz sinh ra từ bài báo đang đọc & 4 & 3 & Major Projects \texttt{[W4]} & Câu hỏi soạn khi đăng bài (3 câu/bài) -- đã chạy trong demo v4; tự động sinh để v2 \\
+\texttt{F-NEWS-11} & Gợi ý bài liên quan & 3 & 2 & Fill-ins & \\
+\midrule
+
+\multicolumn{6}{l}{\textbf{Phân hệ D -- Playing Minigames}} \\
+\midrule
+\texttt{F-GAME-01} & Hub minigame: danh sách, trạng thái mở khoá, phần thưởng & 4 & 2 & Quick Wins & \\
+\texttt{F-GAME-02} & Game đoán bài hát & 5 & 3 & Major Projects \texttt{[W4]} & Biến thể: đoán tên bài, ghép lời, đoán theo hình bìa \\
+\texttt{F-GAME-03} & Quiz tin tức & 4 & 3 & Major Projects \texttt{[W4]} & Gắn với F-NEWS-10 \\
+\texttt{F-GAME-04} & Karaoke chấm điểm giọng hát & 4 & 5 & Major (rủi ro cao) & Khó nhất danh mục: nhận diện độ chính xác giọng; cân nhắc để v2 \\
+\texttt{F-GAME-05} & Rhythm game theo bài hát & 3 & 4 & Thankless (hoãn) & Trùng trải nghiệm với karaoke nhưng kém khác biệt \\
+\texttt{F-GAME-06} & Trivia tổng hợp & 3 & 2 & Fill-ins & Dữ liệu câu hỏi tự dựng \\
+\texttt{F-GAME-07} & Bảng xếp hạng tuần/tháng & 4 & 3 & Major Projects & Cần backend điểm tập trung và chống gian lận cơ bản \\
+\texttt{F-GAME-08} & Chơi game ở nửa dưới màn hình, video chạy phía trên & 4 & 4 & Major Projects \texttt{[W2]} & Demo ấn tượng nhất cho song song hoá nhưng tốn công layout và hiệu năng \\
+\texttt{F-GAME-09} & Phần thưởng khi thắng minigame (điểm) & 5 & 2 & Quick Wins \texttt{[W5]} & \\
+\texttt{F-GAME-10} & Memory match với hình cắt ra từ nội dung & 2 & 2 & Fill-ins & Đã chạy trong demo v4 (6 cặp icon OnePlay); dễ làm, thêm ván khi cần \\
+\texttt{F-GAME-11} & Đập chuột 20 giây (whack-a-mole) & 3 & 2 & Fill-ins & Cơ chế cổ điển không bản quyền; đã chạy trong demo v4; ván nhanh khi chờ tải nội dung \\
+\texttt{F-GAME-12} & 2048 (ghép số) & 3 & 2 & Fill-ins & Cơ chế mã nguồn mở (MIT), chơi ngoại tuyến hoàn toàn, không cần dữ liệu nội dung \\
+\texttt{F-GAME-13} & Snake -- rắn săn mồi & 3 & 1 & Fill-ins & Canvas đơn giản, không bản quyền, chi phí thấp nhất danh mục game \\
+\texttt{F-GAME-14} & ``Beat tiles'' -- nốt nhạc rơi theo bài đang phát (kiểu piano tiles) & 4 & 2 & Quick Wins \texttt{[W4]} & Game phổ biến nhưng vẫn gắn nội dung: nhịp sinh từ chính bài trong kho nhạc; đặt tên riêng khi publish để tránh nhãn thương hiệu \\
+\texttt{F-GAME-15} & Bay xuyên vật cản (kiểu flappy) & 3 & 2 & Fill-ins & Cơ chế quen thuộc, độ khó dễ chỉnh; ghi tên mô tả chung, không dùng tên gốc đã đăng ký nhãn \\
+\midrule
+
+\multicolumn{6}{l}{\textbf{Dùng chung -- Tài khoản, gamification, hệ thống}} \\
+\midrule
+\texttt{F-COM-01} & Đăng ký/đăng nhập một tài khoản cho cả 4 phân hệ & 5 & 3 & Major Projects & Biến thể: email + OTP, Google Sign-In, hoặc cả hai~--~chọn cho gọn \\
+\texttt{F-COM-02} & Onboarding chọn sở thích lần đầu & 4 & 1 & Quick Wins & Chip chọn chủ đề của cả 4 phân hệ, cho phép bỏ qua \\
+\texttt{F-COM-03} & Hồ sơ cá nhân: avatar, khung ảnh theo thành tích & 3 & 2 & Fill-ins \texttt{[W5 W6]} & \\
+\texttt{F-COM-04} & Hệ điểm thưởng dùng chung (XP) & 5 & 2 & Quick Wins \texttt{[W5]} & Mọi hành vi (xem, nghe, đọc, chơi) đều cộng về một số dư \\
+\texttt{F-COM-05} & Nhiệm vụ hằng ngày (3--5 nhiệm vụ) & 4 & 2 & Quick Wins \texttt{[W5]} & Ví dụ: xem 2 video, đọc 1 tin, thắng 1 ván game \\
+\texttt{F-COM-06} & Chuỗi ngày liên tiếp (streak) & 4 & 1 & Quick Wins \texttt{[W5]} & Toast nhắc khi gần đạt mốc 7/30 ngày \\
+\texttt{F-COM-07} & Thú cưng ảo: nuôi bằng điểm, tiến hoá theo mốc & 4 & 3 & Major Projects \texttt{[W5]} & Mức tối giản: 1 pet tĩnh + vài bước tiến hoá hình \\
+\texttt{F-COM-08} & Huy hiệu thành tựu & 3 & 2 & Fill-ins \texttt{[W5]} & \\
+\texttt{F-COM-09} & Khung avatar độc quyền theo mốc thành tích & 3 & 1 & Quick Wins \texttt{[W5 W6]} & Từ ghi chú định hướng của nhóm \\
+\texttt{F-COM-10} & Tổng kết tháng kiểu ``wrapped'', xuất thẻ chia sẻ & 4 & 3 & Major Projects \texttt{[W6]} & Ghi chú định hướng ban đầu của nhóm \\
+\texttt{F-COM-11} & Tìm kiếm xuyên nội dung (một ô tìm cho 4 phân hệ) & 4 & 3 & Major Projects & Nên làm sau khi search từng phân hệ đã ổn định \\
+\texttt{F-COM-12} & Nhắc nhiệm vụ/streak hằng ngày & 3 & 1 & Quick Wins & Cẩn thận spam; cho tắt \\
+\texttt{F-COM-13} & Cài đặt: sáng/tối, ngôn ngữ, tiết kiệm dữ liệu & 4 & 2 & Quick Wins & Tiết kiệm dữ liệu: chỉ stream tiêu chuẩn \\
+\texttt{F-COM-14} & Cửa sổ xác nhận khi hai luồng âm thanh xung đột & 5 & 2 & Quick Wins \texttt{[W2]} & Từ ý tưởng song song hoá; chính sách cụ thể cần chốt \\
+\texttt{F-COM-15} & Cửa hàng đổi quà bằng điểm (mở game, đồ pet, khung avatar) & 4 & 2 & Quick Wins \texttt{[W5]} & Từ ghi chú ``đổi quà, unlock game mới, nuôi pet'' \\
+\texttt{F-COM-16} & Chế độ ngoại tuyến cơ bản: tin đã lưu, trạng thái mất mạng & 3 & 3 & Major (hoãn tới gần cuối) & Gắn ràng buộc di động ở mục~\ref{sec:mobile-constraints} \\
+\texttt{F-COM-17} & Báo nội dung không phù hợp & 2 & 1 & Fill-ins & Liên quan chính sách vận hành \\
+\texttt{F-COM-18} & Chế độ khách dùng thử (không cần tài khoản) & 3 & 2 & Fill-ins & Tranh luận: tăng số người thử nhưng gamification cần tài khoản~--~cần chốt
+\end{longtable}
+
+Tổng gộp theo ma trận $2 \times 2$ (danh sách đầy đủ mỗi nhóm lấy từ cột ``Nhóm đề xuất''):
+
+\begin{itemize}
+    \item \textbf{Quick Wins (làm trước):} F-VID-03, F-VID-04, F-VID-05, F-VID-17, F-VID-18; F-MUS-04, F-MUS-05, F-MUS-06; F-NEWS-02, F-NEWS-03, F-NEWS-06, F-NEWS-09; F-GAME-01, F-GAME-09, F-GAME-14; F-COM-02, F-COM-04, F-COM-05, F-COM-06, F-COM-09, F-COM-12, F-COM-13, F-COM-14, F-COM-15.
+    \item \textbf{Major Projects (xếp lịch, làm theo trụ USP):} F-VID-01, F-VID-02, F-VID-06, F-VID-08, F-VID-10, F-VID-16 (cân nhắc); F-MUS-01, F-MUS-02, F-MUS-03, F-MUS-07, F-MUS-08, F-MUS-09, F-MUS-10; F-NEWS-01, F-NEWS-05, F-NEWS-08 (cân nhắc), F-NEWS-10; F-GAME-02, F-GAME-03, F-GAME-04 (rủi ro cao), F-GAME-07, F-GAME-08; F-COM-01, F-COM-07, F-COM-10, F-COM-11, F-COM-16 (hoãn tới gần cuối).
+    \item \textbf{Fill-ins (làm khi dư thời gian):} F-VID-09, F-VID-11, F-VID-12, F-VID-14, F-VID-15; F-NEWS-04, F-NEWS-07, F-NEWS-11; F-GAME-06, F-GAME-10, F-GAME-11, F-GAME-12, F-GAME-13, F-GAME-15; F-COM-03, F-COM-08, F-COM-17, F-COM-18.
+    \item \textbf{Thankless Tasks (loại hoặc hoãn, kèm lý do):} F-VID-07 và F-MUS-12 (bản quyền nguồn), F-VID-13 (cần kiểm duyệt nội dung), F-VID-19 (AI sinh quiz: rủi ro chất lượng câu hỏi), F-MUS-11 (thiếu khác biệt), F-MUS-13 (backend đồng bộ ngoài khả năng v1), F-MUS-14 (bản quyền phức tạp), F-GAME-05 (trùng karaoke).
+\end{itemize}
+
+\textbf{Các cơ chế nền và cách tính năng đỡ nhau.} Trong 70 ứng viên, một nhóm nhỏ đóng vai trò \textit{cơ chế nền}: chính chúng tạo ra mọi hành vi chuyển đổi mượt mà mà Phần~\ref{sec:mvp-scope} mô tả case-by-case (ma trận chuyển phân hệ). Bảng~\ref{tab:mechanisms} cho thấy nếu rút một cơ chế ra thì những tính năng nào gãy theo --~đây là thứ tự đầu tư đúng, không chỉ là thứ tự điểm cao.
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{2.9cm} >{\raggedright\arraybackslash}p{4.6cm} >{\raggedright\arraybackslash}p{3.6cm} >{\raggedright\arraybackslash}p{3.5cm}}
+\caption{Cơ chế nền và các tính năng bám vào}
+\label{tab:mechanisms}\\
+\toprule
+\textbf{Cơ chế} & \textbf{Vai trò} & \textbf{Tính năng bám vào} & \textbf{Nếu thiếu} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Cơ chế} & \textbf{Vai trò} & \textbf{Tính năng bám vào} & \textbf{Nếu thiếu} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Mini player dock \newline \texttt{F-MUS-02} & Neo hiển thị và điều khiển mọi nội dung có âm thanh còn đang sống, bất kể người dùng ở tab nào & F-NEWS-09 (nghe nhạc khi đọc tin), F-MUS-09 (siêu playlist), các case B$\rightarrow$C, C$\rightarrow$B, B$\rightarrow$D & Không còn gì chứng minh W1; song song hoá nhẹ nhất cũng không tồn tại \\
+\midrule
+Media engine dùng chung \newline \texttt{F-VID-01}, \texttt{F-MUS-01}, \texttt{F-VID-09} & Một pipeline phát duy nhất cho video, nhạc, audio tin; biết luồng nào đang phát và dừng từng luồng đúng cách & Mọi tính năng phát; audio focus; siêu playlist (F-MUS-09) & Code phát bị trùng ba lần, pin tệ, không thể chuyển luồng liền mạch \\
+\midrule
+Trọng tài âm thanh: audio focus + popup \newline \texttt{F-MUS-10} + \texttt{F-COM-14} & Quyết định bên nào được phát khi người dùng mở luồng thứ hai; hỏi lần đầu rồi nhớ lựa chọn & Mọi case chuyển có xung đột tiếng; US-CROSS-02 & Chồng tiếng hoặc nhạc tự chết ngoài ý muốn \\
+\midrule
+Cửa sổ nổi PIP \newline \texttt{F-VID-08}, mở rộng cho \texttt{F-GAME-08} & Giữ một nội dung sống trên màn hình khi người dùng rời nó để làm việc khác & Case A$\rightarrow$C, A$\rightarrow$D; US-CROSS-03, US-CROSS-04 & Rời tab là mất nội dung; mất hai case ấn tượng nhất \\
+\midrule
+State store và khôi phục \newline \texttt{F-VID-05}, một phần \texttt{F-COM-16} & Lưu vị trí tiêu thụ của cả 4 phân hệ; khôi phục khi quay lại hoặc khi hệ điều hành hủy tiến trình & US-CROSS-07; watchlist; queue; lịch sử & Ứng dụng ``quên việc'' -- đúng trải nghiệm gián đoạn mà đề bài muốn diệt \\
+\midrule
+Hệ điểm dùng chung \newline \texttt{F-COM-04, 05, 06} & Nối hành vi ở nhiều phân hệ thành chuỗi nhiệm vụ (đọc tin $\rightarrow$ quiz $\rightarrow$ điểm $\rightarrow$ nuôi pet) & F-COM-07, F-COM-15, F-COM-10, streak, nhiệm vụ & Gamification rời rạc giống y đối thủ ($\rightarrow$ mất W5) \\
+\midrule
+Cầu nối hình thức (converters) \newline \texttt{F-NEWS-05}, \texttt{F-VID-10} + \texttt{F-MUS-07} & Dời nội dung giữa các hình thức: chữ thành audio, video thành tệp nhạc & F-MUS-09 (nhét audio tin vào queue), US-CROSS-08, US-CROSS-09 & Mất hẳn trụ W3; USP chỉ còn ``ghép 4 app vào 1'' \\
+\midrule
+Notification hub \newline \texttt{F-COM-12}, \texttt{F-NEWS-07}, \texttt{F-MUS-03} & Mọi tín hiệu (nhắc nhiệm vụ, tin nóng, điều khiển nhạc nền) về một nơi, theo lịch tôn trọng người dùng & Streak reminder, F-MUS-03 (điều khiển từ notification) & Thông báo spam -- tái hiện đúng pain point mà ứng dụng ra đời để giải \\
+\end{longtable}
+
+Nếu nhóm muốn đổi điểm một feature bất kỳ, hãy kiểm tra lại cả bảng này: đổi một cơ chế nền luôn kéo theo dây tính năng bám dưới nó.
+
+\textbf{Đối chiếu nhanh với đối thủ theo từng trụ (mở rộng ngoài câu hỏi định hướng).} Để chấm Impact tỉnh táo hơn, bảng~\ref{tab:competitor-pillars} cho thấy mảnh ghép nào của từng trụ đã có người khác làm được ở mức nào~--~và khoảng trống thực sự còn lại là gì. Nguy cơ lớn nhất khi brainstorm là tưởng mình độc nhất ở những gì thực ra đã phổ biến; bảng này để tránh điều đó.
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{6.4cm} >{\raggedright\arraybackslash}p{5.4cm}}
+\caption{Đối thủ đã có mảnh ghép nào của từng trụ USP}
+\label{tab:competitor-pillars}\\
+\toprule
+\textbf{Trụ} & \textbf{Ai đã có mảnh ghép} & \textbf{Khoảng trống còn lại} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Trụ} & \textbf{Ai đã có mảnh ghép} & \textbf{Khoảng trống còn lại} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+W1~--~xuyên phân hệ & Spotify phát nhạc và podcast qua cùng một mini player, xuyên suốt các màn trong app; YouTube có button nghe nền khi có gói Premium & Không ai có một dock dùng chung cho 4 loại nội dung trên cùng một ứng dụng, và không ai giữ hàng phát như một hàng chờ chung \\
+W2~--~song song hoá & Hệ điều hành cho PIP và chia đôi màn hình; YouTube hỗ trợ PIP khi rời sang app khác & Không ứng dụng nào thiết kế phối hợp chủ động hai nội dung của chính nó: xử lý xung đột âm thanh có hỏi--nhớ, bố cục chuyên dụng, điểm thưởng cho kết hợp \\
+W3~--~converting & Spotify có podcast (nội dung riêng), YouTube Premium cho nghe--chỉ--âm--thanh video & Không ai cho người dùng tự trích tệp mp3 từ video, và không ứng dụng tin tức chính thống lớn nào có ``nghe tin'' TTS chất lượng tốt tại Việt Nam \\
+W4~--~game gắn nội dung & TikTok có thử thách theo hashtag, Shopee có quiz và ticket game & Không ai sinh minigame từ chính nội dung người dùng vừa xem: quiz từ bài báo đó, đoán bài hát từ thư mục đó \\
+W5~--~gamification & Duolingo là chuẩn tham chiếu cho streak tạo thói quen hằng ngày; Shopee Coin là ví dụ tích điểm trong app thương mại & Không ứng dụng giải trí nào ở Việt Nam gắn điểm thưởng với cả bốn loại hành vi giải trí trong cùng hệ thống \\
+W6~--~tổng kết cá nhân & Spotify Wrapped là chuẩn tham chiếu; YouTube từng làm Rewind & Không ai làm tổng kết cho hành vi giải trí đa dạng (kết hợp 4 loại nội dung trong một tháng) \\
+\end{longtable}
