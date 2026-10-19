@@ -1,39 +1,31 @@
 \subsection{Bối cảnh và phát biểu bài toán}
 \label{sec:problem-statement}
 
-\begin{guide}
-\guidepart{Nội dung}
-\begin{compactitem}
-    \item Bối cảnh thị trường ứng dụng di động: xu hướng tiêu thụ nội dung giải trí trên điện thoại, kèm số liệu có nguồn (thời gian sử dụng, số ứng dụng cài đặt, \ldots).
-    \item Định vị dòng ứng dụng giải trí tổng hợp (All-in-One Entertainment App) và lý do gộp 4 phân hệ Video, Music, News, Minigames vào một ứng dụng.
-    \item Bài toán thực tế: người dùng phải chuyển qua lại giữa nhiều ứng dụng riêng lẻ (nhiều tài khoản, thông báo rời rạc, tốn dung lượng máy, trải nghiệm bị gián đoạn).
-    \item Phát biểu bài toán (problem statement) trong 2--3 câu.
-\end{compactitem}
-\guidepart{Câu hỏi cần trả lời}
-\begin{compactitem}
-    \item Người dùng mục tiêu đang gặp vấn đề gì khi giải trí trên điện thoại? Có số liệu hoặc dẫn chứng nào cho vấn đề đó?
-    \item Vì sao một ứng dụng ``tất cả trong một'' tốt hơn việc dùng nhiều ứng dụng chuyên biệt? Đánh đổi là gì (dung lượng, độ phức tạp)?
-    \item ``Trải nghiệm liền mạch'' cụ thể là gì trong ứng dụng này (ví dụ: nghe nhạc nền khi đọc tin, một tài khoản cho cả 4 phân hệ)?
-    \item Ứng dụng thuộc danh mục (App Category) nào trên Google Play?
-\end{compactitem}
-\end{guide}
+Việt Nam có mức độ thâm nhập di động rất cao. Tính đến cuối năm 2025, cả nước có 137 triệu kết nối di động đang hoạt động, tương đương 134\% dân số với toàn bộ là kết nối băng rộng 3G/4G/5G; số người dùng internet đạt 85,6 triệu, chiếm 84,2\% dân số~\cite{datareportal-vietnam}. Trên nền tảng đó, giải trí trên điện thoại trở thành hoạt động tiêu thụ nội dung chủ đạo: Việt Nam có khoảng 79 triệu danh tính người dùng mạng xã hội; riêng về mức độ phủ nền tảng, TikTok tiếp cận khoảng 76,1 triệu người từ 18 tuổi trở lên và YouTube tiếp cận 62,1 triệu người dùng~\cite{datareportal-vietnam}. Bức tranh toàn cầu cũng cho thấy người trưởng thành trực tuyến dành trung bình khoảng 33,5 giờ mỗi tuần cho các loại hình truyền thông trực tuyến, và dùng tới trung bình 6,75 nền tảng mạng xã hội khác nhau trong mỗi tháng~\cite{datareportal-global} -- cả hai đều là số liệu khảo sát của GWI. Con số cuối phản ánh đúng vấn đề mà đồ án này hướng tới: nhu cầu giải trí là một, nhưng hành vi của người dùng bị phân tán trên nhiều nền tảng và ứng dụng chuyên biệt.
 
-==> Nhiều app tốn dung lượng, phải chuyển app, trải nghiệm bị gián đoạn.
+Mỗi loại nội dung hiện có những ứng dụng làm tốt nhất: YouTube hay TikTok cho xem video, Spotify hay Zing MP3 cho nghe nhạc, VnExpress hay Báo Mới cho đọc tin tức, còn minigame tồn tại rời rạc trong các ứng dụng thương mại điện tử hoặc các trò chơi nhỏ lẻ. Việc phải chuyển qua lại giữa nhiều ứng dụng chuyên biệt tạo ra ba nhóm khó khăn cốt lõi (pain points) cho người dùng:
 
-Các vấn đề cốt lõi (Pain Points):
+\begin{itemize}
+    \item \textbf{Sự đứt gãy và phân mảnh trải nghiệm (context switching):} mỗi lần chuyển ứng dụng là một lần ngắt quãng -- bài nhạc đang phát bị dừng, video phải tải lại, vị trí đang đọc bị mất. Trên màn hình nhỏ, người dùng gần như không thể vừa xem video vừa đọc tin: chế độ chia đôi màn hình mặc định của hệ điều hành không đảm bảo hai ứng dụng phối hợp được với nhau, vì chúng không chia sẻ trạng thái phát, tài khoản hay luồng âm thanh.
+    \item \textbf{Gánh nặng quản lý tài khoản và thông báo:} mỗi ứng dụng đòi hỏi một tài khoản và một lần đăng nhập riêng; thông báo đẩy rơi rác đến từ nhiều nguồn, chồng chéo và dễ làm trôi thông tin quan trọng.
+    \item \textbf{Tài nguyên thiết bị:} duy trì đồng thời nhiều ứng dụng giải trí chiếm dụng bộ nhớ lưu trữ, tiêu tốn RAM khi chạy nền và làm pin cạn nhanh hơn.
+\end{itemize}
 
-Sự đứt gãy & phân mảnh trải nghiệm (Context Switching / App Fragmentation): Người dùng muốn giải trí nhưng phải cài đặt và chuyển đổi liên tục qua lại giữa quá nhiều ứng dụng riêng biệt (như YouTube/TikTok để xem Video, Spotify/Zing MP3 để nghe Nhạc, VnExpress để đọc Tin, và một ứng dụng riêng để chơi Minigames).
+Từ bối cảnh và các khó khăn trên, bài toán của đồ án được phát biểu như sau:
 
-Phiền hà trong việc quản lý tài khoản & thông báo: Việc phải tạo nhiều tài khoản, đăng nhập nhiều lần và nhận thông báo đẩy (push notifications) rời rạc, chồng chéo từ từng app gây trôi thông tin và phiền toái.
+\begin{quote}
+    \textit{Một ứng dụng giải trí trên nền tảng Android cần được thiết kế như thế nào để hợp nhất bốn phân hệ Streaming Video, Listening to Music, Reading News và Playing Minigames trong một trải nghiệm duy nhất? Làm thế nào để người dùng chuyển đổi và kết hợp các loại nội dung với nhau một cách tự nhiên, liền mạch, thay vì bị gián đoạn như khi dùng nhiều ứng dụng chuyên biệt cạnh nhau? Và sản phẩm cần tạo ra giá trị khác biệt gì để người dùng có lý do rời bỏ bộ ứng dụng quen thuộc hiện tại?}
+\end{quote}
 
-Gánh nặng dung lượng & tài nguyên thiết bị: Việc duy trì hàng loạt ứng dụng riêng lẻ chiếm dụng nhiều bộ nhớ lưu trữ (Storage), đồng thời tiêu tốn dung lượng RAM và làm nhanh cạn Pin khi chạy ngầm.
+Trong phạm vi tài liệu này, ``trải nghiệm liền mạch'' (seamless experience) được cụ thể hoá thành bốn đặc tính của sản phẩm:
 
-==> Danh mục entertainment, social
+\begin{enumerate}
+    \item \textbf{Một tài khoản, một ứng dụng:} người dùng chỉ cài một ứng dụng, đăng nhập một lần và nhận thông báo tập trung từ một nguồn duy nhất.
+    \item \textbf{Chuyển đổi tức thời giữa bốn phân hệ:} trạng thái tiêu thụ nội dung được giữ nguyên khi di chuyển -- bài nhạc đang phát thu về một dock mini player, vị trí đang đọc và tiến độ minigame được khôi phục khi quay lại.
+    \item \textbf{Sử dụng song song hai trong bốn loại nội dung:} nghe nhạc khi đọc tin tức, thu nhỏ video về một góc màn hình khi lướt tin, chơi minigame kèm theo video, kèm cơ chế xác nhận rõ ràng khi hai luồng âm thanh xung đột.
+    \item \textbf{Nội dung chuyển đổi được hình thức (converting):} một video có thể trích thành tệp âm thanh cho kho nhạc cá nhân, một bài báo có thể được đọc thành bản audio, giúp cùng một nội dung theo được người dùng qua các ngữ cảnh sử dụng khác nhau.
+\end{enumerate}
 
-"Trong mô hình định vị sản phẩm, ứng dụng thuộc dòng Hybrid / All-in-One Entertainment App
-. Tuy nhiên, khi niêm yết chính thức trên Google Play Store, ứng dụng được đăng ký dưới Danh mục chính là Entertainment (EN)
-, kết hợp cùng hệ thống 5 Thẻ ứng dụng (Tags) bao gồm Media & Video, Music & Audio, News & Magazines, và Casual Games để đảm bảo hệ thống đề xuất của Google phân loại chính xác cả 4 phân hệ cốt lõi
-."
+Hướng tích hợp này đi kèm đánh đổi: một ứng dụng ``tất cả trong một'' phức tạp hơn về phát triển, kiểm thử và quản lý tài nguyên so với bốn ứng dụng nhỏ riêng lẻ, và trong phạm vi môn học, nhóm chỉ phát triển cho một nền tảng duy nhất là Android. Đổi lại, người dùng chỉ cài một ứng dụng, tiết kiệm dung lượng và -- quan trọng nhất -- các loại nội dung có thể phối hợp với nhau, điều mà bốn ứng dụng chuyên biệt dùng cạnh nhau không thể mang lại. So sánh chi tiết với các đối thủ được trình bày ở mục~\ref{sec:market-research}, và phân tích vì sao hướng tiếp cận này là vùng chiến thắng của sản phẩm được trình bày ở mục~\ref{sec:usp-winning-zone}.
 
-
-
+Về mặt định vị, ứng dụng thuộc dòng giải trí tổng hợp (All-in-One Entertainment App), phát triển cho hệ điều hành Android và phân phối trên Google Play. Theo hệ thống phân loại của Google Play, ứng dụng được đăng ký thuộc danh mục \textit{Entertainment} -- danh mục dành cho ``Streaming video, movies, TV, interactive entertainment''~\cite{play-categories} -- cùng tối đa năm thẻ (tag) do nhà phát triển chọn trong Play Console để hệ thống đề xuất phân loại chính xác. Dự kiến các thẻ đề cập tới video, âm nhạc, tin tức và trò chơi giải trí để phản ánh đủ bốn phân hệ của ứng dụng.

@@ -1,19 +1,80 @@
 \subsection{Unique Selling Point và Winning Zone}
 \label{sec:usp-winning-zone}
 
-\begin{guide}
-\guidepart{Nội dung}
-\begin{compactitem}
-    \item Sơ đồ Venn 3 vòng: Nhu cầu người dùng (từ mục~\ref{sec:market-research} và~\ref{sec:user-personas}), Thế mạnh sản phẩm, Lỗ hổng của đối thủ. Giao điểm của cả ba là Winning Zone.
-    \item Phát biểu USP trong 1--2 câu cho ứng dụng tích hợp 4 dịch vụ Video, Music, News, Minigames.
-    \item Những vùng không nên cạnh tranh: đối thủ đã làm rất tốt hoặc người dùng không thực sự cần.
-\end{compactitem}
-\guidepart{Câu hỏi cần trả lời}
-\begin{compactitem}
-    \item Ứng dụng làm được điều gì mà một ứng dụng chuyên biệt (chỉ video, chỉ nhạc) không làm được?
-    \item Mỗi yếu tố trong Winning Zone dựa trên bằng chứng nào (kết quả khảo sát, phân tích đối thủ)?
-    \item USP được thể hiện qua tính năng cụ thể nào trong phạm vi MVP (mục~\ref{sec:mvp-scope})?
-\end{compactitem}
-\guidepart{Hình/bảng nên có}
-Sơ đồ Venn xác định Winning Zone.
-\end{guide}
+Gộp bốn dịch vụ vào chung một ứng dụng vẫn chưa đủ để người dùng rời bỏ thói quen hiện tại, vì mỗi người đã có sẵn bộ ứng dụng chuyên biệt ưng ý của riêng mình. Mục này xác định vùng chiến thắng (Winning Zone) của sản phẩm: giao điểm của ba vòng \textbf{Nhu cầu người dùng} (tổng hợp từ phân tích thị trường ở mục~\ref{sec:market-research} và các persona ở mục~\ref{sec:user-personas}), \textbf{Thế mạnh sản phẩm} mà nhóm có thể hiện thực hoá trong phạm vi môn học, và \textbf{Lỗ hổng của đối thủ} mà các ứng dụng chuyên biệt chưa lấp được. Hình~\ref{fig:winning-zone} tóm tắt kết quả phân tích.
+
+\definecolor{vennneeds}{RGB}{37,99,235}
+\definecolor{vennstrength}{RGB}{16,163,127}
+\definecolor{venngap}{RGB}{217,119,6}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Fill first, stroke after, so each circle's outline stays visible on the overlaps
+        \fill[vennneeds, opacity=0.20] (0,2.2) circle (2.6);
+        \fill[vennstrength, opacity=0.20] (-1.905,-1.1) circle (2.6);
+        \fill[venngap, opacity=0.20] (1.905,-1.1) circle (2.6);
+        \draw[vennneeds, very thick] (0,2.2) circle (2.6);
+        \draw[vennstrength, very thick] (-1.905,-1.1) circle (2.6);
+        \draw[venngap, very thick] (1.905,-1.1) circle (2.6);
+        \node[align=center, font=\small\bfseries, text=vennneeds] at (0,3.45) {Nhu cầu\\người dùng};
+        \node[align=center, font=\small\bfseries, text=vennstrength] at (-3.4,-1.5) {Thế mạnh\\sản phẩm};
+        \node[align=center, font=\small\bfseries, text=venngap] at (3.4,-1.5) {Lỗ hổng\\của đối thủ};
+        \node[fill=white, draw=black!40, rounded corners=2pt, inner sep=5pt, align=center] at (0,-0.05)
+            {\small\textbf{Winning Zone}};
+    \end{tikzpicture}
+    \caption{Sơ đồ Venn xác định Winning Zone của ứng dụng}
+    \label{fig:winning-zone}
+\end{figure}
+
+Ba vòng tròn được cụ thể hoá như sau:
+
+\begin{itemize}
+    \item \textcolor{vennneeds}{\textbf{Nhu cầu người dùng:}} chỉ cài và đăng \textit{một} ứng dụng duy nhất; chuyển đổi giữa các loại nội dung mà không bị gián đoạn; dùng được hai loại nội dung song song; tiết kiệm dung lượng, RAM và pin của thiết bị.
+    \item \textcolor{vennstrength}{\textbf{Thế mạnh sản phẩm:}} bốn phân hệ dùng chung một media engine: dock mini player xuyên suốt, cơ chế chạy song song hai nội dung kèm xác nhận khi xung đột âm thanh, khả năng chuyển đổi nội dung giữa các hình thức (video thành tệp âm thanh, bài báo thành bản audio) và bộ minigame sinh ra từ chính nội dung đang xem, gắn với hệ thống điểm thưởng dùng chung.
+    \item \textcolor{venngap}{\textbf{Lỗ hổng của đối thủ:}} các ứng dụng chuyên biệt không phối hợp được với nhau; minigame hiện tồn tại rời rạc hoặc gắn với ứng dụng thương mại điện tử; không ứng dụng nào cho phép chuyển đổi hình thức nội dung giữa video, âm nhạc và tin tức.
+\end{itemize}
+
+Giao điểm của cả ba vòng cho ra sáu nhân tố cạnh tranh mà sản phẩm tập trung khai thác, tổng hợp trong bảng~\ref{tab:winning-zone}.
+
+\begin{table}[H]
+    \centering
+    \caption{Các nhân tố trong Winning Zone và bằng chứng đi kèm}
+    \label{tab:winning-zone}
+    \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.1cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X}
+        \toprule
+        \textbf{Nhân tố} & \textbf{Biểu hiện trong ứng dụng} & \textbf{Bằng chứng và nguồn gốc} \\
+        \midrule
+        Trải nghiệm xuyên phân hệ liền mạch & Dock mini player dùng chung cho nhạc, video và audio đọc báo; một tài khoản; trạng thái tiêu thụ giữ nguyên khi chuyển tab, khôi phục vị trí đọc và tiến độ minigame & Pain point đứt gãy trải nghiệm ở mục~\ref{sec:problem-statement}; các ứng dụng chuyên biệt không thể phối hợp \\
+        \addlinespace
+        Song song hoá hai trong bốn loại nội dung & Nghe nhạc khi đọc tin tức; video thu nhỏ về góc màn hình (picture-in-picture) khi lướt tin; minigame kèm theo video; cửa sổ xác nhận khi hai luồng âm thanh xung đột & Đặc tính liền mạch số 3 ở mục~\ref{sec:problem-statement}; chưa có đối thủ hỗ trợ kết hợp tùy ý \\
+        \addlinespace
+        Chuyển đổi hình thức nội dung & Nhấn giữ video để trích thành tệp mp3 cho kho nhạc cá nhân; chuyển bài báo thành bản audio để ``nghe tin'' & Ngữ cảnh di động: nhiều lúc người dùng không thể nhìn màn hình (di chuyển, làm việc khác) \\
+        \addlinespace
+        Minigame sinh ra từ nội dung & Game đoán bài hát từ kho nhạc, quiz theo bài báo đang đọc, karaoke chấm điểm giọng hát & Điểm yếu của minigame rời rạc (mục~\ref{sec:market-research}); tăng thời gian gắn bó với nội dung \\
+        \addlinespace
+        Gamification xuyên phân hệ & Nhiệm vụ hằng ngày, streak, thú cưng ảo, huy hiệu thành tựu; điểm thưởng dùng chung để mở khoá minigame mới và nuôi thú cưng & Đối thủ chỉ gamification trong phạm vi hẹp (tích điểm thương mại); nhu cầu động lực dùng hàng ngày \\
+        \addlinespace
+        Tổng kết cá nhân có thể chia sẻ & Thống kê định kỳ theo phong cách ``wrapped'': loại nội dung tiêu thụ nhiều nhất, kỷ lục streak, thành tựu nổi bật, xuất thành hình ảnh để chia sẻ & Người dùng thích khoe số liệu cá nhân; tạo hiệu ứng lan toả tự nhiên cho ứng dụng \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+Từ các nhân tố trên, Unique Selling Point của sản phẩm được phát biểu như sau:
+
+\begin{quote}
+    \textbf{Ứng dụng giải trí ``4 trong 1'' trên Android cho phép chuyển đổi, chạy song song và chuyển hoá hình thức giữa video, âm nhạc, tin tức và minigame trong cùng một trải nghiệm liền mạch -- điều mà một bộ bốn ứng dụng chuyên biệt không thể phối hợp để mang lại.}
+    \par\vspace{2pt}
+    \textbf{Trên nền đó, chính quá trình giải trí hằng ngày được lồng ghép thành một trò chơi: nhiệm vụ mỗi ngày, streak, thú cưng ảo và điểm thưởng dùng chung xuyên suốt bốn phân hệ, biến việc tiêu thụ nội dung thành một minigame lớn.}
+\end{quote}
+
+Bên cạnh vùng chiến thắng, nhóm xác định rõ những vùng \textbf{không} cạnh tranh để tránh dàn trải nguồn lực của một đồ án môn học:
+
+\begin{itemize}
+    \item \textbf{Kho nội dung và quyền phát hành:} nhóm không đối đầu về khối lượng nội dung với YouTube hay Spotify; ứng dụng tiêu thụ nội dung qua các nguồn hợp pháp và API công khai, chỉ tự sản xuất nội dung nhỏ gắn với minigame (câu hỏi quiz, đoạn beat cho game đoán bài hát).
+    \item \textbf{Thuật toán gợi ý quy mô lớn:} hệ thống gợi ý chiều sâu như của các đối thủ đòi hỏi nguồn lực dữ liệu và thời gian huấn luyện ngoài tầm môn học; MVP chỉ hướng tới gợi ý cơ bản dựa trên sở thích khai báo và lịch sử sử dụng.
+    \item \textbf{Mạng xã hội quy mô nền tảng:} sản phẩm không cạnh tranh với tính xã hội quy mô lớn; nhu cầu chia sẻ được đáp ứng gián tiếp qua tổng kết cá nhân.
+    \item \textbf{Định dạng âm thanh và video chất lượng đặc biệt:} các chuẩn lossless, âm thanh vòm hay hiệu chỉnh studio không phải trọng tâm của nhóm người dùng mục tiêu.
+\end{itemize}
+
+Mỗi nhân tố trong bảng~\ref{tab:winning-zone} sẽ được cụ thể hoá thành tính năng trong phạm vi MVP ở mục~\ref{sec:feature-prioritization} và mục~\ref{sec:mvp-scope}, đồng thời được mã hoá thành user story để truy vết ở mục~\ref{sec:user-stories}. Trong toàn bộ thiết kế UI/UX (Phần~\ref{sec:ui-ux-design}) và kiến trúc kỹ thuật (Phần~\ref{sec:technical-architecture}), các quyết định lớn đều được kiểm tra ngược lại với các nhân tố này để bảo đảm sản phẩm luôn nằm trong Winning Zone đã chọn.
