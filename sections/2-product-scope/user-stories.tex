@@ -17,3 +17,157 @@
 \guidepart{Hình/bảng nên có}
 Bảng user story: Mã -- Phân hệ -- User story -- Acceptance criteria -- Mức ưu tiên.
 \end{guide}
+
+Danh sách story dưới đây được viết theo \textbf{Phương án 2 (Cân bằng)} của mục~\ref{sec:mvp-scope}~--~phương án đang được đề xuất~--~kèm một số story mức Could cho nhóm cân nhắc; nếu buổi thảo luận tối nay chốt phương án khác, các dòng tương ứng chỉ cần đổi nhãn ưu tiên mà không phải viết lại. Mỗi story ghi mã tính năng tương ứng (bảng~\ref{tab:feature-pool}) để truy vết; mức ưu tiên Must/Should/Could là \textit{đề xuất}. Tên người dùng đang viết generic (``người dùng''); sau khi mục~\ref{sec:user-personas} được chốt persona, nhóm thay tên persona cụ thể vào từng story.
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{1.9cm} >{\raggedright\arraybackslash}p{5.9cm} >{\raggedright\arraybackslash}p{4.6cm} >{\raggedright\arraybackslash}p{1.4cm}}
+\caption{User stories đề xuất và acceptance criteria (brainstorm)}
+\label{tab:user-stories}\\
+\toprule
+\textbf{Mã} & \textbf{User story} & \textbf{Acceptance criteria} & \textbf{Ưu tiên} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mã} & \textbf{User story} & \textbf{Acceptance criteria} & \textbf{Ưu tiên} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+
+\multicolumn{4}{l}{\textbf{Phân hệ A -- Streaming Video}} \\
+\midrule
+\texttt{US-VID-01} \newline {\small(F-VID-01)} & As a người dùng, I want chạm một video trong feed và xem ngay trong ứng dụng, So that xem video không bị gián đoạn bởi việc chuyển app. & Given kết nối 3G trở lên, When chạm vào một video, Then trình phát mở và bắt đầu phát trong 3 giây; thanh tiến trình hiển thị đúng vị trí; nút tạm dừng/tiếp tục hoạt động. & Must \\
+\midrule
+\texttt{US-VID-02} \newline {\small(F-VID-08)} & As a người dùng đang xem video, I want video tự thu nhỏ về một góc màn hình khi tôi chuyển sang tab khác, So that vừa xem vừa đọc tin hoặc làm việc khác. & Given video đang phát, When chuyển sang tab bất kỳ khác, Then video chuyển thành cửa sổ nổi góc màn hình, tiếp tục phát, có thể kéo đổi góc, chạm hai lần để phóng to trở lại; khi thu nhỏ, luồng âm thanh không bị ngắt quá 1 giây. & Must \\
+\midrule
+\texttt{US-VID-03} \newline {\small(F-VID-17)} & As a người dùng, I want tua nhanh bằng cú chạm đôi và đổi tốc độ phát, So that bỏ qua đoạn không cần xem. & Given video đang phát: When chạm đôi phía bên phải, Then tua tới 10 giây; When mở menu tốc độ, Then hệ thống phát đúng tốc độ đã chọn (0.5x đến 2x). & Must \\
+\midrule
+\texttt{US-VID-04} \newline {\small(F-VID-02)} & As a người dùng có sở thích riêng, I want feed video ưu tiên theo chuyên mục tôi chọn, So that mở app là thấy nội dung mình muốn. & Given tôi đã chọn tối thiểu 3 chủ đề khi onboarding, When vào tab Video, Then các video thuộc chủ đề đó xuất hiện phía trên; tôi vẫn vào được chủ đề khác qua thanh chuyên mục. & Should \\
+\midrule
+\texttt{US-VID-05} \newline {\small(F-VID-04, F-VID-05)} & As a người dùng, I want lưu video để xem sau và quay lại đúng chỗ tôi dừng, So that không mất dấu nội dung. & Chạm biểu tượng lưu, video có mặt trong Watchlist; video xem dở có thẻ ``Tiếp tục'' ở đầu phần Lịch sử; chạm thẻ thì phát tiếp từ vị trí đã lưu (sai lệch $\leq$ 2 giây). & Should \\
+\midrule
+\texttt{US-VID-06} \newline {\small(F-VID-10)} & As a người dùng, I want nhấn giữ một video để trích phần âm thanh thành tệp mp3 trong kho nhạc của tôi, So that nghe được nội dung đó khi không tiện nhìn màn hình. & Nhấn giữ video hiện mục ``Trích âm thanh''; sau khi hoàn tất, tệp xuất hiện trong kho nhạc cá nhân với nhãn nguồn; tệp phát được như một bài nhạc thường và xoá được. (Chỉ hiện với nội dung được phép trích~--~theo quyết định nguồn nội dung đã chốt.) & Should \\
+\midrule
+\texttt{US-VID-07} \newline {\small(F-VID-18)} & As a người dùng thích thử thách, I want có gợi ý ``chơi game liên quan video này'' ở cuối video, So that giải trí chủ động sau khi xem. & Cuối mỗi video hiện một thẻ game nếu video đó có câu hỏi trong catalog (soạn lúc đăng nội dung); chạm thẻ mở đúng game với dữ liệu lấy từ video đó; nếu không có thì không hiện thẻ. & Should \\
+\midrule
+
+\multicolumn{4}{l}{\textbf{Phân hệ B -- Listening to Music}} \\
+\midrule
+\texttt{US-MUS-01} \newline {\small(F-MUS-01)} & As a người dùng, I want chọn một bài từ thư viện và điều khiển phát đầy đủ, So that nghe nhạc như ở một ứng dụng nhạc thực thụ. & Chạm bài bất kỳ phát ngay; các nút next, previous, repeat, shuffle và tua hoạt động đúng trạng thái; tên bài, nghệ sĩ và ảnh bìa hiển thị khớp. & Must \\
+\midrule
+\texttt{US-MUS-02} \newline {\small(F-MUS-02)} & As a người dùng, I want bài nhạc đang phát hiện thành một dock mini ở mọi màn hình chính, So that nghe nhạc trong khi dùng phân hệ khác. & Đang phát nhạc, chuyển qua tab Tin tức/Video/Games, dock vẫn hiện đủ tên bài và nút phát/dừng; chạm dock mở trình phát đầy đủ; vuốt dock sang bên để dừng phát. & Must \\
+\midrule
+\texttt{US-MUS-03} \newline {\small(F-COM-14, F-MUS-10)} & As a người dùng, I want hệ thống hỏi rõ khi tôi mở một luồng âm thanh khác trong khi đang nghe nhạc, So that âm thanh không tự giành nhau gây khó chịu. & Đang phát nhạc, mở video có tiếng, một cửa sổ hiện 3 lựa chọn: tạm dừng nhạc, tắt tiếng video, phát cả hai; lựa chọn áp dụng ngay và được nhớ cho lần sau; có thể đổi lại trong Cài đặt. & Must \\
+\midrule
+\texttt{US-MUS-04} \newline {\small(F-MUS-04, F-MUS-05)} & As a người dùng, I want tự tạo playlist và sắp hàng chờ phát, So that nghe nhạc theo trình tự mình muốn. & Tạo/sửa/xoá playlist được và thay đổi hiển thị tức thì; thêm bài vào ``phát tiếp theo'' đúng vị trí; kéo đổi thứ tự hàng chờ được lưu khi thoát app. & Must \\
+\midrule
+\texttt{US-MUS-05} \newline {\small(F-MUS-07)} & As a người dùng, I want kho nhạc cá nhân chứa các tệp tôi trích từ video, So that quản lý tập trung tại một nơi. & Kho custom hiện danh sách tệp kèm nhãn nguồn; phát, thêm vào playlist, xoá được như nhạc thường; tệp lỗi có thông báo rõ và không làm văng ứng dụng. & Should \\
+\midrule
+\texttt{US-MUS-06} \newline {\small(F-MUS-03)} & As a người dùng, I want nhạc tiếp tục phát khi tôi rời ứng dụng hoặc khoá màn hình, So that nghe nhạc khi làm việc khác. & Rời app hoặc khoá màn hình, nhạc tiếp tục; notification và màn hình khoá có nút phát/dừng/next; nhận cuộc gọi đến thì nhạc tự nhường và trở lại sau. & Should \\
+\midrule
+
+\multicolumn{4}{l}{\textbf{Phân hệ C -- Reading News}} \\
+\midrule
+\texttt{US-NEWS-01} \newline {\small(F-NEWS-01)} & As a người dùng, I want feed tin được sắp theo chuyên mục tôi quan tâm, So that cập nhật tin nhanh và đủ. & Chọn chuyên mục ở onboarding hoặc từ màn Chuyên mục; feed hiển thị mới nhất trước; kéo xuống làm mới trả về bài mới kèm dấu thời gian. & Must \\
+\midrule
+\texttt{US-NEWS-02} \newline {\small(F-NEWS-02)} & As a người dùng đọc lâu, I want trình đọc sạch và chỉnh cỡ chữ, So that đọc không mỏi mắt. & Mở bài hiện giao diện chỉ còn tiêu đề, ảnh và nội dung; tăng/giảm cỡ chữ áp dụng ngay; bật nền tối áp dụng cho cả trình đọc. & Must \\
+\midrule
+\texttt{US-NEWS-03} \newline {\small(F-NEWS-09)} & As a người dùng, I want vừa đọc bài báo vừa nghe nhạc nền, So that không phải chọn giữa hai việc. & Đang phát nhạc, mở bài báo, nhạc vẫn phát và dock vẫn điều khiển được; đóng bài thì không gì thay đổi với nhạc. & Must \\
+\midrule
+\texttt{US-NEWS-04} \newline {\small(F-NEWS-05)} & As a người dùng trên đường đi, I want chuyển một bài báo thành bản audio, So that tiếp tục ``đọc'' tin khi không nhìn được màn hình. & Nút ``Nghe bài này'' chuyển hoá bài thành audio trong thời gian chờ ngắn (có tiến trình); audio phát được, tạm dừng được; bài audio vào hàng chờ nhạc được như tệp thường. & Should \\
+\midrule
+\texttt{US-NEWS-05} \newline {\small(F-NEWS-03)} & As a người dùng, I want lưu bài đọc sau, So that đọc đúng lúc mình rảnh. & Chạm lưu, bài vào danh sách Đã lưu và mở được ngay cả khi offline nếu đã tải; bỏ lưu thì bài biến mất khỏi danh sách nhưng lịch sử đọc vẫn giữ nguyên. & Should \\
+\midrule
+\texttt{US-NEWS-06} \newline {\small(F-NEWS-10, F-GAME-03)} & As a người dùng thích thử thách, I want một quiz 3 câu hỏi sinh từ bài báo tôi vừa đọc, So that vừa đọc vừa chơi và nhận điểm. & Cuối bài có nút ``Kiểm tra nhanh''; trả lời đúng cộng điểm tức thời; kết thúc hiện đáp án đúng và số điểm; bài chưa đọc vẫn chơi được (giảm nhẹ điểm~--~cần chốt). & Should \\
+\midrule
+\texttt{US-NEWS-07} \newline {\small(F-NEWS-07)} & As a người dùng, I want nhận thông báo tin nóng theo chủ đề tôi chọn, So that không bỏ lỡ tin mình quan tâm. & Bật thông báo được cho từng chuyên mục riêng; chỉ tin nóng của chuyên mục đó mới hiện; tắt tổng trong Cài đặt sẽ tắt toàn bộ. & Could \\
+\midrule
+
+\multicolumn{4}{l}{\textbf{Phân hệ D -- Playing Minigames}} \\
+\midrule
+\texttt{US-GAME-01} \newline {\small(F-GAME-01)} & As a người dùng, I want một tab tập hợp các minigame và trạng thái mở khoá, So that biết được chơi gì hôm nay. & Tab Games hiện các thẻ game, trạng thái khoá/mở và số điểm hiện tại; game khoá hiện điều kiện mở; vào game không quá 2 lần chạm từ tab. & Must \\
+\midrule
+\texttt{US-GAME-02} \newline {\small(F-GAME-02)} & As a người dùng, I want chơi game đoán bài hát từ thư viện, So that thử thách thấy mình thuộc bài đến đâu. & Mỗi ván 10 câu, nghe 5 giây rồi chọn 1 trong 4 đáp án; đúng +10 điểm, sai hiện đáp án; hết ván hiện tổng và cộng điểm hệ thống một lần. & Must \\
+\midrule
+\texttt{US-GAME-03} \newline {\small(F-GAME-09)} & As a người dùng, I want điểm thưởng tích lũy dùng chung cho toàn app, So that mọi hoạt động đều có giá trị. & Điểm cộng từ mọi nguồn (game, task) về cùng một số dư; lịch sử điểm ghi rõ nguồn; đủ điểm đổi được quà ở cửa hàng và số dư giảm đúng. & Must \\
+\midrule
+\texttt{US-GAME-07} \newline {\small(F-GAME-12/13)} & As a người dùng, I want một game phổ biến, khởi động nhanh và không cần biết nội dung (Snake hoặc 2048), So that có chỗ vui một phút chờ đợi mà vẫn góp được điểm. & Vào game không quá 2 lần chạm từ tab Game; chơi được khi không có mạng; điểm thắng cộng về hệ thống dùng chung (W5); thêm trò mới sau này không phải đổi luồng điểm. & Should \\
+\midrule
+\texttt{US-GAME-04} \newline {\small(F-GAME-08)} & As a người dùng, I want vừa chơi game vừa xem video trên hai nửa màn hình, So that giải trí song song trọn vẹn hai phân hệ. & Từ game có nút ``Phát video kèm theo''; video chiếm nửa trên, không làm đứng game; thoát video hoặc game thì bên kia tiếp tục và nhả tài nguyên đúng. & Could \\
+\midrule
+\texttt{US-GAME-05} \newline {\small(F-GAME-07)} & As a người dùng, I want bảng xếp hạng tuần, So that có động lực cạnh tranh. & Ranking hiện top 50 tuần hiện tại; tên hiện đại diện theo cài đặt riêng tư; reset đúng đầu tuần và lịch sử tuần cũ xem được. & Could \\
+\midrule
+\texttt{US-GAME-06} \newline {\small(F-GAME-04)} & As a người dùng, I want minigame karaoke chấm điểm giọng hát, So that giải trí chủ động với âm nhạc. & Thu giọng trong lúc bài phát mẫu; chấm theo độ khớp nhịp điệu hiện điểm phần trăm sau khi hát; điểm vào hệ thống chung. (Công nghệ chấm cần khảo sát thêm~--~rủi ro cao.) & Could \\
+\midrule
+
+\multicolumn{4}{l}{\textbf{Dùng chung -- Tài khoản, gamification, hệ thống}} \\
+\midrule
+\texttt{US-COM-01} \newline {\small(F-COM-01)} & As a người dùng, I want đăng ký một tài khoản duy nhất cho cả 4 phân hệ, So that không phải quản lý nhiều tài khoản. & Đăng ký email + OTP tối đa 2 bước; đăng nhập giữ phiên ít nhất 30 ngày; mọi phân hệ nhận diện cùng hồ sơ, avatar và điểm số. & Must \\
+\midrule
+\texttt{US-COM-02} \newline {\small(F-COM-02)} & As a người dùng mới, I want chọn nhanh sở thích lần đầu mở app, So that nội dung phù hợp với tôi từ đầu. & Màn hình onboarding hiển thị chip chủ đề của cả 4 phân hệ; chọn tối thiểu 3 hoặc bỏ qua; lựa chọn áp dụng cho cả video feed và tin feed ngay sau đó. & Must \\
+\midrule
+\texttt{US-COM-03} \newline {\small(F-COM-04, 05, 06)} & As a người dùng, I want nhiệm vụ hằng ngày và chuỗi streak, So that có lý do mở app mỗi ngày. & Mỗi ngày hiện 3--5 nhiệm vụ (xem video, đọc tin, thắng game\ldots); hoàn thành cộng điểm và đánh dấu; dùng app 1 ngày đủ 1 nhiệm vụ thì streak tăng 1, hiển thị số ngày liên tiếp; bỏ lỡ 1 ngày thì streak về 0. & Must \\
+\midrule
+\texttt{US-COM-04} \newline {\small(F-COM-07)} & As a người dùng, I want một thú cưng ảo nuôi bằng điểm thưởng, So that điểm kiếm được có mục tiêu để tiêu. & Nhận pet ban đầu khi đạt mốc điểm đầu; cho ăn bằng điểm làm pet tiến bộ theo mốc; trạng thái pet hiện ở hồ sơ; đổi tên được. & Should \\
+\midrule
+\texttt{US-COM-05} \newline {\small(F-COM-15, F-COM-09)} & As a người dùng, I want đổi điểm lấy quà (mở game mới, đồ pet, khung avatar), So that thời gian dành cho ứng dụng được trả lại bằng phần thưởng hữu hình. & Cửa hàng hiện các mặt hàng kèm giá bằng điểm; mua thành công trừ đúng số dư và mặt hàng kích hoạt ngay; lịch sử giao dịch xem được. & Should \\
+\midrule
+\texttt{US-COM-06} \newline {\small(F-COM-10)} & As a người dùng, I want tổng kết tháng kiểu ``wrapped'' để chia sẻ, So that có nội dung độc đáo khoe lên mạng. & Cuối tháng hệ thống tạo thẻ tổng kết (loại nội dung tiêu thụ, kỷ lục, thành tựu nổi bật); xuất thẻ dưới dạng ảnh và chia sẻ ra ngoài được; người dùng chọn tên và ảnh đại diện trước khi chia sẻ. & Could \\
+\midrule
+\texttt{US-COM-07} \newline {\small(F-COM-13)} & As a người dùng, I want cài đặt sáng/tối, ngôn ngữ và tiết kiệm dữ liệu, So that app tôn trọng thiết bị và gói dữ liệu của tôi. & Giao diện theo chế độ hệ thống hoặc chọn tay; chuyển ngôn ngữ áp dụng không restart; bật tiết kiệm dữ liệu thì video chỉ phát ở chất lượng tiêu chuẩn. & Must \\
+\midrule
+
+\multicolumn{4}{l}{\textbf{Chuyển phân hệ và gián đoạn (cross-module)~--~truy vết ma trận case C1--C9 ở mục~\ref{sec:mvp-scope}}} \\
+\midrule
+\texttt{US-CROSS-01} \newline {\small(F-MUS-02)} & As a người dùng, I want dock mini player xuất hiện ở mọi tab khi có nội dung đang phát, So that luôn biết và điều khiển được đang nghe gì bất kể đang ở đâu. & Đang phát nhạc, chuyển qua từng tab: dock hiện và cập nhật trong 0.5 giây; dock chỉ ẩn trong trình phát đầy đủ hoặc trình đọc toàn màn; vuốt ngang trên dock đổi bài mà không rời tab hiện tại. & Must \\
+\midrule
+\texttt{US-CROSS-02} \newline {\small(F-COM-14, F-MUS-10)} & As a người dùng, I want được hỏi lần đầu khi hai luồng âm thanh đánh nhau và ứng dụng nhớ lựa chọn của tôi, So that các lần sau không phiền nữa. & Lần đầu của một cặp nội dung: popup đủ 3 lựa chọn, chọn áp dụng tức thì; lần sau cùng cặp: áp dụng im lặng đúng lựa chọn; mục Cài đặt cho đổi lại quy tắc từng cặp. & Must \\
+\midrule
+\texttt{US-CROSS-03} \newline {\small(F-VID-08)} & As a người dùng đang xem video, I want video theo tôi sang tab khác dưới dạng PIP, So that không bỏ sót nội dung vì đổi việc. & Đổi tab khi video đang phát: PIP tự hiện trong 1 giây ở góc; kéo được 4 góc màn hình; vuốt ngang = dừng và tự ghi Watchlist theo vị trí; quay lại tab Video: phóng full đúng vị trí, sai lệch tối đa 2 giây. & Should \\
+\midrule
+\texttt{US-CROSS-04} \newline {\small(F-GAME-08)} & As a người dùng, I want vừa chơi game vừa theo dõi video trên hai nửa màn hình, So that giải trí song song thật sự. & Game chiếm khoảng 60\% màn dưới, PIP ở trên; vùng game nhận đủ cảm ứng; máy RAM thấp: PIP tự hạ độ phân giải; thoát một bên không làm văng bên kia. & Could \\
+\midrule
+\texttt{US-CROSS-05} & As a người dùng nhận cuộc gọi, I want mọi nội dung tự nhường và trở lại đúng chỗ sau cuộc gọi, So that không phải tìm lại vị trí cũ. & Mọi luồng tạm dừng trong 0.5 giây khi có cuộc gọi; sau đó: nhạc tự phát lại, video hiện nút ``Tiếp tục'' từ vị trí sai lệch tối đa 2 giây, game hiện nút tiếp tục; có tuỳ chọn tắt tự phát lại. & Must \\
+\midrule
+\texttt{US-CROSS-06} & As a người dùng dùng tai nghe, I want ứng dụng dừng âm thanh khi tôi rút tai nghe, So that không phát ra loa ngoài ngoài ý muốn. & Rút jack hoặc ngắt bluetooth: nhạc và TTS dừng trong 0.5 giây; không tự phát loa; PIP video dừng kèm toast nhắc. & Must \\
+\midrule
+\texttt{US-CROSS-07} \newline {\small(F-VID-05, F-COM-16)} & As a người dùng, I want ứng dụng khôi phục đúng chỗ tôi dừng cả khi hệ điều hành đã từng hủy app, So that phiên dùng của tôi không bị xóa sạch. & Sau khi tiến trình bị hủy, mở lại: bài nhạc, tin đang đọc, ván game dở và video dở được khôi phục trong 2 giây; điểm và hàng phát không mất. & Should \\
+\midrule
+\texttt{US-CROSS-08} \newline {\small(F-NEWS-05)} & As a người dùng đang nghe nhạc, I want bấm ``Nghe tin'' mà không bị cướp bài đang nghe, So that hai việc nhập vào một hàng phát trơn tru. & Hàng phát đang có bài: audio tin tự chèn ``phát tiếp theo''; hàng trống mới hỏi [Phát ngay / Thêm vào hàng]; đến lượt, audio tin phát đúng thứ tự; icon tin hiện trên dock. & Should \\
+\midrule
+\texttt{US-CROSS-09} \newline {\small(F-MUS-09)} & As a người dùng, I want một hàng phát trộn bài hát, tệp trích từ video và audio tin, So that cả ba loại nội dung cùng chảy trong một trải nghiệm. & Thêm được cả ba loại vào cùng một hàng; chuyển giữa các mục gián đoạn tối đa 1 giây; icon loại nội dung đổi đúng mục đang phát; dock hiển thị loại hiện tại. & Could \\
+\midrule
+
+\multicolumn{4}{l}{\textbf{Bổ sung cho các tính năng phụ (phủ nốt các khoảng trống đã nêu)}} \\
+\midrule
+\texttt{US-MUS-07} \newline {\small(F-MUS-06)} & As a người dùng, I want tìm bài hát theo tên, nghệ sĩ hoặc album, So that tới được nội dung mình muốn nhanh hơn là lướt. & Gõ ít nhất 3 ký tự hiện gợi ý theo tiêu đề rồi nghệ sĩ; chọn kết quả phát ngay hoặc thêm vào hàng; không có kết quả hiện dòng gợi ý nội dung thay thế. & Should \\
+\midrule
+\texttt{US-COM-08} \newline {\small(F-COM-09)} & As a người dùng, I want đổi khung avatar theo mốc thành tích tôi đạt được, So that hồ sơ thể hiện được quá trình dùng của mình. & Mở hồ sơ hiện các khung đã mở khoá và chưa mở kèm điều kiện; chọn khung áp dụng tức thì; khung theo mốc streak hiện đúng số ngày đang có. & Should \\
+\midrule
+\texttt{US-COM-09} \newline {\small(F-COM-12)} & As a người dùng dễ quên, I want một lời nhắc nhẹ lúc buổi tối nếu hôm nay chưa hoàn thành nhiệm vụ nào, So that không đánh mất streak đang có. & Chưa hoàn thành nhiệm vụ nào và sau 20h: một thông báo (tối đa 1 lần/ngày, tắt được); nhắc hiện đúng tên nhiệm vụ còn thiếu; bấm nhắc mở thẳng màn nhiệm vụ. & Should \\
+\midrule
+\texttt{US-COM-10} \newline {\small(F-COM-18)} & As a người mới muốn thử, I want dùng thử một phiên không cần đăng ký, So that quyết định đăng ký sau khi đã cảm nhận được ứng dụng. & Chọn ``Dùng thử'': dùng được đủ 4 phân hệ mức cơ bản; điểm và nhiệm vụ vẫn chạy nhưng hiện nhãn ``tạm thời -- đăng ký để giữ''; hành động lưu dữ liệu (playlist, trích mp3) yêu cầu tạo tài khoản tại đúng thời điểm đó. & Could \\
+\end{longtable}
+
+\textbf{Bảng truy vết trụ USP (chép tay cho buổi chốt).} Để nhóm dễ nhìn tổng thể khi gán việc cho từng phân hệ, bảng~\ref{tab:usp-trace} nối mỗi trụ Winning Zone với case minh hoạ, story và tính năng tương ứng; cột ``Màn hình'' sẽ được điền khi Phần~\ref{sec:ui-ux-design} thiết kế wireframe.
+
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{4.6cm}}
+\toprule
+\textbf{Trụ} & \textbf{Case minh hoạ} & \textbf{Stories} & \textbf{Tính năng} \\
+\midrule
+W1~--~xuyên phân hệ & C2, C6 & US-CROSS-01, US-CROSS-08, US-VID-01 & F-MUS-02, F-MUS-04/05, F-NEWS-09 \\
+W2~--~song song hoá & C1, C3, C4, C5 & US-CROSS-02, US-CROSS-03, US-CROSS-04 & F-VID-08, F-MUS-10, F-COM-14, F-GAME-08 \\
+W3~--~converting & C6, C7 & US-VID-06, US-NEWS-04, US-CROSS-09 & F-VID-10, F-NEWS-05, F-MUS-07 \\
+W4~--~game gắn nội dung & quiz trong C2 & US-NEWS-06, US-GAME-02, US-VID-07 & F-GAME-02/03, F-NEWS-10, F-VID-18 \\
+W5~--~gamification & nhiệm vụ ngày đầu & US-COM-03, US-COM-04, US-COM-05, US-GAME-03 & F-COM-04/05/06/07/15 \\
+W6~--~tổng kết cá nhân & (ngoài MVP, P3) & US-COM-06 & F-COM-10 \\
+\bottomrule
+\end{tabularx}
+
+\textbf{Trả lời tóm tắt các câu hỏi định hướng của mục này:}
+
+\begin{itemize}
+    \item \textit{Mỗi tính năng MVP đã có story chưa?}~--~Các trụ chính của Phương án 2, toàn bộ hành vi chuyển phân hệ (ma trận case C1--C9 ở mục~\ref{sec:mvp-scope}) và các tính năng phụ nêu trước đó đã có story (US-MUS-07, US-COM-08/09/10); chỉ còn vài mục lẻ (sắp mới nhất/phổ biến, huy hiệu, báo nội dung) chờ kết quả chốt tối nay để quyết định có vào v1 hay không.
+    \item \textit{Người dùng là ai?}~--~Đang viết generic theo phân hệ; thay bằng tên persona cụ thể sau mục~\ref{sec:user-personas} được viết. Việc này chỉ đổi chủ ngữ câu, không ảnh hưởng acceptance criteria.
+    \item \textit{AC đủ cụ thể để tester kết luận?}~--~Mỗi story có điều kiện Given/When/Then hoặc danh sách kiểm tra đo được (thời gian, số lượng, trạng thái); các chỗ ``cần chốt'' được đánh dấu rõ để không ai phải tự quyết ngầm.
+\end{itemize}
