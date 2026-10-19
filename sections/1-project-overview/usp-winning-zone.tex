@@ -1,41 +1,57 @@
 \subsection{Unique Selling Point và Winning Zone}
 \label{sec:usp-winning-zone}
 
-Gộp bốn dịch vụ vào chung một ứng dụng vẫn chưa đủ để người dùng rời bỏ thói quen hiện tại, vì mỗi người đã có sẵn bộ ứng dụng chuyên biệt ưng ý của riêng mình. Mục này xác định vùng chiến thắng (Winning Zone) của sản phẩm: giao điểm của ba vòng \textbf{Nhu cầu người dùng} (tổng hợp từ phân tích thị trường ở mục~\ref{sec:market-research} và các persona ở mục~\ref{sec:user-personas}), \textbf{Thế mạnh sản phẩm} mà nhóm có thể hiện thực hoá trong phạm vi môn học, và \textbf{Lỗ hổng của đối thủ} mà các ứng dụng chuyên biệt chưa lấp được. Hình~\ref{fig:winning-zone} tóm tắt kết quả phân tích.
+Gộp bốn dịch vụ vào chung một ứng dụng vẫn chưa đủ để người dùng rời bỏ thói quen hiện tại, vì mỗi người đã có sẵn bộ ứng dụng chuyên biệt ưng ý của riêng mình. Mục này xác định vùng chiến thắng (Winning Zone) của sản phẩm theo mô hình Venn ba vòng: \textbf{Nhu cầu người dùng} (từ phân tích thị trường ở mục~\ref{sec:market-research} và các persona ở mục~\ref{sec:user-personas}), \textbf{Thế mạnh của OneSpace} (những gì nhóm có thể hiện thực hoá trong phạm vi môn học), và \textbf{Thế mạnh của đối thủ} (những gì các ứng dụng chuyên biệt đã phục vụ tốt).
+
+Winning Zone là vùng \textbf{Nhu cầu $\cap$ Thế mạnh của OneSpace nằm ngoài vùng đối thủ đã phủ}~--~nghĩa là nơi sản phẩm giải quyết được nhu cầu người dùng mà các đối thủ chưa làm được hoặc làm chưa tốt. Hình~\ref{fig:winning-zone} mô tả trực quan: vùng nền màu vàng phía trái là Winning Zone, còn vùng trung tâm ba vòng cùng phủ là ``vùng hòa nhập''~--~cả OneSpace lẫn đối thủ đều đáp ứng được nên \textbf{không tạo lợi thế cạnh tranh}.
 
 \definecolor{vennneeds}{RGB}{37,99,235}
-\definecolor{vennstrength}{RGB}{16,163,127}
-\definecolor{venngap}{RGB}{217,119,6}
+\definecolor{vennours}{RGB}{16,163,127}
+\definecolor{venncomp}{RGB}{220,38,38}
+\definecolor{winzone}{RGB}{255,215,0}
 
 \begin{figure}[H]
     \centering
     \begin{tikzpicture}
-        % Fill first, stroke after, so each circle's outline stays visible on the overlaps
-        \fill[vennneeds, opacity=0.20] (0,2.2) circle (2.6);
-        \fill[vennstrength, opacity=0.20] (-1.905,-1.1) circle (2.6);
-        \fill[venngap, opacity=0.20] (1.905,-1.1) circle (2.6);
+        % Step 1: fill the A∩B (needs + ours) overlap region in gold = candidate Winning Zone
+        \begin{scope}
+            \clip (0,2.2) circle (2.6);
+            \clip (-1.905,-1.1) circle (2.6);
+            \fill[winzone, opacity=0.35] (-4,-2) rectangle (4,5);
+        \end{scope}
+        % Step 2: draw competitor circle C AFTER, so its fill covers part of the gold = area
+        % that competitors cover is visually "eaten" from the winning-zone candidate
+        \fill[venncomp, opacity=0.18] (1.905,-1.1) circle (2.6);
+        % Step 3: draw the three circles with subtle fills for individual identity
+        \fill[vennneeds, opacity=0.10] (0,2.2) circle (2.6);
+        \fill[vennours, opacity=0.10] (-1.905,-1.1) circle (2.6);
+        % Step 4: circle outlines
         \draw[vennneeds, very thick] (0,2.2) circle (2.6);
-        \draw[vennstrength, very thick] (-1.905,-1.1) circle (2.6);
-        \draw[venngap, very thick] (1.905,-1.1) circle (2.6);
+        \draw[vennours, very thick] (-1.905,-1.1) circle (2.6);
+        \draw[venncomp, very thick] (1.905,-1.1) circle (2.6);
+        % Labels
         \node[align=center, font=\small\bfseries, text=vennneeds] at (0,3.45) {Nhu cầu\\người dùng};
-        \node[align=center, font=\small\bfseries, text=vennstrength] at (-3.4,-1.5) {Thế mạnh\\sản phẩm};
-        \node[align=center, font=\small\bfseries, text=venngap] at (3.4,-1.5) {Lỗ hổng\\của đối thủ};
-        \node[fill=white, draw=black!40, rounded corners=2pt, inner sep=5pt, align=center] at (0,-0.05)
+        \node[align=center, font=\small\bfseries, text=vennours] at (-3.4,-1.5) {Thế mạnh\\của OneSpace};
+        \node[align=center, font=\small\bfseries, text=venncomp] at (3.4,-1.5) {Thế mạnh\\của đối thủ};
+        % Winning Zone label in the gold region (A∩B minus C, left side of AB lens)
+        \node[fill=winzone!20, draw=black!40, rounded corners=2pt, inner sep=5pt, align=center] at (-1.4,0.6)
             {\small\textbf{Winning Zone}};
+        % Vùng hòa nhất label in the triple-overlap center
+        \node[font=\tiny\itshape, text=black!60] at (0,-0.05) {vùng đối thủ cũng phủ};
     \end{tikzpicture}
-    \caption{Sơ đồ Venn xác định Winning Zone của ứng dụng}
+    \caption{Sơ đồ Venn: Winning Zone là vùng giao Nhu cầu + Thế mạnh của OneSpace nằm \textbf{ngoài} vùng đối thủ đã phủ}
     \label{fig:winning-zone}
 \end{figure}
 
 Ba vòng tròn được cụ thể hoá như sau:
 
 \begin{itemize}
-    \item \textcolor{vennneeds}{\textbf{Nhu cầu người dùng:}} chỉ cài và đăng \textit{một} ứng dụng duy nhất; chuyển đổi giữa các loại nội dung mà không bị gián đoạn; dùng được hai loại nội dung song song; tiết kiệm dung lượng, RAM và pin của thiết bị.
-    \item \textcolor{vennstrength}{\textbf{Thế mạnh sản phẩm:}} bốn phân hệ dùng chung một media engine: dock mini player xuyên suốt, cơ chế chạy song song hai nội dung kèm xác nhận khi xung đột âm thanh, khả năng chuyển đổi nội dung giữa các hình thức (video thành tệp âm thanh, bài báo thành bản audio) và bộ minigame sinh ra từ chính nội dung đang xem, gắn với hệ thống điểm thưởng dùng chung.
-    \item \textcolor{venngap}{\textbf{Lỗ hổng của đối thủ:}} các ứng dụng chuyên biệt không phối hợp được với nhau; minigame hiện tồn tại rời rạc hoặc gắn với ứng dụng thương mại điện tử; không ứng dụng nào cho phép chuyển đổi hình thức nội dung giữa video, âm nhạc và tin tức.
+    \item \textcolor{vennneeds}{\textbf{Nhu cầu người dùng:}} chỉ cài và đăng \textit{một} ứng dụng duy nhất; chuyển đổi giữa các loại nội dung mà không bị gián đoạn; dùng được hai loại nội dung song song; tiết kiệm dung lượng, RAM và pin.
+    \item \textcolor{vennours}{\textbf{Thế mạnh của OneSpace:}} bốn phân hệ dùng chung một media engine; dock mini player xuyên suốt; cơ chế chạy song song hai nội dung kèm popup xác nhận khi xung đột âm thanh; chuyển đổi nội dung giữa các hình thức (video $\rightarrow$ mp3, bài báo $\rightarrow$ audio); bộ minigame sinh ra từ chính nội dung đang xem, gắn hệ thống điểm thưởng dùng chung.
+    \item \textcolor{venncomp}{\textbf{Thế mạnh của đối thủ:}} kho nội dung bản quyền lớn (phim HD, triệu bài hát qua Keeng); cơ sở người dùng khổng lồ (Mocha claim 16~triệu); data miễn phí cho thuê bao nhà mạng; mạng xã hội chat + voice sticker giàu tính năng. \textbf{Đây là vùng OneSpace KHÔNG nên cạnh tranh trực diện}.
 \end{itemize}
 
-Giao điểm của cả ba vòng cho ra sáu nhân tố cạnh tranh mà sản phẩm tập trung khai thác, tổng hợp trong bảng~\ref{tab:winning-zone}.
+Kết quả phân tích cho ra sáu nhân tố cạnh tranh trong bảng~\ref{tab:winning-zone}: mỗi nhân tố là một điểm \textit{nhu cầu người dùng} mà OneSpace đáp ứng được (thế mạnh) nhưng \textit{đối thủ chưa phủ được} (nằm ngoài vòng 3).
 
 \begin{table}[H]
     \centering
@@ -43,38 +59,39 @@ Giao điểm của cả ba vòng cho ra sáu nhân tố cạnh tranh mà sản p
     \label{tab:winning-zone}
     \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.1cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X}
         \toprule
-        \textbf{Nhân tố} & \textbf{Biểu hiện trong ứng dụng} & \textbf{Bằng chứng và nguồn gốc} \\
+        \textbf{Nhân tố} & \textbf{Tại sao OneSpace đáp ứng được} & \textbf{Tại sao đối thủ chưa phủ} \\
         \midrule
-        Trải nghiệm xuyên phân hệ liền mạch & Dock mini player dùng chung cho nhạc, video và audio đọc báo; một tài khoản; trạng thái tiêu thụ giữ nguyên khi chuyển tab, khôi phục vị trí đọc và tiến độ minigame & Pain point đứt gãy trải nghiệm ở mục~\ref{sec:problem-statement}; các ứng dụng chuyên biệt không thể phối hợp \\
+        Trải nghiệm xuyên phân hệ liền mạch & Dock mini player dùng chung cho nhạc, video và audio đọc báo; một tài khoản; trạng thái tiêu thụ giữ nguyên khi chuyển tab & Mocha có từng kênh riêng rời (Mocha Video, Keeng, chat) nhưng không có dock dùng chung nhiều loại nội dung \\
         \addlinespace
-        Song song hoá hai trong bốn loại nội dung & Nghe nhạc khi đọc tin tức; video thu nhỏ về góc màn hình (picture-in-picture) khi lướt tin; minigame kèm theo video; cửa sổ xác nhận khi hai luồng âm thanh xung đột & Đặc tính liền mạch số 3 ở mục~\ref{sec:problem-statement}; chưa có đối thủ hỗ trợ kết hợp tùy ý \\
+        Song song hoá hai trong bốn loại nội dung & Nghe nhạc khi đọc tin; PIP video khi lướt tin; minigame kèm video; popup xác nhận khi hai luồng âm thanh xung đột & Đối thủ có PIP riêng app mình nhưng không phối hợp nhiều nội dung trong cùng app \\
         \addlinespace
-        Chuyển đổi hình thức nội dung & Nhấn giữ video để trích thành tệp mp3 cho kho nhạc cá nhân; chuyển bài báo thành bản audio để ``nghe tin'' & Ngữ cảnh di động: nhiều lúc người dùng không thể nhìn màn hình (di chuyển, làm việc khác) \\
+        Chuyển đổi hình thức nội dung & Nhấn giữ video để trích mp3; chuyển bài báo thành audio để ``nghe tin'' & Spotify có podcast nhưng không cho tự trích mp3; không app tin tức VN nào có TTS nghe tin chất lượng tốt \\
         \addlinespace
-        Minigame sinh ra từ nội dung & Game đoán bài hát từ kho nhạc, quiz theo bài báo đang đọc, karaoke chấm điểm giọng hát & Điểm yếu của minigame rời rạc (mục~\ref{sec:market-research}); tăng thời gian gắn bó với nội dung \\
+        Minigame sinh ra từ nội dung & Game đoán bài hát từ kho nhạc, quiz từ bài báo đang đọc & Shopee có game nhưng tách rời hệ sinh thái media; không có game gắn bài báo/bài hát \\
         \addlinespace
-        Gamification xuyên phân hệ & Nhiệm vụ hằng ngày, streak, thú cưng ảo, huy hiệu thành tựu; điểm thưởng dùng chung để mở khoá minigame mới và nuôi thú cưng & Đối thủ chỉ gamification trong phạm vi hẹp (tích điểm thương mại); nhu cầu động lực dùng hàng ngày \\
+        Gamification xuyên phân hệ & Nhiệm vụ hằng ngày, streak, thú cưng ảo, huy hiệu, điểm thưởng dùng chung để mở game/mua đồ pet & Đối thủ chỉ gamification trong phạm vi hẹp (Shopee Coin tích điểm mua sắm) \\
         \addlinespace
-        Tổng kết cá nhân có thể chia sẻ & Thống kê định kỳ theo phong cách ``wrapped'': loại nội dung tiêu thụ nhiều nhất, kỷ lục streak, thành tựu nổi bật, xuất thành hình ảnh để chia sẻ & Người dùng thích khoe số liệu cá nhân; tạo hiệu ứng lan toả tự nhiên cho ứng dụng \\
+        Tổng kết cá nhân có thể chia sẻ & Thống kê định kỳ (kiểu wrapped) theo loại nội dung tiêu thụ, kỷ lục, thành tựu & Spotify có Wrapped nhưng chỉ tính nhạc; không ai tổng kết cho cả 4 loại nội dung \\
         \bottomrule
     \end{tabularx}
 \end{table}
 
-Từ các nhân tố trên, Unique Selling Point của sản phẩm được phát biểu như sau:
+Từ các nhân tố trên, Unique Selling Point được phát biểu như sau:
 
 \begin{quote}
-    \textbf{Ứng dụng giải trí ``4 trong 1'' trên Android cho phép chuyển đổi, chạy song song và chuyển hoá hình thức giữa video, âm nhạc, tin tức và minigame trong cùng một trải nghiệm liền mạch -- điều mà một bộ bốn ứng dụng chuyên biệt không thể phối hợp để mang lại.}
+    \textbf{Ứng dụng giải trí ``4 trong 1'' trên Android cho phép chuyển đổi, chạy song song và chuyển hoá hình thức giữa video, âm nhạc, tin tức và minigame trong cùng một trải nghiệm liền mạch~--~vùng sản phẩm đáp ứng được mà đối thủ chuyên biệt chưa phủ.}
     \par\vspace{2pt}
-    \textbf{Trên nền đó, chính quá trình giải trí hằng ngày được lồng ghép thành một trò chơi: nhiệm vụ mỗi ngày, streak, thú cưng ảo và điểm thưởng dùng chung xuyên suốt bốn phân hệ, biến việc tiêu thụ nội dung thành một minigame lớn.}
+    \textbf{Trên nền đó, quá trình giải trí hằng ngày được lồng ghép thành một trò chơi: nhiệm vụ mỗi ngày, streak, thú cưng ảo và điểm thưởng dùng chung xuyên suốt bốn phân hệ.}
 \end{quote}
 
-Bên cạnh vùng chiến thắng, nhóm xác định rõ những vùng \textbf{không} cạnh tranh để tránh dàn trải nguồn lực của một đồ án môn học:
+Bên cạnh Winning Zone, nhóm xác định rõ những vùng \textbf{KHÔNG cạnh tranh} (nằm trong vòng đối thủ đã phủ~--~họ làm tốt rồi thì ta không vô ích):
 
 \begin{itemize}
-    \item \textbf{Kho nội dung và quyền phát hành:} nhóm không đối đầu về khối lượng nội dung với YouTube hay Spotify; ứng dụng tiêu thụ nội dung qua các nguồn hợp pháp và API công khai, chỉ tự sản xuất nội dung nhỏ gắn với minigame (câu hỏi quiz, đoạn beat cho game đoán bài hát).
-    \item \textbf{Thuật toán gợi ý quy mô lớn:} hệ thống gợi ý chiều sâu như của các đối thủ đòi hỏi nguồn lực dữ liệu và thời gian huấn luyện ngoài tầm môn học; MVP chỉ hướng tới gợi ý cơ bản dựa trên sở thích khai báo và lịch sử sử dụng.
-    \item \textbf{Mạng xã hội quy mô nền tảng:} sản phẩm không cạnh tranh với tính xã hội quy mô lớn; nhu cầu chia sẻ được đáp ứng gián tiếp qua tổng kết cá nhân.
-    \item \textbf{Định dạng âm thanh và video chất lượng đặc biệt:} các chuẩn lossless, âm thanh vòm hay hiệu chỉnh studio không phải trọng tâm của nhóm người dùng mục tiêu.
+    \item \textbf{Kho nội dung bản quyền:} nằm trong vòng ``Thế mạnh đối thủ''~--~OneSpace dùng nội dung catalog mẫu tự dựng, không đối đầu kho phim triệu bài hát.
+    \item \textbf{Thuật toán gợi ý quy mô lớn:} đối thủ có dữ liệu + ML nhiều năm; v1 chỉ lọc theo sở thích khai báo.
+    \item \textbf{Mạng xã hội:} chat, voice sticker, kết bạn~--~đối thủ đã phủ; OneSpace không làm.
+    \item \textbf{Chất lượng phát lossless / Dolby:} không phải trọng tâm nhóm người dùng mục tiêu.
+    \item \textbf{Miễn phí data / cước:} chỉ nhà mạng mới cho được; nhóm không cạnh tranh theo hướng này.
 \end{itemize}
 
-Mỗi nhân tố trong bảng~\ref{tab:winning-zone} sẽ được cụ thể hoá thành tính năng trong phạm vi MVP ở mục~\ref{sec:feature-prioritization} và mục~\ref{sec:mvp-scope}, đồng thời được mã hoá thành user story để truy vết ở mục~\ref{sec:user-stories}. Trong toàn bộ thiết kế UI/UX (Phần~\ref{sec:ui-ux-design}) và kiến trúc kỹ thuật (Phần~\ref{sec:technical-architecture}), các quyết định lớn đều được kiểm tra ngược lại với các nhân tố này để bảo đảm sản phẩm luôn nằm trong Winning Zone đã chọn.
+Mỗi nhân tố trong bảng~\ref{tab:winning-zone} sẽ được cụ thể hoá thành tính năng trong phạm vi MVP ở mục~\ref{sec:feature-prioritization} và mục~\ref{sec:mvp-scope}, đồng thời được mã hoá thành user story ở mục~\ref{sec:user-stories}. Trong toàn bộ thiết kế UI/UX (Phần~\ref{sec:ui-ux-design}) và kiến trúc kỹ thuật (Phần~\ref{sec:technical-architecture}), các quyết định lớn đều được kiểm tra ngược lại với các nhân tố này.
