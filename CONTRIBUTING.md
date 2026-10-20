@@ -38,7 +38,7 @@ Scope dùng tên section (bỏ phần số thứ tự trong tên folder) hoặc 
 
 | Scope | Phạm vi |
 |---|---|
-| `introduction`, `system-design`, ... | Section tương ứng trong `sections/<order>-<name>/` và folder `figures/<name>/` |
+| `project-overview`, `product-scope`, `ui-ux-design`, `technical-architecture` | Section tương ứng trong `sections/<order>-<name>/` và folder `figures/<name>/` |
 | `frontmatter` | Trang bìa, lời cảm ơn |
 | `metadata` | `metadata.tex` |
 
@@ -47,11 +47,11 @@ Scope có thể bỏ qua khi thay đổi không gắn với một phần cụ th
 ## Ví dụ
 
 ```text
-content(introduction): describe the problem and target users
-content(system-design): add MVVM architecture overview
-fix(implementation): correct API endpoint names in table 3
-fix: resolve broken references after renaming section 2 labels
-figure(system-design): add navigation flow diagram
+content(project-overview): add personas from the user survey
+content(technical-architecture): compare Flutter and React Native
+fix(product-scope): correct acceptance criteria of US-VID-03
+fix: resolve broken references after renaming section 3 labels
+figure(ui-ux-design): add cross-module user flow diagram
 ref: add Jetpack Compose documentation
 style(frontmatter): align student names on the title page
 chore(metadata): set phase 2 and course code
@@ -63,14 +63,15 @@ docs: explain the checkpoint workflow in README
 Ví dụ commit có body:
 
 ```text
-content(system-design): replace local storage with Room database
+content(technical-architecture): cache news and music for offline use
 
-The phase 1 feedback asked for offline support, so section 2.3 now
-describes the Room schema and how it syncs with the backend.
+The phase 1 feedback asked for offline support, so section 4.3 now
+describes the local cache and how it syncs with the backend.
 ```
 
 ## Pull request và checkpoint
 
-- `main` không nhận push trực tiếp. Mọi thay đổi được viết trên một branch riêng (ví dụ `content/system-design`), mở pull request vào `main` và chỉ merge được khi check `build` pass.
+- `main` không nhận push trực tiếp. Mọi thay đổi được viết trên một branch riêng (ví dụ `content/user-personas`), mở pull request vào `main` và chỉ merge được khi check `build` pass.
 - Khi merge pull request bằng **Squash and merge** (cách merge duy nhất được bật), title của pull request trở thành commit message trên `main`. Vì vậy title của pull request cũng theo đúng định dạng trên.
+- Viết xong một subsection thì xóa khung `guide` (Hướng dẫn viết) của subsection đó trong cùng commit, xem [README](README.md#khung-hướng-dẫn-viết).
 - Trước khi tạo checkpoint cho một giai đoạn, cập nhật `\reportphase` trong `metadata.tex` bằng một pull request riêng, ví dụ `chore(metadata): set phase 1`. Sau đó mới tạo release theo hướng dẫn trong [README](README.md#tạo-checkpoint-cho-từng-giai-đoạn).

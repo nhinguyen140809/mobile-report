@@ -1,0 +1,185 @@
+\subsection{Tiêu chí đánh giá chất lượng}
+\label{sec:quality-pillars}
+
+Chất lượng của ứng dụng được đánh giá trên ba khía cạnh: User Experience, Security \& Privacy và Business Goals.
+Ở mỗi khía cạnh, nhóm chọn những tiêu chí đo được; mỗi tiêu chí có chỉ số, ngưỡng đạt và cách đo cụ thể, được tổng hợp trong Bảng~\ref{tab:quality-criteria}.
+Mỗi tiêu chí có một mã riêng (ví dụ \texttt{UX-03}) để các quyết định thiết kế ở Phần~\ref{sec:ui-ux-design} và Phần~\ref{sec:technical-architecture} có thể tham chiếu tới.
+
+Ngưỡng đạt được đặt dựa trên các chuẩn, chính sách và quy định đã được công bố (Android vitals, NIST, OWASP MASVS, chính sách của Google Play và AdMob, quy định về bảo vệ dữ liệu cá nhân) và số liệu thị trường ở mục~\ref{sec:market-research}; nguồn của từng ngưỡng được trích dẫn ngay trong bảng.
+Với những chỉ số chưa có chuẩn chung, như thời gian bắt đầu phát nhạc hay mức tiêu thụ pin, nhóm tự đặt ngưỡng ban đầu (đánh dấu * trong bảng) và sẽ điều chỉnh sau khi đo trên bản thử nghiệm đầu tiên.
+
+Trừ khi có ghi chú khác, các chỉ số hiệu năng được đo trên thiết bị tham chiếu là một điện thoại Android tầm trung có RAM 4~GB, kết nối mạng 4G.
+Nhóm chọn máy tầm trung để kết quả phản ánh trải nghiệm của số đông người dùng chứ không chỉ người dùng máy cao cấp; trường hợp mạng yếu được kiểm tra thêm bằng cách giả lập mạng 3G.
+Các chỉ số thuộc khía cạnh Business Goals được đo trên nhóm người dùng thử nghiệm (kênh closed testing trên Google Play) sau khi phát hành MVP.
+
+\begingroup
+\small
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{1.2cm}>{\raggedright\arraybackslash}p{2.4cm}>{\raggedright\arraybackslash}p{4.2cm}>{\raggedright\arraybackslash}p{3.7cm}>{\raggedright\arraybackslash}p{3.5cm}@{}}
+\caption{Tiêu chí đánh giá chất lượng theo ba khía cạnh}
+\label{tab:quality-criteria} \\
+\toprule
+\textbf{Mã} & \textbf{Tiêu chí} & \textbf{Chỉ số} & \textbf{Ngưỡng đạt} & \textbf{Cách đo} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mã} & \textbf{Tiêu chí} & \textbf{Chỉ số} & \textbf{Ngưỡng đạt} & \textbf{Cách đo} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\bottomrule
+\multicolumn{5}{@{}l}{\footnotesize *~Ngưỡng do nhóm tự đặt.} \\
+\endlastfoot
+\multicolumn{5}{@{}l}{\textit{User Experience}} \\
+\texttt{UX-01} & Phản hồi thao tác & Thời gian từ lúc chạm đến khi giao diện có phản hồi (hiệu ứng nhấn, skeleton loader) & $\le$ 100~ms (mốc người dùng cảm thấy hệ thống phản ứng tức thì)~\cite{nielsen-response-times} & Quay màn hình 60~fps, đếm số khung hình từ lúc chạm \\
+\texttt{UX-02} & Tải nội dung & Thời gian đến khi màn hình nội dung (trang chủ, danh sách tin, playlist) hiển thị đầy đủ & $\le$ 3 giây* khi dùng mạng 4G & Firebase Performance Monitoring \\
+\texttt{UX-03} & Khởi động & Thời gian đến khung hình đầu tiên khi cold start & $\le$ 2 giây*; không lần đo nào từ 5 giây trở lên (mốc Google Play xem là quá lâu)~\cite{android-launch-time} & Lệnh \texttt{adb shell am start -W}, lấy trung bình 10 lần đo \\
+\texttt{UX-04} & Bắt đầu phát & Thời gian từ lúc chạm đến khung hình video đầu tiên hoặc âm thanh đầu tiên & Video $\le$ 2 giây*, nhạc $\le$ 1 giây* khi dùng mạng 4G & Log sự kiện của trình phát \\
+\texttt{UX-05} & Phát liên tục & Số lần dừng để tải dữ liệu trong lúc phát; trạng thái nhạc khi chuyển phân hệ & $\le$ 1 lần mỗi 10 phút* khi dùng mạng 4G; nhạc không dừng khi chuyển phân hệ* & Log sự kiện của trình phát; kiểm thử theo user flow (mục~\ref{sec:user-flows}) \\
+\texttt{UX-06} & Độ mượt & Tỉ lệ khung hình render dưới 16~ms khi cuộn feed; số frozen frame (trên 700~ms)~\cite{android-render} & $\ge$ 95\%*; không có frozen frame ở các màn hình chính* & Android Studio Profiler, Android vitals \\
+\texttt{UX-07} & Độ ổn định & Tỉ lệ crash và ANR mà người dùng gặp phải & Crash $\le$ 0,5\%*, ANR $\le$ 0,2\%* (ngưỡng của Google Play: 1,09\% và 0,47\%)~\cite{android-vitals} & Firebase Crashlytics, Android vitals \\
+\texttt{UX-08} & Số bước thao tác & Số lần chạm từ màn hình chính đến khi bắt đầu xem, nghe, đọc hoặc chơi & $\le$ 3 lần chạm*; chuyển phân hệ chỉ cần 1 lần chạm* & Đếm trên prototype và bản build theo từng user flow \\
+\texttt{UX-09} & Dễ dùng & Tỉ lệ hoàn thành tác vụ trong usability test; điểm SUS & $\ge$ 90\%*; SUS $\ge$ 70* (mức trung bình: 68)~\cite{sauro2011sus} & Usability test với 5 người dùng (đủ để phát hiện khoảng 85\% vấn đề)~\cite{nielsen-five-users}; bảng hỏi SUS~\cite{brooke1996sus} sau buổi test \\
+\texttt{UX-10} & Dung lượng & Kích thước tải về từ Google Play & $\le$ 50~MB* & Báo cáo kích thước ứng dụng trong Play Console \\
+\texttt{UX-11} & Pin & Lượng pin tiêu thụ khi phát nhạc trong nền 60 phút với màn hình tắt & $\le$ 5\%* dung lượng pin & Thống kê pin của hệ thống, Battery Historian \\
+\texttt{UX-12} & Accessibility & Vùng chạm, độ tương phản màu (chi tiết ở mục~\ref{sec:accessibility}) & Vùng chạm $\ge 48 \times 48$~dp~\cite{android-accessibility}; tương phản $\ge$ 4,5:1~\cite{wcag22} & Accessibility Scanner, checklist ở mục~\ref{sec:accessibility} \\
+\midrule
+\multicolumn{5}{@{}l}{\textit{Security \& Privacy}} \\
+\texttt{SEC-01} & Xác thực OTP & Độ dài và thời hạn của mã; số lần nhập sai; tần suất gửi mã & 6 chữ số, dùng 1 lần, hiệu lực 5 phút*; tối đa 5 lần sai mỗi mã*; gửi lại sau 60 giây*, tối đa 5 mã mỗi giờ* (NIST yêu cầu $\ge$ 6 chữ số, hiệu lực $\le$ 10 phút, chặn sau tối đa 100 lần sai liên tiếp)~\cite{nist80063b4} & Kiểm thử API với các kịch bản nhập sai, hết hạn, gửi lại liên tục \\
+\texttt{SEC-02} & Lưu trữ an toàn & Nơi lưu token phiên; dữ liệu nhạy cảm trên thiết bị và trong log & Token chỉ nằm trong Keystore (Android) hoặc Keychain (iOS); không có mật khẩu, OTP, token ở dạng rõ~\cite{owasp-masvs} & Kiểm tra bộ nhớ ứng dụng trên máy ảo đã root; rà soát log \\
+\texttt{SEC-03} & Truyền dữ liệu & Tỉ lệ request được mã hóa & Tất cả request đều dùng HTTPS với TLS 1.2 trở lên; request HTTP không mã hóa bị chặn~\cite{owasp-masvs} & Bắt gói tin qua proxy (mitmproxy) \\
+\texttt{SEC-04} & Quyền truy cập & Số quyền phải xin khi chạy; thời điểm xin; khả năng dùng tiếp khi bị từ chối & 2 quyền*; xin đúng ngữ cảnh, có màn hình giải thích; bị từ chối vẫn dùng được các tính năng khác~\cite{android-permissions} & Rà soát manifest; kiểm thử từng luồng với quyền bị từ chối \\
+\texttt{SEC-05} & Đồng ý dùng dữ liệu & Trạng thái cá nhân hóa gợi ý và quảng cáo & Chỉ bật khi người dùng đồng ý; tắt được trong phần cài đặt~\cite{luat-bvdlcn-2025} & Đối chiếu chính sách quyền riêng tư với hành vi thực tế \\
+\texttt{SEC-06} & Xóa tài khoản & Cách yêu cầu xóa; thời gian xóa dữ liệu & Xóa được trong ứng dụng và qua web~\cite{play-account-deletion}; phản hồi yêu cầu trong 2 ngày làm việc, xóa xong trong 20 ngày~\cite{nd356-2025} & Kiểm thử luồng xóa; kiểm tra cơ sở dữ liệu sau khi xóa \\
+\texttt{SEC-07} & Bản ghi giọng hát & Nơi xử lý và thời gian lưu bản ghi & Chấm điểm trên thiết bị*; xóa ngay sau khi chấm*, trừ khi người dùng chủ động chia sẻ & Kiểm tra bộ nhớ thiết bị và request mạng trong lúc chơi \\
+\texttt{SEC-08} & Kiểm tra bảo mật & Số lỗi bảo mật mức High trở lên & Không có lỗi nào* trước mỗi lần phát hành & Quét bằng MobSF, đối chiếu checklist OWASP MASVS~\cite{owasp-masvs} \\
+\midrule
+\multicolumn{5}{@{}l}{\textit{Business Goals}} \\
+\texttt{BIZ-01} & Retention & Tỉ lệ người dùng quay lại sau 1, 7 và 30 ngày & $\ge$ 16\%, 4\% và 2\%* (gấp đôi mức trung bình 8\%, 2\% và 1\% của ứng dụng giải trí)~\cite{adjust2026vn} & Báo cáo cohort trên Firebase Analytics \\
+\texttt{BIZ-02} & Mức độ gắn bó & DAU/MAU & $\ge$ 20\%* & Firebase Analytics \\
+\texttt{BIZ-03} & Dùng nhiều phân hệ & Tỉ lệ người dùng hoạt động trong tuần dùng từ 2 phân hệ trở lên & $\ge$ 40\%* & Sự kiện mở phân hệ trên Firebase Analytics \\
+\texttt{BIZ-04} & Gamification & Tỉ lệ người dùng hoạt động trong ngày hoàn thành ít nhất 1 nhiệm vụ & $\ge$ 30\% DAU* & Sự kiện hoàn thành nhiệm vụ \\
+\texttt{BIZ-05} & Chuyển đổi Premium & Tỉ lệ người dùng trả phí trên MAU sau 3 tháng & $\ge$ 2\%* & Google Play Console, Firebase Analytics \\
+\texttt{BIZ-06} & Giới hạn quảng cáo & Vị trí và tần suất quảng cáo interstitial & Không xuất hiện khi mở, thoát ứng dụng hay khi người dùng đang chơi, đọc~\cite{admob-interstitial}; không chèn giữa video, bài hát đang phát*; tối đa 1 lần mỗi 5 phút* & Log sự kiện quảng cáo; kiểm thử theo kịch bản \\
+\end{longtable}
+\endgroup
+
+\subsubsection{User Experience}
+
+Khi áp dụng các tiêu chí User Experience, nhóm lưu ý thêm những điểm sau:
+\begin{itemize}
+    \item \textbf{Phản hồi trước khi có dữ liệu:} ngưỡng 100~ms của \texttt{UX-01} áp dụng cả khi dữ liệu chưa tải xong; trong thời gian chờ, giao diện hiển thị skeleton loader như mô tả ở mục~\ref{sec:micro-interactions}.
+    \item \textbf{Khoảng dự phòng so với Android vitals:} khi tỉ lệ crash hoặc ANR vượt ngưỡng của Google Play, ứng dụng có thể bị giảm mức độ hiển thị và bị hiện cảnh báo trên trang của ứng dụng trong cửa hàng~\cite{android-vitals}.
+    Vì vậy, ngưỡng của \texttt{UX-03} và \texttt{UX-07} được đặt chặt hơn, để ứng dụng vẫn đạt khi chạy trên nhiều loại thiết bị khác ngoài thiết bị tham chiếu.
+    \item \textbf{Trình phát:} video và nhạc là hai phân hệ dự kiến được dùng lâu nhất.
+    Khi mạng yếu, trình phát hạ chất lượng thay vì dừng hẳn (\texttt{UX-05}).
+    Nhạc không dừng khi chuyển phân hệ là điều kiện tối thiểu cho trải nghiệm liền mạch mà ứng dụng hướng tới.
+    \item \textbf{Dung lượng và pin:} đây là hai pain point của việc dùng nhiều ứng dụng riêng lẻ (mục~\ref{sec:problem-statement}).
+    Kích thước tải về càng lớn thì người dùng càng ngại cài đặt và tỉ lệ gỡ cài đặt càng tăng~\cite{android-app-size}, nên dung lượng của ứng dụng phải nhỏ hơn tổng dung lượng các ứng dụng mà nó thay thế (\texttt{UX-10}).
+    Mức tiêu thụ pin được đo khi phát nhạc trong nền vì đây là kịch bản sử dụng kéo dài nhất trong ngày (\texttt{UX-11}).
+\end{itemize}
+
+\subsubsection{Security \& Privacy}
+
+Ứng dụng lưu trữ ba loại dữ liệu cần bảo vệ: thông tin tài khoản (số điện thoại hoặc email), lịch sử xem, nghe, đọc dùng để gợi ý nội dung, và bản ghi giọng hát từ minigame chấm điểm.
+Thanh toán cho gói Premium và vật phẩm được xử lý qua Google Play Billing, nên ứng dụng không trực tiếp xử lý thông tin thẻ.
+Ứng dụng thuộc phạm vi áp dụng của Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15 (có hiệu lực từ ngày 1/1/2026)~\cite{luat-bvdlcn-2025}, nên việc xin người dùng đồng ý trước khi dùng lịch sử xem, nghe, đọc để cá nhân hóa gợi ý và quảng cáo (\texttt{SEC-05}) và việc xóa dữ liệu khi người dùng yêu cầu (\texttt{SEC-06}) là yêu cầu bắt buộc chứ không chỉ là khuyến nghị.
+
+\textbf{Xác thực bằng OTP.}
+Giới hạn gửi lại mã ở \texttt{SEC-01} vừa chống dò mã, vừa tránh việc hệ thống bị lợi dụng để gửi tin nhắn rác.
+Theo NIST, gửi mã qua mạng điện thoại (SMS, cuộc gọi) bị xếp vào nhóm hạn chế vì mã có thể bị chặn bắt hoặc bị chuyển đến kẻ tấn công khi số điện thoại bị chiếm đoạt, còn email không được dùng làm kênh gửi mã xác thực vì hộp thư có thể bị truy cập chỉ bằng mật khẩu~\cite{nist80063b4}.
+Vì vậy, ngoài OTP qua SMS, ứng dụng cung cấp thêm cách đăng nhập bằng tài khoản Google; email chỉ dùng để xác minh địa chỉ và khôi phục tài khoản.
+
+\textbf{Quyền truy cập.}
+Thời điểm xin quyền đặc biệt quan trọng vì trên Android, nếu người dùng từ chối cùng một quyền hai lần, hệ thống sẽ không hiện lại hộp thoại xin quyền đó nữa~\cite{android-permissions}.
+Bảng~\ref{tab:permissions} liệt kê hai quyền mà ứng dụng phải xin khi chạy (\texttt{SEC-04}).
+
+\begingroup
+\small
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{2.9cm}>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}p{4.4cm}>{\raggedright\arraybackslash}p{4.6cm}@{}}
+\caption{Các quyền ứng dụng xin khi chạy}
+\label{tab:permissions} \\
+\toprule
+\textbf{Quyền} & \textbf{Dùng cho} & \textbf{Thời điểm xin} & \textbf{Nếu người dùng từ chối} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Quyền} & \textbf{Dùng cho} & \textbf{Thời điểm xin} & \textbf{Nếu người dùng từ chối} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Thông báo (\texttt{POST\_\allowbreak NOTIFICATIONS}, từ Android 13) &
+Nhắc nhiệm vụ hằng ngày và streak; báo tin mới theo chủ đề đã theo dõi &
+Khi người dùng bật nhắc nhở streak hoặc theo dõi một chủ đề tin lần đầu. Không xin ngay khi vừa mở ứng dụng. &
+Không nhận được nhắc nhở và tin mới. Trình phát nhạc vẫn hiện nút điều khiển trên thanh thông báo, vì thông báo của media session không cần quyền này~\cite{android-notification-permission}. \\
+\midrule
+Micro (\texttt{RECORD\_\allowbreak AUDIO}) &
+Minigame chấm điểm giọng hát &
+Khi người dùng vào minigame chấm điểm giọng hát lần đầu. &
+Minigame chuyển sang chế độ hát theo lời, không chấm điểm. Các minigame khác không bị ảnh hưởng. \\
+\end{longtable}
+\endgroup
+
+Ngoài hai quyền trên, ứng dụng chỉ khai báo các quyền được cấp sẵn khi cài đặt, như truy cập mạng và chạy foreground service để phát nhạc trong nền.
+Ứng dụng không cần quyền đọc bộ nhớ hay thư viện ảnh: ảnh đại diện được chọn qua Photo Picker của hệ thống, còn nội dung tải về được lưu trong vùng nhớ riêng của ứng dụng.
+
+\subsubsection{Business Goals}
+
+Ứng dụng theo mô hình freemium với ba nguồn doanh thu:
+\begin{itemize}
+    \item \textbf{Quảng cáo}, chỉ hiển thị với người dùng miễn phí: quảng cáo native xen trong feed tin tức và danh sách video, quảng cáo interstitial ở những điểm dừng tự nhiên như khi kết thúc một màn minigame, và rewarded ads (quảng cáo người dùng tự chọn xem để nhận thêm điểm thưởng hoặc lượt chơi).
+    \item \textbf{Gói Premium} trả phí theo tháng: không quảng cáo, tải nội dung về để dùng khi không có mạng, chất lượng âm thanh và video cao hơn, cùng vật phẩm trang trí độc quyền mỗi tháng.
+    Mức giá cụ thể được xác định sau, dựa trên giá gói trả phí của các ứng dụng đối thủ như YouTube Premium hay Spotify Premium.
+    \item \textbf{In-app purchase} cho vật phẩm trang trí như khung ảnh đại diện, trang phục cho thú ảo.
+    Ứng dụng không bán vật phẩm giúp thắng trong minigame, để bảng xếp hạng luôn công bằng giữa người dùng trả phí và người dùng miễn phí.
+\end{itemize}
+
+\textbf{Ảnh hưởng tới người dùng miễn phí.}
+Nguyên tắc của nhóm là gói Premium chỉ bổ sung các tiện ích, không khóa những tính năng tạo nên khác biệt của ứng dụng.
+Người dùng miễn phí vẫn dùng đủ bốn phân hệ, vẫn nghe nhạc khi tắt màn hình, vẫn tạo được playlist kết hợp nhiều loại nội dung và vẫn tham gia đầy đủ hệ thống nhiệm vụ, streak, thú ảo.
+Lý do là MVP cần kiểm chứng giả thuyết người dùng thực sự cần một ứng dụng giải trí tổng hợp (mục~\ref{sec:mvp-scope}).
+Nếu các tính năng kết hợp bị khóa sau gói trả phí, phần lớn người dùng sẽ không bao giờ trải nghiệm chúng, và giả thuyết không thể kiểm chứng được.
+
+\textbf{Chỉ số đánh giá.}
+Ở giai đoạn đầu, mục tiêu kinh doanh là giữ chân người dùng, chưa phải tối đa hóa doanh thu, nên chỉ số quan trọng nhất là retention (\texttt{BIZ-01}).
+Mục tiêu gấp đôi mức trung bình vẫn thấp hơn retention của ứng dụng game (mục~\ref{sec:market-research}), nên là kỳ vọng hợp lý cho một ứng dụng giải trí có gamification.
+Chỉ số \texttt{BIZ-03} kiểm chứng trực tiếp giả thuyết cốt lõi của sản phẩm: nếu phần lớn người dùng chỉ dùng một phân hệ, ứng dụng chỉ là một phiên bản kém hơn của một ứng dụng chuyên biệt.
+
+\subsubsection{Thứ tự ưu tiên khi các khía cạnh mâu thuẫn}
+
+Khi mục tiêu của các khía cạnh mâu thuẫn với nhau, nhóm ưu tiên theo thứ tự: Security \& Privacy trước, User Experience sau, Business Goals cuối cùng.
+Một sự cố lộ dữ liệu làm mất lòng tin của người dùng gần như vĩnh viễn và có thể vi phạm pháp luật, nên không mục tiêu nào được đánh đổi bằng an toàn dữ liệu.
+Giữa trải nghiệm và doanh thu, nhóm ưu tiên trải nghiệm vì doanh thu chỉ bền vững khi người dùng tiếp tục sử dụng ứng dụng.
+
+Thứ tự ưu tiên này được áp dụng theo hai cách:
+\begin{itemize}
+    \item Ngưỡng của khía cạnh được ưu tiên cao hơn là giới hạn cho khía cạnh được ưu tiên thấp hơn: mọi thay đổi nhằm tăng doanh thu (chẳng hạn tăng tần suất quảng cáo) chỉ được giữ lại nếu các chỉ số UX và retention không giảm.
+    \item Với từng mâu thuẫn cụ thể, nhóm tìm cách đạt mục tiêu của khía cạnh được ưu tiên thấp hơn mà không vi phạm ngưỡng của khía cạnh được ưu tiên cao hơn, như trong Bảng~\ref{tab:quality-conflicts}.
+\end{itemize}
+
+\begingroup
+\small
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{5.0cm}>{\raggedright\arraybackslash}p{10.4cm}@{}}
+\caption{Cách xử lý khi các khía cạnh mâu thuẫn}
+\label{tab:quality-conflicts} \\
+\toprule
+\textbf{Tình huống} & \textbf{Cách xử lý} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Tình huống} & \textbf{Cách xử lý} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+SDK quảng cáo làm ứng dụng khởi động chậm hơn (Business Goals với \texttt{UX-03}) &
+Chỉ khởi tạo SDK quảng cáo sau khi khung hình đầu tiên đã hiển thị, và không hiện quảng cáo khi mở ứng dụng. Nếu vẫn vượt ngưỡng \texttt{UX-03}, bỏ định dạng quảng cáo gây chậm. \\
+\midrule
+Gợi ý nội dung và quảng cáo cá nhân hóa cần dữ liệu hành vi (User Experience, Business Goals với \texttt{SEC-05}) &
+Mặc định gợi ý theo xu hướng chung và theo chủ đề người dùng tự chọn, chỉ hiện quảng cáo không cá nhân hóa. Lịch sử xem, nghe, đọc chỉ được thu thập và dùng để cá nhân hóa khi người dùng đồng ý. \\
+\midrule
+Thông báo nhắc streak giúp tăng retention nhưng có thể gây phiền toái (\texttt{BIZ-01} với User Experience) &
+Tối đa 1 thông báo nhắc nhở mỗi ngày, cho phép tắt riêng từng loại thông báo. Theo dõi tỉ lệ người dùng tắt thông báo; nếu tỉ lệ này tăng thì giảm tần suất nhắc. \\
+\end{longtable}
+\endgroup
