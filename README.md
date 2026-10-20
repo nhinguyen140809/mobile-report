@@ -15,7 +15,8 @@ Submission/Release của từng giai đoạn được lưu tại trang [Releases
 ├── refs.bib                  # tài liệu tham khảo (biblatex + biber, style IEEE)
 ├── styles/
 │   ├── preamble.tex          # khai báo package, layout trang, header/footer, định dạng heading
-│   └── guide.tex             # khung "Hướng dẫn viết" trong mỗi subsection
+│   ├── guide.tex             # khung "Hướng dẫn viết" trong mỗi subsection
+│   └── diagrams.tex          # ký hiệu cho bảng so sánh, ô của ma trận 2x2 (SWOT, Impact vs. Effort)
 ├── frontmatter/              # trang bìa, lời cảm ơn
 ├── sections/
 │   ├── 1-project-overview/   # Phần 1: tổng quan tài liệu và chiến lược sản phẩm
@@ -37,6 +38,7 @@ Convention:
 - Mỗi section cấp 1 là một thư mục `sections/<order>-<name>/`. File `main.tex` của section chứa lệnh `\section{}` và `\input` các subsection, mỗi subsection nằm trong một file riêng.
 - Hình minh họa đặt trong `figures/<section name>/`. Preamble đã khai báo `\graphicspath{{figures/}}`, vì vậy đường dẫn trong `\includegraphics` chỉ cần tính từ `figures/`.
 - Mọi đường dẫn trong `\input` và `\include` đều tính từ thư mục gốc của repo, kể cả khi lệnh nằm trong file của một section.
+- File của section chỉ chứa nội dung. Lệnh tự định nghĩa (`\newcommand`), style của TikZ (`\tikzset`) và các thiết lập định dạng khác đặt trong `styles/`, ví dụ ký hiệu `\ratingfull`, `\ratinghalf`, `\ratingnone` cho bảng so sánh và style `quadrant` cho ô của ma trận 2x2 nằm trong `styles/diagrams.tex`.
 - Tiêu đề viết hoa chữ cái đầu như một câu bình thường (`Phân tích thị trường và đối thủ cạnh tranh`, không viết `Phân tích Thị trường`). Thuật ngữ quen dùng bằng tiếng Anh (MVP, User Flows, Design System, Accessibility, ...) giữ nguyên tiếng Anh, không dịch và không ghi thêm bản dịch trong ngoặc.
 - Mỗi section và subsection có `\label{sec:<tên file>}` ngay dưới tiêu đề, ví dụ `\label{sec:user-personas}` cho `user-personas.tex`. Tham chiếu tới một mục bằng `mục~\ref{sec:user-personas}`, tới một phần bằng `Phần~\ref{sec:ui-ux-design}`.
 - Tên môn học, mã môn, tên đề tài, giai đoạn, giảng viên, sinh viên và năm chỉ được khai báo tại `metadata.tex`. Trang bìa, footer của mỗi trang và PDF properties đều lấy thông tin từ file này. Chẳng hạn, trước khi nộp giai đoạn 2, chỉ cần sửa `\newcommand{\reportphase}{Giai đoạn 2}` thay vì tìm và sửa từng vị trí.
