@@ -55,13 +55,13 @@ Phân lớp xác định trách nhiệm logic, còn mô-đun Gradle xác định
 \begin{lstlisting}[language={},basicstyle=\ttfamily\footnotesize,columns=fullflexible,breaklines=true,frame=single]
 app/
 domain/
-  auth/ video/ music/ news/ games/ session/
+  auth/ video/ music/ news/ games/ session/ engagement/
 feature/
   home/ video/ music/ news/ games/ account/ onboarding/ auth/
     navigation/
     presentation/
 data/
-  video/ music/ news/ games/ auth/
+  video/ music/ news/ games/ auth/ engagement/
 core/
   common/ designsystem/ session/ media/
   database/ datastore/ network/ sync/
@@ -69,7 +69,7 @@ core/
 \end{minipage}
 
 
-Trong cấu trúc trên, app, domain và từng thư mục con trực tiếp của feature, data, core là các mô-đun Gradle. Các thư mục nghiệp vụ bên trong domain là package thuộc một mô-đun Kotlin chung. Lựa chọn này thuận tiện cho các quy tắc xuyên phân hệ và tránh tăng số mô-đun trước khi có nhu cầu tách biệt lớn hơn.
+Cấu trúc trên mô tả cách tổ chức của hệ thống đích. App, domain và từng thư mục con trực tiếp của feature, data, core là các mô-đun Gradle. Nghiệp vụ engagement tập hợp nhiệm vụ, điểm, chuỗi ngày, thú cưng và đổi vật phẩm; các màn hình tương ứng nằm trong đồ thị tài khoản, còn Home quan sát cùng hợp đồng để hiển thị tổng quan. Các thư mục nghiệp vụ bên trong domain là package thuộc một mô-đun Kotlin chung. Lựa chọn này thuận tiện cho các quy tắc xuyên phân hệ và tránh tăng số mô-đun trước khi có nhu cầu tách biệt lớn hơn.
 
 Mô-đun app đóng vai trò composition root: khai báo Application, MainActivity, khung giao diện chung, đồ thị điều hướng gốc và cấu hình kết nối phụ thuộc. Nhóm feature sở hữu màn hình, ViewModel và khai báo điều hướng của từng chức năng. Nhóm data hiện thực các hợp đồng truy cập dữ liệu. Nhóm core tập hợp thành phần dùng chung theo vai trò; đây là cách tổ chức mô-đun, không phải lớp nghiệp vụ thứ tư.
 
@@ -165,40 +165,8 @@ Repository phiên nội dung & Data & Lưu và truy xuất định danh, tiến 
 
 Ví dụ, khi người dùng phát nhạc trong lúc video có tiếng, SessionCoordinator lấy trạng thái bộ phát và thiết lập đã lưu, sau đó yêu cầu SessionPolicy xác định phương án. Nếu cần lựa chọn, giao diện hiển thị hộp thoại; kết quả được chuyển lại để chính sách tạo kế hoạch tắt tiếng hoặc tạm dừng. Adapter media thực thi kế hoạch và phát trạng thái mới. SessionCoordinator không gọi ViewModel của phân hệ khác và không thực hiện điều hướng.
 
-Trạng thái thực thi do bộ phát cung cấp là nguồn xác định nội dung, vị trí và hoạt động phát. Snapshot phân biệt ý định phát với trạng thái đang phát thực tế, đồng thời biểu diễn buffering, kết thúc, lỗi và trường hợp bị hạn chế phát. Nhờ đó, nút tạm dừng vẫn phản ánh được yêu cầu người dùng trong lúc đang đệm, còn nhãn trạng thái phản ánh đúng hoạt động của engine. SessionState chỉ giữ thông tin cần cho phối hợp và phục hồi, tránh nhân bản các cờ playback đã có tại bộ phát.
+Trạng thái thực thi do bộ phát cung cấp là nguồn xác định nội dung, vị trí và hoạt động phát. Snapshot phân biệt ý định phát với trạng thái đang phát thực tế, đồng thời biểu diễn buffering, kết thúc, lỗi và trường hợp bị hạn chế phát. Chính sách phiên còn quản lý nguồn nội dung có tiếng và hệ số âm lượng tạm thời khi hiệu ứng trò chơi phát xen kẽ; các bộ phát nội dung vẫn được dùng chung. Nhờ đó, nút tạm dừng vẫn phản ánh được yêu cầu người dùng trong lúc đang đệm, còn nhãn trạng thái phản ánh đúng hoạt động của engine. SessionState chỉ giữ thông tin cần cho phối hợp và phục hồi, tránh nhân bản các cờ playback đã có tại bộ phát.
 
 Hàng phát đang chạy được quản lý cùng playlist của adapter Media3. Các thao tác Next và Previous sử dụng chính sách Domain trên hàng phát này; chuyển bài tự động sử dụng cùng playlist. Danh mục giao diện chỉ tạo lựa chọn ban đầu, không trở thành một hàng phát độc lập. Yêu cầu bất đồng bộ được gắn với phiên đang xử lý; khi đóng phiên, đăng xuất hoặc có lựa chọn mới, yêu cầu cũ bị vô hiệu để tránh phát nội dung ngoài ý định hiện tại.
 
-\subsubsection{Thiết kế dữ liệu và khả năng mở rộng}
-\label{sec:data-sync}
-
-Repository cung cấp hợp đồng truy cập dữ liệu theo nghiệp vụ và điều phối nguồn cục bộ hoặc từ xa. Các đối tượng của nhà cung cấp, bản ghi database và phản hồi HTTP được ánh xạ tại biên Data; lớp Domain và giao diện sử dụng mô hình phù hợp với ứng dụng. Bảng~\ref{tab:data-sync} thể hiện lựa chọn lưu trữ của kiến trúc đề xuất; phạm vi được triển khai trong bản nguyên mẫu được giới hạn tại mục~\ref{sec:architecture-scope}.
-\begingroup
-\small
-\renewcommand{\arraystretch}{1.2}
-\setlength{\tabcolsep}{3pt}
-\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.22\linewidth}>{\RaggedRight\arraybackslash}p{0.24\linewidth}>{\RaggedRight\arraybackslash}p{0.46\linewidth}}
-\caption{Phân bố dữ liệu trong kiến trúc đề xuất}
-\label{tab:data-sync}\\
-\toprule
-\textbf{Nhóm dữ liệu} & \textbf{Cơ chế lưu trữ} & \textbf{Nguyên tắc quản lý} \\
-\midrule
-\endfirsthead
-\toprule
-\textbf{Nhóm dữ liệu} & \textbf{Cơ chế lưu trữ} & \textbf{Nguyên tắc quản lý} \\
-\midrule
-\endhead
-\bottomrule
-\endfoot
-Tiến độ và danh sách video & Room & Lưu định danh nội dung, vị trí và metadata cần phục hồi \\
-Hàng phát âm nhạc & Snapshot qua repository, ưu tiên Room khi có cấu trúc & Lưu thứ tự, mục hiện tại và vị trí; bộ phát giữ trạng thái thực thi \\
-Tin tức đã lưu & Room & Lưu bài, bookmark và vị trí đọc; cung cấp nguồn đọc cục bộ \\
-Phiên trò chơi & Room & Snapshot gồm bàn chơi, điểm, seed nếu có và phiên bản mô hình \\
-Thiết lập ứng dụng & DataStore & Lưu onboarding, sở thích và quy tắc phối hợp nội dung \\*
-Danh tính người dùng & Provider hoặc backend và cơ chế lưu phù hợp & Xác minh tại dịch vụ danh tính; dữ liệu tài khoản được phân vùng theo người dùng \\
-\end{longtable}
-\endgroup
-
-Đồng bộ từ xa cần xác định khóa dữ liệu, phiên bản và tính lặp an toàn của thao tác theo từng nghiệp vụ. Các tác vụ có thể trì hoãn được lập lịch với điều kiện kết nối và cơ chế thử lại; chính sách giải quyết xung đột được xác định cùng hợp đồng backend. Điều này tránh áp dụng một quy tắc ghi đè chung cho dữ liệu có ý nghĩa khác nhau như bookmark, tiến độ hoặc điểm trò chơi.
-
-Khi mở rộng thêm loại nội dung như podcast hoặc âm thanh tổng hợp từ tin tức, cấu trúc mô-đun cho phép bổ sung mô hình, hợp đồng, adapter dữ liệu và giao diện tương ứng. Việc dùng lại bộ phát chỉ khả thi khi kiểu mục trong hàng phát và chính sách phiên hỗ trợ loại nội dung mới. Thiết kế vì vậy tái sử dụng hạ tầng media, đồng thời giữ quy tắc và nguồn dữ liệu riêng của từng nghiệp vụ.
+\input{sections/4-technical-architecture/data-design}

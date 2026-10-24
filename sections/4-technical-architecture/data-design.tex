@@ -1,0 +1,194 @@
+\subsubsection{Kiến trúc hệ thống và nguồn nội dung}
+\label{sec:data-sync}
+
+Thiết kế dữ liệu phục vụ toàn bộ phạm vi MVP trong bảng~\ref{tab:mvp-scope-full}, gồm cả nghe tin, trích âm thanh, quiz theo nội dung và gamification dùng chung. Hệ thống có ba ranh giới: ứng dụng Android quản lý tương tác và dữ liệu cục bộ; API OneSpace quản lý nội dung công bố cùng dữ liệu tài khoản; kho tệp cung cấp media qua URL đọc. PostgreSQL là nguồn có thẩm quyền cho nội dung máy chủ, số dư điểm và quyền sở hữu vật phẩm. Room là nguồn đọc của giao diện đối với dữ liệu đã đồng bộ hoặc được tạo tại thiết bị. Trạng thái playback thực tế vẫn do bộ phát sở hữu.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=13mm and 13mm, box/.style={draw,rounded corners,align=center,text width=43mm,minimum height=12mm,font=\small}, >=Stealth]
+\node[box] (api) {API OneSpace\\Xác thực, nội dung, nghiệp vụ};
+\node[box,left=of api] (mobile) {Android\\Repository, Room, bộ phát};
+\node[box,right=of api] (db) {PostgreSQL\\Dữ liệu và giao dịch};
+\node[box,below=of api] (worker) {Worker máy chủ\\Nhập nội dung, chuyển MP3};
+\node[box,below=of db] (storage) {Kho đối tượng\\Video, nhạc, ảnh, MP3};
+\draw[<->] (mobile) -- node[above,font=\scriptsize]{HTTPS} (api);
+\draw[<->] (api) -- (db);
+\draw[->] (api) -- (worker);
+\draw[->] (worker) -- (storage);
+\draw[->] (worker.east) -- ++(5mm,0) |- (db.south);
+\draw[->] (api) -- (storage);
+\draw[->] (storage.south) -- ++(0,-7mm) -| node[pos=0.7,left,font=\scriptsize]{Đọc media} (mobile.south);
+\end{tikzpicture}
+\caption{Ranh giới tích hợp dữ liệu và media của hệ thống đích.}
+\label{fig:data-system}
+\end{figure}
+
+Nguồn video và âm nhạc chính là danh mục do nhóm biên soạn từ tài sản có quyền sử dụng, được nạp vào PostgreSQL bằng công cụ quản trị hoặc script nhập có kiểm tra. Tệp gốc và các biến thể được đưa vào kho đối tượng; bản ghi danh mục giữ định danh tài sản, thời lượng, tác giả, chủ đề và quyền xử lý. Video cần chất lượng tự động được chuẩn bị thành HLS có nhiều mức chất lượng; MP4 được dùng khi chỉ cần nguồn đơn. Bộ phát nhận manifest hoặc URL tệp, không nhận trực tiếp dữ liệu nhị phân từ API danh mục.
+
+Tin tức sử dụng bài do nhóm biên soạn hoặc nguồn cho phép tích hợp qua API/RSS. Adapter nhập tin ở máy chủ chuẩn hóa tiêu đề, nội dung, thời điểm xuất bản, nguồn và URL gốc; khóa nguồn kết hợp định danh bài giúp loại bản trùng. Chỉ bài có quyền lưu toàn văn mới được cung cấp cho chế độ đọc ngoại tuyến và TTS. Nguồn chỉ cung cấp mô tả được thể hiện bằng bản tóm lược và liên kết gốc, không được giả định là đã có toàn văn. Quiz được biên soạn gắn với phiên bản bài hoặc video, không phụ thuộc vào việc gọi AI lúc người dùng mở nội dung.
+
+API cung cấp danh mục game, cấu hình thưởng, nhiệm vụ và tài sản thú cưng từ dữ liệu quản trị có phiên bản. Logic Snake/2048 và các luật game chạy trong ứng dụng; câu hỏi, đoạn nhạc gợi ý và beat map của game gắn nội dung được tải theo định danh phiên bản. Feed ban đầu lọc theo sở thích và chuyên mục rồi sắp theo thời điểm xuất bản; không cần dịch vụ gợi ý học máy để hiện thực hóa yêu cầu này.
+
+\subsubsection{Mô hình dữ liệu và phân bố lưu trữ}
+\label{sec:data-model}
+
+Các thực thể sử dụng định danh ổn định, độc lập với URL tệp và vị trí hiển thị. Dữ liệu máy chủ có version và updatedAt do máy chủ cấp; các phép ghi lặp an toàn sử dụng opId dạng UUID. Định danh nội bộ dùng UUID biểu diễn dưới dạng chuỗi trong JSON; khóa nguồn bên ngoài được lưu riêng. Version và số thứ tự là số nguyên tăng; position và duration tính bằng mili giây, size tính bằng byte, số dư điểm dùng số nguyên. API biểu diễn thời gian theo UTC/RFC 3339; Room có thể lưu tương ứng dưới dạng epoch. Dữ liệu thuộc người dùng có ownerId lấy từ phiên xác thực. Trong Room, ownerId có thể là định danh khách cục bộ; khóa tổng hợp ngăn dữ liệu giữa khách và các tài khoản bị dùng lẫn.
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.19\linewidth}>{\RaggedRight\arraybackslash}p{0.39\linewidth}>{\RaggedRight\arraybackslash}p{0.34\linewidth}}
+\caption{Mô hình dữ liệu nghiệp vụ và nơi lưu có thẩm quyền}
+\label{tab:data-sync}\\
+\toprule
+\textbf{Nhóm thực thể} & \textbf{Thuộc tính và quan hệ chính} & \textbf{Phân bố lưu trữ} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Nhóm thực thể} & \textbf{Thuộc tính và quan hệ chính} & \textbf{Phân bố lưu trữ} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+User, Interest & User: id, email, name, avatarId; UserInterest liên kết userId và topicId & PostgreSQL; Room giữ hồ sơ được phép dùng ngoại tuyến \\
+AuthChallenge, AuthSession & Challenge: id, email, codeHash, expiresAt, attempts; Session: id, userId, refreshHash, expiresAt, revokedAt & Chỉ máy chủ giữ challenge và bản kiểm tra token; thiết bị lưu refresh token đã mã hóa \\
+Content, MediaAsset & Content: id, type, title, topicId, sourceId, version; Asset: contentId, ownerId khi riêng tư, format, duration, rights, objectKey & PostgreSQL giữ metadata; kho đối tượng giữ tệp; Room giữ bản sao danh mục \\
+Article, Quiz & Article: contentId, body, sourceUrl; Quiz: id, contentId, contentVersion; Question, Choice và đáp án thuộc Quiz & Máy chủ giữ bản gốc; Room giữ bài đã lưu và gói câu hỏi phục vụ đọc/chơi \\
+Collection, Progress & Collection: id, ownerId, contentId, kind, deleted; Progress: ownerId, contentId, position, completed, version & Room ghi trước đối với bookmark và tiến độ; API đồng bộ bản tài khoản \\
+Playlist, PlaylistItem & Playlist: id, ownerId, name, revision; Item: id, playlistId, mediaRef, order & Room giữ bản làm việc; PostgreSQL lưu playlist tài khoản theo revision \\
+Queue, QueueItem & Queue: id, ownerId, currentItemId, position, repeat, shuffleOrder; Item: id, queueId, mediaRef, order & Room là nơi lưu snapshot phiên thiết bị; playlist có thể đồng bộ, queue đang chạy không đồng bộ đa thiết bị \\
+LocalAsset, ProcessingJob & Asset: id, ownerId, originId, originVersion, uri, mime, size, checksum; Job: id, type, inputHash, state, outputId & Room quản lý chỉ mục; tệp ở vùng riêng ứng dụng; job MP3 và kết quả gốc được quản lý trên máy chủ \\
+GameSession, GameResult & Session: id, ownerId, gameId, rulesVersion, seed, board, score; Result: sessionId, actions, duration, status & Room lưu snapshot; máy chủ xác nhận kết quả đủ điều kiện thưởng \\
+Mission, MissionProgress & Mission: id, ruleVersion, period, target, reward; Progress: ownerId, missionId, periodKey, count, claimed & PostgreSQL là nguồn xác nhận; Room giữ trạng thái đã xác nhận và sự kiện đang chờ \\
+Wallet, PointEntry & Wallet: ownerId, balance, revision; Entry: id, ownerId, businessKey, delta, reason, createdAt & Chỉ máy chủ quyết định số dư và sổ điểm; Room giữ bản sao chỉ đọc \\
+Pet, Inventory, Redemption & Pet: ownerId, stage, progress; Inventory: ownerId, itemId, quantity; Redemption: opId, itemId, cost, state & Giao dịch máy chủ quản lý nuôi pet, đổi quà, mở khóa game và khung avatar \\*
+ConflictPreference & ownerId, videoId, audioRef, rule; khóa duy nhất theo owner và cặp nội dung & Room giữ quy tắc theo cặp; DataStore giữ lựa chọn mặc định của thiết bị \\*
+PendingOperation, SyncState & Operation: opId, ownerId, resource, payload, baseVersion, state, attempts; SyncState: scope, cursor & Chỉ Room; điều phối ghi đợi và điểm tiếp tục đồng bộ \\
+\end{longtable}
+\endgroup
+
+Quan hệ một--nhiều được biểu diễn qua khóa ngoại: Playlist chứa nhiều PlaylistItem; Content có nhiều MediaAsset; Quiz có nhiều Question; Wallet có nhiều PointEntry. Những khóa duy nhất quan trọng gồm (ownerId, contentId, kind) cho bookmark, (ownerId, missionId, periodKey) cho nhận thưởng nhiệm vụ, và businessKey cho mỗi giao dịch điểm. Bản ghi queue dùng itemId riêng để một nội dung có thể xuất hiện nhiều lần mà vẫn xác định đúng mục đang phát. Chỉ mục được tạo trên khóa ngoại và các bộ lọc thường dùng: loại/chủ đề/thời điểm xuất bản của Content, ownerId/contentId của Progress, playlistId/order của PlaylistItem và ownerId/state của PendingOperation. Tìm kiếm trực tuyến dùng chỉ mục toàn văn trên tiêu đề cùng văn bản được phép lập chỉ mục; tìm kiếm cục bộ chỉ bao phủ dữ liệu đã tải, được ghi rõ trên giao diện.
+
+MediaRef gồm loại nội dung và định danh tài sản: nhạc danh mục, âm thanh bài báo, âm thanh trích hoặc video. Playlist và queue lưu tham chiếu này thay cho URL có thời hạn; trước khi phát, resolver lấy URL còn hiệu lực hoặc URI cục bộ. Kiểu video cần bề mặt hiển thị dùng bộ phát video chung, các kiểu audio dùng bộ phát audio chung; chỉ một mục chính của queue hoạt động tại một thời điểm. URI cục bộ không được đồng bộ như địa chỉ dùng chung. Tham chiếu TTS mang nguồn bài và tham số tổng hợp để thiết bị khác có thể tạo lại; MP3 dùng assetId máy chủ. Mục chỉ tồn tại trên một thiết bị được hiển thị không khả dụng trên thiết bị khác khi không có nguồn tái tạo, thay vì làm mất mục playlist. Thứ tự shuffle đã tạo và itemId hiện tại được lưu để phục hồi đúng thứ tự, thay vì tạo ngẫu nhiên lại sau mỗi lần mở.
+
+DataStore lưu theme, cỡ chữ, chế độ tiết kiệm dữ liệu, onboarding và tùy chọn thiết bị. Sở thích phục vụ cá nhân hóa được lưu theo tài khoản trong Room và đồng bộ qua API; cấu hình thiết bị không tự ghi đè tùy chọn trên thiết bị khác. Quy tắc xung đột gồm mặc định chung trong DataStore và các lựa chọn theo cặp nội dung trong Room được mô tả tại mục~\ref{sec:multitasking-matrix}. Dữ liệu định danh xác thực được lưu riêng theo cơ chế bảo vệ ở mục~\ref{sec:data-security}.
+
+Tệp người dùng chủ động lưu, âm thanh TTS đã ghim và MP3 cá nhân nằm trong vùng files riêng của ứng dụng; ảnh và media đệm có thể tái tạo nằm trong cache~\cite{android-app-files}. Room lưu URI, kích thước, checksum và trạng thái sẵn sàng, không lưu tệp media lớn dưới dạng BLOB. Tệp đang ghi có tên tạm; chỉ sau khi ghi hoàn tất và kiểm tra hợp lệ mới được đổi tên rồi công bố trong database. Tệp còn sót khi process kết thúc được dọn khi khởi động; bản ghi thiếu tệp được đánh dấu cần tạo hoặc tải lại.
+
+Schema Room có phiên bản và migration được kiểm thử trên dữ liệu cũ~\cite{android-room-migrations}. Migration bảo toàn bookmark, playlist, queue và tệp cá nhân; dữ liệu cache có thể nạp lại. Snapshot game và tệp sinh từ nội dung có rulesVersion hoặc contentVersion để phát hiện không tương thích. Bộ đệm áp dụng giới hạn dung lượng và loại bỏ theo lần sử dụng gần nhất; bài đã ghim, tệp cá nhân và job đang chạy được loại khỏi cơ chế dọn tự động. Khi thiếu dung lượng, ứng dụng yêu cầu người dùng chọn nội dung cần xóa hoặc hủy tác vụ mới, không âm thầm xóa sản phẩm đã lưu.
+
+\subsubsection{Hợp đồng API và cách truy xuất dữ liệu}
+\label{sec:data-api}
+
+API OneSpace dùng tiền tố \path|/v1|, request và response JSON qua HTTPS. Các đường dẫn trong bảng~\ref{tab:data-api} xác định hợp đồng tích hợp giữa ứng dụng Android và backend. Giá trị trong ngoặc nhọn là định danh tài nguyên. API danh sách hỗ trợ cursor, limit, topic, query và sort khi phù hợp; response gồm items, nextCursor và serverTime. Mỗi nội dung trả contentVersion cùng quyền phát, lưu và chuyển đổi để giao diện và worker dùng cùng điều kiện.
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.2\linewidth}>{\RaggedRight\arraybackslash}p{0.38\linewidth}>{\RaggedRight\arraybackslash}p{0.34\linewidth}}
+\caption{Các nhóm API phục vụ phạm vi sản phẩm}
+\label{tab:data-api}\\
+\toprule
+\textbf{Nghiệp vụ} & \textbf{Endpoint và phương thức} & \textbf{Dữ liệu hoặc kết quả} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Nghiệp vụ} & \textbf{Endpoint và phương thức} & \textbf{Dữ liệu hoặc kết quả} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Xác thực & POST \path|/auth/otp/request|; POST \path|/auth/otp/verify|; POST \path|/auth/refresh|; POST \path|/auth/logout| & Challenge, phiên đăng nhập, thời hạn và thu hồi phiên \\
+Tài khoản & GET/PATCH \path|/me|; GET/PUT \path|/me/interests|; DELETE \path|/me| & Hồ sơ, sở thích và yêu cầu xóa tài khoản \\
+Danh mục & GET \path|/videos|, \path|/tracks|, \path|/articles|, \path|/games|; GET từng tài nguyên theo id & Metadata phân trang; nội dung bài; cấu hình game và quiz liên quan \\
+Media & POST \path|/media/resolve| với assetId & URL đọc, expiresAt, MIME, duration và các biến thể; không trả khóa quản trị kho tệp \\
+Dữ liệu cá nhân & PUT/DELETE \path|/me/collections/{id}|; PUT \path|/me/progress/{id}| & Lưu/xóa bookmark hoặc watchlist; ghi vị trí kèm version \\
+Playlist & GET/POST \path|/me/playlists|; GET/PATCH/DELETE \path|/me/playlists/{id}| & Tên và thứ tự mục; sửa kèm revision để phát hiện xung đột \\
+Đồng bộ & GET \path|/me/changes?cursor=...|; POST \path|/me/operations| & Đọc thay đổi và tombstone; ghi theo lô, phản hồi riêng cho từng opId \\
+Chuyển MP3 & POST \path|/conversions|; GET \path|/conversions/{id}|; DELETE \path|/conversions/{id}| & Tạo, theo dõi hoặc yêu cầu hủy job; kết quả là assetId thuộc tài khoản \\
+Game và quiz & GET \path|/games/{id}/bundle|; POST \path|/game-results| & Gói luật/câu hỏi; kết quả được chấp nhận, từ chối hoặc chờ đối chiếu \\
+Hoạt động và nhiệm vụ & POST \path|/activity-events|;\newline GET \path|/me/missions|;\newline POST \path|/me/mission-claims| & Sự kiện có opId; tiến độ đã xác nhận; nhận thưởng đúng một lần \\
+Điểm, pet, vật phẩm & GET \path|/me/wallet|, \path|/me/pet|, \path|/me/inventory|; GET \path|/shop/items|; POST \path|/redemptions|; POST \path|/me/pet/actions| & Số dư, sổ điểm, cấu hình giá và kết quả giao dịch nguyên tử \\*
+Cấu hình và mở rộng & GET \path|/config|; GET \path|/search|; GET \path|/leaderboards|; GET \path|/me/summary| & Cấu hình phiên bản; tìm kiếm chung, xếp hạng, tổng kết dành cho giai đoạn sau MVP \\
+\end{longtable}
+\endgroup
+
+Response lỗi gồm code, message, retryable và requestId; lớp Data ánh xạ sang các trạng thái giao diện có ý nghĩa. Mã 401 kích hoạt tối đa một lần làm mới phiên dùng chung giữa các request; nếu refresh token bị từ chối hoặc thu hồi, app yêu cầu đăng nhập lại. Lỗi mạng trong lúc làm mới giữ dữ liệu cục bộ theo owner và trạng thái chờ kết nối, không được diễn giải thành xác nhận đăng xuất từ server. Mã 403 biểu diễn thiếu quyền; 404/410 cho biết nội dung không còn sẵn sàng; 409 biểu diễn xung đột version; 429 tuân theo thời điểm thử lại do server cung cấp. Lỗi mạng và 5xx được thử lại có giới hạn; hủy coroutine do rời phiên không được hiển thị như lỗi nội dung.
+
+Các thao tác tạo job, ghi sự kiện, nhận thưởng hoặc đổi vật phẩm gửi Idempotency-Key tương ứng opId. Máy chủ lưu dấu vết và kết quả xử lý; gửi lại cùng khóa và cùng payload trả kết quả trước đó, còn payload khác bị từ chối. Tài nguyên tài khoản được xác định từ token, không từ ownerId tùy ý trong request. Các request sửa playlist và tiến độ kèm baseVersion; máy chủ trả version mới để client cập nhật bản sao cục bộ.
+
+Luồng đọc của feed bắt đầu bằng truy vấn Room và phát kết quả qua Flow. Nếu chưa có dữ liệu hoặc bản sao quá hạn, repository gọi API, ánh xạ DTO, cập nhật bản ghi cùng thứ tự trang trong một transaction rồi để truy vấn Room phát trạng thái mới. Khóa trang bao gồm bộ lọc và kiểu sắp xếp để kết quả của hai feed không bị trộn. Chính sách làm mới mặc định là 15 phút cho danh mục và 24 giờ cho nội dung bài chưa ghim; người dùng có thể làm mới chủ động. ETag hoặc version giúp bỏ qua nội dung không đổi. Bài đã ghim vẫn đọc được khi quá hạn và được cập nhật khi có kết nối.
+
+Khi mở video hoặc nhạc, repository cung cấp metadata và progress cục bộ; resolver lấy URL media khi cần. URL hết hạn được phân giải lại theo assetId, giữ vị trí hiện tại và thử lại có giới hạn. Nội dung đã bị thu hồi quyền chuyển sang trạng thái không khả dụng. Lưu bài đọc sau là một transaction gồm nội dung cần đọc, bookmark và tác vụ đồng bộ; giao diện chỉ báo sẵn sàng ngoại tuyến khi toàn văn cần thiết đã có tại thiết bị.
+
+\subsubsection{Ghi dữ liệu, đồng bộ và xử lý xung đột}
+\label{sec:data-synchronization}
+
+Đối với bookmark, lịch sử và playlist, thao tác ghi trước vào Room cùng một PendingOperation trong transaction. Giao diện có thể phản hồi ngay và biểu diễn trạng thái đang chờ đồng bộ. Một worker duy nhất theo tài khoản gửi các thao tác đến API khi có mạng; worker có thể được kích hoạt sau ghi, khi mở ứng dụng hoặc khi hệ thống cho phép công việc nền. Việc dùng outbox bền vững và WorkManager giúp các thao tác còn tồn tại sau khi process bị kết thúc~\cite{android-offline-first,android-workmanager}.
+
+Các operation có số thứ tự cục bộ; worker giữ thứ tự thao tác trên cùng tài nguyên, gộp checkpoint tiến độ chưa gửi khi phù hợp và không để một lỗi vĩnh viễn chặn các tài nguyên độc lập. Lỗi không thể thử lại được giữ cùng trạng thái cần người dùng xử lý. Worker chỉ xóa hoặc đánh dấu hoàn tất operation sau khi nhận xác nhận tương ứng. Nếu mất response, cùng opId được gửi lại. Khi tải thay đổi, dữ liệu và cursor được ghi trong cùng transaction; cursor hết hạn dẫn đến tải lại bản tài khoản rồi áp dụng lại các thao tác cục bộ chưa xác nhận. Xóa dữ liệu tạo tombstone có version để thiết bị không làm sống lại bản ghi đã xóa.
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.22\linewidth}>{\RaggedRight\arraybackslash}p{0.42\linewidth}>{\RaggedRight\arraybackslash}p{0.28\linewidth}}
+\caption{Chính sách nhất quán theo loại dữ liệu}
+\label{tab:data-conflicts}\\
+\toprule
+\textbf{Loại dữ liệu} & \textbf{Quy tắc ghi và xung đột} & \textbf{Khi ngoại tuyến} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Loại dữ liệu} & \textbf{Quy tắc ghi và xung đột} & \textbf{Khi ngoại tuyến} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Danh mục, luật và giá & Máy chủ có thẩm quyền; client nhận phiên bản công bố và trạng thái thu hồi & Đọc bản sao còn hợp lệ; không sửa giá hoặc luật \\
+Bookmark và watchlist & Set trạng thái mong muốn theo opId; server cấp thứ tự version; thao tác xóa được giữ bằng tombstone & Ghi cục bộ và đưa vào outbox \\
+Tiến độ xem hoặc đọc & Ghi theo phiên và số thứ tự tăng; lần seek mới nhất trong phiên có thể giảm vị trí; version ngăn ghi cũ đè ghi mới & Checkpoint cục bộ; xung đột lấy bản server rồi áp lại thao tác phiên hiện tại \\
+Playlist & Sửa trên revision cụ thể; khi xung đột, tải bản mới và áp lại thao tác theo itemId; thao tác không còn hợp lệ yêu cầu người dùng chọn & Giữ bản làm việc và trạng thái chờ; không ghi đè toàn bộ danh sách cũ \\
+Queue và game snapshot & Thuộc phiên thiết bị; không đưa vào cơ chế tranh chấp vị trí phát nhiều thiết bị & Lưu ngay tại Room; phục hồi theo owner và version luật \\*
+Điểm, nhận thưởng, đổi quà & Máy chủ xử lý giao dịch và chống lặp bằng businessKey; client không gửi số dư tự tính & Giữ số dư đã xác nhận; sự kiện thưởng có thể chờ; thao tác chi điểm yêu cầu mạng \\
+\end{longtable}
+\endgroup
+
+Đối với điểm và vật phẩm, phản hồi giao diện phân biệt số đã xác nhận với phần đang chờ. Giao dịch đổi quà khóa hoặc cập nhật có điều kiện số dư, kiểm tra giá và quyền sở hữu, ghi sổ điểm, cập nhật kho vật phẩm rồi trả revision mới trong cùng transaction. Các giao dịch cạnh tranh được kiểm soát bằng khóa hàng hoặc cơ chế cô lập tương ứng của PostgreSQL~\cite{postgres-transactions}. Nếu timeout, client tra cứu hoặc gửi lại opId; không tự trừ điểm lần nữa. Quy tắc này giữ số dư không âm và tránh cấp trùng vật phẩm khi gửi lại request.
+
+Trạng thái guest có owner cục bộ, được dùng đọc nội dung công khai, lưu bookmark và chơi cục bộ. Guest không có số dư thưởng máy chủ. Khi đăng nhập, người dùng có thể chọn nhập bookmark, sở thích và playlist khách vào tài khoản; transaction nhập dùng khóa lặp an toàn. Bookmark trùng được hợp nhất theo định danh nội dung, playlist nhập được cấp định danh mới và giữ ánh xạ nhập để không nhân bản khi retry. Sự kiện điểm của khách không được tự chuyển thành điểm tài khoản. Khi đăng xuất, ứng dụng hủy worker và request thuộc owner cũ, dừng media riêng, xóa token và dữ liệu riêng theo chính sách tài khoản; danh mục công khai và thiết lập thiết bị có thể giữ lại.
+
+\subsubsection{Luồng dữ liệu của TTS, chuyển đổi và trò chơi}
+\label{sec:data-pipelines}
+
+\paragraph{Nghe tin và hàng phát hỗn hợp.}
+NewsRepository cung cấp toàn văn đã chuẩn hóa cùng phiên bản. Use case tạo yêu cầu TTS bằng TextToSpeech của Android; lựa chọn giọng ưu tiên hỗ trợ tiếng Việt và không cần mạng, đồng thời kiểm tra khả năng của engine trước khi tạo tệp~\cite{android-tts}. Văn bản được chia theo đoạn trong giới hạn engine; synthesizeToFile thực hiện bất đồng bộ, chỉ công bố đoạn sau callback hoàn tất và kiểm tra tệp. Từng tệp mang khóa gồm articleId, contentVersion, ngôn ngữ, giọng, tốc độ và số đoạn. Khi thiếu giọng phù hợp, giao diện hướng dẫn cài dữ liệu giọng hoặc thông báo yêu cầu kết nối; không nhận là TTS ngoại tuyến nếu engine cần mạng.
+
+Một mục nghe tin lưu danh sách đoạn và đoạn hiện tại trong Room. Player phát các đoạn đã sẵn sàng qua cùng audio engine; đoạn tiếp theo có thể được tạo trước trong giới hạn bộ đệm. Hủy yêu cầu dừng sinh các đoạn còn chờ và giữ hoặc dọn tệp theo lựa chọn lưu của người dùng. Khi phát tin ngay, policy áp dụng cùng quy tắc nhường nội dung chính; khi thêm vào hàng, MediaRef được chèn sau bài hiện tại như C6. Đối với C8, queue sử dụng chung kiểu MediaRef cho nhạc, TTS, MP3 cá nhân và video; lỗi một mục được báo rõ và cho bỏ qua hoặc thử lại, không làm mất thứ tự các mục còn lại.
+
+\paragraph{Trích MP3 và kho cá nhân.}
+Thiết kế lựa chọn chuyển MP3 tại worker máy chủ để định dạng đầu ra không phụ thuộc codec encoder của thiết bị. Ứng dụng lưu yêu cầu tạo job cùng opId vào Room trước khi gửi; mất response được xử lý bằng cách gửi lại cùng khóa. Android gửi videoId, contentVersion, định dạng và opId; API kiểm tra quyền chuyển đổi được cấu hình trên tài sản rồi tạo job thuộc tài khoản. Worker đọc nguồn được phép, tách audio và mã hóa MP3 bằng FFmpeg với bộ mã hóa \texttt{libmp3lame}~\cite{ffmpeg-codecs}. Worker nhận job bằng cập nhật nguyên tử và lease có thời hạn; job đang chạy nhưng hết lease được tiếp nhận lại, đầu ra có khóa theo jobId để không xuất trùng. Job đi qua các trạng thái queued, running, succeeded, failed hoặc cancelled; response theo dõi trả tiến độ khi có và mã lỗi khi thất bại.
+
+Kết quả thành công tạo MediaAsset riêng, MIME audio/mpeg, thời lượng, checksum và quyền sở hữu; API trả assetId cùng URL đọc có thời hạn. Ứng dụng tải vào tệp tạm, kiểm tra kích thước và checksum SHA-256 rồi ghi LocalAsset trong Room. Kho cá nhân chỉ hiển thị tệp sẵn sàng sau bước hoàn tất; job lỗi hoặc thiếu dung lượng không tạo bản ghi phát được. Yêu cầu hủy và retry giữ quan hệ với cùng job để tránh xuất trùng. Chức năng này hiện thực hóa C7 và F-VID-10/F-MUS-07; không đồng nghĩa với tải mọi video hoặc bài nhạc để dùng ngoại tuyến, vốn nằm ngoài phạm vi MVP.
+
+\paragraph{Quiz và game gắn nội dung.}
+Gói quiz có contentId, contentVersion, câu hỏi, lựa chọn và rulesVersion; game đoán bài hát có danh sách đoạn nhạc gợi ý và định danh đáp án; beat tiles dùng beat map biên soạn hoặc tính trước theo trackVersion. Bản beat map xác định các mốc theo thời gian của bài đang phát, không dựa vào bộ đếm UI độc lập. Chơi ngoại tuyến sử dụng gói đã tải; dữ liệu có thể bị đọc từ client nên đáp án nằm ở client không được dùng làm bằng chứng chống gian lận.
+
+GameSession lưu seed, số bước hoặc chuỗi hành động cần thiết, thời gian chơi và snapshot có phiên bản. Trước khi cộng thưởng, máy chủ kiểm tra sessionId duy nhất, phiên bản luật, giới hạn điểm, thời lượng và chuỗi hành động khi có thể tái hiện; quiz có thưởng được chấm bằng đáp án máy chủ. Kết quả ngoại tuyến hiển thị tại thiết bị nhưng có trạng thái chờ đối chiếu; nếu thiếu dữ liệu xác minh, kết quả chỉ được giữ cục bộ và không cấp thưởng hoặc đưa lên xếp hạng. Cách phân chia này hỗ trợ game cục bộ mà không coi điểm do client gửi là số dư có thẩm quyền.
+
+\paragraph{Nhiệm vụ, điểm, streak và thú cưng.}
+Các hành động đủ điều kiện tạo ActivityEvent gồm opId, loại sự kiện, contentId hoặc gameSessionId, phiên bản luật và dữ liệu kiểm tra. Sự kiện hoàn tất xem/nghe/đọc chỉ được tính theo ngưỡng cấu hình; máy chủ kiểm tra khoảng thời gian, tần suất và khóa nghiệp vụ để hạn chế gửi lặp. Các biện pháp này là kiểm tra hợp lệ cơ bản, không chứng minh tuyệt đối người dùng đã tiêu thụ nội dung. Thưởng được xác nhận theo ruleVersion hiện hành, không nhận trực tiếp số điểm từ client.
+
+Máy chủ dùng thời gian UTC và ngày nghiệp vụ theo múi giờ cấu hình Asia/Ho\_Chi\_Minh để tạo periodKey cho nhiệm vụ\path|/ng|ày và streak. Một nhiệm vụ chỉ nhận thưởng một lần trong một kỳ. Streak tăng từ ngày hoạt động đủ điều kiện do server ghi nhận; thời điểm của sự kiện ngoại tuyến là dữ liệu tham khảo, không tự thay ngày đã chốt. Hệ số điểm, giá vật phẩm và mốc pet được lấy từ \path|/config| có version, tham chiếu kinh tế điểm ở bảng~\ref{tab:point-economy}. Quy tắc trứng nở sau ba nhiệm vụ được đánh giá từ số nhiệm vụ được xác nhận; thao tác cho ăn, mở khóa game và mua khung avatar dùng cùng giao dịch chi điểm. Kết quả trả trạng thái wallet, pet và inventory mới để repository cập nhật nhất quán.
+
+Các chức năng mở rộng như leaderboard và tổng kết tháng đọc kết quả đã xác nhận và sổ sự kiện theo kỳ. Việc lưu sự kiện từ các phân hệ qua cùng hợp đồng phục vụ khả năng mở rộng này; không yêu cầu thu thập toàn văn bài hoặc nội dung media vào nhật ký hành vi. Nhắc nhiệm vụ và streak tại thiết bị được lập lịch từ thiết lập người dùng và dữ liệu tiến độ; thông báo hệ thống không phải nguồn xác nhận đã hoàn thành nhiệm vụ.
+
+\subsubsection{Xác thực, bảo vệ dữ liệu và vận hành}
+\label{sec:data-security}
+
+Luồng xác thực chính sử dụng email và OTP do máy chủ xác minh. Request tạo challengeId; mã được gửi qua adapter dịch vụ email của backend. Chính sách khởi đầu là mã sáu chữ số, hiệu lực năm phút, tối đa năm lần thử và chờ tối thiểu 60 giây trước khi gửi lại; các giới hạn theo email và địa chỉ mạng được thực thi ở server. Mã lưu dưới dạng giá trị kiểm tra được bảo vệ bằng bí mật máy chủ, không ghi log hoặc trả cho client; challenge dùng thành công bị vô hiệu. Thông báo gửi mã tránh tiết lộ sự tồn tại của tài khoản.
+
+Sau khi xác minh, API cấp access token ngắn hạn và refresh token có thể thu hồi theo phiên. Chính sách khởi đầu tương ứng 15 phút và 30 ngày; refresh token được xoay khi dùng, lưu giá trị băm ở server và có phát hiện dùng lại. Android giữ access token trong bộ nhớ; refresh token được mã hóa trong tệp riêng bằng khóa AES-GCM do Android Keystore bảo vệ~\cite{android-keystore}. Keystore lưu khóa, không phải kho lưu trực tiếp mọi token. Tệp xác thực được loại khỏi sao lưu; khi khóa không còn dùng được, ứng dụng yêu cầu đăng nhập lại. DataStore thiết lập không lưu token dưới dạng văn bản rõ.
+
+Mọi thao tác dữ liệu riêng đều kiểm tra quyền sở hữu ở server, bao gồm chuyển MP3, playlist và vật phẩm. URL media riêng được cấp với thời hạn ngắn; app chỉ nhận quyền đọc cần thiết, còn khóa dịch vụ email, kho tệp và database nằm tại máy chủ. Nội dung HTML từ nguồn tin được chuẩn hóa và làm sạch trước khi cung cấp cho trình đọc. Log kỹ thuật ghi requestId và mã lỗi, loại token, OTP, URL ký riêng và dữ liệu nhạy cảm. Giới hạn kích thước payload, độ dài văn bản TTS và nguồn media hợp lệ được kiểm tra tại biên tiếp nhận.
+
+Sao lưu PostgreSQL và kho đối tượng được quản lý theo lịch vận hành và được thử phục hồi; migration máy chủ triển khai tương thích với \path|/v1| trước khi loại trường cũ. API, worker và cấu hình quyền nội dung có kiểm tra sức khỏe, log job và cảnh báo lỗi lặp. Yêu cầu xóa tài khoản thu hồi phiên, xóa dữ liệu cá nhân và tài sản riêng theo quy trình xác định; nhật ký giao dịch kỹ thuật chỉ giữ dữ liệu tối thiểu theo chính sách lưu giữ của sản phẩm. Các tham số môi trường và nhà cung cấp có thể cấu hình, trong khi định danh dữ liệu, quyền sở hữu, giao dịch và luồng xử lý nêu trên là hợp đồng triển khai ổn định.

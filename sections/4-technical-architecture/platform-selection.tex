@@ -35,7 +35,7 @@ Trên cơ sở các tiêu chí này, nhóm lựa chọn Android Native với Kot
 \subsubsection{Các thành phần công nghệ và vai trò kiến trúc}
 \label{sec:tech-stack}
 
-Các công nghệ được lựa chọn theo trách nhiệm trong kiến trúc, thay vì ghép thành danh sách thư viện độc lập. Bảng~\ref{tab:tech-stack} phân biệt công nghệ sử dụng trong bản nguyên mẫu với các lựa chọn dành cho phần mở rộng của thiết kế.
+Các công nghệ được lựa chọn theo trách nhiệm trong kiến trúc, thay vì ghép thành danh sách thư viện độc lập. Bảng~\ref{tab:tech-stack} xác định các thành phần của kiến trúc đích cùng vai trò và cơ sở lựa chọn.
 \begingroup
 \small
 \renewcommand{\arraystretch}{1.2}
@@ -60,9 +60,9 @@ Kết nối thành phần & Hilt, KSP & Cấp phát phụ thuộc theo phạm vi
 Phát đa phương tiện & Media3 ExoPlayer & Cung cấp bộ phát, playlist và sự kiện trạng thái để xây dựng adapter media \\
 Dữ liệu có cấu trúc & Room & Lưu tiến độ và dữ liệu nghiệp vụ cần truy vấn hoặc phục hồi lâu dài \\
 Thiết lập nhỏ & DataStore & Lưu sở thích, trạng thái onboarding và metadata nhỏ của phiên \\
-Phát nhạc nền (đề xuất) & MediaSessionService, MediaController & Tách quyền sở hữu phiên phát khỏi Activity; kết nối điều khiển hệ thống \\
-Dữ liệu từ xa (đề xuất) & Retrofit, OkHttp, Kotlin Serialization; Coil cho ảnh & Tách giao tiếp HTTP, ánh xạ dữ liệu và tải ảnh khỏi lớp giao diện \\*
-Đồng bộ trì hoãn (đề xuất) & WorkManager & Lập lịch công việc theo điều kiện mạng và chính sách thử lại \\
+Phiên media nền & MediaSessionService, MediaController & Tách quyền sở hữu phiên phát khỏi Activity; kết nối điều khiển hệ thống \\
+Dữ liệu từ xa & Retrofit, OkHttp, Kotlin Serialization; Coil cho ảnh & Tách giao tiếp HTTP, ánh xạ dữ liệu và tải ảnh khỏi lớp giao diện \\*
+Đồng bộ trì hoãn & WorkManager & Lập lịch công việc theo điều kiện mạng và chính sách thử lại \\
 \end{longtable}
 \endgroup
 
@@ -70,6 +70,8 @@ Compose kết hợp Material 3 tạo cơ sở cho một hệ thống thiết k�
 
 Room và DataStore được sử dụng cho hai nhóm dữ liệu khác nhau. Room phục vụ dữ liệu có cấu trúc và các snapshot cần truy vấn; DataStore phục vụ thiết lập và metadata nhỏ. Các hợp đồng Domain che giấu lựa chọn lưu trữ, cho phép thay dữ liệu mô phỏng bằng nguồn thực mà không yêu cầu giao diện biết chi tiết database hoặc HTTP client.
 
-Đối với phát nhạc nền, thiết kế lựa chọn MediaSessionService làm chủ sở hữu bộ phát và media session theo hướng dẫn Media3~\cite{media3-background}. WorkManager đảm nhiệm đồng bộ có thể trì hoãn~\cite{android-workmanager}; hai cơ chế có mục đích và vòng đời khác nhau. Những thành phần được đánh dấu đề xuất trong bảng là lựa chọn cho kiến trúc mở rộng, không được xem là khả năng đã hiện thực hóa của bản nguyên mẫu.
+Đối với phát nhạc nền, thiết kế lựa chọn MediaSessionService làm chủ sở hữu bộ phát và media session theo hướng dẫn Media3~\cite{media3-background}. WorkManager đảm nhiệm đồng bộ có thể trì hoãn~\cite{android-workmanager}; hai cơ chế có mục đích và vòng đời khác nhau. MediaSessionService bảo đảm mô hình sở hữu phiên phát thống nhất; việc kích hoạt phát ngoài ứng dụng thuộc giai đoạn sau MVP như mục~\ref{sec:mvp-scope}, nhưng hợp đồng media không phụ thuộc vòng đời màn hình ngay từ thiết kế.
 
 Đối với trò chơi nhỏ, thiết kế lựa chọn logic Kotlin kết hợp Compose hoặc Canvas để biểu diễn bàn chơi. Phạm vi này phù hợp với tương tác đơn giản và cho phép tái sử dụng hệ thống trạng thái, điều hướng của ứng dụng. Game engine chuyên dụng chỉ trở nên cần thiết khi có yêu cầu đồ họa hoặc mô phỏng vượt quá phạm vi trên. Kiểm thử sử dụng JUnit cho quy tắc nghiệp vụ và Compose UI tests cho luồng giao diện; các thử nghiệm media bổ sung kiểm tra hành vi thực tế của adapter.
+
+Phía máy chủ sử dụng một ứng dụng API được tổ chức theo mô-đun nghiệp vụ, PostgreSQL cho dữ liệu quan hệ, kho đối tượng cho tệp media và một worker xử lý chuyển đổi âm thanh. Cách triển khai tập trung này phù hợp quy mô đồ án và hỗ trợ giao dịch giữa điểm thưởng, nhiệm vụ và vật phẩm. API sử dụng HTTPS và JSON; Android không kết nối trực tiếp PostgreSQL hoặc giữ thông tin quản trị kho tệp. Nhà cung cấp hạ tầng, tên miền và khóa tích hợp được đặt trong cấu hình môi trường; thay đổi nơi triển khai không làm thay đổi hợp đồng dữ liệu.

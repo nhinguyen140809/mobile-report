@@ -15,7 +15,7 @@ Sau khi có dữ liệu, app chọn nhánh trong hình~\ref{fig:startup-navigati
 
 Thiết kế phân biệt chuyển ngữ cảnh giao diện với yêu cầu phát nội dung. Chọn tab Music chỉ mở danh mục; chỉ hành động phát một bài mới yêu cầu phân xử âm thanh. Tương tự, mở bài báo không tự khởi động chức năng đọc thành tiếng. Sự phân biệt này giúp thao tác điều hướng không gây tác động bất ngờ lên phiên media đang diễn ra.
 
-Chính sách nội bộ của OneSpace giới hạn một nguồn nội dung chính có tiếng tại một thời điểm. Khi bắt đầu nhạc trong lúc video có tiếng (C1), người dùng chọn một trong ba phương án: tắt tiếng video và phát nhạc; tạm dừng video và phát nhạc; hoặc giữ video và hủy yêu cầu phát nhạc. Lựa chọn có thể được ghi nhớ trên toàn ứng dụng tại thiết bị và đặt lại trong Settings. Video tắt tiếng không cạnh tranh quyền phát âm thanh với nhạc.
+Chính sách nội bộ của OneSpace giới hạn một nguồn nội dung chính có tiếng tại một thời điểm. Khi bắt đầu nhạc trong lúc video có tiếng (C1), người dùng chọn một trong ba phương án: tắt tiếng video và phát nhạc; tạm dừng video và phát nhạc; hoặc giữ video và hủy yêu cầu phát nhạc. Lựa chọn được lưu theo cặp định danh video và mục audio khi người dùng bật ghi nhớ; thiết lập chung trên thiết bị là giá trị mặc định khi cặp chưa có quy tắc. Khóa gồm ownerId, videoId và audioRef; người dùng có thể xóa hoặc sửa quy tắc từng cặp trong Settings. Video tắt tiếng không cạnh tranh quyền phát âm thanh với nhạc.
 \begingroup
 \small
 \renewcommand{\arraystretch}{1.2}
@@ -38,15 +38,15 @@ Mở danh mục Music & Giữ phiên hiện có; chưa tạo yêu cầu phát nh
 Phát nhạc khi video có tiếng & Áp dụng lựa chọn C1 đã lưu hoặc yêu cầu người dùng chọn & Hiển thị trạng thái tương ứng của video và nhạc \\
 Phát video có tiếng & Tạm dừng nguồn âm thanh chính trước đó & Video trở thành nội dung phát chủ động \\
 Nhạc sang Home, News hoặc Games & Giữ hàng phát và bài hiện tại & Thanh điều khiển thu gọn hoặc đường truy cập rõ ràng tới bộ điều khiển \\
-Media cùng trò chơi & Giữ chính sách một nguồn tiếng; trò chơi dùng chế độ tắt âm & Bố trí video nổi không che vùng điều khiển của trò chơi \\
+Media cùng trò chơi & Một nội dung chính; hiệu ứng game là âm thanh phụ và có thể giảm âm lượng nhạc theo thiết lập & Bố trí video nổi không che vùng điều khiển; có tùy chọn tắt âm game \\
 Rời trò chơi & Tạm dừng cập nhật và lưu snapshot & Cho phép tiếp tục phiên từ trạng thái đã lưu \\*
-Ứng dụng không còn hiển thị & Tạm dừng video và trò chơi; nhạc nền theo vòng đời service & Điều khiển nhạc qua media session khi có triển khai service \\
+Ứng dụng không còn hiển thị & Tạm dừng video và trò chơi; nhạc nền theo vòng đời service & Điều khiển nhạc qua media session qua service quản lý phiên \\
 \end{longtable}
 \endgroup
 
-Các chính sách trong bảng~\ref{tab:multitasking-matrix} là sự cụ thể hóa phạm vi kỹ thuật cho các kịch bản ở bảng~\ref{tab:switch-matrix}. C1 sử dụng một quy tắc chung trên thiết bị thay cho phương án ghi nhớ theo từng cặp nội dung. C3--C4 sử dụng video nổi bên trong ứng dụng; cơ chế này khác Picture-in-Picture do hệ điều hành quản lý khi rời ứng dụng. Đối với C5 và C9, thiết kế giới hạn một nguồn tiếng chính và tắt âm trò chơi, thay cho phương án trộn tiếng hoặc giảm nhạc xuống một tỷ lệ cố định. Những lựa chọn này giới hạn độ phức tạp phân xử âm thanh và phù hợp với phạm vi nguyên mẫu; các mô tả rộng hơn tại mục~\ref{sec:mvp-scope} và các user story liên quan được xem là hướng mở rộng, chưa phải hành vi được kiến trúc này bảo đảm đầy đủ.
+Các chính sách trong bảng~\ref{tab:multitasking-matrix} phân biệt nội dung chính với hiệu ứng phụ để hiện thực hóa các kịch bản ở bảng~\ref{tab:switch-matrix}. Với C3--C4, video nổi hoạt động trong ứng dụng và giữ cùng engine; system Picture-in-Picture khi rời ứng dụng là cơ chế riêng. Với C5, hiệu ứng trò chơi sử dụng adapter âm thanh ngắn với SoundPool~\cite{android-soundpool}, không tạo hàng phát nội dung thứ hai; nhạc giảm về hệ số mặc định 0,3 khi hiệu ứng hoạt động nếu tùy chọn duck được bật. Khi hiệu ứng kết thúc, policy khôi phục âm lượng người dùng trước đó. Game yêu cầu nghe đoạn nhạc để đoán bài thì đoạn đó là nội dung chính và tạm dừng bài đang phát, thay vì trộn hai bài.
 
-Các kịch bản C6--C8 về đọc tin thành tiếng, trích âm thanh và hàng phát hỗn hợp cần bổ sung pipeline xử lý nội dung cùng mô hình hàng phát tương ứng. Chúng có thể kế thừa hợp đồng phiên media, nhưng hàng phát nhạc thông thường chưa đủ để đại diện cho toàn bộ các chức năng đó.
+C9 có thể đồng thời trình bày bài báo, video tắt tiếng và nhạc; chỉ nhạc là nguồn nội dung chính có tiếng. Việc thêm một nội dung có tiếng áp dụng chính sách thay thế hoặc tạm dừng, tránh ba luồng âm thanh độc lập. Lệnh từ UI và điều khiển hệ thống cùng áp dụng quy tắc này. Các pipeline TTS, trích MP3 và hàng phát hỗn hợp cho C6--C8 được xác định tại mục~\ref{sec:data-pipelines}, thay vì phụ thuộc vào danh mục mô phỏng của giao diện.
 
 \subsubsection{Quyền sở hữu trạng thái và lưu bền vững}
 \label{sec:state-storage}
@@ -76,7 +76,7 @@ Playback và hàng phát & Bộ phát; service khi phát nền & Bộ phát cung
 Tiến độ video & Bộ phát và repository phiên xem & Room lưu vị trí theo checkpoint và các sự kiện kết thúc tương tác \\
 Bài đã lưu, vị trí đọc & Repository tin tức & Kho cục bộ giữ dữ liệu bền vững độc lập với màn hình \\
 Bàn chơi và điểm & Phiên trò chơi & Snapshot có định danh trò chơi và phiên bản để kiểm tra tương thích \\*
-Sở thích và quy tắc phối hợp & Repository thiết lập & DataStore lưu các thay đổi liên quan một cách nhất quán \\
+Sở thích và quy tắc phối hợp & Repository thiết lập & DataStore lưu thiết lập thiết bị; Room lưu sở thích tài khoản và quy tắc theo cặp \\
 \end{longtable}
 \endgroup
 
@@ -113,7 +113,7 @@ Mất focus tạm thời & Tạm dừng hoặc giảm âm lượng theo loại n
 Mất focus lâu dài & Tạm dừng và chờ thao tác phù hợp; tránh yêu cầu lại focus liên tục \\
 Ngắt tai nghe & Tạm dừng nguồn có tiếng để tránh chuyển âm thanh ra loa ngoài ngoài ý muốn \\
 Người dùng chủ động dừng & Kết thúc yêu cầu phát và vô hiệu hóa các lệnh tự tiếp tục đang chờ \\*
-Khóa màn hình hoặc về Home & Nhạc tiếp tục qua service và có điều khiển hệ thống khi cơ chế phát nền được triển khai \\
+Khóa màn hình hoặc về Home & Nhạc tiếp tục qua service và có điều khiển hệ thống trong chế độ phát nền \\
 \end{longtable}
 \endgroup
 
@@ -146,17 +146,20 @@ Liên tục nội dung & Đổi toàn màn hình và video nổi giữ bộ phá
 Đúng chính sách âm thanh & Mỗi lựa chọn C1 dẫn tới kế hoạch phù hợp; video tắt tiếng cùng tồn tại với nhạc & Kiểm thử đơn vị và tích hợp bộ phát \\
 Phục hồi dữ liệu & Sau kết thúc process, dữ liệu bền vững được đọc lại và nội dung mặc định tạm dừng & Kiểm thử process death với snapshot thực \\
 Thích ứng hệ thống & Phản ứng phù hợp với focus, tai nghe, khóa màn hình và service & Kiểm thử gián đoạn trên thiết bị hoặc emulator \\*
+Đồng bộ và giao dịch & Gửi lại cùng opId; tạo hai yêu cầu đổi quà cạnh tranh; số dư, vật phẩm và bookmark giữ đúng kết quả & Kiểm thử API, outbox và transaction máy chủ \\
+Pipeline nội dung & TTS thiếu giọng, job MP3 bị hủy hoặc mất response; không công bố tệp dở, có thể tiếp tục theo jobId & Kiểm thử tích hợp engine, worker và kho tệp \\
+Cô lập tài khoản & Đổi owner trong request bị từ chối; đăng xuất không để worker cũ ghi vào phiên mới & Kiểm thử phân quyền và chuyển phiên \\
 Hiệu quả tài nguyên & Đo khởi động, bộ nhớ, lưu trữ và độ ổn định trên cấu hình mục tiêu & Profiler hoặc công cụ đo có mô tả điều kiện \\
 \end{longtable}
 \endgroup
 
 Kết quả của một nhóm kiểm thử chỉ hỗ trợ kết luận trong phạm vi kịch bản đã thực hiện. Chẳng hạn, tạo lại Activity chưa chứng minh phục hồi sau process death; phát media trong foreground chưa chứng minh phát nền; dữ liệu mô phỏng còn trong bộ nhớ chưa chứng minh khả năng đọc ngoại tuyến. Báo cáo kết quả thực nghiệm cần ghi rõ cấu hình và phương pháp tương ứng với từng tiêu chí.
 
-\subsubsection{Phạm vi hiện thực hóa và giới hạn}
+\subsubsection{Hợp đồng triển khai và tính thay thế nguồn dữ liệu}
 \label{sec:architecture-scope}
 
-Bản nguyên mẫu hiện thực hóa cấu trúc mô-đun, phân lớp, điều hướng theo đồ thị, onboarding, chế độ khách và luồng xác thực mô phỏng. Danh mục nội dung sử dụng dữ liệu mô phỏng, trong khi video và nhạc mẫu được phát bằng Media3. Room lưu tiến độ và danh sách video; DataStore lưu thiết lập cùng metadata nhỏ của phiên. Các cơ chế này cung cấp cơ sở để khảo sát luồng tương tác và chính sách phối hợp nội dung, không đại diện cho một sản phẩm đã tích hợp đầy đủ dịch vụ từ xa.
+Các cấu trúc dữ liệu, API và chính sách ở mục~\ref{sec:data-sync}--\ref{sec:data-security} xác định hệ thống đích, độc lập với việc sử dụng nguồn dữ liệu mô phỏng để kiểm chứng giao diện. Repository mô phỏng và repository tích hợp thực phải tuân theo cùng hợp đồng Domain về định danh, phân trang, trạng thái lỗi, quyền nội dung và kết quả thao tác. Cơ chế cấp phát phụ thuộc lựa chọn triển khai theo biến thể bản dựng; dữ liệu giả và mã OTP thử nghiệm chỉ thuộc biến thể phát triển, không được đưa vào biến thể phát hành.
 
-Một số thành phần của kiến trúc đề xuất chưa được hiện thực hóa: dịch vụ xác thực thực, pipeline dữ liệu từ xa và đồng bộ, lưu bền vững tin tức, logic cùng snapshot trò chơi, phục hồi đầy đủ hàng phát và MediaSessionService với điều khiển hệ thống. Xác thực email/OTP trong bản nguyên mẫu chỉ minh họa luồng giao diện, không xác minh danh tính qua server. Xử lý audio focus hiện có ở bộ phát nhạc; việc phân xử focus và ngắt tai nghe cho toàn bộ nguồn có tiếng còn cần được hoàn thiện. Video nổi đang thuộc phạm vi trong ứng dụng, không phải system Picture-in-Picture.
+Quá trình tích hợp nguồn thực thay adapter và bổ sung cơ chế lưu trữ, truyền tải theo thiết kế; màn hình tiếp tục nhận cùng trạng thái nghiệp vụ. Các màn hình phải có biểu diễn cho dữ liệu rỗng, tải lần đầu, dữ liệu cũ, lỗi, chờ đồng bộ và quyền không hợp lệ, kể cả khi nguồn mô phỏng phản hồi tức thì. Kiểm thử hợp đồng dùng cùng bộ tình huống cho cả hai triển khai; kiểm thử tích hợp bổ sung database, API, tệp và các giao dịch thực.
 
-Các chức năng đọc tin thành tiếng, trích âm thanh, hàng phát hỗn hợp và tải nhạc ngoại tuyến thuộc phạm vi mở rộng cần pipeline chuyên biệt. Các mục tiêu tài nguyên và độ chính xác phục hồi cần đánh giá thực nghiệm theo mục~\ref{sec:min-config} và bảng~\ref{tab:arch-test-cases}. Sự phân biệt giữa thiết kế đề xuất và bản nguyên mẫu cho phép trình bày đầy đủ hướng kiến trúc mà vẫn xác định đúng giới hạn của kết quả triển khai.
+Tiêu chí hoàn tất hệ thống không chỉ là hiển thị được dữ liệu: bài đã lưu phải đọc lại sau khi khởi động không có mạng; playlist và queue phải phục hồi đúng mục; job TTS/MP3 phải công bố đầu ra hợp lệ hoặc lỗi rõ ràng; request thưởng và đổi vật phẩm gửi lặp không làm thay đổi kết quả lần thứ hai; đăng xuất và đổi tài khoản không làm lộ dữ liệu owner cũ. Việc chọn nhà cung cấp triển khai hoặc thay cấu hình môi trường không làm thay đổi các tiêu chí này. Chỉ thay đổi yêu cầu nghiệp vụ hoặc đánh đổi kiến trúc mới cần sửa hợp đồng thiết kế, không phải việc chuyển từ dữ liệu mô phỏng sang dữ liệu thực.

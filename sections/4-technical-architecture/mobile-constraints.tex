@@ -37,7 +37,7 @@ Tương tác & Không gian hiển thị nhỏ; nhiều nội dung cạnh tranh v
 
 Video sử dụng bộ giải mã và bộ đệm; âm nhạc duy trì hàng phát và kết nối; trò chơi có thể phát sinh vòng lặp cập nhật liên tục. Nếu mỗi màn hình tự tạo và sở hữu các tài nguyên này, việc chuyển phân hệ dễ dẫn đến nhân bản bộ phát, mất vị trí đang xem hoặc tiếp tục xử lý khi nội dung không còn được sử dụng. Thiết kế vì vậy gắn tài nguyên với phiên nội dung, tách khỏi vòng đời của từng màn hình.
 
-OneSpace giới hạn tối đa một bộ phát video và một bộ phát âm thanh dùng chung. Hai bộ phát phục vụ trường hợp video tắt tiếng cùng tồn tại với nhạc; chính sách âm thanh chỉ cho phép một nguồn nội dung chính có tiếng tại một thời điểm. Chế độ toàn màn hình và video nổi sử dụng cùng bộ phát video, qua đó tránh khởi tạo lại bộ giải mã khi thay đổi cách trình bày.
+OneSpace giới hạn tối đa một bộ phát video và một bộ phát âm thanh dùng chung. Hai bộ phát phục vụ trường hợp video tắt tiếng cùng tồn tại với nhạc; chính sách âm thanh chỉ cho phép một nguồn nội dung chính có tiếng tại một thời điểm; hiệu ứng trò chơi ngắn được điều phối như âm thanh phụ theo mục~\ref{sec:multitasking-matrix}. Chế độ toàn màn hình và video nổi sử dụng cùng bộ phát video, qua đó tránh khởi tạo lại bộ giải mã khi thay đổi cách trình bày.
 \begingroup
 \small
 \renewcommand{\arraystretch}{1.2}
@@ -101,4 +101,6 @@ Bộ đệm tạm thời và chức năng tải xuống có phạm vi khác nhau
 
 Ứng dụng lựa chọn Android 8.0 (API 26) làm mức hỗ trợ tối thiểu. Giá trị này quy định khả năng cài đặt và tập API cần tương thích; compileSdk và targetSdk phục vụ biên dịch và hành vi tương thích nền tảng, được quản lý riêng trong cấu hình xây dựng.
 
-Thiết bị RAM 3 GB và ngân sách khoảng 200 MB cho cài đặt cùng bộ đệm được sử dụng làm mục tiêu đánh giá, chưa phải số liệu thực nghiệm. Việc đánh giá cần ghi nhận cấu hình thiết bị, phiên bản Android, biến thể bản dựng, nguồn media và thời lượng sử dụng. Các chỉ số phù hợp gồm thời gian khởi động lạnh, thời gian chuyển phân hệ, bộ nhớ đỉnh, kích thước lưu trữ và số lần lỗi hoặc bị kết thúc do thiếu bộ nhớ. Các điều kiện này giúp phân biệt mục tiêu thiết kế với khả năng đã được chứng minh trên thiết bị cụ thể.
+Thiết bị RAM 3 GB và ngân sách khoảng 200 MB cho cài đặt cùng bộ đệm có thể tái tạo được sử dụng làm mục tiêu đánh giá, chưa phải số liệu thực nghiệm. Việc đánh giá cần ghi nhận cấu hình thiết bị, phiên bản Android, biến thể bản dựng, nguồn media và thời lượng sử dụng. Các chỉ số phù hợp gồm thời gian khởi động lạnh, thời gian chuyển phân hệ, bộ nhớ đỉnh, kích thước lưu trữ và số lần lỗi hoặc bị kết thúc do thiếu bộ nhớ. Các điều kiện này giúp phân biệt mục tiêu thiết kế với khả năng đã được chứng minh trên thiết bị cụ thể.
+
+Tệp MP3 cá nhân và nội dung người dùng chủ động lưu có hạn mức riêng, được hiển thị trong quản lý dung lượng. Chúng không bị xóa bởi chính sách bộ đệm; khi đạt hạn mức, người dùng quyết định giải phóng dữ liệu hoặc hủy tác vụ mới.
