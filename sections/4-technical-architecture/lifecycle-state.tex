@@ -1,228 +1,162 @@
-\subsection{Vòng đời ứng dụng và quản lý trạng thái}
+\subsection{Mô hình thực thi, vòng đời và quản lý trạng thái}
 \label{sec:lifecycle-state}
 
-Thiết kế phân biệt lifecycle, saved state và background media theo tài liệu Android~\cite{android-lifecycle,android-state,media3-background}.
-
-\subsubsection{Luồng thực thi}
+\subsubsection{Khởi động và thiết lập phiên sử dụng}
 \label{sec:execution-flow}
 
-\begin{enumerate}
-\item Application thiết lập Hilt; MainActivity cài native splash, tạo shell và NavController.
-\item Startup state đọc preferences và auth session đã lưu từ repository; không điều hướng theo object mặc định chưa load.
-\item Chưa onboarding: vào onboarding. Hoàn tất chỉ lưu sở thích/onboarding, chưa tự cấp guest session.
-\item Đã onboarding nhưng signed out: vào Auth. Người dùng chọn guest hoặc hoàn tất xác thực.
-\item Phiên được persist xong: root chuyển Main; lần mở lại có thể phục hồi tab trước đó. Video/nhạc được restore ở trạng thái paused, không autoplay từ một lần mở app thông thường.
-\item Root quan sát phiên đã lưu để xử lý sign-out/recreate; ViewModel không giữ callback trỏ tới NavController của Activity cũ.
-\end{enumerate}
+Luồng khởi động được xác định từ trạng thái đã lưu thay vì giả định người dùng luôn bắt đầu tại Home. Application thiết lập cơ chế cấp phát phụ thuộc; MainActivity cài màn hình splash và khởi tạo khung ứng dụng. Trong thời gian đọc thiết lập và phiên xác thực, giao diện giữ trạng thái khởi động để tránh chuyển qua một màn hình trung gian không phù hợp.
 
-Guest là luồng MVP bắt buộc để demo bốn phân hệ không lệ thuộc backend. Email/OTP hiện là demo; provider thật là phần triển khai tiếp. Sign-out dừng phiên phát, xóa restore request đang chờ, trở lại Auth; giữ sở thích và settings cục bộ. Khi có dữ liệu riêng theo tài khoản phải bổ sung partition/cleanup theo identity.
+Sau khi có dữ liệu, app chọn nhánh trong hình~\ref{fig:startup-navigation}. Người dùng mới đi qua onboarding để lưu sở thích; người đã hoàn tất onboarding nhưng chưa có phiên được chuyển tới luồng xác thực hoặc chế độ khách. Khi phiên được ghi thành công, app mở đồ thị nội dung chính và có thể phục hồi phân hệ đã truy cập gần nhất. Video và nhạc được chuẩn bị ở trạng thái tạm dừng khi mở lại ứng dụng thông thường, bảo đảm việc khởi động không tự tạo âm thanh ngoài dự kiến.
 
-\subsubsection{Chính sách audio và ma trận chuyển nội dung}
+Đăng xuất làm thay đổi trạng thái phiên tại repository. App quan sát thay đổi này, kết thúc phiên nội dung, vô hiệu hóa yêu cầu phát hoặc phục hồi đang chờ và loại bỏ ngăn xếp nội dung cũ. Thiết lập chung có thể được giữ lại; dữ liệu riêng của tài khoản cần cơ chế phân vùng và dọn dẹp theo danh tính. Callback gắn với Activity được xử lý trong phạm vi giao diện, tránh để tác vụ của ViewModel điều hướng qua một Activity đã được tạo lại.
+
+\subsubsection{Chuyển nội dung và chính sách âm thanh}
 \label{sec:multitasking-matrix}
 
-\textbf{Phân biệt chọn tab và bắt đầu phát.} Vào catalog Music không đồng nghĩa PlayTrack; mở Article không đồng nghĩa bật TTS. Chỉ intent phát nội dung mới làm phát sinh cạnh tranh audio.
+Thiết kế phân biệt chuyển ngữ cảnh giao diện với yêu cầu phát nội dung. Chọn tab Music chỉ mở danh mục; chỉ hành động phát một bài mới yêu cầu phân xử âm thanh. Tương tự, mở bài báo không tự khởi động chức năng đọc thành tiếng. Sự phân biệt này giúp thao tác điều hướng không gây tác động bất ngờ lên phiên media đang diễn ra.
 
-C1 chốt ba lựa chọn khi bắt đầu nhạc trong lúc video đang có tiếng: \textbf{Tắt tiếng video, phát nhạc / Dừng video, phát nhạc / Chỉ giữ video}. Quy tắc nhớ \textbf{toàn ứng dụng trên thiết bị} cho baseline, có nút reset trong Settings. Không mô tả nhớ theo cặp nội dung khi storage chỉ có một conflictRule. Mọi trạng thái video còn chạy phải có surface/control nhìn thấy; không chấp nhận audio vô hình khi chuyển catalog.
-
+Chính sách nội bộ của OneSpace giới hạn một nguồn nội dung chính có tiếng tại một thời điểm. Khi bắt đầu nhạc trong lúc video có tiếng (C1), người dùng chọn một trong ba phương án: tắt tiếng video và phát nhạc; tạm dừng video và phát nhạc; hoặc giữ video và hủy yêu cầu phát nhạc. Lựa chọn có thể được ghi nhớ trên toàn ứng dụng tại thiết bị và đặt lại trong Settings. Video tắt tiếng không cạnh tranh quyền phát âm thanh với nhạc.
 \begingroup
 \small
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{3pt}
-\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.23\linewidth}>{\RaggedRight\arraybackslash}p{0.32\linewidth}>{\RaggedRight\arraybackslash}p{0.37\linewidth}}
-\caption{Chính sách chuyển nội dung và khôi phục}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.23\linewidth}>{\RaggedRight\arraybackslash}p{0.35\linewidth}>{\RaggedRight\arraybackslash}p{0.34\linewidth}}
+\caption{Chính sách chuyển nội dung của kiến trúc đề xuất}
 \label{tab:multitasking-matrix}\\
 \toprule
-\textbf{Sự kiện} & \textbf{Chính sách đích} & \textbf{UI/khôi phục} \\
+\textbf{Tình huống} & \textbf{Hành vi phiên nội dung} & \textbf{Biểu diễn giao diện} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Sự kiện} & \textbf{Chính sách đích} & \textbf{UI/khôi phục} \\
+\textbf{Tình huống} & \textbf{Hành vi phiên nội dung} & \textbf{Biểu diễn giao diện} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Video \(\rightarrow\) News/Home & Video tiếp tục khi app còn hiển thị & Floating dùng cùng engine, mở lại detail không reset vị trí \\
-Chọn tab Music & Không tự phát nhạc; giữ quyền kiểm soát video hiện có & Floating vẫn hiện trên catalog/player Music; chỉ PlayTrack mới áp dụng C1 \\
-PlayTrack khi video có tiếng & Áp dụng C1, hỏi khi chưa có lựa chọn & Nhạc và video mute có thể cùng tồn tại \\
-PlayVideo có tiếng & Dừng/pause audio chính trước đó & Video là nội dung chính người dùng vừa yêu cầu \\
-Music \(\rightarrow\) News/Home & Nhạc tiếp tục & Dock tiếp tục hiện ở News/Home/Games; reader có thể thay layout nhưng phải còn đường tới controls \\
-Video/Music \(\rightarrow\) Game mute & Không thêm nguồn tiếng thứ hai; video có thể floating & Game nhận vùng chạm riêng, không bị overlay che controls \\
-Rời game & Pause và lưu snapshot & Vào lại phục hồi board/score, không tạo phiên mới ngoài ý muốn \\
-TTS/chuyển MP3/mixed queue & Dùng cùng audio queue và chính sách một nguồn tiếng & C6--C8 vẫn là functional backlog; chưa tạo thêm engine hoặc placeholder screen \\
-App không còn hiển thị & Pause video/game; checkpoint & Music chỉ được cam kết tiếp tục khi có service đúng chuẩn \\
-Process bị kill & Restore snapshot hợp lệ, mặc định paused & Không phục hồi object Player hoặc tự phát khi người dùng chưa yêu cầu \\
+Video sang Home hoặc News & Tiếp tục video khi ứng dụng còn hiển thị & Video nổi dùng cùng bộ phát và vị trí \\
+Mở danh mục Music & Giữ phiên hiện có; chưa tạo yêu cầu phát nhạc & Duy trì video nổi và quyền truy cập điều khiển \\
+Phát nhạc khi video có tiếng & Áp dụng lựa chọn C1 đã lưu hoặc yêu cầu người dùng chọn & Hiển thị trạng thái tương ứng của video và nhạc \\
+Phát video có tiếng & Tạm dừng nguồn âm thanh chính trước đó & Video trở thành nội dung phát chủ động \\
+Nhạc sang Home, News hoặc Games & Giữ hàng phát và bài hiện tại & Thanh điều khiển thu gọn hoặc đường truy cập rõ ràng tới bộ điều khiển \\
+Media cùng trò chơi & Giữ chính sách một nguồn tiếng; trò chơi dùng chế độ tắt âm & Bố trí video nổi không che vùng điều khiển của trò chơi \\
+Rời trò chơi & Tạm dừng cập nhật và lưu snapshot & Cho phép tiếp tục phiên từ trạng thái đã lưu \\*
+Ứng dụng không còn hiển thị & Tạm dừng video và trò chơi; nhạc nền theo vòng đời service & Điều khiển nhạc qua media session khi có triển khai service \\
 \end{longtable}
 \endgroup
 
-Không chốt duck 30\%, ba luồng có tiếng hoặc giới hạn phản hồi cuộc gọi 0,5 giây khi chưa có phép đo và implementation. Với game của baseline chọn mute SFX để giữ phạm vi audio rõ ràng. Các hiệu ứng/ducking sau này cần ADR bổ sung.
+Các chính sách trong bảng~\ref{tab:multitasking-matrix} là sự cụ thể hóa phạm vi kỹ thuật cho các kịch bản ở bảng~\ref{tab:switch-matrix}. C1 sử dụng một quy tắc chung trên thiết bị thay cho phương án ghi nhớ theo từng cặp nội dung. C3--C4 sử dụng video nổi bên trong ứng dụng; cơ chế này khác Picture-in-Picture do hệ điều hành quản lý khi rời ứng dụng. Đối với C5 và C9, thiết kế giới hạn một nguồn tiếng chính và tắt âm trò chơi, thay cho phương án trộn tiếng hoặc giảm nhạc xuống một tỷ lệ cố định. Những lựa chọn này giới hạn độ phức tạp phân xử âm thanh và phù hợp với phạm vi nguyên mẫu; các mô tả rộng hơn tại mục~\ref{sec:mvp-scope} và các user story liên quan được xem là hướng mở rộng, chưa phải hành vi được kiến trúc này bảo đảm đầy đủ.
 
-\subsubsection{State owner và persistence}
+Các kịch bản C6--C8 về đọc tin thành tiếng, trích âm thanh và hàng phát hỗn hợp cần bổ sung pipeline xử lý nội dung cùng mô hình hàng phát tương ứng. Chúng có thể kế thừa hợp đồng phiên media, nhưng hàng phát nhạc thông thường chưa đủ để đại diện cho toàn bộ các chức năng đó.
+
+\subsubsection{Quyền sở hữu trạng thái và lưu bền vững}
 \label{sec:state-storage}
 
+Trạng thái được phân loại theo thời gian tồn tại và chủ sở hữu. Trạng thái giao diện nhỏ có thể được khôi phục qua cơ chế saved state; dữ liệu nghiệp vụ cần tồn tại qua các lần mở ứng dụng được lưu tại kho cục bộ. ViewModel giữ trạng thái qua thay đổi cấu hình nhưng không tồn tại qua việc hệ điều hành kết thúc process~\cite{android-state}. Vì vậy, sử dụng ViewModel và sử dụng lưu trữ bền vững giải quyết hai yêu cầu khác nhau.
 \begingroup
 \small
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{3pt}
-\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.17\linewidth}>{\RaggedRight\arraybackslash}p{0.28\linewidth}>{\RaggedRight\arraybackslash}p{0.22\linewidth}>{\RaggedRight\arraybackslash}p{0.23\linewidth}}
-\caption{State owner và persistence}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.22\linewidth}>{\RaggedRight\arraybackslash}p{0.25\linewidth}>{\RaggedRight\arraybackslash}p{0.45\linewidth}}
+\caption{Chủ sở hữu và cơ chế duy trì trạng thái}
 \label{tab:state-storage}\\
 \toprule
-\textbf{Loại state} & \textbf{Runtime owner} & \textbf{Persistence} & \textbf{Cam kết} \\
+\textbf{Loại trạng thái} & \textbf{Chủ sở hữu khi chạy} & \textbf{Cơ chế duy trì trong thiết kế} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Loại state} & \textbf{Runtime owner} & \textbf{Persistence} & \textbf{Cam kết} \\
+\textbf{Loại trạng thái} & \textbf{Chủ sở hữu khi chạy} & \textbf{Cơ chế duy trì trong thiết kế} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Dialog, form, filter nhỏ & Compose/feature ViewModel & rememberSaveable hoặc SavedStateHandle tùy cần & Không lưu bitmap, Player hoặc queue lớn vào Bundle \\
-Catalog/UI state & Feature ViewModel & Repository data nếu cần durable & Thu thập lifecycle-aware, UI không là nguồn dữ liệu duy nhất \\
-Tab/detail/back stack & Navigation ở app & Navigation saved state + last section nhỏ & Không coi SavedStateHandle là cơ sở dữ liệu hoặc bảo đảm sau force-stop \\
-Video progress/watchlist & Engine + ViewingSessionRepository & Room & Checkpoint hiện tại theo chu kỳ 3 giây; bổ sung checkpoint theo semantic events khi cần \\
-Music track/queue/position & Engine/service & Snapshot repository & Hiện mới nhớ track ID; đầy đủ queue/position là phần tiếp theo \\
-News reading/bookmark & Repository + ViewModel & Room đích & Hiện bookmark còn RAM; chưa đạt restore sau process death \\
-Game board/score & Game session & Room đích & Board preview không được tính là gameplay/persistence đã xong \\
-Theme, preferences, guest marker & Repository & DataStore & Ghi atomic cho metadata phiên liên quan \\
+Biểu mẫu, bộ lọc, hộp thoại & Compose hoặc feature ViewModel & rememberSaveable hoặc SavedStateHandle đối với dữ liệu nhỏ cần khôi phục \\
+Danh mục và trạng thái màn hình & Feature ViewModel & Tái tạo từ repository; thu thập dữ liệu theo vòng đời \\
+Tab, màn chi tiết, ngăn xếp & Navigation tại app & Saved state của điều hướng; lưu định danh phân hệ khi cần khởi động lại \\
+Playback và hàng phát & Bộ phát; service khi phát nền & Bộ phát cung cấp trạng thái thực tế; repository lưu snapshot cần phục hồi \\
+Tiến độ video & Bộ phát và repository phiên xem & Room lưu vị trí theo checkpoint và các sự kiện kết thúc tương tác \\
+Bài đã lưu, vị trí đọc & Repository tin tức & Kho cục bộ giữ dữ liệu bền vững độc lập với màn hình \\
+Bàn chơi và điểm & Phiên trò chơi & Snapshot có định danh trò chơi và phiên bản để kiểm tra tương thích \\*
+Sở thích và quy tắc phối hợp & Repository thiết lập & DataStore lưu các thay đổi liên quan một cách nhất quán \\
 \end{longtable}
 \endgroup
 
-Configuration change, OS process death, swipe-away/force-stop và cold launch là các tình huống kiểm thử khác nhau. ViewModel không sống qua process death. Saved state phụ thuộc task/host restoration; dữ liệu cần giữ bền vững phải có local storage. Không chờ onDestroy mới lưu.
+Snapshot lưu định danh, vị trí và dữ liệu có thể tuần tự hóa; Player, ViewModel và bitmap lớn không được đưa vào Bundle hoặc database như trạng thái có thể phục hồi trực tiếp. Khi mở lại, ứng dụng đọc snapshot, kiểm tra tính hợp lệ, truy xuất nội dung và tạo trạng thái thực thi mới. Dữ liệu quan trọng được ghi định kỳ hoặc theo sự kiện, do onDestroy không phải điểm kết thúc được bảo đảm trong mọi tình huống.
 
-Trong app, fullscreen/floating giữ cùng engine nên mục tiêu quay lại vị trí không lệch quá 2 giây vẫn áp dụng. Sau kill đột ngột, vị trí phụ thuộc checkpoint gần nhất; mục tiêu demo cold restore là mất không quá 5 giây tiến độ dưới điều kiện đo đã ghi nhận, chưa phải kết quả đã chứng minh.
+Việc đổi giữa video toàn màn hình và video nổi giữ nguyên engine nên không yêu cầu khôi phục từ database. Trường hợp process bị kết thúc phải phục hồi từ checkpoint gần nhất, do đó mức mất tiến độ phụ thuộc thời điểm ghi. Mục tiêu sai lệch không quá 2 giây khi quay lại nội dung trong cùng phiên và không quá 5 giây khi phục hồi từ checkpoint được dùng làm tiêu chí đánh giá trong điều kiện thử nghiệm xác định, không phải kết quả đo đã được chứng minh.
 
-\subsubsection{Lifecycle và background playback}
+\subsubsection{Vòng đời Android và phát nhạc nền}
 \label{sec:activity-lifecycle}
 
-Lifecycle Activity: Created \(\rightarrow\) Started \(\rightarrow\) Resumed \(\rightarrow\) Paused \(\rightarrow\) Stopped \(\rightarrow\) Destroyed. Không đồng nhất Paused với không còn hiển thị, hoặc mọi dialog với onPause. Compose dialog cùng Activity không bắt buộc tạo một transition Activity riêng.
+Activity chuyển qua các trạng thái Created, Started, Resumed, Paused, Stopped và Destroyed theo tương tác và quản lý của hệ điều hành~\cite{android-lifecycle}. OneSpace sử dụng khả năng hiển thị để quyết định tài nguyên nào cần tiếp tục hoạt động. Khi ứng dụng không còn hiển thị, video và trò chơi được tạm dừng, đồng thời ghi nhận trạng thái cần thiết. Mất trạng thái Resumed không luôn đồng nghĩa ứng dụng đã bị che hoàn toàn, đặc biệt trong chế độ nhiều cửa sổ; vì vậy, xử lý onPause được phân biệt với xử lý onStop.
 
-\begin{itemize}
-\item ON\_STOP khi app không còn hiển thị: pause video/game và lưu state; không tắt nhạc chỉ vì UI rời foreground nếu service hợp lệ đang sở hữu phiên.
-\item ON\_PAUSE: xử lý theo mức tương tác/visibility; không blanket-pause mọi video chỉ vì mất focus tạm thời hoặc đang multi-window.
-\item Audio focus/noisy là tín hiệu riêng từ hệ thống, không thay bằng navigation hay onStop.
-\item Nhạc nền phải do MediaSessionService sở hữu player/session; UI gửi lệnh qua MediaController/adapter. Lệnh từ notification, media buttons và UI phải dùng cùng Domain policy tại ranh giới service/application; service không gọi Activity ViewModel. Singleton engine trong process không thay cho service.
-\item OS có thể kết thúc process/service tùy chính sách. Không hứa phát vô hạn hoặc autoplay sau force-stop.
-\end{itemize}
+Đối với nhạc nền, kiến trúc đề xuất chuyển quyền sở hữu bộ phát và media session sang MediaSessionService. Activity kết nối thông qua MediaController hoặc adapter tương ứng; các lệnh từ giao diện, notification và nút media được xử lý trên cùng phiên~\cite{media3-background}. Chính sách Domain được sử dụng tại ranh giới service hoặc ứng dụng, không thông qua ViewModel thuộc Activity. Thiết kế này cho phép vòng đời playback tách khỏi màn hình, trong phạm vi các giới hạn service và tài nguyên do hệ điều hành áp dụng.
 
+Audio focus là cơ chế phân xử với các ứng dụng khác và hệ thống, độc lập với chính sách C1 bên trong OneSpace. Adapter của nguồn đang có tiếng chịu trách nhiệm yêu cầu hoặc nhường focus; video tắt tiếng không tranh focus với nhạc. Đối với ứng dụng target API 35 trở lên trên Android 15 trở lên, việc xin audio focus yêu cầu ứng dụng ở vị trí top app hoặc có foreground service phù hợp~\cite{android-audiofocus}. Ràng buộc này là một cơ sở kỹ thuật của lựa chọn service cho phát nhạc nền.
 \begingroup
 \small
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{3pt}
-\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.26\linewidth}>{\RaggedRight\arraybackslash}p{0.68\linewidth}}
-\caption{Hành vi audio đích}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.29\linewidth}>{\RaggedRight\arraybackslash}p{0.63\linewidth}}
+\caption{Phản ứng thiết kế trước gián đoạn âm thanh}
 \label{tab:audio-rules}\\
 \toprule
-\textbf{Sự kiện audio} & \textbf{Hành vi đích} \\
+\textbf{Sự kiện} & \textbf{Chính sách xử lý} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Sự kiện audio} & \textbf{Hành vi đích} \\
+\textbf{Sự kiện} & \textbf{Chính sách xử lý} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Lock screen/Home & Music tiếp tục qua service và có controls từ notification/lock screen \\
-Focus loss tạm thời & Pause/duck theo chính sách; chỉ resume nếu trước đó thực sự phát và user chưa Stop \\
-Focus loss lâu dài & Pause/stop theo provider/system policy, không tự tranh focus liên tục \\
-Rút tai nghe & Pause nguồn có tiếng; không tự chuyển sang loa ngoài \\
-Stop chủ động & Dừng session theo service lifecycle và xóa restore/autoplay pending \\
-Hai engine nội bộ & Chỉ nguồn đang có tiếng quản lý focus; video mute không được giành lại focus của nhạc \\
+Mất focus tạm thời & Tạm dừng hoặc giảm âm lượng theo loại nội dung; chỉ tiếp tục khi còn ý định phát hợp lệ \\
+Mất focus lâu dài & Tạm dừng và chờ thao tác phù hợp; tránh yêu cầu lại focus liên tục \\
+Ngắt tai nghe & Tạm dừng nguồn có tiếng để tránh chuyển âm thanh ra loa ngoài ngoài ý muốn \\
+Người dùng chủ động dừng & Kết thúc yêu cầu phát và vô hiệu hóa các lệnh tự tiếp tục đang chờ \\*
+Khóa màn hình hoặc về Home & Nhạc tiếp tục qua service và có điều khiển hệ thống khi cơ chế phát nền được triển khai \\
 \end{longtable}
 \endgroup
 
-Với targetSdk từ 35 trên thiết bị Android 15 trở lên, app chỉ xin được audio focus khi là top app hoặc có foreground service phù hợp~\cite{android-audiofocus}. Vì vậy test playback trong foreground phải có Activity hiển thị; kết quả đó không chứng minh nhạc nền khi chưa có service.
+Khôi phục sau thay đổi cấu hình, sau kết thúc process, sau đóng task và sau force-stop là các tình huống khác nhau. Cơ chế saved state phụ thuộc việc hệ thống khôi phục task; dữ liệu cần tồn tại lâu dài dựa vào lưu trữ cục bộ. Thiết kế phục hồi ưu tiên trạng thái tạm dừng và quyền chủ động của người dùng, thay vì giả định mọi lần mở lại đều có thể tự phát.
 
-Hiện music player bật xử lý audio focus của Media3, video player không tự xử lý focus. Vì vậy chưa được ghi mọi cuộc gọi/noisy/focus case là hoàn tất; cần bổ sung adapter audio focus cho toàn bộ nguồn đang có tiếng và test hệ thống.
-
-\subsubsection{ADR đã chốt}
-\label{sec:adr}
-
-\begingroup
-\small
-\renewcommand{\arraystretch}{1.2}
-\setlength{\tabcolsep}{3pt}
-\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.26\linewidth}>{\RaggedRight\arraybackslash}p{0.68\linewidth}}
-\caption{Architecture Decision Records}
-\label{tab:adr}\\
-\toprule
-\textbf{ADR} & \textbf{Quyết định và lý do} \\
-\midrule
-\endfirsthead
-\toprule
-\textbf{ADR} & \textbf{Quyết định và lý do} \\
-\midrule
-\endhead
-\bottomrule
-\endfoot
-01 & Android/Kotlin/Compose: đúng trọng tâm media/lifecycle và năng lực nhóm \\
-02 & minSdk 26; RAM/storage/startup là mục tiêu đo, không số liệu tự nhận đã đạt \\
-03 & Presentation--Domain--Data + MVVM/UDF; Domain Kotlin thuần để thể hiện bài ba lớp \\
-04 & Giữ Gradle modules ngoài app; domain chung phân package nghiệp vụ, không nhân submodule chưa cần \\
-05 & app thực thi navigation; feature sở hữu Route/NavGraph declaration và callbacks \\
-06 & Một root NavController; graph-scoped catalog/auth VM, destination scope cho settings khi phù hợp \\
-07 & Domain policy quyết định, shared session adapter điều phối, route executor điều hướng, media engine thực thi \\
-08 & Một video engine + một audio engine; một nguồn tiếng chính, không hỗ trợ ba luồng có tiếng \\
-09 & C1 nhớ global trên thiết bị, ba lựa chọn không trùng nghĩa; reset ở Settings \\
-10 & Floating trong app; system PiP và ducking SFX hoãn cho ADR riêng \\
-11 & Room/DataStore lưu data/snapshot, không lưu runtime Player/ViewModel \\
-12 & Music background cần MediaSessionService; WorkManager chỉ sync trì hoãn \\
-13 & News/game hướng local-first; catalog mock không được tính là offline-first đã hoàn tất \\
-14 & Guest là baseline; demo OTP không phải xác thực backend \\
-15 & ON\_STOP/visibility tách audio focus; restore không autoplay từ cold launch \\
-16 & Chọn tab không sửa playback; floating/dock giữ controls; queue runtime dùng chung; playing tách playRequested/buffering/error \\
-17 & Chưa chốt vendor API/backend hoặc giao thức leaderboard khi chưa triển khai functional tương ứng \\
-18 & verifyArchitecture + compiler + runtime tests cùng kiểm chứng; không một kiểm tra nào thay thế tất cả \\
-\end{longtable}
-\endgroup
-
-\subsubsection{Ma trận kiểm chứng và phần còn thiếu}
+\subsubsection{Tiêu chí kiểm chứng kiến trúc}
 \label{sec:arch-test-cases}
 
+Khả năng đáp ứng của kiến trúc được đánh giá bằng các kịch bản quan sát được. Kiểm tra phụ thuộc xác nhận ranh giới mô-đun; kiểm thử đơn vị đánh giá chính sách thuần Kotlin; kiểm thử tích hợp và giao diện đánh giá phối hợp navigation, dữ liệu và bộ phát. Các thử nghiệm gián đoạn hệ thống và hiệu năng cần điều kiện thực thi riêng.
 \begingroup
 \small
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{3pt}
-\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.23\linewidth}>{\RaggedRight\arraybackslash}p{0.32\linewidth}>{\RaggedRight\arraybackslash}p{0.37\linewidth}}
-\caption{Ma trận kiểm chứng và phần còn thiếu}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.24\linewidth}>{\RaggedRight\arraybackslash}p{0.43\linewidth}>{\RaggedRight\arraybackslash}p{0.25\linewidth}}
+\caption{Kịch bản và tiêu chí đánh giá kiến trúc}
 \label{tab:arch-test-cases}\\
 \toprule
-\textbf{Nội dung} & \textbf{Trạng thái baseline} & \textbf{Điều kiện để ghi hoàn tất trong báo cáo} \\
+\textbf{Thuộc tính} & \textbf{Kịch bản và tiêu chí} & \textbf{Phương pháp} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Nội dung} & \textbf{Trạng thái baseline} & \textbf{Điều kiện để ghi hoàn tất trong báo cáo} \\
+\textbf{Thuộc tính} & \textbf{Kịch bản và tiêu chí} & \textbf{Phương pháp} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Module/layer và callbacks navigation & Đã có cấu trúc và guardrail & verifyArchitecture, build và regression navigation pass trên revision tương ứng \\
-Auth/root routing/recreate & Có demo & Phân biệt guest/signed-out, OTP sai/đúng, recreate ngay lúc sign-out; ghi rõ local demo \\
-Same-engine floating/mini player & Có baseline & Kiểm tra surface thật, position, expand/close và controls \\
-C1 audio policy & Domain tạo plan; adapter thực thi, preference global & Test từng lựa chọn, video mute/buffering và thao tác pause/resume \\
-Video/control khi ở catalog Music & Đã chỉnh baseline: chọn tab không đổi engine, floating vẫn hiện & Regression chạy video rồi mở Music catalog; kiểm tra player identity, tiến độ và controls \\
-Game loop/snapshot/score & Preview & Gameplay thật, pause/resume và kill/restore test riêng \\
-News offline/bookmark durable & Chưa hoàn tất & Room là nguồn đọc, tắt mạng thật, restart process vẫn có dữ liệu \\
-Music service/notification/lock screen & Chưa có & Service thật + controls + lock/Home/background test \\
-Restore đầy đủ video/music/news/game & Một phần & Kill process có dữ liệu thật; kiểm tra ID, position, queue/board theo từng loại \\
-Call/noisy/audio focus cho cả video và nhạc & Một phần & Test hệ thống, không suy ra từ dialog C1 trong app \\
-Data Saver/adaptive playback & Có toggle/track cap & Nguồn HLS/DASH hoặc multi-variant thật và đo lựa chọn track; MP4 đơn không đủ chứng minh \\
-Low RAM/Battery Saver/startup budget & Chưa chứng minh & Profiler/Perfetto và test trên cấu hình đã nêu; ghi số liệu thực \\
-C6 TTS, C7 conversion, C8 mixed queue & Functional backlog giữ lại & Domain/data pipeline, UI và test tích hợp riêng; không tạo màn rỗng ở bước kiến trúc \\
+Tính độc lập mô-đun & Domain không phụ thuộc Android; Feature không truy cập triển khai Data hoặc Feature khác & Kiểm tra dependency, import và biên dịch \\
+Nhất quán điều hướng & Đổi tab giữ ngăn xếp; đăng xuất loại bỏ nội dung của phiên cũ & Kiểm thử giao diện và tạo lại Activity \\
+Liên tục nội dung & Đổi toàn màn hình và video nổi giữ bộ phát; đổi tab không tự thay phiên media & Kiểm tra định danh bộ phát, vị trí và điều khiển \\
+Đúng chính sách âm thanh & Mỗi lựa chọn C1 dẫn tới kế hoạch phù hợp; video tắt tiếng cùng tồn tại với nhạc & Kiểm thử đơn vị và tích hợp bộ phát \\
+Phục hồi dữ liệu & Sau kết thúc process, dữ liệu bền vững được đọc lại và nội dung mặc định tạm dừng & Kiểm thử process death với snapshot thực \\
+Thích ứng hệ thống & Phản ứng phù hợp với focus, tai nghe, khóa màn hình và service & Kiểm thử gián đoạn trên thiết bị hoặc emulator \\*
+Hiệu quả tài nguyên & Đo khởi động, bộ nhớ, lưu trữ và độ ổn định trên cấu hình mục tiêu & Profiler hoặc công cụ đo có mô tả điều kiện \\
 \end{longtable}
 \endgroup
 
-Các regression bổ sung kiểm tra: Next/Previous dùng queue khác catalog, video mute cùng nhạc, pause khi buffering, đóng phiên hủy request cũ và controls của floating trên Music catalog. Kết quả pass được ghi trong hồ sơ kiểm chứng của revision tương ứng, không suy ra từ sự tồn tại của test.
+Kết quả của một nhóm kiểm thử chỉ hỗ trợ kết luận trong phạm vi kịch bản đã thực hiện. Chẳng hạn, tạo lại Activity chưa chứng minh phục hồi sau process death; phát media trong foreground chưa chứng minh phát nền; dữ liệu mô phỏng còn trong bộ nhớ chưa chứng minh khả năng đọc ngoại tuyến. Báo cáo kết quả thực nghiệm cần ghi rõ cấu hình và phương pháp tương ứng với từng tiêu chí.
 
-Các test nền tảng gồm: first launch, guest/login/logout, từng tab/detail, Back, preserve tab stack, recreate, chuyển floating/fullscreen, xung đột audio, real media progression, settings/offline UI và bookmark trong phiên. Những test này không tự chứng minh OS process death, service nền, offline cache hoặc RAM 3 GB.
+\subsubsection{Phạm vi hiện thực hóa và giới hạn}
+\label{sec:architecture-scope}
 
-\subsubsection{Diễn giải baseline với phạm vi sản phẩm và UI}
+Bản nguyên mẫu hiện thực hóa cấu trúc mô-đun, phân lớp, điều hướng theo đồ thị, onboarding, chế độ khách và luồng xác thực mô phỏng. Danh mục nội dung sử dụng dữ liệu mô phỏng, trong khi video và nhạc mẫu được phát bằng Media3. Room lưu tiến độ và danh sách video; DataStore lưu thiết lập cùng metadata nhỏ của phiên. Các cơ chế này cung cấp cơ sở để khảo sát luồng tương tác và chính sách phối hợp nội dung, không đại diện cho một sản phẩm đã tích hợp đầy đủ dịch vụ từ xa.
 
-\begin{enumerate}
-\item C1 của baseline dùng quy tắc global trên thiết bị, reset trong Settings và ba lựa chọn ở mục 4.4.2. Phương án nhớ theo từng cặp nội dung trong phạm vi sản phẩm ban đầu được thay thế bằng quyết định này.
-\item C3--C4 và UI dùng floating trong app, giữ cùng engine khi mở lại; system PiP nằm ngoài baseline này.
-\item C5/C9 được giới hạn bởi một nguồn tiếng chính và game mute; ducking hoặc ba luồng có tiếng cần quyết định và kiểm chứng bổ sung.
-\item C6--C8 vẫn là yêu cầu sản phẩm chưa triển khai; queue nhạc hiện tại chưa chứng minh TTS, conversion hoặc mixed queue.
-\item Luồng UI gồm startup/auth/main graphs; app thực thi callbacks từ feature graphs, playback không phụ thuộc thay đổi destination.
-\item Offline Music chỉ được cam kết khi có pipeline download thật; dữ liệu mock hoặc buffer không thay thế tính năng tải đã hoãn.
-\item Ma trận kiểm chứng phân biệt thiết kế, implementation và số đo; UI demo không tự chứng minh service, process death hoặc performance.
-\end{enumerate}
+Một số thành phần của kiến trúc đề xuất chưa được hiện thực hóa: dịch vụ xác thực thực, pipeline dữ liệu từ xa và đồng bộ, lưu bền vững tin tức, logic cùng snapshot trò chơi, phục hồi đầy đủ hàng phát và MediaSessionService với điều khiển hệ thống. Xác thực email/OTP trong bản nguyên mẫu chỉ minh họa luồng giao diện, không xác minh danh tính qua server. Xử lý audio focus hiện có ở bộ phát nhạc; việc phân xử focus và ngắt tai nghe cho toàn bộ nguồn có tiếng còn cần được hoàn thiện. Video nổi đang thuộc phạm vi trong ứng dụng, không phải system Picture-in-Picture.
+
+Các chức năng đọc tin thành tiếng, trích âm thanh, hàng phát hỗn hợp và tải nhạc ngoại tuyến thuộc phạm vi mở rộng cần pipeline chuyên biệt. Các mục tiêu tài nguyên và độ chính xác phục hồi cần đánh giá thực nghiệm theo mục~\ref{sec:min-config} và bảng~\ref{tab:arch-test-cases}. Sự phân biệt giữa thiết kế đề xuất và bản nguyên mẫu cho phép trình bày đầy đủ hướng kiến trúc mà vẫn xác định đúng giới hạn của kết quả triển khai.

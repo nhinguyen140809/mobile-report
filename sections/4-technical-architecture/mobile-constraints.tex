@@ -1,103 +1,104 @@
-\subsection{Ràng buộc của môi trường di động}
+\subsection{Đặc điểm và ràng buộc của môi trường di động}
 \label{sec:mobile-constraints}
 
-\subsubsection{Mobile, web và desktop}
+\subsubsection{Đặc điểm môi trường thực thi}
 \label{sec:mobile-vs-desktop}
 
+Thiết bị di động có giới hạn về năng lượng, bộ nhớ và khả năng duy trì kết nối. Đồng thời, hệ điều hành quyết định vòng đời Activity và có thể thu hồi process để phục vụ các tác vụ khác. Vì vậy, tính đúng đắn của OneSpace không chỉ phụ thuộc vào kết quả của từng thao tác, mà còn phụ thuộc vào khả năng bảo toàn dữ liệu khi ngữ cảnh thực thi thay đổi~\cite{android-lifecycle,android-state}.
+
+Sự khác biệt giữa mobile, web và desktop được xem xét theo môi trường thực thi, không theo giả định rằng một nền tảng luôn có hiệu năng cao hơn nền tảng khác. Đối với OneSpace, những khác biệt có ảnh hưởng trực tiếp đến thiết kế được tổng hợp trong bảng~\ref{tab:mobile-desktop}.
 \begingroup
 \small
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{3pt}
-\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.13\linewidth}>{\RaggedRight\arraybackslash}p{0.2\linewidth}>{\RaggedRight\arraybackslash}p{0.19\linewidth}>{\RaggedRight\arraybackslash}p{0.19\linewidth}>{\RaggedRight\arraybackslash}p{0.18\linewidth}}
-\caption{Đặc điểm môi trường mobile, web và desktop}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.17\linewidth}>{\RaggedRight\arraybackslash}p{0.24\linewidth}>{\RaggedRight\arraybackslash}p{0.23\linewidth}>{\RaggedRight\arraybackslash}p{0.28\linewidth}}
+\caption{Ràng buộc môi trường thực thi và hệ quả thiết kế}
 \label{tab:mobile-desktop}\\
 \toprule
-\textbf{Tiêu chí} & \textbf{Android Native} & \textbf{Web} & \textbf{Desktop} & \textbf{Hệ quả cho OneSpace} \\
+\textbf{Tiêu chí} & \textbf{Android di động} & \textbf{Web và desktop} & \textbf{Hệ quả thiết kế} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Tiêu chí} & \textbf{Android Native} & \textbf{Web} & \textbf{Desktop} & \textbf{Hệ quả cho OneSpace} \\
+\textbf{Tiêu chí} & \textbf{Android di động} & \textbf{Web và desktop} & \textbf{Hệ quả thiết kế} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-RAM/CPU & Giới hạn, process có thể bị thu hồi & Phụ thuộc browser/tab và thiết bị & Thường có ngân sách lớn hơn & Không tạo player/game loop theo mỗi screen \\
-Pin & Tác động trực tiếp thời gian sử dụng & Cũng chịu giới hạn năng lượng & Có thể dùng nguồn điện ổn định & Ngừng công việc ngoài màn hình, giới hạn prefetch \\
-Vòng đời & Activity và process do OS quản lý & Tab có thể bị suspend/discard & Vòng đời cửa sổ/process khác mobile & Tách UI state, persisted state và playback lifetime \\
-Media nền & Có API media session/service và audio focus & Phụ thuộc browser/platform & Thường linh hoạt hơn & Dùng Media3 và MediaSessionService cho Android \\
-Offline & Room, DataStore, file cache & IndexedDB, Service Worker tùy hỗ trợ & Database/file system & Repository điều phối local/remote, UI không gọi nguồn dữ liệu \\
-Tích hợp hệ thống & Notification, Bluetooth, audio focus, lifecycle & Khả năng tùy nền tảng & API theo hệ điều hành & Thiết kế adapter Android, không đưa API hệ thống vào Domain \\
+Tài nguyên & Bộ nhớ và năng lượng có giới hạn; process có thể bị thu hồi & Phụ thuộc thiết bị; trình duyệt còn quản lý vòng đời của tab & Dùng chung bộ phát; giải phóng tài nguyên theo vòng đời nội dung \\
+Vòng đời & Activity có thể được tạo lại; process có thể bị kết thúc & Vòng đời cửa sổ hoặc tab khác với Activity Android & Tách trạng thái giao diện khỏi dữ liệu lưu bền vững \\
+Kết nối & Có thể chuyển mạng hoặc mất kết nối khi di chuyển & Cũng có thể mất mạng; cơ chế lưu cục bộ tùy nền tảng & Repository phối hợp nguồn cục bộ và nguồn từ xa \\
+Tích hợp media & Có audio focus, media session, service và điều khiển hệ thống & API và giới hạn phát nền tùy hệ điều hành hoặc trình duyệt & Đóng gói API Android trong các adapter chuyên trách \\*
+Tương tác & Không gian hiển thị nhỏ; nhiều nội dung cạnh tranh vùng chạm & Kích thước và phương thức nhập thay đổi theo thiết bị & Phối hợp nội dung chính, video nổi và thanh điều khiển nhạc \\
 \end{longtable}
 \endgroup
 
-Chọn native do trọng tâm bài là vòng đời, đa nhiệm, media và kinh nghiệm của nhóm. Đây là quyết định theo phạm vi và năng lực triển khai; không khẳng định web hoặc cross-platform không thể làm các chức năng tương tự.
-
-\subsubsection{Ngân sách tài nguyên}
+\subsubsection{Quản lý tài nguyên đa phương tiện}
 \label{sec:resource-consumption}
 
-Video thường tốn dữ liệu và decoder hơn đọc tin; game có thể tốn CPU/GPU hơn video tùy thuật toán và đồ họa. Các nhận xét này là định tính, không thay cho số đo.
+Video sử dụng bộ giải mã và bộ đệm; âm nhạc duy trì hàng phát và kết nối; trò chơi có thể phát sinh vòng lặp cập nhật liên tục. Nếu mỗi màn hình tự tạo và sở hữu các tài nguyên này, việc chuyển phân hệ dễ dẫn đến nhân bản bộ phát, mất vị trí đang xem hoặc tiếp tục xử lý khi nội dung không còn được sử dụng. Thiết kế vì vậy gắn tài nguyên với phiên nội dung, tách khỏi vòng đời của từng màn hình.
 
+OneSpace giới hạn tối đa một bộ phát video và một bộ phát âm thanh dùng chung. Hai bộ phát phục vụ trường hợp video tắt tiếng cùng tồn tại với nhạc; chính sách âm thanh chỉ cho phép một nguồn nội dung chính có tiếng tại một thời điểm. Chế độ toàn màn hình và video nổi sử dụng cùng bộ phát video, qua đó tránh khởi tạo lại bộ giải mã khi thay đổi cách trình bày.
 \begingroup
 \small
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{3pt}
-\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.26\linewidth}>{\RaggedRight\arraybackslash}p{0.68\linewidth}}
-\caption{Ngân sách và quy tắc tài nguyên}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.23\linewidth}>{\RaggedRight\arraybackslash}p{0.69\linewidth}}
+\caption{Nguyên tắc phân bổ tài nguyên theo loại nội dung}
 \label{tab:resource-policy}\\
 \toprule
-\textbf{Thành phần} & \textbf{Quy tắc kiến trúc đích} \\
+\textbf{Thành phần} & \textbf{Nguyên tắc thiết kế} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Thành phần} & \textbf{Quy tắc kiến trúc đích} \\
+\textbf{Thành phần} & \textbf{Nguyên tắc thiết kế} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Video & Tối đa một video decoder đang phục vụ nội dung; fullscreen và floating dùng cùng engine \\
-Audio & Một queue/engine âm thanh dùng chung; không tạo engine riêng cho từng bài hoặc từng tab \\
-Games & Chỉ game đang hiển thị mới chạy loop; pause khi rời game, checkpoint theo sự kiện \\
-News & Không duy trì tác vụ UI khi destination không hoạt động; nội dung đã lưu đọc từ local \\
-RAM thấp & Giảm cache/prefetch và bỏ tài nguyên không còn sử dụng; tránh sao chép model lớn vào saved state \\
-Data Saver & Giới hạn chất lượng/prefetch khi nguồn có biến thể phù hợp; không cam kết giảm bitrate của MP4 đơn chất lượng \\
-Battery Saver & Hoãn sync không thiết yếu, giảm công việc nền; không vô hiệu hóa thao tác media người dùng chủ động yêu cầu \\
+Video & Dùng chung bộ phát giữa chế độ toàn màn hình và video nổi; tạm dừng khi ứng dụng không còn hiển thị \\
+Âm thanh & Duy trì một hàng phát thống nhất; việc đổi màn hình không tạo hàng phát hoặc bộ phát mới \\
+Trò chơi & Chỉ cập nhật phiên đang tương tác; tạm dừng và ghi trạng thái khi rời bàn chơi \\
+Tin tức & Chỉ thu thập trạng thái giao diện theo vòng đời; dữ liệu cần giữ được quản lý tại repository \\
+Bộ đệm và tải trước & Giới hạn theo nhu cầu nội dung; giảm tải trước khi cần tiết kiệm dữ liệu hoặc bộ nhớ \\*
+Tác vụ nền & Phân biệt phát media do người dùng yêu cầu với đồng bộ có thể trì hoãn \\
 \end{longtable}
 \endgroup
 
-Không tạo thêm ResourcePolicyManager chỉ để đủ tên trong báo cáo. SessionPolicy giữ luật phối hợp; adapter media/game áp dụng luật tài nguyên. Chỉ tách manager mới khi có trách nhiệm và nhiều nơi sử dụng thực tế.
+Các cơ chế tiết kiệm tài nguyên được đặt tại adapter sở hữu tài nguyên tương ứng. Ví dụ, adapter media điều chỉnh lựa chọn luồng phát, còn repository và bộ lập lịch kiểm soát đồng bộ. Với nguồn có nhiều mức chất lượng, chính sách tiết kiệm dữ liệu có thể giới hạn mức chất lượng và tải trước. Đối với tệp chỉ có một mức chất lượng, giới hạn track không tự tạo ra một luồng bitrate thấp hơn. Sự phân biệt này giúp xác định đúng khả năng mà thiết kế có thể cung cấp.
 
-\subsubsection{Offline và mạng không ổn định}
+\subsubsection{Kết nối không ổn định và khả năng hoạt động ngoại tuyến}
 \label{sec:offline-design}
 
+Thiết kế xử lý ngoại tuyến theo đặc điểm của từng nghiệp vụ. Tin tức đã lưu và trạng thái trò chơi phù hợp với cách tiếp cận ưu tiên dữ liệu cục bộ; luồng video hoặc âm nhạc trực tuyến phụ thuộc vào dữ liệu đã được đệm hoặc tải xuống. Đối với dữ liệu hỗ trợ ngoại tuyến, repository cung cấp luồng đọc từ kho cục bộ; cập nhật từ mạng được ghi vào kho này trước khi phản ánh lên giao diện, phù hợp với hướng dẫn xây dựng ứng dụng offline-first của Android~\cite{android-offline-first}.
 \begingroup
 \small
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{3pt}
-\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.23\linewidth}>{\RaggedRight\arraybackslash}p{0.32\linewidth}>{\RaggedRight\arraybackslash}p{0.37\linewidth}}
-\caption{Hành vi đích khi mất mạng}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.19\linewidth}>{\RaggedRight\arraybackslash}p{0.36\linewidth}>{\RaggedRight\arraybackslash}p{0.37\linewidth}}
+\caption{Hành vi thiết kế khi kết nối thay đổi}
 \label{tab:offline-behavior}\\
 \toprule
-\textbf{Phân hệ} & \textbf{Khi mất mạng} & \textbf{Khi có mạng lại} \\
+\textbf{Phân hệ} & \textbf{Khi mất kết nối} & \textbf{Khi kết nối được khôi phục} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Phân hệ} & \textbf{Khi mất mạng} & \textbf{Khi có mạng lại} \\
+\textbf{Phân hệ} & \textbf{Khi mất kết nối} & \textbf{Khi kết nối được khôi phục} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Video & Tiếp tục buffer hợp lệ; hết buffer thì báo chờ/retry, giữ vị trí & Người dùng retry hoặc resume theo trạng thái lỗi thực tế \\
-Music & Nội dung đã tải mới được bảo đảm offline; stream chỉ dùng phần buffer còn lại & Khôi phục request/queue theo chính sách, không tự tạo engine mới \\
-News & Đọc bài đã cache/bookmark từ Room; thiếu cache thì hiển thị trạng thái rõ ràng & Refresh remote, ghi local rồi phát state mới \\
-Games & Logic/board cục bộ vẫn hoạt động & Nếu có leaderboard thì sync theo ID phiên, không ghi đè bản local mới hơn \\
+Video & Phát phần đệm còn hợp lệ; khi không đủ dữ liệu, biểu diễn trạng thái chờ hoặc lỗi và giữ vị trí & Cho phép thử lại từ trạng thái được ghi nhận \\
+Âm nhạc & Tệp đã tải có thể phát cục bộ; nội dung trực tuyến phụ thuộc bộ đệm & Tiếp tục theo hàng phát và ý định của người dùng, tránh tự tạo phiên mới \\
+Tin tức & Đọc bài đã lưu; thông báo khi nội dung chưa có trong kho cục bộ & Làm mới nguồn từ xa, cập nhật kho cục bộ và phát trạng thái mới \\*
+Trò chơi & Duy trì logic và trạng thái cục bộ của phiên chơi & Đồng bộ dữ liệu có nhu cầu chia sẻ khi tồn tại dịch vụ tương ứng \\
 \end{longtable}
 \endgroup
 
-Cache không đồng nghĩa download. Downloaded Music không phải điều kiện hoàn tất baseline kiến trúc; nếu triển khai sau phải bổ sung quản lý file và dung lượng. Connectivity chỉ là tín hiệu gợi ý; lỗi request/player mới quyết định kết quả thao tác. Nút mô phỏng offline hiện tại chỉ kiểm tra UI, không chứng minh offline-first hay network recovery thật.
+Bộ đệm tạm thời và chức năng tải xuống có phạm vi khác nhau: bộ đệm hỗ trợ phiên phát đang diễn ra, còn tải xuống cần quản lý tệp, dung lượng và thời hạn sử dụng. Tín hiệu kết nối được dùng để hỗ trợ quyết định thử lại; kết quả request hoặc bộ phát vẫn là căn cứ xác định thành công của thao tác. Thiết kế này tránh xem việc thiết bị có kết nối mạng là bảo đảm rằng nguồn nội dung đang truy cập được.
 
-\subsubsection{Mức hỗ trợ và đo kiểm}
+\subsubsection{Cấu hình hỗ trợ và tiêu chí đánh giá}
 \label{sec:min-config}
 
-Android 8.0/API 26 là minSdk đã cấu hình. compileSdk/targetSdk hiện là 37, được quản lý trong Gradle và có thể nâng theo yêu cầu nền tảng. Không đồng nhất các số này với phiên bản Android tối thiểu.
+Ứng dụng lựa chọn Android 8.0 (API 26) làm mức hỗ trợ tối thiểu. Giá trị này quy định khả năng cài đặt và tập API cần tương thích; compileSdk và targetSdk phục vụ biên dịch và hành vi tương thích nền tảng, được quản lý riêng trong cấu hình xây dựng.
 
-RAM 3 GB và ngân sách khoảng 200 MB cho cài đặt/cache là mục tiêu cần đo và điều chỉnh. Không dùng emulator host 8 GB hoặc một lần chạy API 35 để kết luận đã đạt mục tiêu thiết bị RAM 3 GB. Hồ sơ kiểm chứng cần nêu thiết bị, API, RAM guest, nguồn media, build variant, thời lượng chạy, peak memory và crash/OOM. Cold start, warm start và chuyển tab được đo riêng.
+Thiết bị RAM 3 GB và ngân sách khoảng 200 MB cho cài đặt cùng bộ đệm được sử dụng làm mục tiêu đánh giá, chưa phải số liệu thực nghiệm. Việc đánh giá cần ghi nhận cấu hình thiết bị, phiên bản Android, biến thể bản dựng, nguồn media và thời lượng sử dụng. Các chỉ số phù hợp gồm thời gian khởi động lạnh, thời gian chuyển phân hệ, bộ nhớ đỉnh, kích thước lưu trữ và số lần lỗi hoặc bị kết thúc do thiếu bộ nhớ. Các điều kiện này giúp phân biệt mục tiêu thiết kế với khả năng đã được chứng minh trên thiết bị cụ thể.

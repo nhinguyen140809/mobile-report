@@ -1,70 +1,75 @@
-\subsection{Lựa chọn nền tảng và framework}
+\subsection{Lựa chọn nền tảng và công nghệ}
 \label{sec:platform-selection}
 
-\subsubsection{Phương án đã cân nhắc}
+\subsubsection{Tiêu chí và đối chiếu phương án}
 \label{sec:platform-comparison}
 
+Việc lựa chọn nền tảng dựa trên ba nhóm tiêu chí: khả năng tích hợp media và vòng đời hệ thống; chi phí triển khai, kiểm thử trong phạm vi đồ án; mức độ phù hợp với kinh nghiệm của nhóm. Do trọng tâm của OneSpace là chuyển đổi nội dung và phối hợp phiên phát trên Android, khả năng tiếp cận trực tiếp các API nền tảng có trọng số cao hơn nhu cầu chia sẻ mã giao diện giữa nhiều hệ điều hành.
 \begingroup
 \small
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{3pt}
-\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.17\linewidth}>{\RaggedRight\arraybackslash}p{0.28\linewidth}>{\RaggedRight\arraybackslash}p{0.22\linewidth}>{\RaggedRight\arraybackslash}p{0.23\linewidth}}
-\caption{Đối chiếu các nền tảng và framework}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.19\linewidth}>{\RaggedRight\arraybackslash}p{0.35\linewidth}>{\RaggedRight\arraybackslash}p{0.38\linewidth}}
+\caption{Đối chiếu phương án nền tảng theo nhu cầu của OneSpace}
 \label{tab:platform-comparison}\\
 \toprule
-\textbf{Phương án} & \textbf{Điểm phù hợp} & \textbf{Chi phí trong bài} & \textbf{Kết luận} \\
+\textbf{Phương án} & \textbf{Đặc điểm phù hợp} & \textbf{Đánh đổi trong phạm vi đồ án} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Phương án} & \textbf{Điểm phù hợp} & \textbf{Chi phí trong bài} & \textbf{Kết luận} \\
+\textbf{Phương án} & \textbf{Đặc điểm phù hợp} & \textbf{Đánh đổi trong phạm vi đồ án} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Android Native/Kotlin & Trực tiếp dùng lifecycle, Media3, media session và audio focus; nhóm có kinh nghiệm & Chỉ triển khai Android & Chọn \\
-iOS Native/Swift & Tích hợp hệ thống iOS trực tiếp & Thêm nền tảng và công cụ; không có bản iOS để kiểm thử & Phân tích, không triển khai \\
-Flutter & Chia sẻ UI và logic đa nền tảng & Cần kiểm tra plugin và phần tích hợp Android cho từng yêu cầu media & Không chọn trong phạm vi hiện tại \\
-React Native & Chia sẻ UI/logic bằng JS/TS & Phụ thuộc thư viện/native integration cho media và background & Không chọn \\
-Kotlin Multiplatform & Có thể chia sẻ logic Kotlin & Vẫn cần chiến lược UI/media theo nền tảng; tăng phạm vi kiểm thử & Cân nhắc sau nếu có yêu cầu iOS \\
+Android Native với Kotlin & Tích hợp trực tiếp lifecycle, Media3, audio focus và service & Tập trung một nền tảng; cần thiết kế riêng nếu mở rộng sang iOS \\
+iOS Native với Swift & Tiếp cận trực tiếp cơ chế media và vòng đời của iOS & Cần hệ công cụ, thiết bị và triển khai độc lập với bản Android \\
+Flutter & Chia sẻ giao diện và logic giữa các nền tảng & Cần đánh giá plugin và tích hợp nền tảng cho các tình huống media cụ thể \\
+React Native & Chia sẻ giao diện và logic bằng JavaScript hoặc TypeScript & Cần đánh giá thư viện và phần tích hợp native cho phát nền, điều khiển media \\*
+Kotlin Multiplatform & Có thể chia sẻ mô hình và logic Kotlin & Vẫn cần xác định chiến lược giao diện, media và kiểm thử cho từng nền tảng \\
 \end{longtable}
 \endgroup
 
-Không dùng bảng này để khẳng định một framework luôn nhanh hơn framework khác hoặc mọi cross-platform app đều cần tự viết native bridge.
+Trên cơ sở các tiêu chí này, nhóm lựa chọn Android Native với Kotlin. Lựa chọn giúp tập trung việc thiết kế và kiểm thử vào một mô hình vòng đời, một cơ chế phân xử âm thanh và một hệ công cụ. Chi phí của quyết định là chưa cung cấp ứng dụng iOS. Các phương án đa nền tảng vẫn có khả năng đáp ứng nhiều yêu cầu tương tự; chúng không được chọn do nhu cầu chia sẻ mã chưa bù đắp chi phí mở rộng phạm vi tích hợp và kiểm thử của đồ án.
 
-\subsubsection{Technology stack và mức triển khai}
+\subsubsection{Các thành phần công nghệ và vai trò kiến trúc}
 \label{sec:tech-stack}
 
+Các công nghệ được lựa chọn theo trách nhiệm trong kiến trúc, thay vì ghép thành danh sách thư viện độc lập. Bảng~\ref{tab:tech-stack} phân biệt công nghệ sử dụng trong bản nguyên mẫu với các lựa chọn dành cho phần mở rộng của thiết kế.
 \begingroup
 \small
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{3pt}
-\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.23\linewidth}>{\RaggedRight\arraybackslash}p{0.32\linewidth}>{\RaggedRight\arraybackslash}p{0.37\linewidth}}
-\caption{Technology stack và mức triển khai}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.2\linewidth}>{\RaggedRight\arraybackslash}p{0.27\linewidth}>{\RaggedRight\arraybackslash}p{0.45\linewidth}}
+\caption{Công nghệ được lựa chọn và cơ sở sử dụng}
 \label{tab:tech-stack}\\
 \toprule
-\textbf{Vai trò} & \textbf{Công nghệ chốt} & \textbf{Hiện trạng} \\
+\textbf{Vai trò} & \textbf{Công nghệ} & \textbf{Cơ sở lựa chọn} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Vai trò} & \textbf{Công nghệ chốt} & \textbf{Hiện trạng} \\
+\textbf{Vai trò} & \textbf{Công nghệ} & \textbf{Cơ sở lựa chọn} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-UI/design system & Compose, Material 3, font đóng gói & Có \\
-Navigation & Navigation Compose typed routes + Kotlin Serialization & Có \\
-State/DI & ViewModel, StateFlow, lifecycle-aware collection, Hilt/KSP & Có \\
-Domain & Kotlin/JVM, coroutines/Flow cho contracts & Có \\
-Media & Media3 ExoPlayer, adapter thực thi MediaSessionPort & Có phát sample stream thật \\
-Structured local data & Room & Có progress/watchlist video; các schema nghiệp vụ khác triển khai sau \\
-Preferences & DataStore & Có \\
-Remote API & Retrofit + OkHttp + Kotlin Serialization & Chọn cho giai đoạn remote; chưa có client/backend thật \\
-Artwork/ảnh & Coil khi tích hợp ảnh từ nguồn thật & Chưa tích hợp; hiện dùng minh họa mock \\
-Music background & MediaSessionService + MediaController & Bắt buộc cho hành vi background đích; chưa triển khai \\
-Deferred sync & WorkManager & Dành cho sync/retry trì hoãn; chưa có worker \\
-Mini game & Logic Kotlin + Compose/Canvas phù hợp game nhỏ & Mới board preview \\
-Verification & JUnit, Compose UI tests, verifyArchitecture & Có baseline; mỗi yêu cầu mới cần bằng chứng riêng \\
+Giao diện & Jetpack Compose, Material 3 & Giao diện khai báo theo trạng thái; dùng chung màu sắc, kiểu chữ và thành phần tương tác \\
+Điều hướng & Navigation Compose, Kotlin Serialization & Biểu diễn đồ thị lồng nhau và route có kiểu; tập trung quản lý ngăn xếp tại ứng dụng \\
+Trạng thái giao diện & ViewModel, StateFlow, coroutines & Tách xử lý khỏi giao diện; cung cấp trạng thái quan sát được và tác vụ bất đồng bộ \\
+Kết nối thành phần & Hilt, KSP & Cấp phát phụ thuộc theo phạm vi; kết nối hợp đồng nghiệp vụ với triển khai cụ thể \\
+Phát đa phương tiện & Media3 ExoPlayer & Cung cấp bộ phát, playlist và sự kiện trạng thái để xây dựng adapter media \\
+Dữ liệu có cấu trúc & Room & Lưu tiến độ và dữ liệu nghiệp vụ cần truy vấn hoặc phục hồi lâu dài \\
+Thiết lập nhỏ & DataStore & Lưu sở thích, trạng thái onboarding và metadata nhỏ của phiên \\
+Phát nhạc nền (đề xuất) & MediaSessionService, MediaController & Tách quyền sở hữu phiên phát khỏi Activity; kết nối điều khiển hệ thống \\
+Dữ liệu từ xa (đề xuất) & Retrofit, OkHttp, Kotlin Serialization; Coil cho ảnh & Tách giao tiếp HTTP, ánh xạ dữ liệu và tải ảnh khỏi lớp giao diện \\*
+Đồng bộ trì hoãn (đề xuất) & WorkManager & Lập lịch công việc theo điều kiện mạng và chính sách thử lại \\
 \end{longtable}
 \endgroup
 
-Không thêm dependency, empty service hoặc empty use case chỉ để bảng stack trông đầy đủ. Những mục chưa có phải giữ trạng thái dự kiến cho đến khi có code và test.
+Compose kết hợp Material 3 tạo cơ sở cho một hệ thống thiết kế dùng chung~\cite{material3}. Màu sắc, kiểu chữ và hình dạng được tập trung tại mô-đun design system; các phân hệ sử dụng cùng bộ quy ước thay vì định nghĩa lại theo từng màn hình. Phông chữ được đóng gói cùng ứng dụng để cách trình bày không phụ thuộc vào việc tải phông lúc chạy.
+
+Room và DataStore được sử dụng cho hai nhóm dữ liệu khác nhau. Room phục vụ dữ liệu có cấu trúc và các snapshot cần truy vấn; DataStore phục vụ thiết lập và metadata nhỏ. Các hợp đồng Domain che giấu lựa chọn lưu trữ, cho phép thay dữ liệu mô phỏng bằng nguồn thực mà không yêu cầu giao diện biết chi tiết database hoặc HTTP client.
+
+Đối với phát nhạc nền, thiết kế lựa chọn MediaSessionService làm chủ sở hữu bộ phát và media session theo hướng dẫn Media3~\cite{media3-background}. WorkManager đảm nhiệm đồng bộ có thể trì hoãn~\cite{android-workmanager}; hai cơ chế có mục đích và vòng đời khác nhau. Những thành phần được đánh dấu đề xuất trong bảng là lựa chọn cho kiến trúc mở rộng, không được xem là khả năng đã hiện thực hóa của bản nguyên mẫu.
+
+Đối với trò chơi nhỏ, thiết kế lựa chọn logic Kotlin kết hợp Compose hoặc Canvas để biểu diễn bàn chơi. Phạm vi này phù hợp với tương tác đơn giản và cho phép tái sử dụng hệ thống trạng thái, điều hướng của ứng dụng. Game engine chuyên dụng chỉ trở nên cần thiết khi có yêu cầu đồ họa hoặc mô phỏng vượt quá phạm vi trên. Kiểm thử sử dụng JUnit cho quy tắc nghiệp vụ và Compose UI tests cho luồng giao diện; các thử nghiệm media bổ sung kiểm tra hành vi thực tế của adapter.
