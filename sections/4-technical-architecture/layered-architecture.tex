@@ -1,126 +1,203 @@
 \subsection{Kiến trúc ba lớp và chia module}
 \label{sec:layered-architecture}
 
-Nhóm áp dụng \textbf{MVVM + Clean Architecture} theo ba lớp, kết hợp modularization theo feature. Vì đề bài yêu cầu ba lớp rõ ràng, nhóm xây dựng Domain tách biệt dù hướng dẫn Android chính thức xem Domain là lớp tùy chọn~--~làm vậy giúp chứng minh L.O.1.3 (thiết kế kiến trúc đa module).
+Thiết kế áp dụng khuyến nghị kiến trúc Android, modularization và nested navigation graphs~\cite{android-architecture,android-modularization,android-navigation}.
 
-\subsubsection{Sơ đồ kiến trúc ba lớp}
+\subsubsection{Layer và chiều phụ thuộc}
 \label{sec:three-layers}
 
-\begin{longtable}{>{\raggedright\arraybackslash}p{3.2cm} >{\raggedright\arraybackslash}p{6.8cm} >{\raggedright\arraybackslash}p{5.0cm}}
-\caption{Kiến trúc ba lớp của OneSpace}
-\label{tab:three-layers}\\
+Ba layer là ranh giới trách nhiệm; module là ranh giới build. Tên core không tạo ra layer thứ tư và không cho phép mọi module phụ thuộc tùy ý.
+
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.23\linewidth}>{\RaggedRight\arraybackslash}p{0.32\linewidth}>{\RaggedRight\arraybackslash}p{0.37\linewidth}}
 \toprule
-\textbf{Lớp} & \textbf{Thành phần} & \textbf{Công nghệ} \\
+\textbf{Layer} & \textbf{Trách nhiệm} & \textbf{Không làm} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Lớp} & \textbf{Thành phần} & \textbf{Công nghệ} \\
+\textbf{Layer} & \textbf{Trách nhiệm} & \textbf{Không làm} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-\textbf{Presentation} & UI (Compose Screens, Floating UI, Mini Player) + Feature ViewModels & Jetpack Compose, StateFlow, Navigation, ViewModel \\
-\midrule
-\textbf{Domain} & Use Cases (PlayMedia, SwitchContent, ResolveAudioConflict, SaveGame, RestoreSession, SyncNews) + Repository Interfaces + Business Rules + Models & Pure Kotlin (không phụ thuộc Android hay Compose) \\
-\midrule
-\textbf{Data} & Repository Implementations + Local (Room, DataStore, Media Cache, Game State) + Remote (Video API, Music API, News API, Auth API) & Retrofit, OkHttp, Room, DataStore, WorkManager \\
+Presentation & Compose, UI state, ViewModel, graph declarations, callback UI; app ghép flow & Truy cập Room/DataStore/API trực tiếp, giữ token/provider SDK hoặc tự quyết định luật xung đột audio \\
+Domain & Model, repository/port contracts, use cases, SessionPolicy, quy tắc queue & Import Android/Compose/Hilt/Room/Media3 hoặc biết route/NavController \\
+Data/infrastructure & Repository implementations, local/remote sources, Media3/system adapters, sync & Import feature ViewModel/screen hoặc quyết định screen phải mở \\
 \end{longtable}
+\endgroup
 
-Chiều phụ thuộc: \textbf{Presentation $\rightarrow$ Domain $\leftarrow$ Data}. Domain giữ Repository Interface; Data triển khai các interface đó. Hilt kết nối chúng tại composition root. Nói cách khác, Domain \textbf{không} phụ thuộc vào framework giao diện~--~trả lời trực tiếp câu hỏi định hướng của guide box. Mũi tên trao đổi dữ liệu không hoàn toàn giống mũi tên phụ thuộc mã nguồn.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=12mm and 12mm, box/.style={draw,rounded corners,align=center,text width=43mm,minimum height=12mm,font=\small}, >=Stealth]
+\node[box] (app) {app\\Composition root};
+\node[box,below left=of app] (p) {Presentation\\UI, ViewModel, callbacks};
+\node[box,below right=of app] (i) {Data / infrastructure\\Repositories, Android adapters};
+\node[box,below=24mm of app] (d) {Domain\\Models, contracts, policies};
+\draw[->] (app) -- (p); \draw[->] (app) -- (i);
+\draw[->] (p) -- (d); \draw[->] (i) -- (d);
+\end{tikzpicture}
+\caption{Chiều phụ thuộc: UI và infrastructure cùng phụ thuộc Domain.}
+\label{fig:architecture-dependencies}
+\end{figure}
 
-\subsubsection{Cách chia module}
+Presentation gọi contract/use case; Data triển khai contract; Hilt ở composition root chọn implementation. UI state đi xuống, user intent đi lên. Không bắt buộc tạo use case pass-through cho mọi getter; use case được dùng cho luồng tái sử dụng, validation hoặc phối hợp nghiệp vụ. Domain riêng là quyết định của nhóm để thể hiện kiến trúc ba lớp cho bài, không phải quy định rằng mọi Android app đều bắt buộc có Domain.
+
+\subsubsection{Cấu trúc Gradle và quyền sở hữu}
 \label{sec:module-structure}
 
-\begin{longtable}{>{\raggedright\arraybackslash}p{3.2cm} >{\raggedright\arraybackslash}p{11.8cm}}
-\caption{Cấu trúc module trong Android Studio}
-\label{tab:module-structure}\\
+\begin{lstlisting}[language={},basicstyle=\ttfamily\footnotesize,columns=fullflexible,breaklines=true,frame=single]
+app/                         MainActivity, Application, shell, root routing, Hilt wiring
+domain/                      Pure Kotlin: auth/video/music/news/games/session
+feature/
+  home/ video/ music/ news/ games/ account/ onboarding/ auth/
+    navigation/              Typed Route + NavGraph declaration + UI callbacks
+    presentation/            Screens, UI state, ViewModel
+data/
+  video/ music/ news/ games/ auth/
+    repository/              Domain contract implementations
+    ...                      Sources/mapping khi phát sinh nhu cầu thực tế
+core/
+  common/                    Shared presentation state/formatting, Kotlin thuần
+  designsystem/              Compose tokens và components dùng chung
+  session/                   Shared presentation coordinator cho phiên nội dung
+  media/                     Media3/system adapter và platform video surface
+  database/                  Room schema/DAO/DI
+  datastore/                 Preferences storage implementation/DI
+  network/                   Extension point cho HTTP/connectivity
+  sync/                      Extension point cho deferred sync
+\end{lstlisting}
+
+Đây là các Gradle module thực nằm ngoài app. Không giữ phương án đặt domain/core/feature trong app rồi tách sau. Hiện có 23 module leaf. Nhóm giữ một domain module và chia package theo nghiệp vụ để dùng chung session/media policy, thay vì tạo ba submodule cho từng feature khi chưa cần cô lập lớn hơn. Không thêm core:model trùng lặp với domain models.
+
+Các module core được phân loại theo vai trò: designsystem/common/session phục vụ presentation; database/datastore/network/sync và media engine là infrastructure. VideoSurface là adapter hiển thị Android trong core:media; phần này không được kéo Media3 vào Domain. Data factories trả về domain interface; app chỉ chọn implementation, không tạo nghiệp vụ.
+
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.23\linewidth}>{\RaggedRight\arraybackslash}p{0.32\linewidth}>{\RaggedRight\arraybackslash}p{0.37\linewidth}}
 \toprule
-\textbf{Module} & \textbf{Nội dung} \\
+\textbf{Nguồn dependency} & \textbf{Được phép} & \textbf{Bị cấm} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Module} & \textbf{Nội dung} \\
+\textbf{Nguồn dependency} & \textbf{Được phép} & \textbf{Bị cấm} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-\texttt{app/} & MainActivity, AppNavigation, OneSpaceApplication \\
-\midrule
-\texttt{core/} & \texttt{common/}, \texttt{model/}, \texttt{database/}, \texttt{network/}, \texttt{datastore/}, \texttt{media/}, \texttt{designsystem/}, \texttt{session/} \\
-\midrule
-\texttt{feature/} & \texttt{home/}, \texttt{video/}, \texttt{music/}, \texttt{news/}, \texttt{games/}, \texttt{account/} \\
-\midrule
-\texttt{domain/} & \texttt{repository/} (interfaces), \texttt{usecase/}, \texttt{model/} \\
+app & Feature API, Domain, Data factories và Core cần để ghép app & Đặt lại catalog/repository/business policy trong app \\
+feature:X & Domain, core UI/session/media adapters cần thiết & app, feature:Y, data implementation \\
+data:X & Domain, core storage/network cần thiết & app, feature, repository implementation của data:Y trong baseline này \\
+core & Domain hoặc core kỹ thuật cần thiết theo vai trò & app, feature, data implementation \\
+domain & Kotlin/JVM và thư viện Kotlin cần cho contracts & Android, Core infrastructure, Data, Feature, app \\
 \end{longtable}
+\endgroup
 
-Ở mức Gradle, có thể dùng module \texttt{:feature:video}, \texttt{:feature:music}~\ldots{} Nếu thời gian ít, ban đầu có thể tổ chức các package này trong một Android module duy nhất rồi tách sau. Modular architecture không bắt buộc mỗi feature phải là một Gradle module ngay từ đầu.
+Task verifyArchitecture kiểm tra các import/dependency trực tiếp và việc feature nhận controller. Đây là guardrail tự động, không thay thế review về nghiệp vụ, coroutine lifetime, tài nguyên hoặc hành vi runtime.
 
-\subsubsection{Module đa nhiệm~--~SessionCoordinator}
+\subsubsection{Navigation: app thực thi, feature khai báo}
+
+Chốt một NavController và một root NavHost trong app. Không tạo NavController riêng cho mỗi tab và không tạo global navigator singleton/event bus.
+
+\begin{itemize}
+\item \textbf{app/AppNavigation:} đăng ký root Splash/Onboarding/Auth/Main, ghép các feature graph, quan sát phiên auth và onboarding để chọn flow.
+\item \textbf{app/OneSpaceAppState:} thực thi navigate/pop, chuyển tab và saveState/restoreState/launchSingleTop; biết các typed route public cần để ghép app.
+\item \textbf{feature/XRoute:} khai báo graph/feed/detail và arguments của feature; argument chỉ là ID hoặc dữ liệu nhỏ cần cho destination.
+\item \textbf{feature/XNavGraph:} khai báo composable, đọc typed arguments, lấy ViewModel scope, chuyển UI action thành callback.
+\item \textbf{feature screen:} nhận state/callback; không nhận controller hoặc truy cập graph của feature khác.
+\end{itemize}
+
+Ví dụ Video phát onOpenVideo(id); app thực hiện openVideo(id). Home mở video cũng qua callback app. Video yêu cầu khám phá News bằng callback; app chọn section tương ứng. Auth tạo code thành công phát state để graph gọi callback mở màn OTP; auth session đã lưu mới quyết định chuyển toàn bộ flow sang Main.
+
+Feature graph không nhận NavController/NavHostController. Với catalog và auth, app cấp getGraphEntry callback để feature dùng đúng parent graph làm ViewModelStoreOwner. Đây chỉ là cung cấp scope, không phải controller gián tiếp có quyền điều hướng. Root/auth/main transitions giữ typed root anchor và xóa child stack phù hợp; Back không quay từ Main về OTP hoặc từ signed-out Auth về nội dung Main.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=9mm and 7mm, box/.style={draw,rounded corners,align=center,text width=37mm,minimum height=10mm,font=\small}, >=Stealth]
+\node[box] (s) {Native splash\\Đọc persisted startup state};
+\node[box,below=of s] (o) {Chưa onboarding\\Onboarding graph};
+\node[box,below=of o] (a) {Signed out\\Auth graph};
+\node[box,below=of a] (m) {Guest / authenticated\\Main graph};
+\node[box,left=of m] (f) {Home, Video, Music\\News, Games};
+\node[box,right=of m] (c) {Account\\Settings};
+\draw[->] (s) -- (o);
+\draw[->] (o) -- node[right,font=\scriptsize]{preferences đã lưu} (a);
+\draw[->] (a) -- node[right,font=\scriptsize]{session đã lưu} (m);
+\draw[->] (s.west) -- ++(-26mm,0) |- (a.west);
+\draw[->] (s.east) -- ++(27mm,0) |- (m.east);
+\draw[->] (m) -- (f); \draw[->] (m) -- (c);
+\draw[->] (c.north) |- node[pos=0.25,right,font=\scriptsize]{sign out} (a.east);
+\end{tikzpicture}
+\caption{App chọn root flow từ onboarding và auth đã lưu; các feature dùng chung root controller.}
+\label{fig:startup-navigation}
+\end{figure}
+
+\subsubsection{Session, playback và quyền quyết định}
 \label{sec:session-coordinator}
 
-Đây là thành phần cốt lõi để bốn phân hệ phối hợp được với nhau~--~thay vì để VideoViewModel tự gọi MusicViewModel hay GameViewModel (tạo coupling chằng chịt), nhóm xây dựng một \texttt{SessionCoordinator} đóng vai trò điều phối trung tâm.
-
-Bảng~\ref{tab:coordinators} phân biệt trách nhiệm từng thành phần điều phối:
-
-\begin{longtable}{>{\raggedright\arraybackslash}p{4.0cm} >{\raggedright\arraybackslash}p{11.0cm}}
-\caption{Trách nhiệm của các thành phần điều phối}
-\label{tab:coordinators}\\
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.23\linewidth}>{\RaggedRight\arraybackslash}p{0.32\linewidth}>{\RaggedRight\arraybackslash}p{0.37\linewidth}}
 \toprule
-\textbf{Thành phần} & \textbf{Trách nhiệm} \\
+\textbf{Thành phần} & \textbf{Layer/vai trò} & \textbf{Quyền sở hữu} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Thành phần} & \textbf{Trách nhiệm} \\
+\textbf{Thành phần} & \textbf{Layer/vai trò} & \textbf{Quyền sở hữu} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-SessionCoordinator & Điều phối chuyển tab và phiên hoạt động (numeric entry: chuyển từ Video $\rightarrow$ Tin thì gọi VideoPlayerController chuyển sang floating rồi chuyển Navigation) \\
-PlaybackCoordinator & Điều khiển các media player, ngăn phát audio xung đột \\
-AudioFocusController & Phối hợp chính sách âm thanh nội bộ với Android Audio Focus \\
-SessionRepository & Lưu và phục hồi phiên (Room/DataStore) \\
-VideoPlayerController & Phát video, vị trí phát, fullscreen/floating \\
-MusicPlaybackService & Phát nhạc khi ứng dụng chạy nền (MediaSessionService) \\
-GameSessionManager & Pause, save và resume minigame \\
+SessionPolicy và queue policies & Domain & Quy tắc nội dung, kết quả xử lý audio conflict; không side effect Android \\
+SessionCoordinator & Shared presentation adapter, Activity ViewModel & Nhận intent, gọi policy/repository/MediaSessionPort, phát UI state và conflict request \\
+OneSpaceAppState/root graph & app shell & Navigation và presentation của floating/dock theo destination \\
+MediaSessionPort & Domain contract & Lệnh playback và state quan sát được, không lộ ExoPlayer \\
+MediaPlaybackCoordinator & Android infrastructure & Engine playback, vị trí/buffering, queue transport và thực thi effect \\
+Audio focus handler & Android infrastructure, phần triển khai tiếp & Cấp/nhường focus cho nguồn đang có tiếng, phản ứng interruption/noisy \\
+MusicPlaybackService & Android infrastructure, phần triển khai tiếp & Sở hữu audio player/session ngoài vòng đời Activity \\
+Repository implementations & Data & Persist/restore ID, progress, snapshot và preferences \\
+Game session logic/adapter & Domain + presentation/infrastructure tương ứng, triển khai tiếp & Board, score, pause/resume và checkpoints \\
 \end{longtable}
+\endgroup
 
-Ví dụ cụ thể: khi người dùng chuyển \texttt{Video $\rightarrow$ Tin} (case C3 trong ma trận~\ref{sec:mvp-scope}), SessionCoordinator yêu cầu VideoPlayerController chuyển chế độ Floating rồi điều hướng sang Tin. \textbf{Video player không được tạo lại chỉ vì thay đổi màn hình}~--~nó giữ một player duy nhất và chỉ đổi cách hiển thị.
+SessionCoordinator không gọi NavController và không gọi ViewModel của feature khác. App áp dụng intent section cho coordinator rồi thực thi route; destination không phải nguồn sự thật của trạng thái decoder. State playing/position/buffering lấy từ MediaSessionPort; UI không được tự giả lập playback bằng boolean hoặc timer.
 
-\subsubsection{Local Storage, Remote Data và đồng bộ}
+Một video player và một audio player cho phép video mute cùng nhạc. Điều này không có nghĩa chỉ được tạo đúng một ExoPlayer cho cả hai loại nội dung. Khi chuyển fullscreen/floating, đổi surface và layout, không tạo lại video engine. Floating trong app khác Android system Picture-in-Picture; system PiP ngoài app được hoãn, không dùng hai tên này thay nhau.
+
+\subsubsection{Lưu trữ, API và mở rộng}
 \label{sec:data-sync}
 
-Bảng~\ref{tab:data-sync} trả lời câu hỏi ``dữ liệu nào local, dữ liệu nào remote, đồng bộ thế nào'' của guide box:
-
-\begin{longtable}{>{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{4.2cm} >{\raggedright\arraybackslash}p{4.2cm} >{\raggedright\arraybackslash}p{4.0cm}}
-\caption{Chiến lược lưu trữ và đồng bộ theo loại dữ liệu}
-\label{tab:data-sync}\\
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.17\linewidth}>{\RaggedRight\arraybackslash}p{0.28\linewidth}>{\RaggedRight\arraybackslash}p{0.22\linewidth}>{\RaggedRight\arraybackslash}p{0.23\linewidth}}
 \toprule
-\textbf{Dữ liệu} & \textbf{Local} & \textbf{Remote} & \textbf{Đồng bộ} \\
+\textbf{Dữ liệu} & \textbf{Nguồn lưu đích} & \textbf{Nguồn remote} & \textbf{Quy tắc} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Dữ liệu} & \textbf{Local} & \textbf{Remote} & \textbf{Đồng bộ} \\
+\textbf{Dữ liệu} & \textbf{Nguồn lưu đích} & \textbf{Nguồn remote} & \textbf{Quy tắc} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-News & Bài báo đã cache & News API & Local-first, làm mới khi có mạng \\
-Video & Metadata, vị trí phát, cache & Video API / stream & Streaming, lưu tiến độ \\
-Music & Playlist metadata, file tải & Music API / stream & Đồng bộ danh sách khi online \\
-Game & Game state, điểm số & Optional leaderboard & Offline-first \\
-User & Preferences, session & Account API & Server là nguồn xác thực \\
-Multitasking & Active session, playback state & Không bắt buộc & Chủ yếu local \\
+Video progress/watchlist & Room & Catalog/stream URL khi có & Engine báo tiến độ; repository checkpoint và cung cấp resume \\
+Music queue/track/position & Room snapshot; metadata nhỏ có thể nằm DataStore & Music catalog/stream & Service/engine là runtime truth; persisted snapshot để phục hồi paused \\
+News/article/bookmark/reading position & Room & News API & Local-first sau khi có cache; refresh ghi local rồi phát Flow \\
+Game board/score/seed/version & Room & Leaderboard nếu có & Offline-first, restore snapshot đúng game/version \\
+Settings/onboarding/last section & DataStore & Không bắt buộc & Tách khỏi auth identity và playback object \\
+Auth session thật & Provider/backend + storage phù hợp provider & Auth API/provider & Chỉ server/provider xác minh danh tính thật \\
+Auth demo & DataStore email + guest flag & Không có & Chỉ local demo, không phải token hoặc xác minh email \\
 \end{longtable}
+\endgroup
 
-Với dữ liệu chỉnh sửa được ở cả local và server, nhóm phải quyết định cách xử lý conflict. Chẳng hạn: game chơi offline lưu điểm local rồi gửi lên server khi online; \textbf{không tự động ghi đè tiến độ mới hơn bằng dữ liệu cũ}.
+HTTP client/Room/DataStore không được gọi từ screen. WorkManager chỉ làm công việc trì hoãn có điều kiện mạng/backoff; không làm engine phát nhạc nền. Conflict đồng bộ cần ID/version/idempotency theo loại dữ liệu; không chọn last-write-wins cho mọi dữ liệu khi chưa có backend contract.
 
-\subsubsection{Trường hợp thêm Podcast (khả năng mở rộng)}
-\label{sec:extensibility}
-
-Nếu kiến trúc đúng, nhóm chỉ cần:
-\begin{enumerate}
-\item Thêm module \texttt{feature:podcast} cùng model/repository/use case tương ứng.
-\item Đăng ký podcast với PlaybackCoordinator.
-\end{enumerate}
-
-Không cần viết lại Video, Music, News hay Games. Podcast tái sử dụng Media3, audio focus, background playback, notification và mini-player~--~chứng minh kiến trúc module đáp ứng L.O.1.3. Đây cũng là câu trả lời cho câu hỏi ``muốn thêm phân hệ mới thì cần sửa module nào'' của guide box.
+Khi thêm Podcast cần thêm domain models/contracts/use cases cần thiết, data adapter, feature và đăng ký navigation/DI; bổ sung loại queue item nếu audio pipeline hiện tại chưa hỗ trợ. Có thể dùng lại engine/service/notification sau khi các contract đó được triển khai. Không tuyên bố chỉ thêm một screen là tự động hỗ trợ toàn bộ podcast.

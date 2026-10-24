@@ -1,136 +1,97 @@
 \subsection{Ràng buộc của môi trường di động}
 \label{sec:mobile-constraints}
 
-\subsubsection{Mobile App so với Web App và Desktop App}
+\subsubsection{Mobile, web và desktop}
 \label{sec:mobile-vs-desktop}
 
-Yêu cầu L.O.1.1 của học phần yêu cầu phân tích sự khác biệt kiến trúc giữa ứng dụng di động và ứng dụng máy tính. Bảng~\ref{tab:mobile-desktop} so sánh ba loại ứng dụng theo các tiêu chí ảnh hưởng trực tiếp đến thiết kế của OneSpace.
-
-\begin{longtable}{>{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{4.4cm} >{\raggedright\arraybackslash}p{4.2cm} >{\raggedright\arraybackslash}p{4.2cm}}
-\caption{So sánh Native Mobile App, Web App và Desktop App}
-\label{tab:mobile-desktop}\\
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.13\linewidth}>{\RaggedRight\arraybackslash}p{0.2\linewidth}>{\RaggedRight\arraybackslash}p{0.19\linewidth}>{\RaggedRight\arraybackslash}p{0.19\linewidth}>{\RaggedRight\arraybackslash}p{0.18\linewidth}}
 \toprule
-\textbf{Tiêu chí} & \textbf{Native Mobile App} & \textbf{Web App} & \textbf{Desktop App} \\
+\textbf{Tiêu chí} & \textbf{Android Native} & \textbf{Web} & \textbf{Desktop} & \textbf{Hệ quả cho OneSpace} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Tiêu chí} & \textbf{Native Mobile App} & \textbf{Web App} & \textbf{Desktop App} \\
+\textbf{Tiêu chí} & \textbf{Android Native} & \textbf{Web} & \textbf{Desktop} & \textbf{Hệ quả cho OneSpace} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Hiệu năng & Tốt, truy cập API hệ điều hành trực tiếp & Phụ thuộc trình duyệt & Thường có nhiều tài nguyên hơn \\
-RAM, CPU & Giới hạn theo thiết bị & Phụ thuộc trình duyệt và thiết bị & Thường ít bị giới hạn \\
-Pin & Cần tối ưu nghiêm ngặt & Cũng cần tối ưu trên điện thoại & Ít bị ảnh hưởng khi cắm nguồn \\
-Phát nhạc nền & MediaSession / Service & Có thể bị giới hạn bởi trình duyệt & Tương đối linh hoạt \\
-Chạy game & Native rendering & Canvas / WebGL & Có thể dùng GPU mạnh \\
-Offline & Room, DataStore, file cache & Service Worker, IndexedDB & Local filesystem / database \\
-Vòng đời & Do hệ điều hành kiểm soát chặt & Phụ thuộc vòng đời tab/trình duyệt & Ít bị hạn chế hơn \\
-Thông báo & Android Notification API & Web Notifications khi được hỗ trợ & OS notification \\
-Phù hợp dự án & \textbf{Rất phù hợp} & Hạn chế ở tích hợp nền & Không phù hợp mục tiêu mobile \\
+RAM/CPU & Giới hạn, process có thể bị thu hồi & Phụ thuộc browser/tab và thiết bị & Thường có ngân sách lớn hơn & Không tạo player/game loop theo mỗi screen \\
+Pin & Tác động trực tiếp thời gian sử dụng & Cũng chịu giới hạn năng lượng & Có thể dùng nguồn điện ổn định & Ngừng công việc ngoài màn hình, giới hạn prefetch \\
+Vòng đời & Activity và process do OS quản lý & Tab có thể bị suspend/discard & Vòng đời cửa sổ/process khác mobile & Tách UI state, persisted state và playback lifetime \\
+Media nền & Có API media session/service và audio focus & Phụ thuộc browser/platform & Thường linh hoạt hơn & Dùng Media3 và MediaSessionService cho Android \\
+Offline & Room/DataStore/file cache & IndexedDB/Service Worker tùy hỗ trợ & Database/file system & Repository điều phối local/remote, UI không gọi nguồn dữ liệu \\
+Tích hợp hệ thống & Notification, Bluetooth, audio focus, lifecycle & Khả năng tùy nền tảng & API theo hệ điều hành & Thiết kế adapter Android, không đưa API hệ thống vào Domain \\
 \end{longtable}
+\endgroup
 
-Kết luận: ứng dụng tiêu dùng nội dung giải trí đa phương tiện cần phát nhạc nền ổn định, xử lý vòng đời nghiêm ngặt và thông báo tức thì~--~đây là những khả năng chỉ native mobile app đáp ứng đủ cho phạm vi môn học.
+Chọn native do trọng tâm bài là vòng đời, đa nhiệm, media và kinh nghiệm của nhóm. Đây là quyết định theo phạm vi và năng lực triển khai; không khẳng định web hoặc cross-platform không thể làm các chức năng tương tự.
 
-\subsubsection{Phân hệ nào tiêu thụ nhiều tài nguyên}
+\subsubsection{Ngân sách tài nguyên}
 \label{sec:resource-consumption}
 
-Bảng~\ref{tab:resource-consumption} đánh giá tương đối mức tiêu thụ tài nguyên theo phân hệ (định tính, không phải benchmark), làm cơ sở cho chính sách tối ưu ở mục~\ref{sec:resource-policy}.
+Video thường tốn dữ liệu và decoder hơn đọc tin; game có thể tốn CPU/GPU hơn video tùy thuật toán và đồ họa. Các nhận xét này là định tính, không thay cho số đo.
 
-\begin{longtable}{>{\raggedright\arraybackslash}p{1.6cm} >{\centering\arraybackslash}p{1.3cm} >{\centering\arraybackslash}p{1.8cm} >{\centering\arraybackslash}p{1.8cm} >{\raggedright\arraybackslash}p{8.0cm}}
-\caption{Mức tiêu thụ tài nguyên theo phân hệ (đánh giá định tính)}
-\label{tab:resource-consumption}\\
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.26\linewidth}>{\RaggedRight\arraybackslash}p{0.68\linewidth}}
 \toprule
-\textbf{Phân hệ} & \textbf{Pin} & \textbf{Dữ liệu mạng} & \textbf{CPU/RAM} & \textbf{Biện pháp} \\
+\textbf{Thành phần} & \textbf{Quy tắc kiến trúc đích} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Phân hệ} & \textbf{Pin} & \textbf{Dữ liệu} & \textbf{CPU/RAM} & \textbf{Biện pháp} \\
+\textbf{Thành phần} & \textbf{Quy tắc kiến trúc đích} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Video & Cao & Rất cao & Cao & Adaptive bitrate, giới hạn preloading, giải mã phần cứng \\
-Music & Thấp--TB & Thấp--TB & Thấp & Audio cache, phát với màn hình tắt, tránh polling \\
-News & Thấp & Thấp--TB & Thấp & Cache bài viết, lazy loading ảnh \\
-Games & TB--Cao & Thấp nếu offline & Phụ thuộc game & Giảm FPS, dừng game loop khi pause \\
+Video & Tối đa một video decoder đang phục vụ nội dung; fullscreen và floating dùng cùng engine \\
+Audio & Một queue/engine âm thanh dùng chung; không tạo engine riêng cho từng bài hoặc từng tab \\
+Games & Chỉ game đang hiển thị mới chạy loop; pause khi rời game, checkpoint theo sự kiện \\
+News & Không duy trì tác vụ UI khi destination không hoạt động; nội dung đã lưu đọc từ local \\
+RAM thấp & Giảm cache/prefetch và bỏ tài nguyên không còn sử dụng; tránh sao chép model lớn vào saved state \\
+Data Saver & Giới hạn chất lượng/prefetch khi nguồn có biến thể phù hợp; không cam kết giảm bitrate của MP4 đơn chất lượng \\
+Battery Saver & Hoãn sync không thiết yếu, giảm công việc nền; không vô hiệu hóa thao tác media người dùng chủ động yêu cầu \\
 \end{longtable}
+\endgroup
 
-Video thường tiêu thụ dữ liệu di động nhiều nhất và là một trong những nguồn hao pin lớn nhất. Tuy nhiên, game có đồ họa phức tạp vẫn có thể tốn pin hơn video~--~đây là lý do feature F-GAME-15 (kiểu flappy) được chấm Effort 2 thay vì 1 tại bảng~\ref{tab:feature-pool}.
-
-\subsubsection{Chính sách tối ưu tài nguyên}
-\label{sec:resource-policy}
-
-Nhóm xây dựng một \texttt{ResourcePolicyManager} điều phối các quy tắc xử lý theo tình huống:
-
-\begin{longtable}{>{\raggedright\arraybackslash}p{5.2cm} >{\raggedright\arraybackslash}p{9.8cm}}
-\caption{Chính sách xử lý tài nguyên theo tình huống}
-\label{tab:resource-policy}\\
-\toprule
-\textbf{Tình huống} & \textbf{Quy tắc xử lý} \\
-\midrule
-\endfirsthead
-\toprule
-\textbf{Tình huống} & \textbf{Quy tắc xử lý} \\
-\midrule
-\endhead
-\bottomrule
-\endfoot
-Video chuyển thành Floating & Chỉ giữ một video decoder đang hoạt động \\
-Music chạy nền & Dùng MediaSessionService, không giữ UI chạy \\
-Game chuyển tab & Pause game loop, lưu game state \\
-News ngoài màn hình & Ngừng các tác vụ UI không cần thiết \\
-RAM thấp & Giảm prefetch, giải phóng player và ảnh không dùng \\
-Bật Data Saver & Giảm chất lượng streaming, hạn chế tải trước \\
-Battery Saver & Giảm xử lý nền không thiết yếu \\
-\end{longtable}
-
-Đặc biệt, khi game không còn hiển thị, không giữ vòng lặp render 60~FPS chỉ để người dùng có thể quay lại nhanh~--~điều này gây lãng phí trên thiết bị RAM 3~GB của persona Quốc Huy (mục~\ref{sec:persona-quochuy}).
+Không tạo thêm ResourcePolicyManager chỉ để đủ tên trong báo cáo. SessionPolicy giữ luật phối hợp; adapter media/game áp dụng luật tài nguyên. Chỉ tách manager mới khi có trách nhiệm và nhiều nơi sử dụng thực tế.
 
 \subsubsection{Offline và mạng không ổn định}
 \label{sec:offline-design}
 
-Bảng~\ref{tab:offline-behavior} định nghĩa hành vi từng phân hệ khi mất mạng và khi có mạng trở lại:
-
-\begin{longtable}{>{\raggedright\arraybackslash}p{1.6cm} >{\raggedright\arraybackslash}p{6.8cm} >{\raggedright\arraybackslash}p{6.8cm}}
-\caption{Hành vi offline theo phân hệ}
-\label{tab:offline-behavior}\\
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.23\linewidth}>{\RaggedRight\arraybackslash}p{0.32\linewidth}>{\RaggedRight\arraybackslash}p{0.37\linewidth}}
 \toprule
-\textbf{Phân hệ} & \textbf{Khi mất mạng} & \textbf{Khi có mạng trở lại} \\
+\textbf{Phân hệ} & \textbf{Khi mất mạng} & \textbf{Khi có mạng lại} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Phân hệ} & \textbf{Khi mất mạng} & \textbf{Khi có mạng trở lại} \\
+\textbf{Phân hệ} & \textbf{Khi mất mạng} & \textbf{Khi có mạng lại} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Video & Phát phần còn buffer/cache; nếu không đủ thì chờ mạng & Retry hoặc resume từ vị trí trước đó \\
-Music & Phát bài đã tải xuống; streaming chỉ phát được phần buffer & Tiếp tục streaming \\
-News & Đọc bài đã cache, bookmark vẫn hoạt động & Cập nhật nội dung từ server \\
-Games & Game offline vẫn chơi được (F-GAME-12/13) & Đồng bộ điểm số nếu có tài khoản \\
+Video & Tiếp tục buffer hợp lệ; hết buffer thì báo chờ/retry, giữ vị trí & Người dùng retry hoặc resume theo trạng thái lỗi thực tế \\
+Music & Nội dung đã tải mới được bảo đảm offline; stream chỉ dùng phần buffer còn lại & Khôi phục request/queue theo chính sách, không tự tạo engine mới \\
+News & Đọc bài đã cache/bookmark từ Room; thiếu cache thì hiển thị trạng thái rõ ràng & Refresh remote, ghi local rồi phát state mới \\
+Games & Logic/board cục bộ vẫn hoạt động & Nếu có leaderboard thì sync theo ID phiên, không ghi đè bản local mới hơn \\
 \end{longtable}
+\endgroup
 
-Lưu ý quan trọng: \textbf{cache không đồng nghĩa với download}. Streaming cache có thể bị xóa và không bảo đảm phát ngoại tuyến toàn bộ nội dung. Nếu muốn chức năng Downloaded Music (F-MUS-12), cần thiết kế lưu trữ và quản lý file riêng~--~tính năng này đã được xếp vào nhóm Thankless (hoãn v1) tại bảng~\ref{tab:feature-pool}.
+Cache không đồng nghĩa download. Downloaded Music không phải điều kiện hoàn tất baseline kiến trúc; nếu triển khai sau phải bổ sung quản lý file và dung lượng. Connectivity chỉ là tín hiệu gợi ý; lỗi request/player mới quyết định kết quả thao tác. Nút mô phỏng offline hiện tại chỉ kiểm tra UI, không chứng minh offline-first hay network recovery thật.
 
-\subsubsection{Cấu hình tối thiểu hỗ trợ}
+\subsubsection{Mức hỗ trợ và đo kiểm}
 \label{sec:min-config}
 
-\begin{longtable}{>{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{12.4cm}}
-\caption{Cấu hình tối thiểu đề xuất}
-\label{tab:min-config}\\
-\toprule
-\textbf{Thành phần} & \textbf{Quyết định} \\
-\midrule
-\endhead
-\bottomrule
-\endfoot
-Android & 8.0+ (API 26+) \\
-RAM & 3~GB mục tiêu (khớp persona Quốc Huy, thiết bị phổ thông) \\
-Storage & Khoảng 200~MB trống cho cài đặt và cache MVP \\
-Internet & Cần cho streaming và news mới \\
-Offline & News cached, downloaded music, minigame offline \\
-iOS & \textbf{Không hỗ trợ trong MVP}~--~phân tích iOS có ở mục~\ref{sec:platform-selection} nhưng nhóm không code bản iOS \\
-\end{longtable}
+Android 8.0/API 26 là minSdk đã cấu hình. compileSdk/targetSdk hiện là 37, được quản lý trong Gradle và có thể nâng theo yêu cầu nền tảng. Không đồng nhất các số này với phiên bản Android tối thiểu.
 
-API 26 và RAM 3~GB là mục tiêu hỗ trợ đề xuất, không phải mức tối thiểu bắt buộc của Jetpack Compose. Cần kiểm thử trên emulator hoặc thiết bị tương ứng (danh sách test case ở mục~\ref{sec:lifecycle-state}).
+RAM 3 GB và ngân sách khoảng 200 MB cho cài đặt/cache là mục tiêu cần đo và điều chỉnh. Không dùng emulator host 8 GB hoặc một lần chạy API 35 để kết luận đã đạt mục tiêu thiết bị RAM 3 GB. Hồ sơ kiểm chứng cần nêu thiết bị, API, RAM guest, nguồn media, build variant, thời lượng chạy, peak memory và crash/OOM. Cold start, warm start và chuyển tab được đo riêng.

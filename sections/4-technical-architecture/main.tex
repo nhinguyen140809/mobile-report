@@ -1,28 +1,38 @@
 \section{Kiến trúc kỹ thuật}
 \label{sec:technical-architecture}
 
-Phần này mô tả kiến trúc kỹ thuật và cách phát triển ứng dụng, đáp ứng chuẩn đầu ra L.O.1.1 (phan tích khác biệt kiến trúc mobile vs desktop), L.O.1.2 (phan tích kiến trúc và luồng thực thi), L.O.1.3 (thiết kế kiến trúc đa module) và L.O.4.1 (phát triển bằng framework phù hợp) của môn học.
+\textbf{Baseline kiến trúc thống nhất ngày 24/10/2026.} Phần 4.1--4.4 xác định kiến trúc đích; ma trận cuối tài liệu phân biệt phần đã có trong code và phần cần triển khai tiếp. Việc chốt kiến trúc không có nghĩa mọi chức năng đã hoàn thành.
 
-Với mỗi quyết định kỹ thuật, nhóm nêu các phương án đã cân nhắc, lý do chọn phương án cuối cùng vàBehaviour mong đợi~--~đồng thời ghi thành Architecture Decision Records (ADR) ở mục~\ref{sec:adr} để đảm bảo mọi thành viên code theo cùng một hướng.
+Phạm vi kiến trúc phục vụ trực tiếp CO3043: phân biệt môi trường mobile/desktop (L.O.1.1), giải thích luồng thực thi và vòng đời (L.O.1.2), thiết kế module với ranh giới rõ ràng (L.O.1.3), lựa chọn framework phù hợp (L.O.4.1). Không mở rộng sang microservices, nhiều nền tảng hoặc game engine khi chưa có nhu cầu trong bài.
 
-\textbf{Technical Baseline} được chốt cho MVP:
-
-\begin{longtable}{>{\raggedright\arraybackslash}p{3.6cm} >{\raggedright\arraybackslash}p{11.4cm}}
-\caption{Technical Baseline}
-\label{tab:baseline}\\
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.26\linewidth}>{\RaggedRight\arraybackslash}p{0.68\linewidth}}
 \toprule
-\textbf{Thành phần} & \textbf{Quyết định} \\
+\textbf{Hạng mục} & \textbf{Quyết định} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Hạng mục} & \textbf{Quyết định} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Platform & Android Native \\
-Language / UI & Kotlin + Jetpack Compose \\
-Minimum Android & Android 8.0 (API 26) \\
-Target minimum RAM & 3~GB \\
-Architecture & 3 Layers + MVVM \\
-Media engine & AndroidX Media3 \\
+Nền tảng triển khai & Android Native; không tuyên bố hỗ trợ iOS \\
+Ngôn ngữ/giao diện & Kotlin, Jetpack Compose, Material 3 \\
+Thiết bị & minSdk 26; RAM 3 GB là mục tiêu kiểm thử, chưa phải kết quả benchmark \\
+Kiến trúc & Ba layer Presentation--Domain--Data, MVVM và UDF \\
+Tổ chức & Gradle multi-module: app, domain, feature/*, data/*, core/* \\
+Điều hướng & Một Activity, một NavController, một root NavHost; nested graphs theo feature \\
+Media & Media3; tối đa một video player và một audio player dùng chung \\
+Âm thanh & Một nguồn nội dung chính có tiếng tại một thời điểm; video mute có thể cùng tồn tại với nhạc \\
+Lưu trữ & Room cho dữ liệu có cấu trúc/tiến độ; DataStore cho preferences và metadata phiên nhỏ \\
+Chạy nền & MediaSessionService là kiến trúc đích của Music; WorkManager dành cho công việc trì hoãn \\
+Trạng thái hiện tại & Catalog mock, auth demo; phát sample media thật; các phần còn thiếu nằm trong ma trận triển khai \\
 \end{longtable}
+\endgroup
 
 \input{sections/4-technical-architecture/mobile-constraints}
 \input{sections/4-technical-architecture/platform-selection}

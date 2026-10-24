@@ -1,84 +1,66 @@
 \subsection{Lựa chọn nền tảng và framework}
 \label{sec:platform-selection}
 
-\subsubsection{Bảng so sánh}
+\subsubsection{Phương án đã cân nhắc}
 \label{sec:platform-comparison}
 
-Bảng~\ref{tab:platform-comparison} so sánh năm phương án theo các tiêu chí ảnh hưởng trực tiếp đến trải nghiệm media đa nhiệm của OneSpace. Các đánh giá hiệu năng là \textbf{định tính}; không nên tuyên bố framework này luôn nhanh hơn framework kia nếu chưa có benchmark tương ứng.
-
-\begin{longtable}{>{\raggedright\arraybackslash}p{2.2cm} >{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}p{4.4cm}}
-\caption{So sánh các nền tảng và framework}
-\label{tab:platform-comparison}\\
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.17\linewidth}>{\RaggedRight\arraybackslash}p{0.28\linewidth}>{\RaggedRight\arraybackslash}p{0.22\linewidth}>{\RaggedRight\arraybackslash}p{0.23\linewidth}}
 \toprule
-\textbf{Tiêu chí} & \textbf{Android Native} & \textbf{iOS Native} & \textbf{Flutter} & \textbf{React Native / KMP} \\
+\textbf{Phương án} & \textbf{Điểm phù hợp} & \textbf{Chi phí trong bài} & \textbf{Kết luận} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Tiêu chí} & \textbf{Android Native} & \textbf{iOS Native} & \textbf{Flutter} & \textbf{React Native / KMP} \\
+\textbf{Phương án} & \textbf{Điểm phù hợp} & \textbf{Chi phí trong bài} & \textbf{Kết luận} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Ngôn ngữ & Kotlin & Swift & Dart & TypeScript / Kotlin \\
-UI & Jetpack Compose & SwiftUI / UIKit & Flutter Widgets & Native-backed / Compose MP \\
-Hiệu năng & Rất tốt & Rất tốt & Tốt & Tốt \\
-Code tái sử dụng & Thấp (chỉ Android) & Thấp (chỉ iOS) & Cao (2 nền) & Cao (2+ nền) \\
-Background media & Trực tiếp qua API & Qua iOS API & Plugin/native module & Native module \\
-Video player & AndroidX Media3 & AVPlayer & video\_player, plugin & Video library / native \\
-Minigame & Compose Canvas & SwiftUI / SpriteKit & Flutter / Flame engine & Skia / native \\
-Kinh nghiệm nhóm & \textbf{Cao} & Chưa có & Chưa có & Chưa có \\
-Phạm vi & Android & iOS & Android + iOS & Android + iOS \\
-Nhu cầu tích hợp native & Không cần & Không cần & Platform channel cho audio nền & Native module cho audio nền \\
+Android Native/Kotlin & Trực tiếp dùng lifecycle, Media3, media session và audio focus; nhóm có kinh nghiệm & Chỉ triển khai Android & Chọn \\
+iOS Native/Swift & Tích hợp hệ thống iOS trực tiếp & Thêm nền tảng và công cụ; không có bản iOS để kiểm thử & Phân tích, không triển khai \\
+Flutter & Chia sẻ UI và logic đa nền tảng & Cần kiểm tra plugin và phần tích hợp Android cho từng yêu cầu media & Không chọn trong phạm vi hiện tại \\
+React Native & Chia sẻ UI/logic bằng JS/TS & Phụ thuộc thư viện/native integration cho media và background & Không chọn \\
+Kotlin Multiplatform & Có thể chia sẻ logic Kotlin & Vẫn cần chiến lược UI/media theo nền tảng; tăng phạm vi kiểm thử & Cân nhắc sau nếu có yêu cầu iOS \\
 \end{longtable}
+\endgroup
 
-\subsubsection{Quyết định cuối cùng}
-\label{sec:platform-choice}
+Không dùng bảng này để khẳng định một framework luôn nhanh hơn framework khác hoặc mọi cross-platform app đều cần tự viết native bridge.
 
-Chọn: \textbf{Kotlin + Jetpack Compose + AndroidX Media3}.
-
-Năm lý do:
-
-\begin{enumerate}
-\item Nhóm đã có kinh nghiệm Android nên giảm thời gian học framework mới.
-\item Compose giao diện theo state-driven model, phù hợp floating video và mini-player~--~hai thành phần cốt lõi của trải nghiệm đa nhiệm OneSpace.
-\item AndroidX Media3 hỗ trợ ExoPlayer, MediaSession và tích hợp phát nhạc nền đầy đủ.
-\item Xử lý trực tiếp Activity Lifecycle, AudioManager, Picture-in-Picture và notification~--~không qua lớp trung gian.
-\item Tránh lớp tích hợp native bổ sung thường cần khi dùng framework cross-platform.
-\end{enumerate}
-
-Quan trọng: nhóm vẫn \textbf{phân tích} iOS Native và cross-platform trong bảng~\ref{tab:platform-comparison} để chứng minh quyết định có cơ sở so sánh, nhưng \textbf{không ghi iOS là nền tảng được hỗ trợ} trong MVP vì không có phiên bản iOS thực tế. Tương ứng câu trả lời cho guide box: không có phần nào cần platform channel hay native module vì toàn bộ hệ thống (audio focus, PiP, notification, background service) được gọi trực tiếp qua Android API.
-
-\subsubsection{Technology Stack}
+\subsubsection{Technology stack và mức triển khai}
 \label{sec:tech-stack}
 
-\begin{longtable}{>{\raggedright\arraybackslash}p{3.8cm} >{\raggedright\arraybackslash}p{11.2cm}}
-\caption{Technology Stack của OneSpace}
-\label{tab:tech-stack}\\
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.23\linewidth}>{\RaggedRight\arraybackslash}p{0.32\linewidth}>{\RaggedRight\arraybackslash}p{0.37\linewidth}}
 \toprule
-\textbf{Thành phần} & \textbf{Công nghệ} \\
+\textbf{Vai trò} & \textbf{Công nghệ chốt} & \textbf{Hiện trạng} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Thành phần} & \textbf{Công nghệ} \\
+\textbf{Vai trò} & \textbf{Công nghệ chốt} & \textbf{Hiện trạng} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Programming & Kotlin \\
-UI & Jetpack Compose + Material 3 \\
-Navigation & Navigation Compose \\
-State & ViewModel + StateFlow \\
-Dependency Injection & Hilt \\
-Networking & Retrofit + OkHttp \\
-Serialization & Kotlinx Serialization \\
-Local Database & Room \\
-Preferences & DataStore \\
-Video / Audio & AndroidX Media3 (ExoPlayer) \\
-Background Audio & MediaSessionService \\
-Image Loading & Coil \\
-Background Sync & WorkManager \\
-Mini Game & Compose Canvas hoặc custom rendering \\
-Testing & JUnit, Compose UI Test \\
+UI/design system & Compose, Material 3, font đóng gói & Có \\
+Navigation & Navigation Compose typed routes + Kotlin Serialization & Có \\
+State/DI & ViewModel, StateFlow, lifecycle-aware collection, Hilt/KSP & Có \\
+Domain & Kotlin/JVM, coroutines/Flow cho contracts & Có \\
+Media & Media3 ExoPlayer, adapter thực thi MediaSessionPort & Có phát sample stream thật \\
+Structured local data & Room & Có progress/watchlist video; các schema nghiệp vụ khác triển khai sau \\
+Preferences & DataStore & Có \\
+Remote API & Retrofit + OkHttp + Kotlin Serialization & Chọn cho giai đoạn remote; chưa có client/backend thật \\
+Artwork/ảnh & Coil khi tích hợp ảnh từ nguồn thật & Chưa tích hợp; hiện dùng minh họa mock \\
+Music background & MediaSessionService + MediaController & Bắt buộc cho hành vi background đích; chưa triển khai \\
+Deferred sync & WorkManager & Dành cho sync/retry trì hoãn; chưa có worker \\
+Mini game & Logic Kotlin + Compose/Canvas phù hợp game nhỏ & Mới board preview \\
+Verification & JUnit, Compose UI tests, verifyArchitecture & Có baseline; mỗi yêu cầu mới cần bằng chứng riêng \\
 \end{longtable}
+\endgroup
 
-Về minigame: nên chọn \textbf{2048} hoặc \textbf{Tic-Tac-Toe} (hoặc Snake, đã có trong bảng~\ref{tab:feature-pool}). Không cần game engine phức tạp vì mục tiêu chính của dự án là đa nhiệm, không phải đồ họa game~--~khớp với ghi chú F-GAME-14 (``beat tiles'') và F-GAME-12/13 (2048, Snake) đã xếp vào MVP.
+Không thêm dependency, empty service hoặc empty use case chỉ để bảng stack trông đầy đủ. Những mục chưa có phải giữ trạng thái dự kiến cho đến khi có code và test.

@@ -1,222 +1,214 @@
 \subsection{Vòng đời ứng dụng và quản lý trạng thái}
 \label{sec:lifecycle-state}
 
-\subsubsection{Luồng thực thi (Execution Flow)}
+Thiết kế phân biệt lifecycle, saved state và background media theo tài liệu Android~\cite{android-lifecycle,android-state,media3-background}.
+
+\subsubsection{Luồng thực thi}
 \label{sec:execution-flow}
 
-Luồng khởi động của OneSpace:
-
 \begin{enumerate}
-\item \textbf{Launch app}: Android khởi chạy MainActivity, OneSpaceApplication khởi tạo Hilt dependencies.
-\item \textbf{Load preferences and saved session}: đọc DataStore (cài đặt người dùng) và Room/DataStore (phiên hoạt động trước đó).
-\item \textbf{Kiểm tra phiên đăng nhập}: nếu có phiên hợp lệ $\rightarrow$ vào Home trực tiếp; nếu không $\rightarrow$ vào Guest Mode hoặc màn Đăng nhập.
-\item \textbf{Home Screen}: hiển thị nội dung gợi ý theo sở thích; người dùng chọn phân hệ (Video, Music, News, Games).
-\item \textbf{SessionCoordinator} lưu hoặc khôi phục trạng thái phân hệ tương ứng.
+\item Application thiết lập Hilt; MainActivity cài native splash, tạo shell và NavController.
+\item Startup state đọc preferences và auth session thật từ repository; không điều hướng theo object mặc định chưa load.
+\item Chưa onboarding: vào onboarding. Hoàn tất chỉ lưu sở thích/onboarding, chưa tự cấp guest session.
+\item Đã onboarding nhưng signed out: vào Auth. Người dùng chọn guest hoặc hoàn tất xác thực.
+\item Phiên được persist xong: root chuyển Main; lần mở lại có thể phục hồi tab trước đó. Video/nhạc được restore ở trạng thái paused, không autoplay từ một lần mở app thông thường.
+\item Root quan sát phiên đã lưu để xử lý sign-out/recreate; ViewModel không giữ callback trỏ tới NavController của Activity cũ.
 \end{enumerate}
 
-Nhóm khuyên \textbf{Guest Mode} trong MVP (tương ứng F-COM-18) để người dùng trải nghiệm đủ bốn phân hệ mà không bị phụ thuộc backend. Authentication là module mở rộng nếu assignment không yêu cầu tài khoản bắt buộc.
+Guest là luồng MVP bắt buộc để demo bốn phân hệ không lệ thuộc backend. Email/OTP hiện là demo; provider thật là phần triển khai tiếp. Sign-out dừng phiên phát, xóa restore request đang chờ, trở lại Auth; giữ sở thích và settings cục bộ. Khi có dữ liệu riêng theo tài khoản phải bổ sung partition/cleanup theo identity.
 
-\subsubsection{Quy tắc giữ trạng thái}
-\label{sec:state-rules}
-
-Điểm rất quan trọng: \textbf{chuyển tab trong app khác với đưa toàn bộ ứng dụng xuống background}. Chuyển \texttt{Video $\rightarrow$ Tin} vẫn nằm trong cùng Activity, nên Floating Video tiếp tục phát. Nhưng bấm Home đưa Activity xuống nền thì MVP \textbf{pause video} để tiết kiệm pin, trừ khi người dùng kích hoạt chế độ riêng.
-
-Bảng~\ref{tab:state-rules} định nghĩa trạng thái từng loại nội dung trong ba tình huống:
-
-\begin{longtable}{>{\raggedright\arraybackslash}p{1.6cm} >{\raggedright\arraybackslash}p{4.6cm} >{\raggedright\arraybackslash}p{5.2cm} >{\raggedright\arraybackslash}p{4.6cm}}
-\caption{Quy tắc giữ trạng thái theo ba tình huống}
-\label{tab:state-rules}\\
-\toprule
-\textbf{Nội dung} & \textbf{Chuyển tab trong app} & \textbf{App vào background} & \textbf{Process bị kill} \\
-\midrule
-\endfirsthead
-\toprule
-\textbf{Nội dung} & \textbf{Chuyển tab} & \textbf{Background} & \textbf{Process kill} \\
-\midrule
-\endhead
-\bottomrule
-\endfoot
-Video & Floating hoặc pause theo chính sách & Pause (trừ khi bật PiP) & Khôi phục video và vị trí, không tự phát \\
-Music & Tiếp tục phát nếu không xung đột & Tiếp tục qua MediaSessionService & Lưu bài, vị trí và queue; khôi phục khi mở lại \\
-News & Giữ vị trí cuộn & Giữ trạng thái đọc & Phục hồi article ID và vị trí đọc \\
-Games & Pause + save & Pause + save & Phục hồi từ bản lưu gần nhất \\
-\end{longtable}
-
-\subsubsection{State nào được lưu ở đâu}
-\label{sec:state-storage}
-
-\begin{longtable}{>{\raggedright\arraybackslash}p{5.2cm} >{\raggedright\arraybackslash}p{9.8cm}}
-\caption{Loại trạng thái và cách lưu}
-\label{tab:state-storage}\\
-\toprule
-\textbf{Loại trạng thái} & \textbf{Cách lưu} \\
-\midrule
-\endfirsthead
-\toprule
-\textbf{Loại trạng thái} & \textbf{Cách lưu} \\
-\midrule
-\endhead
-\bottomrule
-\endfoot
-Nút đang chọn, popup đang mở & Compose \texttt{rememberSaveable} \\
-UI State màn hình & ViewModel + StateFlow \\
-Navigation arguments & Navigation / SavedStateHandle \\
-Vị trí video, bài nhạc, queue & Repository + Room/DataStore \\
-Nội dung tin đã cache & Room \\
-Game board, score, level & Room \\
-Cài đặt mute, chất lượng media & DataStore \\
-Player còn hoạt động & Playback controller / service~--~\textbf{không} lưu đối tượng Player xuống database \\
-\end{longtable}
-
-Lưu ý quan trọng: ViewModel tồn tại qua configuration changes thông thường (xoay màn hình), nhưng \textbf{không tồn tại qua process death}. Vì vậy game state và tiến độ media không thể chỉ giữ trong ViewModel~--~phải lưu xuống Room hoặc DataStore. Cũng không nên trông chờ \texttt{onDestroy()} được gọi trước khi hệ điều hành kill process; nên lưu các mốc quan trọng ngay khi trạng thái thay đổi, thay vì chỉ lưu tất cả khi app thoát.
-
-\subsubsection{Sơ đồ vòng đời Activity}
-\label{sec:activity-lifecycle}
-
-Vòng đời Activity chuẩn của Android:
-
-\begin{quote}
-\texttt{Created} $\rightarrow$ \texttt{Started} $\rightarrow$ \texttt{Resumed} $\rightarrow$ \texttt{Paused} $\rightarrow$ \texttt{Stopped} $\rightarrow$ \texttt{Destroyed}
-\end{quote}
-
-Sự kiện chính và ứng xử:
-
-\begin{itemize}
-\item \textbf{App loses focus} (notification kéo xuống, dialog): Activity vào \texttt{Paused}~--~video pause, nhạc vẫn phát.
-\item \textbf{No longer visible} (bấm Home, chuyển app): Activity vào \texttt{Stopped}~--~video và game pause + save; nhạc tiếp tục qua MediaSessionService.
-\item \textbf{System reclaims memory}: process bị kill~--~khôi phục từ Room/DataStore khi mở lại.
-\item \textbf{Activity finishes}: người dùng chủ động thoát hoặc hệ thống.
-\end{itemize}
-
-Các trạng thái này chỉ đại diện vòng đời \textbf{Activity}. Phát nhạc qua MediaSessionService có vòng đời riêng, không gắn cứng với MainActivity~--~khi Activity bị destroy, service vẫn chạy.
-
-\subsubsection{Background Audio Playback}
-\label{sec:background-audio}
-
-Phân hệ Music dùng \texttt{MediaSessionService} để duy trì media session ngoài vòng đời Activity, cung cấp điều khiển từ notification, Bluetooth và màn hình khoá. Bảng~\ref{tab:audio-rules} định nghĩa hành vi mong muốn theo từng sự kiện:
-
-\begin{longtable}{>{\raggedright\arraybackslash}p{5.4cm} >{\raggedright\arraybackslash}p{9.6cm}}
-\caption{Quy tắc audio focus theo sự kiện}
-\label{tab:audio-rules}\\
-\toprule
-\textbf{Sự kiện} & \textbf{Hành vi mong muốn} \\
-\midrule
-\endfirsthead
-\toprule
-\textbf{Sự kiện} & \textbf{Hành vi} \\
-\midrule
-\endhead
-\bottomrule
-\endfoot
-Người dùng khoá màn hình & Music tiếp tục phát \\
-Bấm Home & Music tiếp tục phát \\
-Cuộc gọi đến & Pause theo audio focus change \\
-Rút tai nghe & Pause~--~tránh phát loa ngoài bất ngờ \\
-Notification Pause & Music tạm dừng \\
-Notification Next & Chuyển bài tiếp theo \\
-Mở Video có âm thanh & Music pause (case C1) \\
-Mở game đã mute & Music tiếp tục (case C5) \\
-Người dùng chủ động Stop & Dừng session nền theo chính sách \\
-\end{longtable}
-
-Khi triển khai Media3, nhóm bật xử lý Android Audio Focus qua \texttt{setAudioAttributes(..., true)}, đồng thời dùng chính sách nội bộ (bảng~\ref{tab:audio-rules}) để phối hợp các nguồn phát trong cùng ứng dụng.
-
-\subsubsection{Ma trận chuyển phân hệ~--~đối chiếu với case C1--C9}
+\subsubsection{Chính sách audio và ma trận chuyển nội dung}
 \label{sec:multitasking-matrix}
 
-Bảng~\ref{tab:multitasking-matrix} là phiên bản kỹ thuật của ma trận case C1--C9 đã trình bày ở mục~\ref{sec:mvp-scope}, gắn trực tiếp với các thành phần điều phối kiến trúc:
+\textbf{Phân biệt chọn tab và bắt đầu phát.} Vào catalog Music không đồng nghĩa PlayTrack; mở Article không đồng nghĩa bật TTS. Chỉ intent phát nội dung mới làm phát sinh cạnh tranh audio.
 
-\begin{longtable}{>{\raggedright\arraybackslash}p{3.4cm} >{\raggedright\arraybackslash}p{4.8cm} >{\raggedright\arraybackslash}p{6.8cm}}
-\caption{Ma trận chuyển phân hệ: trạng thái player/game và UI}
-\label{tab:multitasking-matrix}\\
+C1 chốt ba lựa chọn khi bắt đầu nhạc trong lúc video đang có tiếng: \textbf{Tắt tiếng video, phát nhạc / Dừng video, phát nhạc / Chỉ giữ video}. Quy tắc nhớ \textbf{toàn ứng dụng trên thiết bị} cho baseline, có nút reset trong Settings. Không mô tả nhớ theo cặp nội dung khi storage chỉ có một conflictRule. Mọi trạng thái video còn chạy phải có surface/control nhìn thấy; không chấp nhận audio vô hình khi chuyển catalog.
+
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.23\linewidth}>{\RaggedRight\arraybackslash}p{0.32\linewidth}>{\RaggedRight\arraybackslash}p{0.37\linewidth}}
 \toprule
-\textbf{Chuyển từ $\rightarrow$ tới} & \textbf{Player / Game State} & \textbf{UI hiển thị} \\
+\textbf{Sự kiện} & \textbf{Chính sách đích} & \textbf{UI/khôi phục} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Chuyển từ $\rightarrow$ tới} & \textbf{Player / Game} & \textbf{UI} \\
+\textbf{Sự kiện} & \textbf{Chính sách đích} & \textbf{UI/khôi phục} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Video $\rightarrow$ Tin & Video tiếp tục (case C3) & Floating Video \\
-Video $\rightarrow$ Nhạc & Video pause, Nhạc play (case C1) & Mini Music Player \\
-Video $\rightarrow$ Games & Video tiếp tục nếu game mute (case C4) & Floating Video + game \\
-Nhạc $\rightarrow$ Tin & Nhạc tiếp tục (case C2) & Mini Music Player \\
-Nhạc $\rightarrow$ Video & Nhạc pause khi video phát tiếng & Video Player \\
-Nhạc $\rightarrow$ Games & Nhạc tiếp tục nếu game mute (case C5) & Game fullscreen, nhạc nền \\
-Games $\rightarrow$ Tin & Game pause + save & News Screen \\
-Games $\rightarrow$ Video & Game pause + save & Video Screen \\
-Tin $\rightarrow$ Games & Lưu vị trí đọc & Game Screen \\
-Any $\rightarrow$ Background & Pause video/game; Nhạc tiếp tục & Android background \\
+Video \(\rightarrow\) News/Home & Video tiếp tục khi app còn hiển thị & Floating dùng cùng engine, mở lại detail không reset vị trí \\
+Chọn tab Music & Không tự phát nhạc; giữ quyền kiểm soát video hiện có & Floating hoặc chủ động pause có thông báo; không phát video ẩn \\
+PlayTrack khi video có tiếng & Áp dụng C1, hỏi khi chưa có lựa chọn & Nhạc và video mute có thể cùng tồn tại \\
+PlayVideo có tiếng & Dừng/pause audio chính trước đó & Video là nội dung chính người dùng vừa yêu cầu \\
+Music \(\rightarrow\) News/Home & Nhạc tiếp tục & Dock; reader có thể thay layout nhưng phải còn đường tới controls \\
+Video/Music \(\rightarrow\) Game mute & Không thêm nguồn tiếng thứ hai; video có thể floating & Game nhận vùng chạm riêng, không bị overlay che controls \\
+Rời game & Pause và lưu snapshot & Vào lại phục hồi board/score, không tạo phiên mới ngoài ý muốn \\
+TTS/chuyển MP3/mixed queue & Dùng cùng audio queue và chính sách một nguồn tiếng & C6--C8 vẫn là functional backlog; chưa tạo thêm engine hoặc placeholder screen \\
+App không còn hiển thị & Pause video/game; checkpoint & Music chỉ được cam kết tiếp tục khi có service đúng chuẩn \\
+Process bị kill & Restore snapshot hợp lệ, mặc định paused & Không phục hồi object Player hoặc tự phát khi người dùng chưa yêu cầu \\
 \end{longtable}
+\endgroup
 
-Đây là \textbf{chính sách sản phẩm} nhóm chủ động lập trình, không phải hành vi Android tự động thực hiện. Mỗi chuyển tab phải được code: pause, resume, đổi player, lưu session.
+Không chốt duck 30\%, ba luồng có tiếng hoặc giới hạn phản hồi cuộc gọi 0,5 giây khi chưa có phép đo và implementation. Với game của baseline chọn mute SFX để giữ phạm vi audio rõ ràng. Các hiệu ứng/ducking sau này cần ADR bổ sung.
 
-\subsubsection{Quyết định kiến trúc quan trọng}
+\subsubsection{State owner và persistence}
+\label{sec:state-storage}
+
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.17\linewidth}>{\RaggedRight\arraybackslash}p{0.28\linewidth}>{\RaggedRight\arraybackslash}p{0.22\linewidth}>{\RaggedRight\arraybackslash}p{0.23\linewidth}}
+\toprule
+\textbf{Loại state} & \textbf{Runtime owner} & \textbf{Persistence} & \textbf{Cam kết} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Loại state} & \textbf{Runtime owner} & \textbf{Persistence} & \textbf{Cam kết} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Dialog, form, filter nhỏ & Compose/feature ViewModel & rememberSaveable/SavedStateHandle tùy cần & Không lưu bitmap, Player hoặc queue lớn vào Bundle \\
+Catalog/UI state & Feature ViewModel & Repository data nếu cần durable & Thu thập lifecycle-aware, UI không là nguồn dữ liệu duy nhất \\
+Tab/detail/back stack & Navigation ở app & Navigation saved state + last section nhỏ & Không coi SavedStateHandle là cơ sở dữ liệu hoặc bảo đảm sau force-stop \\
+Video progress/watchlist & Engine + ViewingSessionRepository & Room & Checkpoint hiện tại theo chu kỳ 3 giây; bổ sung checkpoint theo semantic events khi cần \\
+Music track/queue/position & Engine/service & Snapshot repository & Hiện mới nhớ track ID; đầy đủ queue/position là phần tiếp theo \\
+News reading/bookmark & Repository + ViewModel & Room đích & Hiện bookmark còn RAM; chưa đạt restore sau process death \\
+Game board/score & Game session & Room đích & Board preview không được tính là gameplay/persistence đã xong \\
+Theme/preferences/guest marker & Repository & DataStore & Ghi atomic cho metadata phiên liên quan \\
+\end{longtable}
+\endgroup
+
+Configuration change, OS process death, swipe-away/force-stop và cold launch là các tình huống kiểm thử khác nhau. ViewModel không sống qua process death. Saved state phụ thuộc task/host restoration; dữ liệu cần giữ bền vững phải có local storage. Không chờ onDestroy mới lưu.
+
+Trong app, fullscreen/floating giữ cùng engine nên mục tiêu quay lại vị trí không lệch quá 2 giây vẫn áp dụng. Sau kill đột ngột, vị trí phụ thuộc checkpoint gần nhất; mục tiêu demo cold restore là mất không quá 5 giây tiến độ dưới điều kiện đo đã ghi nhận, chưa phải kết quả đã chứng minh.
+
+\subsubsection{Lifecycle và background playback}
+\label{sec:activity-lifecycle}
+
+Lifecycle Activity: Created \(\rightarrow\) Started \(\rightarrow\) Resumed \(\rightarrow\) Paused \(\rightarrow\) Stopped \(\rightarrow\) Destroyed. Không đồng nhất Paused với không còn hiển thị, hoặc mọi dialog với onPause. Compose dialog cùng Activity không bắt buộc tạo một transition Activity riêng.
+
+\begin{itemize}
+\item ON\_STOP khi app không còn hiển thị: pause video/game và lưu state; không tắt nhạc chỉ vì UI rời foreground nếu service hợp lệ đang sở hữu phiên.
+\item ON\_PAUSE: xử lý theo mức tương tác/visibility; không blanket-pause mọi video chỉ vì mất focus tạm thời hoặc đang multi-window.
+\item Audio focus/noisy là tín hiệu riêng từ hệ thống, không thay bằng navigation hay onStop.
+\item Nhạc nền phải do MediaSessionService sở hữu player/session; UI gửi lệnh qua MediaController/adapter. Singleton engine trong process không thay cho service.
+\item OS có thể kết thúc process/service tùy chính sách. Không hứa phát vô hạn hoặc autoplay sau force-stop.
+\end{itemize}
+
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.26\linewidth}>{\RaggedRight\arraybackslash}p{0.68\linewidth}}
+\toprule
+\textbf{Sự kiện audio} & \textbf{Hành vi đích} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Sự kiện audio} & \textbf{Hành vi đích} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Lock screen/Home & Music tiếp tục qua service và có controls từ notification/lock screen \\
+Focus loss tạm thời & Pause/duck theo chính sách; chỉ resume nếu trước đó thực sự phát và user chưa Stop \\
+Focus loss lâu dài & Pause/stop theo provider/system policy, không tự tranh focus liên tục \\
+Rút tai nghe & Pause nguồn có tiếng; không tự chuyển sang loa ngoài \\
+Stop chủ động & Dừng session theo service lifecycle và xóa restore/autoplay pending \\
+Hai engine nội bộ & Chỉ nguồn đang có tiếng quản lý focus; video mute không được giành lại focus của nhạc \\
+\end{longtable}
+\endgroup
+
+Hiện music player bật xử lý audio focus của Media3, video player không tự xử lý focus. Vì vậy chưa được ghi mọi cuộc gọi/noisy/focus case là hoàn tất; cần bổ sung adapter audio focus cho toàn bộ nguồn đang có tiếng và test hệ thống.
+
+\subsubsection{ADR đã chốt}
 \label{sec:adr}
 
-Bảng~\ref{tab:adr} tổng hợp các Architecture Decision Records (ADR) nhóm cần thống nhất trước khi code, để tránh các thành viên code theo cách khác nhau:
-
-\begin{longtable}{>{\raggedright\arraybackslash}p{1.6cm} >{\raggedright\arraybackslash}p{13.4cm}}
-\caption{Architecture Decision Records}
-\label{tab:adr}\\
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.26\linewidth}>{\RaggedRight\arraybackslash}p{0.68\linewidth}}
 \toprule
-\textbf{ADR} & \textbf{Quyết định} \\
+\textbf{ADR} & \textbf{Quyết định và lý do} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{ADR} & \textbf{Quyết định} \\
+\textbf{ADR} & \textbf{Quyết định và lý do} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-ADR-01 & Android Native, Kotlin + Jetpack Compose \\
-ADR-02 & Android 8.0+ (API 26+), mục tiêu RAM tối thiểu 3~GB \\
-ADR-03 & MVVM + 3-layer architecture + UDF (Unidirectional Data Flow) \\
-ADR-04 & Feature-based modularization \\
-ADR-05 & Media3 cho audio/video playback \\
-ADR-06 & MediaSessionService cho Music background \\
-ADR-07 & Một nguồn audio chính có tiếng tại một thời điểm; cho phép game mute SFX \\
-ADR-08 & In-app Floating Player cho Video $\rightarrow$ Tin/Games \\
-ADR-09 & Room cho persisted session/game state; DataStore cho preferences \\
-ADR-10 & News cache và offline-first minigame \\
-ADR-11 & SessionCoordinator xử lý chuyển đổi phân hệ \\
-ADR-12 & Video và game mặc định pause khi app vào background; Music được tiếp tục \\
+01 & Android/Kotlin/Compose: đúng trọng tâm media/lifecycle và năng lực nhóm \\
+02 & minSdk 26; RAM/storage/startup là mục tiêu đo, không số liệu tự nhận đã đạt \\
+03 & Presentation--Domain--Data + MVVM/UDF; Domain Kotlin thuần để thể hiện bài ba lớp \\
+04 & Giữ Gradle modules ngoài app; domain chung phân package nghiệp vụ, không nhân submodule chưa cần \\
+05 & app thực thi navigation; feature sở hữu Route/NavGraph declaration và callbacks \\
+06 & Một root NavController; graph-scoped catalog/auth VM, destination scope cho settings khi phù hợp \\
+07 & Domain policy, shared session adapter, route executor và media engine là bốn trách nhiệm khác nhau \\
+08 & Một video engine + một audio engine; một nguồn tiếng chính, không hỗ trợ ba luồng có tiếng \\
+09 & C1 nhớ global trên thiết bị, ba lựa chọn không trùng nghĩa; reset ở Settings \\
+10 & Floating trong app; system PiP và ducking SFX hoãn cho ADR riêng \\
+11 & Room/DataStore lưu data/snapshot, không lưu runtime Player/ViewModel \\
+12 & Music background cần MediaSessionService; WorkManager chỉ sync trì hoãn \\
+13 & News/game hướng local-first; catalog mock không được tính là offline-first đã hoàn tất \\
+14 & Guest là baseline; demo OTP không phải xác thực backend \\
+15 & ON\_STOP/visibility tách audio focus; restore không autoplay từ cold launch \\
+16 & Không có nguồn audio vô hình; chọn tab khác với Play intent \\
+17 & Chưa chốt vendor API/backend hoặc giao thức leaderboard khi chưa triển khai functional tương ứng \\
+18 & verifyArchitecture + compiler + runtime tests cùng kiểm chứng; không một kiểm tra nào thay thế tất cả \\
 \end{longtable}
+\endgroup
 
-\subsubsection{Test case kiểm chứng kiến trúc}
+\subsubsection{Ma trận kiểm chứng và phần còn thiếu}
 \label{sec:arch-test-cases}
 
-Để chứng minh kiến trúc hoạt động đúng, nhóm đưa vào báo cáo các test case thực tế sau:
-
-\begin{longtable}{>{\raggedright\arraybackslash}p{1.4cm} >{\raggedright\arraybackslash}p{6.4cm} >{\raggedright\arraybackslash}p{7.2cm}}
-\caption{Test case kiểm chứng hành vi đa nhiệm và vòng đời}
-\label{tab:arch-test-cases}\\
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.23\linewidth}>{\RaggedRight\arraybackslash}p{0.32\linewidth}>{\RaggedRight\arraybackslash}p{0.37\linewidth}}
 \toprule
-\textbf{Test} & \textbf{Tình huống} & \textbf{Kết quả mong đợi} \\
+\textbf{Nội dung} & \textbf{Trạng thái baseline} & \textbf{Điều kiện để ghi hoàn tất trong báo cáo} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Test} & \textbf{Tình huống} & \textbf{Kết quả} \\
+\textbf{Nội dung} & \textbf{Trạng thái baseline} & \textbf{Điều kiện để ghi hoàn tất trong báo cáo} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-TC01 & Video $\rightarrow$ Tin & Video thu nhỏ, tiếp tục phát \\
-TC02 & Video $\rightarrow$ Nhạc & Video pause, Nhạc bắt đầu \\
-TC03 & Nhạc $\rightarrow$ Home $\rightarrow$ khoá màn hình & Nhạc tiếp tục, điều khiển từ lock screen \\
-TC04 & Nhạc $\rightarrow$ Games (game mute) & Nhạc tiếp tục \\
-TC05 & Game $\rightarrow$ Tin $\rightarrow$ Game & Khôi phục đúng board và score \\
-TC06 & Mất mạng khi đọc Tin & Hiển thị bài đã cache \\
-TC07 & Mất mạng khi stream Video & Phát buffer còn lại, sau đó trạng thái chờ/retry \\
-TC08 & Có mạng trở lại & Cho phép retry hoặc resume \\
-TC09 & Activity recreate (xoay màn hình) & Trạng thái cần thiết được giữ \\
-TC10 & OS kill app process & Khôi phục phiên từ local storage \\
-TC11 & Có cuộc gọi khi nghe Nhạc & Audio pause/duck theo chính sách \\
-TC12 & Rút tai nghe & Nhạc pause \\
-TC13 & Thiết bị RAM 3~GB & Không crash/OOM trong luồng demo (Quốc Huy) \\
-TC14 & Bật Battery Saver & Hạn chế tác vụ không thiết yếu \\
+Module/layer và callbacks navigation & Đã có cấu trúc và guardrail & verifyArchitecture, build và regression navigation pass trên revision tương ứng \\
+Auth/root routing/recreate & Có demo & Phân biệt guest/signed-out, OTP sai/đúng, recreate ngay lúc sign-out; ghi rõ local demo \\
+Same-engine floating/mini player & Có baseline & Kiểm tra surface thật, position, expand/close và controls \\
+C1 audio policy & Có ba lựa chọn và global preference & Test từng lựa chọn; ghi rõ navigation/catalog và playback là hai intent \\
+Video ẩn khi ở catalog Music & Còn gap trong layout/policy hiện tại & Đồng bộ SessionState với engine và giữ surface/control, hoặc pause rõ ràng; xử lý ở bước functional kế tiếp \\
+Game loop/snapshot/score & Preview & Gameplay thật, pause/resume và kill/restore test riêng \\
+News offline/bookmark durable & Chưa hoàn tất & Room là nguồn đọc, tắt mạng thật, restart process vẫn có dữ liệu \\
+Music service/notification/lock screen & Chưa có & Service thật + controls + lock/Home/background test \\
+Restore đầy đủ video/music/news/game & Một phần & Kill process có dữ liệu thật; kiểm tra ID, position, queue/board theo từng loại \\
+Call/noisy/audio focus cho cả video và nhạc & Một phần & Test hệ thống, không suy ra từ dialog C1 trong app \\
+Data Saver/adaptive playback & Có toggle/track cap & Nguồn HLS/DASH hoặc multi-variant thật và đo lựa chọn track; MP4 đơn không đủ chứng minh \\
+Low RAM/Battery Saver/startup budget & Chưa chứng minh & Profiler/Perfetto và test trên cấu hình đã nêu; ghi số liệu thực \\
+C6 TTS, C7 conversion, C8 mixed queue & Functional backlog giữ lại & Domain/data pipeline, UI và test tích hợp riêng; không tạo màn rỗng ở bước kiến trúc \\
 \end{longtable}
+\endgroup
 
-Để kiểm chứng các tuyên bố về pin và hiệu năng, nhóm có thể dùng Android Studio Profiler, Memory Profiler và Perfetto~--~đo khi chỉ xem video so với vừa xem floating video vừa đọc tin hoặc chơi game. Các số liệu này bổ sung cho bảng chỉ số ở mục~\ref{sec:quality-pillars}.
+Các test nền tảng gồm: first launch, guest/login/logout, từng tab/detail, Back, preserve tab stack, recreate, chuyển floating/fullscreen, xung đột audio, real media progression, settings/offline UI và bookmark trong phiên. Những test này không tự chứng minh OS process death, service nền, offline cache hoặc RAM 3 GB.
+
+\subsubsection{Đối chiếu với phạm vi sản phẩm và UI}
+
+\begin{enumerate}
+\item Mục 2.2/C1: đổi “nhớ theo cặp” thành “global trên thiết bị, reset trong Settings”; dùng đúng ba lựa chọn ở 4.4.2. Xóa lựa chọn trùng nghĩa.
+\item Mục 2.2/C3--C4 và 3.1: dùng “floating trong app” cho overlay hiện tại; không gọi đó là system PiP. Giữ mục tiêu quay lại cùng engine.
+\item Mục 2.2/C5/C9: baseline một nguồn tiếng chính, game mute; ducking/ba luồng chưa cam kết.
+\item Mục 2.2/C6--C8: giữ yêu cầu sản phẩm và ghi chưa triển khai; không đánh dấu xong vì đã có queue nhạc mock.
+\item Mục 3.1: bổ sung startup/auth/main graphs; app thực thi callbacks từ feature graphs.
+\item Bảng offline/cấu hình: bỏ downloaded music khỏi lời hứa offline của baseline khi tính năng tải đã hoãn.
+\item Bảng trạng thái và kết luận: tách “đã chốt thiết kế” khỏi “đã triển khai/đã đo”; không dùng kết quả UI demo để suy ra service/process-death/performance.
+\end{enumerate}
