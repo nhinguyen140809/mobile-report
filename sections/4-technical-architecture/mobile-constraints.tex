@@ -9,6 +9,8 @@
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{3pt}
 \begin{longtable}{>{\RaggedRight\arraybackslash}p{0.13\linewidth}>{\RaggedRight\arraybackslash}p{0.2\linewidth}>{\RaggedRight\arraybackslash}p{0.19\linewidth}>{\RaggedRight\arraybackslash}p{0.19\linewidth}>{\RaggedRight\arraybackslash}p{0.18\linewidth}}
+\caption{Đặc điểm môi trường mobile, web và desktop}
+\label{tab:mobile-desktop}\\
 \toprule
 \textbf{Tiêu chí} & \textbf{Android Native} & \textbf{Web} & \textbf{Desktop} & \textbf{Hệ quả cho OneSpace} \\
 \midrule
@@ -23,7 +25,7 @@ RAM/CPU & Giới hạn, process có thể bị thu hồi & Phụ thuộc browser
 Pin & Tác động trực tiếp thời gian sử dụng & Cũng chịu giới hạn năng lượng & Có thể dùng nguồn điện ổn định & Ngừng công việc ngoài màn hình, giới hạn prefetch \\
 Vòng đời & Activity và process do OS quản lý & Tab có thể bị suspend/discard & Vòng đời cửa sổ/process khác mobile & Tách UI state, persisted state và playback lifetime \\
 Media nền & Có API media session/service và audio focus & Phụ thuộc browser/platform & Thường linh hoạt hơn & Dùng Media3 và MediaSessionService cho Android \\
-Offline & Room/DataStore/file cache & IndexedDB/Service Worker tùy hỗ trợ & Database/file system & Repository điều phối local/remote, UI không gọi nguồn dữ liệu \\
+Offline & Room, DataStore, file cache & IndexedDB, Service Worker tùy hỗ trợ & Database/file system & Repository điều phối local/remote, UI không gọi nguồn dữ liệu \\
 Tích hợp hệ thống & Notification, Bluetooth, audio focus, lifecycle & Khả năng tùy nền tảng & API theo hệ điều hành & Thiết kế adapter Android, không đưa API hệ thống vào Domain \\
 \end{longtable}
 \endgroup
@@ -40,6 +42,8 @@ Video thường tốn dữ liệu và decoder hơn đọc tin; game có thể t�
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{3pt}
 \begin{longtable}{>{\RaggedRight\arraybackslash}p{0.26\linewidth}>{\RaggedRight\arraybackslash}p{0.68\linewidth}}
+\caption{Ngân sách và quy tắc tài nguyên}
+\label{tab:resource-policy}\\
 \toprule
 \textbf{Thành phần} & \textbf{Quy tắc kiến trúc đích} \\
 \midrule
@@ -70,6 +74,8 @@ Không tạo thêm ResourcePolicyManager chỉ để đủ tên trong báo cáo.
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{3pt}
 \begin{longtable}{>{\RaggedRight\arraybackslash}p{0.23\linewidth}>{\RaggedRight\arraybackslash}p{0.32\linewidth}>{\RaggedRight\arraybackslash}p{0.37\linewidth}}
+\caption{Hành vi đích khi mất mạng}
+\label{tab:offline-behavior}\\
 \toprule
 \textbf{Phân hệ} & \textbf{Khi mất mạng} & \textbf{Khi có mạng lại} \\
 \midrule

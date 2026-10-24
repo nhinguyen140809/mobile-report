@@ -13,6 +13,8 @@ Ba layer là ranh giới trách nhiệm; module là ranh giới build. Tên core
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{3pt}
 \begin{longtable}{>{\RaggedRight\arraybackslash}p{0.23\linewidth}>{\RaggedRight\arraybackslash}p{0.32\linewidth}>{\RaggedRight\arraybackslash}p{0.37\linewidth}}
+\caption{Trách nhiệm ba layer}
+\label{tab:three-layers}\\
 \toprule
 \textbf{Layer} & \textbf{Trách nhiệm} & \textbf{Không làm} \\
 \midrule
@@ -58,16 +60,16 @@ feature/
 data/
   video/ music/ news/ games/ auth/
     repository/              Domain contract implementations
-    ...                      Sources/mapping khi phát sinh nhu cầu thực tế
+    ...                      Sources/mapping as needed
 core/
-  common/                    Shared presentation state/formatting, Kotlin thuần
-  designsystem/              Compose tokens và components dùng chung
-  session/                   Shared presentation coordinator cho phiên nội dung
-  media/                     Media3/system adapter và platform video surface
+  common/                    Shared presentation state/formatting; pure Kotlin
+  designsystem/              Reusable Compose tokens and components
+  session/                   Shared content-session presentation adapter
+  media/                     Media3/system adapter, platform video surface
   database/                  Room schema/DAO/DI
   datastore/                 Preferences storage implementation/DI
-  network/                   Extension point cho HTTP/connectivity
-  sync/                      Extension point cho deferred sync
+  network/                   HTTP/connectivity extension point
+  sync/                      Deferred sync extension point
 \end{lstlisting}
 
 Đây là các Gradle module thực nằm ngoài app. Không giữ phương án đặt domain/core/feature trong app rồi tách sau. Hiện có 23 module leaf. Nhóm giữ một domain module và chia package theo nghiệp vụ để dùng chung session/media policy, thay vì tạo ba submodule cho từng feature khi chưa cần cô lập lớn hơn. Không thêm core:model trùng lặp với domain models.
@@ -79,6 +81,8 @@ Các module core được phân loại theo vai trò: designsystem/common/sessio
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{3pt}
 \begin{longtable}{>{\RaggedRight\arraybackslash}p{0.23\linewidth}>{\RaggedRight\arraybackslash}p{0.32\linewidth}>{\RaggedRight\arraybackslash}p{0.37\linewidth}}
+\caption{Quyền phụ thuộc giữa các module}
+\label{tab:module-dependencies}\\
 \toprule
 \textbf{Nguồn dependency} & \textbf{Được phép} & \textbf{Bị cấm} \\
 \midrule
@@ -105,9 +109,9 @@ Chốt một NavController và một root NavHost trong app. Không tạo NavCon
 
 \begin{itemize}
 \item \textbf{app/AppNavigation:} đăng ký root Splash/Onboarding/Auth/Main, ghép các feature graph, quan sát phiên auth và onboarding để chọn flow.
-\item \textbf{app/OneSpaceAppState:} thực thi navigate/pop, chuyển tab và saveState/restoreState/launchSingleTop; biết các typed route public cần để ghép app.
+\item \textbf{OneSpaceAppState (app):} thực thi navigate/pop, chuyển tab và saveState, restoreState, launchSingleTop; biết các typed route public cần để ghép app.
 \item \textbf{feature/XRoute:} khai báo graph/feed/detail và arguments của feature; argument chỉ là ID hoặc dữ liệu nhỏ cần cho destination.
-\item \textbf{feature/XNavGraph:} khai báo composable, đọc typed arguments, lấy ViewModel scope, chuyển UI action thành callback.
+\item \textbf{XNavGraph (feature):} khai báo composable, đọc typed arguments, lấy ViewModel scope, chuyển UI action thành callback.
 \item \textbf{feature screen:} nhận state/callback; không nhận controller hoặc truy cập graph của feature khác.
 \end{itemize}
 
@@ -121,14 +125,14 @@ Feature graph không nhận NavController/NavHostController. Với catalog và a
 \node[box] (s) {Native splash\\Đọc persisted startup state};
 \node[box,below=of s] (o) {Chưa onboarding\\Onboarding graph};
 \node[box,below=of o] (a) {Signed out\\Auth graph};
-\node[box,below=of a] (m) {Guest / authenticated\\Main graph};
+\node[box,below=of a] (m) {Guest / signed in\\Main graph};
 \node[box,left=of m] (f) {Home, Video, Music\\News, Games};
 \node[box,right=of m] (c) {Account\\Settings};
 \draw[->] (s) -- (o);
 \draw[->] (o) -- node[right,font=\scriptsize]{preferences đã lưu} (a);
 \draw[->] (a) -- node[right,font=\scriptsize]{session đã lưu} (m);
 \draw[->] (s.west) -- ++(-26mm,0) |- (a.west);
-\draw[->] (s.east) -- ++(27mm,0) |- (m.east);
+\draw[->] (s.east) -- ++(55mm,0) |- ([yshift=-6mm]m.south) -- (m.south);
 \draw[->] (m) -- (f); \draw[->] (m) -- (c);
 \draw[->] (c.north) |- node[pos=0.25,right,font=\scriptsize]{sign out} (a.east);
 \end{tikzpicture}
@@ -144,6 +148,8 @@ Feature graph không nhận NavController/NavHostController. Với catalog và a
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{3pt}
 \begin{longtable}{>{\RaggedRight\arraybackslash}p{0.23\linewidth}>{\RaggedRight\arraybackslash}p{0.32\linewidth}>{\RaggedRight\arraybackslash}p{0.37\linewidth}}
+\caption{Quyền sở hữu session, playback và navigation}
+\label{tab:coordinators}\\
 \toprule
 \textbf{Thành phần} & \textbf{Layer/vai trò} & \textbf{Quyền sở hữu} \\
 \midrule
@@ -156,9 +162,9 @@ Feature graph không nhận NavController/NavHostController. Với catalog và a
 \endfoot
 SessionPolicy và queue policies & Domain & Quy tắc nội dung, kết quả xử lý audio conflict; không side effect Android \\
 SessionCoordinator & Shared presentation adapter, Activity ViewModel & Nhận intent, gọi policy/repository/MediaSessionPort, phát UI state và conflict request \\
-OneSpaceAppState/root graph & app shell & Navigation và presentation của floating/dock theo destination \\
+OneSpaceAppState và root graph & app shell & Navigation và presentation của floating/dock theo destination \\
 MediaSessionPort & Domain contract & Lệnh playback và state quan sát được, không lộ ExoPlayer \\
-MediaPlaybackCoordinator & Android infrastructure & Engine playback, vị trí/buffering, queue transport và thực thi effect \\
+MediaPlayback\-Coordinator & Android infrastructure & Engine playback, playlist/queue đang chạy, trạng thái thực tế và thực thi effect \\
 Audio focus handler & Android infrastructure, phần triển khai tiếp & Cấp/nhường focus cho nguồn đang có tiếng, phản ứng interruption/noisy \\
 MusicPlaybackService & Android infrastructure, phần triển khai tiếp & Sở hữu audio player/session ngoài vòng đời Activity \\
 Repository implementations & Data & Persist/restore ID, progress, snapshot và preferences \\
@@ -166,7 +172,15 @@ Game session logic/adapter & Domain + presentation/infrastructure tương ứng,
 \end{longtable}
 \endgroup
 
-SessionCoordinator không gọi NavController và không gọi ViewModel của feature khác. App áp dụng intent section cho coordinator rồi thực thi route; destination không phải nguồn sự thật của trạng thái decoder. State playing/position/buffering lấy từ MediaSessionPort; UI không được tự giả lập playback bằng boolean hoặc timer.
+SessionCoordinator không gọi NavController và không gọi ViewModel của feature khác. App áp dụng intent section cho coordinator rồi thực thi route; destination không phải nguồn sự thật của trạng thái decoder. State playing/position/buffering lấy từ MediaSessionPort; SessionState chỉ giữ identity để trình bày/restore và trạng thái game, không nhân bản cờ playing. UI không được tự giả lập playback bằng boolean hoặc timer.
+
+\paragraph{Contract playback và audio policy.}
+MediaSessionPort phát snapshot gồm playing (isPlaying thực tế), playRequested (ý định phát), PlaybackStatus (IDLE, BUFFERING, READY, ENDED, ERROR), suppressed, error, position và identity. Nút transport dùng ý định phát để người dùng vẫn có thể pause khi buffering; nhãn trạng thái lấy trạng thái thực tế. Media3 báo lỗi/gián đoạn qua listener, UI hiện feedback và cho thử lại bằng lệnh Phát. Việc có trường suppressed không có nghĩa đã hoàn tất mọi trường hợp audio focus của hệ thống.
+
+SessionPolicy quyết định C1 và VideoStartPlan. SessionCoordinator áp dụng plan; adapter chỉ thực thi effect mute/pause hoặc lệnh playback. Video đã mute không tạo audio conflict, kể cả khi còn chạy hình. Request cũ đang chờ catalog/storage bị vô hiệu khi có intent phát mới hoặc đóng phiên, tránh phát lại sau sign-out.
+
+\paragraph{Một runtime queue.}
+MediaPlayback\-Coordinator sở hữu playlist Media3 và cung cấp queue trong MusicPlayback. Next/Previous từ UI chọn track bằng policy Domain trên queue này, không lấy catalog của feature ViewModel. Media3 tự chuyển bài theo cùng playlist, repeat-all cho baseline; thay track không thêm navigation entry. Catalog chỉ tạo queue khi người dùng bắt đầu một lựa chọn mới. Restore hiện vẫn chỉ chuẩn bị catalog/track đã nhớ ở trạng thái paused; durable queue snapshot là phần triển khai tiếp.
 
 Một video player và một audio player cho phép video mute cùng nhạc. Điều này không có nghĩa chỉ được tạo đúng một ExoPlayer cho cả hai loại nội dung. Khi chuyển fullscreen/floating, đổi surface và layout, không tạo lại video engine. Floating trong app khác Android system Picture-in-Picture; system PiP ngoài app được hoãn, không dùng hai tên này thay nhau.
 
@@ -178,6 +192,8 @@ Một video player và một audio player cho phép video mute cùng nhạc. Đi
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{3pt}
 \begin{longtable}{>{\RaggedRight\arraybackslash}p{0.17\linewidth}>{\RaggedRight\arraybackslash}p{0.28\linewidth}>{\RaggedRight\arraybackslash}p{0.22\linewidth}>{\RaggedRight\arraybackslash}p{0.23\linewidth}}
+\caption{Lưu trữ và nguồn dữ liệu theo nghiệp vụ}
+\label{tab:data-sync}\\
 \toprule
 \textbf{Dữ liệu} & \textbf{Nguồn lưu đích} & \textbf{Nguồn remote} & \textbf{Quy tắc} \\
 \midrule
@@ -190,9 +206,9 @@ Một video player và một audio player cho phép video mute cùng nhạc. Đi
 \endfoot
 Video progress/watchlist & Room & Catalog/stream URL khi có & Engine báo tiến độ; repository checkpoint và cung cấp resume \\
 Music queue/track/position & Room snapshot; metadata nhỏ có thể nằm DataStore & Music catalog/stream & Service/engine là runtime truth; persisted snapshot để phục hồi paused \\
-News/article/bookmark/reading position & Room & News API & Local-first sau khi có cache; refresh ghi local rồi phát Flow \\
+News: article, bookmark, reading position & Room & News API & Local-first sau khi có cache; refresh ghi local rồi phát Flow \\
 Game board/score/seed/version & Room & Leaderboard nếu có & Offline-first, restore snapshot đúng game/version \\
-Settings/onboarding/last section & DataStore & Không bắt buộc & Tách khỏi auth identity và playback object \\
+Settings, onboarding, last section & DataStore & Không bắt buộc & Tách khỏi auth identity và playback object \\
 Auth session thật & Provider/backend + storage phù hợp provider & Auth API/provider & Chỉ server/provider xác minh danh tính thật \\
 Auth demo & DataStore email + guest flag & Không có & Chỉ local demo, không phải token hoặc xác minh email \\
 \end{longtable}
