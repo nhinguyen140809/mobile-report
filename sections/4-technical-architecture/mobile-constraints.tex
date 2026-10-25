@@ -4,6 +4,8 @@
 \subsubsection{Mobile, web và desktop}
 \label{sec:mobile-vs-desktop}
 
+Thiết bị di động có giới hạn về năng lượng, bộ nhớ và khả năng duy trì kết nối. Đồng thời, hệ điều hành quyết định vòng đời Activity và có thể thu hồi process để phục vụ các tác vụ khác. Vì vậy, tính đúng đắn của OneSpace cả phụ thuộc vào kết quả của từng thao tác, lẫn phụ thuộc vào khả năng bảo toàn dữ liệu khi ngữ cảnh thực thi thay đổi~\cite{android-lifecycle,android-state}.
+
 \begingroup
 \small
 \renewcommand{\arraystretch}{1.2}
@@ -68,6 +70,8 @@ Không tạo thêm ResourcePolicyManager chỉ để đủ tên trong báo cáo.
 
 \subsubsection{Offline và mạng không ổn định}
 \label{sec:offline-design}
+
+Thiết kế xử lý ngoại tuyến theo đặc điểm của từng nghiệp vụ. Tin tức đã lưu và trạng thái trò chơi phù hợp với cách tiếp cận ưu tiên dữ liệu cục bộ; luồng video hoặc âm nhạc trực tuyến phụ thuộc vào dữ liệu đã được đệm hoặc tải xuống. Đối với dữ liệu hỗ trợ ngoại tuyến, repository cung cấp luồng đọc từ kho cục bộ; cập nhật từ mạng được ghi vào kho này trước khi phản ánh lên giao diện, phù hợp với hướng dẫn xây dựng ứng dụng offline-first của Android~\cite{android-offline-first}.
 
 \begingroup
 \small

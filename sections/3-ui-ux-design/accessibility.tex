@@ -1,20 +1,72 @@
 \subsection{Accessibility}
 \label{sec:accessibility}
 
-\begin{guide}
-\guidepart{Nội dung}
-\begin{compactitem}
-    \item Kích thước vùng chạm tối thiểu (Touch Target Size): $48 \times 48$~dp trên Android, $44 \times 44$~pt trên iOS.
-    \item Độ tương phản màu theo chuẩn WCAG mức AA~\cite{wcag22}: tối thiểu 4.5:1 với văn bản thường.
-    \item Hỗ trợ Dynamic Text Scaling (cỡ chữ theo cài đặt hệ thống) và trình đọc màn hình (TalkBack trên Android, VoiceOver trên iOS).
-\end{compactitem}
-\guidepart{Câu hỏi cần trả lời}
-\begin{compactitem}
-    \item Các cặp màu chữ và nền trong design system (mục~\ref{sec:design-system}) đạt tỉ lệ tương phản bao nhiêu? Kiểm tra bằng công cụ nào?
-    \item Bố cục có bị vỡ khi người dùng đặt cỡ chữ hệ thống lớn nhất không?
-    \item Các nút chỉ có biểu tượng đã có nhãn cho trình đọc màn hình (content description, accessibility label) chưa?
-    \item Video có phụ đề không? Minigame có cách chơi thay thế cho người dùng trình đọc màn hình không?
-\end{compactitem}
-\guidepart{Hình/bảng nên có}
-Bảng kiểm tra độ tương phản các cặp màu, checklist accessibility cho từng màn hình.
-\end{guide}
+Mục này đối chiếu giao diện của OneSpace với ba nhóm yêu cầu tiếp cận đã đặt trong \texttt{UX-12} (mục~\ref{sec:quality-pillars}): vùng chạm, độ tương phản màu theo WCAG~\cite{wcag22} và hỗ trợ cỡ chữ hệ thống cùng trình đọc màn hình.
+
+\textbf{Vùng chạm.} Toàn bộ nút của ứng dụng dùng component Material 3~--~từ \texttt{Button} đến \texttt{Switch} và các tab của Bottom Navigation. Ên kế thừa ràng buộc vùng tương tác tối thiểu $48 \times 48$~dp của Android~\cite{android-accessibility} ngay cả khi hình vẽ bên trong nhỏ hơn. Riêng các thẻ nội dung (\texttt{ContentCard}) và thẻ game cao hơn 48dp nên không phát sinh vấn đề. Với thang thiết kế của emulator thử nghiệm (420dpi), 48dp tương đương khoảng 126 px vật lý.
+
+\textbf{Độ tương phản màu.} Nhóm tính lại tỉ lệ tương phản của mọi cặp màu chữ--nền chính trong bảng token (mục~\ref{sec:design-system}) theo công thức WCAG 2.x (độ sáng tương đối của từng màu rồi lấy tỉ lệ hai độ sáng). Kết quả trong Bảng~\ref{tab:contrast-check}: tất cả các cặp chữ chính đạt mức AA cho văn bản thường ($\geq$ 4,5:1) ở cả hai chế độ sáng và tối. Cặp duy nhất dưới 4,5:1 là \texttt{outline} trên nền sáng (4,23:1), nhưng vai trò này chỉ dùng cho viền phân tách và gợi ý ô nhập~--~không bao giờ chứa văn bản. Ên vẫn đạt mức 3:1 yêu cầu cho thành phần giao diện.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Tỉ lệ tương phản các cặp màu chữ--nền (tính theo công thức WCAG 2.x từ giá trị hex của theme)}
+\label{tab:contrast-check}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{4.6cm} >{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Cặp màu} & \textbf{Chế độ sáng} & \textbf{Chế độ tối} & \textbf{Kết luận} \\
+\midrule
+onBackground / background & 16,22:1 & 14,41:1 & AA văn bản thường \\
+onSurfaceVariant / surface & 8,93:1 & 11,25:1 & AA văn bản thường \\
+onSurfaceVariant / surfaceVariant & 7,17:1 & 5,68:1 & AA văn bản thường \\
+onPrimary / primary & 6,46:1 & 10,20:1 & AA văn bản thường \\
+onPrimaryContainer / primaryContainer & 13,60:1 & 7,47:1 & AA văn bản thường \\
+onSecondary / secondary & 6,44:1 & 8,22:1 & AA văn bản thường \\
+onError / error & 6,46:1 & 7,72:1 & AA văn bản thường \\
+primary (biểu tượng) / background & 6,13:1 & 14,25:1 & AA văn bản thường \\
+outline / background & 4,23:1 & 5,82:1 & AA thành phần giao diện (3:1) \\
+\bottomrule
+\end{tabularx}
+
+
+Ví dụ trực quan các cặp màu đạt AA (đọc được chữ trên nền):
+
+\begin{figure}[H]
+\centering
+\begin{tabular}{c}
+\colorbox[HTML]{F8FAF2}{\textcolor[HTML]{191D17}{\rule{0pt}{0.5cm}\makebox[10cm][l]{~~Nền sáng, chữ tối (onBackground) — 16,2:1 \checkmark}}} \\[4pt]
+\colorbox[HTML]{10140E}{\textcolor[HTML]{E0E4D8}{\rule{0pt}{0.5cm}\makebox[10cm][l]{~~Nền tối, chữ sáng (onBackground) — 14,4:1 \checkmark}}} \\[4pt]
+\colorbox[HTML]{41690F}{\textcolor[HTML]{FFFFFF}{\rule{0pt}{0.5cm}\makebox[10cm][l]{~~Nút chính, chữ trắng (onPrimary) — 6,5:1 \checkmark}}} \\[4pt]
+\colorbox[HTML]{BA1A1A}{\textcolor[HTML]{FFFFFF}{\rule{0pt}{0.5cm}\makebox[10cm][l]{~~Nút lỗi, chữ trắng (onError) — 6,5:1 \checkmark}}}
+\end{tabular}
+\caption{Ví dụ trực quan: chữ trên nền màu thật, kèm tỉ lệ tương phản}
+\label{fig:contrast-examples}
+\end{figure}
+
+Vùng chạm tối thiểu $48 \times 48$~dp so với kích thước biểu tượng bên trong:
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.7, every node/.style={font=\small}]
+    % Vùng chạm 48dp (outer dashed)
+    \draw[dashed, thick, gray] (0,0) rectangle (4.8,4.8);
+    \node[above] at (2.4,4.8) {\textit{Vùng chạm 48dp}};
+    % Icon 20dp (inner solid)
+    \fill[gray!40] (1.4,1.4) rectangle (3.4,3.4);
+    \node[below] at (2.4,0) {\textit{Biểu tượng 20dp}};
+    % Arrow
+    \draw[->, gray] (1.4,3.8) -- (1.4,3.5);
+    \draw[->, gray] (3.4,1.0) -- (3.4,1.3);
+\end{tikzpicture}
+\caption{Vùng chạm tối thiểu $48 \times 48$~dp bao quanh biểu tượng, đảm bảo bấm được}
+\label{fig:touch-target}
+\end{figure}
+\end{table}
+
+Việc mọi cặp đều đạt AA một cách thoải mái (phần lớn trên 6:1) không phải ngẫu nhiên: đây là kết quả của nguyên tắc khai báo màu theo cặp vai trò \texttt{role/onRole} của Material 3~--~khi thêm một màu nền mới, nhóm bắt buộc khai báo kèm màu chữ của nó và đối chiếu bảng này trước khi merge.
+
+\textbf{Cỡ chữ theo hệ thống.} Toàn bộ chữ trong ứng dụng đặt theo đơn vị \texttt{sp}, nên cỡ chữ phóng to theo cài đặt hệ thống (người dùng khiếm thị thường đặt 130--200\%). Bố cục dùng cột dọc và card co giãn theo nội dung thay vì chiều cao cố định, nhờ đó không bị chồng chữ khi phóng to; thanh tab và các nút vẫn giữ kích thước vùng chạm.
+
+\textbf{Trình đọc màn hình (TalkBack).} Đây là mục nhóm tự đánh giá là \textbf{chưa đạt} ở phiên bản hiện tại. Việc rà soát mã nguồn cho thấy các nhãn \texttt{contentDescription} mới được thêm ở các phân hệ Account, Music và News (ví dụ ``Bài trước'', ``Tạm dừng'', ``Đóng''), trong khi thẻ game và một số nút chỉ có biểu tượng của Home, Video và Onboarding chưa có nhãn~--~trình đọc màn hình sẽ đọc ``nút'' hoặc bỏ qua thay vì đọc tên chức năng. Việc bổ sung nhãn cho toàn bộ nút biểu tượng là bắt buộc trước khi phát hành chính thức.
+
+Hai câu hỏi còn lại của phạm vi tiếp cận được trả lời trung thực theo phạm vi phiên bản đầu: \textit{phụ đề video} không nằm trong sản phẩm vì nguồn nội dung catalog tự dựng chưa có tệp phụ đề và chi phí chuẩn hoá phụ đề vượt quá phạm vi môn học; \textit{cách chơi thay thế cho người dùng trình đọc màn hình trong minigame} chưa được thiết kế riêng~--~minigame vốn là tương tác trực quan và theo thời gian, nên hướng hỗ trợ khả thi là chế độ câu hỏi--trả lời (quiz) đã có sẵn thay cho thao tác kéo vuốt, sẽ được cân nhắc ở giai đoạn phát triển tiếp theo.

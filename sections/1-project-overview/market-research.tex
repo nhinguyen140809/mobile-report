@@ -1,31 +1,239 @@
 \subsection{Phân tích thị trường và đối thủ cạnh tranh}
 \label{sec:market-research}
 
-\begin{guide}
-\guidepart{Nội dung}
-\begin{compactitem}
-    \item Đối thủ trực tiếp (ứng dụng giải trí tổng hợp) và gián tiếp (ứng dụng chuyên biệt cho từng phân hệ: video, nhạc, tin tức, game).
-    \item Khảo sát định tính (phỏng vấn) và định lượng (bảng khảo sát): mục tiêu, số người tham gia, câu hỏi chính, kết quả tổng hợp.
-    \item Ma trận SWOT (Strengths, Weaknesses, Opportunities, Threats) của ứng dụng.
-\end{compactitem}
-\guidepart{Câu hỏi cần trả lời}
-\begin{compactitem}
-    \item Đối thủ nào đang được dùng nhiều nhất? Họ làm tốt điều gì và còn thiếu điều gì?
-    \item Khảo sát được thực hiện với bao nhiêu người, theo hình thức nào? Kết quả nào ảnh hưởng trực tiếp đến thiết kế?
-    \item Từ SWOT, điểm mạnh nào cần khai thác và rủi ro nào cần có phương án giảm thiểu?
-\end{compactitem}
-\guidepart{Hình/bảng nên có}
-Bảng so sánh tính năng với đối thủ, biểu đồ kết quả khảo sát, ma trận SWOT $2 \times 2$.
-\end{guide}
+\subsubsection{Tổng quan thị trường}
 
-% Ghi chú phân tích đối thủ do nhóm tổng hợp (dành cho mục 1.3, chưa biên tập thành nội dung):
-% Nhóm đối thủ gián tiếp (ứng dụng chuyên biệt - đang chiếm thị phần lớn nhất):
-% - Video Streaming (YouTube / TikTok): làm tốt kho nội dung đồ sộ, thuật toán gợi ý chuẩn xác,
-%   luồng stream mượt mà; còn thiếu phát nhạc nền chuyên sâu nếu không có gói Premium, không có
-%   không gian đọc tin tức văn bản và minigame tương tác trên cùng ứng dụng.
-% - Music Listening (Spotify / Zing MP3): làm tốt chất lượng âm thanh, cá nhân hoá playlist,
-%   chạy nền mượt mà; còn thiếu đọc tin tức, xem video dài đa dạng và gamification/minigame.
-% - News Reading (VnExpress / Báo Mới): làm tốt tốc độ cập nhật, giao diện đọc báo tối ưu;
-%   còn thiếu trải nghiệm nghe nhạc đệm khi đọc tin, nội dung chủ yếu văn bản và ảnh tĩnh.
-% - Minigames (Shopee Games / game casual lẻ): làm tốt giải trí nhanh, tích điểm tạo động lực;
-%   còn thiếu gắn với hệ sinh thái truyền thông, tồn tại rời rạc hoặc phụ thuộc ứng dụng TMĐT.
+Việt Nam là một thị trường lớn và người dùng chủ yếu tiếp cận nội dung số qua điện thoại.
+Đến cuối năm 2025, cả nước có 85,6 triệu người dùng Internet, tương đương 84,2\% dân số, và tốc độ tải xuống trung vị của Internet di động đạt 152,17~Mbps~\cite{datareportal2026vn}.
+Trong năm 2025, Việt Nam ghi nhận 2,88 tỷ lượt tải ứng dụng, xếp thứ 11 thế giới~\cite{tuoitre-gamedownloads2026}.
+Về hệ điều hành, tính đến tháng 9/2026, Android chiếm 59,79\% thị phần, iOS chiếm 40,19\%~\cite{statcounter-vn}.
+
+Ở cả bốn phân hệ mà ứng dụng hướng tới, thị trường đều đã có những ứng dụng dẫn đầu rõ rệt:
+\begin{itemize}
+    \item \textbf{Video:} YouTube và TikTok là hai nền tảng phổ biến nhất.
+    Theo số liệu quảng cáo của chính các nền tảng, YouTube tiếp cận được 62,1 triệu người dùng tại Việt Nam, còn TikTok tiếp cận được 76,1 triệu người từ 18 tuổi trở lên~\cite{datareportal2026vn}.
+    Riêng với nhu cầu xem phim, khảo sát của Decision Lab trong quý 2/2024 cho thấy 68\% người được hỏi xem phim trên YouTube, tiếp theo là Facebook (32\%), FPT Play (29\%), Netflix (28\%) và VTV Go (27\%)~\cite{vneconomy-streaming2024}.
+    \item \textbf{Âm nhạc:} theo khảo sát của Decision Lab trong quý 1/2024, YouTube cũng là ứng dụng nghe nhạc phổ biến nhất với 77\% người được hỏi, xếp sau là hai ứng dụng trong nước Zing MP3 (52\%) và NhacCuaTui (32\%), trong khi Spotify chỉ đạt 28\%~\cite{decisionlab-music2024}.
+    \item \textbf{Tin tức:} người dùng đọc tin trên ứng dụng riêng của các báo điện tử như VnExpress, Tuổi Trẻ, Dân trí, hoặc trên các ứng dụng tổng hợp tin như Báo Mới, vốn lấy tin từ hơn 150 báo điện tử~\cite{baomoi-appstore}.
+    \item \textbf{Minigames:} game là nhóm ứng dụng được tải nhiều nhất tại Việt Nam, đạt 1,29 tỷ lượt tải trong năm 2025; số phiên chơi game tăng 15\% trong quý 1/2026 so với cùng kỳ, cao gấp ba mức trung toàn cầu (4\%), và người dùng dành trung bình gần 33 phút mỗi phiên~\cite{tuoitre-gamedownloads2026}.
+\end{itemize}
+
+Điểm quan trọng nhất là người dùng tải ứng dụng giải trí rất nhiều nhưng rất ít người tiếp tục sử dụng sau khi tải.
+Theo Báo Tuổi Trẻ dẫn số liệu của Adjust, đến ngày thứ 7 chỉ còn 5\% người chơi game tiếp tục sử dụng ứng dụng, trong khi mức trung toàn cầu đạt 14\%~\cite{tuoitre-gamedownloads2026}.
+Ngược lại, những người vẫn tiếp tục sử dụng thì dành nhiều thời gian cho ứng dụng: phiên dùng ứng dụng giải trí tăng từ 21,5 phút năm 2024 lên 24,46 phút trong quý 1/2026, cao hơn quan trọng so với mức trung bình khoảng 14,5 phút của khu vực Đông Nam Á~\cite{tuoitre-gamedownloads2026}.
+Vì vậy, với một ứng dụng mới, thách thức lớn nhất không phải là tăng lượt tải mà là khiến người dùng tiếp tục sử dụng ứng dụng mỗi ngày.
+
+\subsubsection{Đối thủ trực tiếp}
+
+Đối thủ được chia thành hai loại.
+Đối thủ trực tiếp là những nền tảng đã gộp nhiều loại nội dung giải trí vào cùng một ứng dụng, tức là có mô hình tương tự ý tưởng của nhóm.
+Đối thủ gián tiếp là các ứng dụng chuyên biệt cho từng phân hệ: mỗi ứng dụng chỉ cạnh tranh ở một phân hệ, nhưng chiếm phần lớn thời gian sử dụng của người dùng ở phân hệ đó.
+
+Nhóm phân tích ba đối thủ trực tiếp: Mocha của Viettel (ứng dụng trong nước hướng đến đủ bốn loại nội dung video, nhạc, tin tức và game), YouTube và TikTok (hai nền tảng video đã mở rộng sang nhiều loại nội dung khác).
+
+\textbf{Mocha} ban đầu là ứng dụng nhắn tin, gọi điện miễn phí của Viettel; từ cuối năm 2018, Viettel nâng cấp Mocha theo hướng một ứng dụng giải trí, phục vụ các nhu cầu nghe nhạc, xem phim, xem video, đọc tin tức và chơi game~\cite{sggp-mocha2019}.
+Hiện nay, Mocha có hơn 10 triệu lượt tải trên Google Play.
+Theo phần giới thiệu trên Google Play, Mocha là siêu ứng dụng cho phép gọi điện, nhắn tin, chơi game có thưởng, xem video, xem phim, xem livestream và nghe nhạc từ kho nhạc Keeng~\cite{mocha-googleplay}.
+Lợi thế lớn nhất của Mocha là ưu đãi của nhà mạng.
+Theo mô tả trên App Store, thuê bao Viettel được miễn phí data khi dùng Mocha: học sinh, sinh viên được dùng không giới hạn, các thuê bao khác được 5~GB mỗi tháng~\cite{mocha-appstore}.
+Với video và nhạc (hai loại nội dung tốn nhiều data), đây là ưu đãi mà ứng dụng của nhóm không thể cung cấp.
+Tuy vậy, Mocha có ba hạn chế:
+\begin{itemize}
+    \item Các ưu đãi miễn phí về tin nhắn SMS, cuộc gọi và data đều chỉ áp dụng cho thuê bao Viettel, trong đó gọi điện miễn phí chỉ dành cho học sinh, sinh viên và một số đối tượng khác~\cite{mocha-googleplay, mocha-appstore}. Người dùng mạng khác không nhận được những lợi ích này.
+    \item Giải trí vẫn là phần bổ sung cho chức năng liên lạc: Mocha được xếp vào danh mục Liên lạc trên Google Play, và tin tức (mảng mà năm 2019 Mocha từng tổng hợp từ 100 đầu báo~\cite{sggp-mocha2019}) không còn được nhắc đến trong phần giới thiệu hiện tại~\cite{mocha-googleplay}.
+    \item Nhóm không tìm thấy thông tin về tính năng nào của Mocha liên kết các loại nội dung với nhau, như playlist gồm cả nhạc và video, hay minigame dựa trên nội dung người dùng vừa xem.
+\end{itemize}
+
+\textbf{YouTube} là đối thủ mạnh nhất.
+Ngoài video, đây là nơi nghe nhạc phổ biến nhất ở Việt Nam, nhiều cơ quan báo chí có kênh tin tức riêng trên nền tảng, và YouTube Playables (kho game chơi ngay trong ứng dụng mà không cần cài thêm) đã có mặt tại Việt Nam~\cite{youtube-playables}.
+Tuy vậy, video vẫn là nội dung chính, nên các loại nội dung khác trên YouTube còn ba hạn chế:
+\begin{itemize}
+    \item Những tính năng phục vụ việc nghe như phát trong nền khi tắt màn hình hay tải về để dùng ngoại tuyến chỉ dành cho tài khoản YouTube Premium~\cite{youtube-premium}.
+    \item Tin tức chỉ ở dạng video, người dùng không đọc được bài viết.
+    \item Playables hoạt động tách biệt với phần còn lại của ứng dụng: game không liên quan đến nội dung người dùng vừa xem, và không có cơ chế thưởng chung cho việc xem, nghe hay chơi.
+\end{itemize}
+
+\textbf{TikTok} tập trung vào video ngắn, và phần lớn video trên nền tảng này đều dùng nhạc nền.
+TikTok hiện có Mini Games (các game nhẹ chơi ngay trong ứng dụng), và Việt Nam nằm trong danh sách thị trường có tính năng này~\cite{tiktok-minigames}.
+Tuy vậy, TikTok có hai hạn chế:
+\begin{itemize}
+    \item TikTok đã đóng cửa ứng dụng nghe nhạc TikTok Music từ ngày 28/11/2024, với lý do muốn tập trung vào vai trò thúc đẩy người dùng nghe nhạc trên các nền tảng streaming~\cite{tiktok-music-shutdown}. Vì vậy, người dùng vẫn phải sang ứng dụng khác nếu muốn nghe trọn một bài hát hay một playlist.
+    \item Feed được thiết kế để lướt liên tục, không phù hợp với việc nghe nhạc khi tắt màn hình hay đọc một bài viết dài.
+\end{itemize}
+
+\subsubsection{Đối thủ gián tiếp}
+
+Bảng~\ref{tab:indirect-competitors} tổng hợp các ứng dụng chuyên biệt mà người dùng đang dùng cho từng phân hệ, ngoài ba đối thủ trực tiếp ở trên.
+Các ứng dụng này đáp ứng tốt nhu cầu trong phạm vi của mình; điều nhóm quan tâm là cột ``Hạn chế'' (những nhu cầu liên quan đến nhiều phân hệ cùng lúc mà không ứng dụng chuyên biệt nào đáp ứng).
+
+\begingroup
+\small
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{1.9cm}>{\raggedright\arraybackslash}p{2.3cm}>{\raggedright\arraybackslash}p{5.6cm}>{\raggedright\arraybackslash}p{5.6cm}@{}}
+\caption{Đối thủ gián tiếp theo từng phân hệ}
+\label{tab:indirect-competitors} \\
+\toprule
+\textbf{Phân hệ} & \textbf{Ứng dụng tiêu biểu} & \textbf{Điểm mạnh} & \textbf{Hạn chế} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Phân hệ} & \textbf{Ứng dụng tiêu biểu} & \textbf{Điểm mạnh} & \textbf{Hạn chế} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Video & FPT Play, Netflix, VTV Go &
+Kho phim và chương trình truyền hình có bản quyền. Phát video ổn định, tự điều chỉnh chất lượng theo tốc độ mạng. &
+Chỉ tập trung vào phim và chương trình truyền hình, không phục vụ việc nghe nhạc hay đọc tin. \\
+\midrule
+Âm nhạc & Zing MP3, NhacCuaTui, Spotify &
+Chất lượng âm thanh cao, hiển thị lời bài hát dạng karaoke~\cite{zingmp3-appstore}. Phát trong nền ổn định, điều khiển được từ màn hình khóa. Từ tháng 9/2025, tài khoản Spotify miễn phí được chọn và phát bài hát bất kỳ, và daylist (playlist cá nhân hóa theo từng thời điểm trong ngày) được cập nhật thường xuyên~\cite{spotify-free2025}. &
+Chỉ phục vụ việc nghe: video giới hạn ở MV hoặc video podcast, không có tin tức, không có minigame. Nội dung dạng lời nói chủ yếu là podcast có sẵn, người dùng không chuyển được một bài báo hay một video bất kỳ sang dạng nghe. \\
+\midrule
+Tin tức & VnExpress, Báo Mới &
+Cập nhật nhanh. Giao diện đọc được tối ưu với nhiều cỡ chữ, chế độ đọc ban đêm. Báo Mới có giọng đọc tự động và chế độ đọc ngoại tuyến~\cite{baomoi-appstore}. &
+Muốn nghe nhạc trong lúc đọc tin, người dùng phải mở thêm một ứng dụng khác. Nội dung chủ yếu là chữ và ảnh tĩnh, ít tương tác. Ngoài việc liên tục đưa tin mới, ứng dụng gần như không có cách nào khác để khuyến khích người dùng quay lại. \\
+\midrule
+Minigames & Game casual, Shopee Games, MoMo &
+Mỗi lượt chơi chỉ mất ít thời gian, phù hợp với lúc nghỉ giải lao. MoMo và Shopee dùng nhiệm vụ hằng ngày, thú ảo và xu đổi quà để tạo thói quen mở ứng dụng mỗi ngày. Chẳng hạn, người dùng MoMo nhận Xu khi thanh toán hoặc khi cho Heo Đất ăn, rồi dùng Xu để đổi ưu đãi hay trang phục cho Heo Đất~\cite{momo-shopxu}. &
+Mỗi game casual là một ứng dụng riêng. Minigame của MoMo và Shopee phục vụ mục tiêu thanh toán, mua sắm, không gắn với nội dung giải trí mà người dùng đang xem hoặc nghe. \\
+\end{longtable}
+\endgroup
+
+\subsubsection{So sánh tính năng}
+
+Bảng~\ref{tab:feature-comparison} so sánh ứng dụng đề xuất với bảy ứng dụng tiêu biểu ở trên, theo những tính năng gắn với ý tưởng của nhóm.
+Việc đánh giá dựa trên phiên bản dành cho người dùng Việt Nam tại thời điểm tháng 10/2026, theo mô tả trên kho ứng dụng và trang hỗ trợ chính thức của từng ứng dụng.
+% TODO: kiểm tra lại từng ô trên thiết bị thật trước khi nộp (đặc biệt cột Zing MP3, Spotify và Báo Mới).
+% TODO: cột Mocha chưa xác minh được 4 ô: playlist nhạc, nghe khi tắt màn hình, tin tức, nhiệm vụ hằng ngày (mô tả trên kho ứng dụng không nhắc tới).
+
+\begin{table}[H]
+    \centering
+    \caption{So sánh tính năng giữa ứng dụng đề xuất và các đối thủ}
+    \label{tab:feature-comparison}
+    \small
+    \setlength{\tabcolsep}{3pt}
+    \begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.6cm}>{\centering\arraybackslash}p{1.6cm}*{7}{>{\centering\arraybackslash}p{1.4cm}}@{}}
+        \toprule
+        \footnotesize
+        \textbf{Tính năng} & \footnotesize\textbf{YouTube} & \footnotesize\textbf{TikTok} & \footnotesize\textbf{Mocha} & \footnotesize\textbf{Zing MP3} & \footnotesize\textbf{Spotify} & \footnotesize\textbf{Báo Mới} & \footnotesize\textbf{MoMo} & \footnotesize\textbf{Đề xuất} \\
+        \midrule
+        \multicolumn{9}{@{}l}{Tính năng của từng phân hệ} \\
+        Xem video & \ratingfull & \ratingfull & \ratingfull & \ratinghalf & \ratinghalf & \ratinghalf & \ratingnone & \ratingfull \\
+        Nghe nhạc theo playlist & \ratingfull & \ratingnone & \ratingfull & \ratingfull & \ratingfull & \ratingnone & \ratingnone & \ratingfull \\
+        Nghe nhạc khi tắt màn hình ở bản miễn phí & \ratingnone & \ratingnone & \ratingfull & \ratingfull & \ratingfull & \ratingnone & \ratingnone & \ratingfull \\
+        Đọc tin tức dạng bài viết & \ratingnone & \ratingnone & \ratingnone & \ratingnone & \ratingnone & \ratingfull & \ratingnone & \ratingfull \\
+        Minigame chơi ngay trong ứng dụng & \ratingfull & \ratingfull & \ratingfull & \ratingnone & \ratingnone & \ratingnone & \ratingfull & \ratingfull \\
+        Nhiệm vụ hằng ngày, streak, thú ảo & \ratingnone & \ratingnone & \ratingnone & \ratingnone & \ratingnone & \ratingnone & \ratingfull & \ratingfull \\
+        \midrule
+        \multicolumn{9}{@{}l}{Tính năng kết hợp nhiều phân hệ} \\
+        Chuyển video, bài viết sang dạng nghe & \ratinghalf & \ratingnone & \ratingnone & \ratingnone & \ratingnone & \ratinghalf & \ratingnone & \ratingfull \\
+        Playlist kết hợp nhiều loại nội dung & \ratinghalf & \ratingnone & \ratingnone & \ratingnone & \ratinghalf & \ratingnone & \ratingnone & \ratingfull \\
+        Minigame dựa trên nội dung đã xem, nghe, đọc & \ratingnone & \ratingnone & \ratingnone & \ratingnone & \ratingnone & \ratingnone & \ratingnone & \ratingfull \\
+        \bottomrule
+    \end{tabular}
+
+    \smallskip
+    \footnotesize
+    \ratingfull~có \quad \ratinghalf~có nhưng bị giới hạn (chỉ một dạng nội dung hoặc phải trả phí) \quad \ratingnone~không có
+\end{table}
+
+Từ Bảng~\ref{tab:feature-comparison}, nhóm rút ra hai điểm chính:
+\begin{itemize}
+    \item Từng tính năng riêng lẻ đều đã có ở ít nhất một đối thủ, nên ứng dụng của nhóm không thể tạo khác biệt chỉ bằng các tính năng này.
+    \item Các tính năng kết hợp nhiều phân hệ chưa được ứng dụng nào hỗ trợ đầy đủ. Những tính năng này chỉ làm được khi các phân hệ nằm chung một ứng dụng và dùng chung một tài khoản, nên đây là nhu cầu chưa được đáp ứng mà ứng dụng hướng tới.
+\end{itemize}
+
+\subsubsection{Ma trận SWOT}
+
+Hình~\ref{fig:swot} tổng hợp điểm mạnh, nhược điểm của ứng dụng cùng các cơ hội và thách thức từ thị trường, dựa trên phân tích ở các mục trên.
+Mỗi yếu tố được đánh mã (S1, W1, \ldots) để tham chiếu ở phần chiến lược bên dưới.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \node[quadrant={green}{6.2cm}] (S) at (0,0) {%
+            \textbf{Điểm mạnh (S)}
+            \begin{compactitem}
+                \item[S1] Một tài khoản cho cả xem, nghe, đọc, chơi; nhạc không bị ngắt khi chuyển phân hệ.
+                \item[S2] Playlist trộn nhạc, video, tin tức; chuyển video, bài báo sang dạng nghe.
+                \item[S3] Minigame dựa trên nội dung: đố tin tức, đoán bài hát, chấm điểm giọng hát.
+                \item[S4] Gamification chung cho bốn phân hệ: nhiệm vụ hằng ngày, streak, thú ảo.
+            \end{compactitem}};
+        \node[quadrant={orange}{6.2cm}] (W) at (7.9,0) {%
+            \textbf{Điểm yếu (W)}
+            \begin{compactitem}
+                \item[W1] Kho nội dung nhỏ hơn nhiều so với YouTube, TikTok, Zing MP3; không có ngân sách mua bản quyền.
+                \item[W2] Từng phân hệ có ít tính năng hơn ứng dụng chuyên biệt, nhất là về gợi ý nội dung.
+                \item[W3] Gộp bốn phân hệ làm tăng dung lượng và độ phức tạp, có thể khiến ứng dụng khởi động chậm hơn.
+                \item[W4] Thương hiệu mới, chưa có người dùng; nhóm nhỏ, thời gian có hạn.
+            \end{compactitem}};
+        \node[quadrant={blue}{6.7cm}] (O) at (0,-6.9) {%
+            \textbf{Cơ hội (O)}
+            \begin{compactitem}
+                \item[O1] Thị trường lớn: 85,6 triệu người dùng Internet, mạng di động tốc độ cao.
+                \item[O2] Retention của ứng dụng giải trí chỉ 1\% sau 30 ngày; giữ chân người dùng là vấn đề chung của thị trường.
+                \item[O3] Nhiệm vụ hằng ngày, thú ảo, xu đổi quà đã quen thuộc với người dùng Việt qua MoMo, Shopee.
+                \item[O4] YouTube chỉ cho phát trong nền với tài khoản Premium, TikTok đã đóng TikTok Music.
+            \end{compactitem}};
+        \node[quadrant={red}{6.7cm}] (T) at (7.9,-6.9) {%
+            \textbf{Thách thức (T)}
+            \begin{compactitem}
+                \item[T1] YouTube, TikTok, Mocha đã có minigame, có thể nhanh chóng sao chép tính năng; Mocha còn miễn phí data cho thuê bao Viettel.
+                \item[T2] Nhạc, video, tin tức cần bản quyền; tổng hợp tin có thể cần giấy phép.
+                \item[T3] Điểm thưởng, vật phẩm ảo không được quy đổi ra tiền hay hiện vật.
+                \item[T4] Luật Bảo vệ dữ liệu cá nhân 2025 đặt yêu cầu chặt hơn về sự đồng ý.
+                \item[T5] Người dùng đã có sẵn playlist, lịch sử ở ứng dụng quen thuộc nên ngại chuyển sang ứng dụng mới.
+            \end{compactitem}};
+        \node[quadrant label, above] at (S.north) {Tích cực};
+        \node[quadrant label, above] at (W.north) {Tiêu cực};
+        \node[quadrant label, rotate=90, above] at (S.west) {Yếu tố bên trong};
+        \node[quadrant label, rotate=90, above] at (O.west) {Yếu tố bên ngoài};
+    \end{tikzpicture}
+    \caption{Ma trận SWOT của ứng dụng}
+    \label{fig:swot}
+\end{figure}
+
+\subsubsection{Chiến lược rút ra từ SWOT}
+
+\textbf{Điểm mạnh cần khai thác.}
+Ứng dụng không cạnh tranh bằng độ lớn của kho nội dung mà bằng cách kết nối các loại nội dung với nhau (S1--S3), và dùng gamification xuyên suốt bốn phân hệ (S4) để cải thiện retention thấp (O2, O3).
+Các tính năng kết hợp này là ưu tiên của Winning Zone ở mục~\ref{sec:usp-winning-zone} và được ưu tiên đưa vào phạm vi MVP ở mục~\ref{sec:mvp-scope}.
+Ngược lại, nhóm không cạnh tranh ở những mảng mà đối thủ đã đáp ứng rất tốt, như kho video rất lớn của YouTube hay thuật toán gợi ý video ngắn của TikTok.
+
+\textbf{Rủi ro cần giảm thiểu.}
+Bảng~\ref{tab:swot-risks} liệt kê các nhược điểm và thách thức chính cùng phương án giảm thiểu.
+
+\begingroup
+\small
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{4.2cm}>{\raggedright\arraybackslash}p{11.2cm}@{}}
+\caption{Rủi ro và phương án giảm thiểu}
+\label{tab:swot-risks} \\
+\toprule
+\textbf{Rủi ro} & \textbf{Phương án giảm thiểu} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Rủi ro} & \textbf{Phương án giảm thiểu} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Kho nội dung nhỏ, rủi ro bản quyền (W1, T2) &
+Chỉ dùng nguồn nội dung hợp pháp: nhạc và video có giấy phép cho phép sử dụng (Creative Commons, thư viện miễn phí bản quyền) hoặc lấy qua API chính thức của nhà cung cấp. Tin tức lấy từ nguồn RSS mà các báo công khai, chỉ hiển thị phần tóm tắt kèm tên báo và liên kết về bài gốc. Tính năng chuyển sang dạng nghe chỉ áp dụng cho nội dung mà ứng dụng được phép sử dụng; ứng dụng không tải hay chuyển đổi nội dung từ nền tảng khác. Nếu sau này muốn hiển thị toàn văn bài báo, nhóm cần thỏa thuận hợp tác với cơ quan báo chí và xin giấy phép trang thông tin điện tử tổng hợp theo Nghị định 147/2024/NĐ-CP~\cite{nd147-2024}. \\
+\midrule
+Từng phân hệ không sâu bằng ứng dụng chuyên biệt (W2) &
+Trong MVP, mỗi phân hệ chỉ cần luồng sử dụng cơ bản; nhóm tập trung phát triển các tính năng kết hợp (mục~\ref{sec:mvp-scope}). \\
+\midrule
+Ứng dụng nặng, khởi động chậm (W3) &
+Đưa dung lượng tải về và thời gian khởi động thành tiêu chí bắt buộc (\texttt{UX-03}, \texttt{UX-10} ở mục~\ref{sec:quality-pillars}). Minigame không đóng gói sẵn mà chỉ tải về khi người dùng chơi lần đầu. \\
+\midrule
+Đối thủ lớn sao chép tính năng, người dùng ngại chuyển đổi (T1, T5) &
+Tập trung vào một nhóm người dùng hẹp là người trẻ và sinh viên thay vì cạnh tranh trên toàn thị trường. Xây dựng các yếu tố gắn với tài khoản như streak, thú ảo, bộ sưu tập vật phẩm để người dùng có lý do tiếp tục sử dụng ứng dụng, ngay cả khi đối thủ có tính năng tương tự. \\
+\midrule
+Quy định về điểm thưởng và vật phẩm ảo (T3) &
+Theo Điều 57 Nghị định 147/2024/NĐ-CP, điểm thưởng và vật phẩm ảo chỉ được dùng trong chính trò chơi, không được quy đổi ra tiền hay hiện vật, và người chơi không được mua bán với nhau~\cite{nd147-2024}. Vì vậy, điểm thưởng được thiết kế khép kín: chỉ kiếm được qua hoạt động trong ứng dụng, chỉ đổi được vật phẩm ảo (thức ăn cho thú ảo, khung ảnh đại diện, mở khóa minigame mới), không đổi ra tiền, voucher hay quà hiện vật, và không chuyển được giữa các tài khoản. \\
+\midrule
+Yêu cầu về dữ liệu cá nhân (T4) &
+Xin đồng ý riêng cho việc cá nhân hóa và cho phép tắt bất cứ lúc nào. Chi tiết ở tiêu chí \texttt{SEC-05}, mục~\ref{sec:quality-pillars}. \\
+\end{longtable}
+\endgroup

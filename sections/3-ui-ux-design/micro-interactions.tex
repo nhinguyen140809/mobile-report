@@ -1,19 +1,38 @@
 \subsection{Micro-interactions và phản hồi tức thì}
 \label{sec:micro-interactions}
 
-\begin{guide}
-\guidepart{Nội dung}
-\begin{compactitem}
-    \item Thiết kế micro-interaction theo mô hình 4 thành phần của Saffer~\cite{saffer2013}: Trigger, Rules, Feedback (hình ảnh, âm thanh, rung haptic), Loops \& Modes.
-    \item Ví dụ cho từng phân hệ: thả tim video, kéo mini player, vuốt để chuyển bài, kéo xuống để tải lại tin, hiệu ứng thắng thua trong minigame.
-    \item Loading indicator và skeleton loader để giao diện không bị đơ khi chờ dữ liệu từ mạng.
-\end{compactitem}
-\guidepart{Câu hỏi cần trả lời}
-\begin{compactitem}
-    \item Mỗi thao tác của người dùng nhận được phản hồi sau bao lâu? Đối chiếu với mục tiêu phản hồi dưới 3 giây ở mục~\ref{sec:quality-pillars}.
-    \item Khi nào dùng skeleton loader, khi nào dùng spinner?
-    \item Rung haptic được dùng ở đâu, và người dùng có tắt được không?
-\end{compactitem}
-\guidepart{Hình/bảng nên có}
-Bảng micro-interaction: Tên -- Trigger -- Rules -- Feedback -- Loops \& Modes.
-\end{guide}
+Mỗi tương tác nhỏ của OneSpace được thiết kế theo mô hình bốn thành phần của Saffer~\cite{saffer2013}: \textit{Trigger} (điều kiện khởi động), \textit{Rules} (logic quyết định điều gì xảy ra), \textit{Feedback} (hiệu ứng người dùng nhìn thấy) và \textit{Loops \& Modes} (lặp lại và điều kiện đặc biệt). Bảng~\ref{tab:micro-interactions} liệt kê các micro-interaction đã cài đặt trong ứng dụng, chỉ gồm những tương tác có thật trong mã nguồn.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Các micro-interaction của OneSpace theo mô hình bốn thành phần của Saffer}
+\label{tab:micro-interactions}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{3.2cm} >{\raggedright\arraybackslash}p{2.9cm} >{\raggedright\arraybackslash}X}
+\toprule
+\textbf{Tên} & \textbf{Trigger} & \textbf{Rules} & \textbf{Feedback} & \textbf{Loops \& Modes} \\
+\midrule
+Skeleton feed & Vào feed khi dữ liệu đang tải & Bốn hàng khung gồm một ô vuông và hai vạch ngang & Hiệu ứng shimmer (gradient chạy) trên khung xám & Dừng ngay khi có dữ liệu; chỉ dùng cho feed nhiều thông tin, không dùng cho thao tác nhẹ \\
+\midrule
+Ripple Material & Chạm mọi nút, thẻ, tab & Hiệu ứng chuẩn Material 3 & Vòng sóng lan từ điểm chạm & Mặc định toàn hệ thống \\
+\midrule
+Dock mini player & Bắt đầu phát một bài & Bài đang phát luôn hiện một hàng dock ở đáy nội dung & Dock hiện tên bài, nút tạm dừng và nút đóng & Dock hiện trên mọi feed và trong trình đọc bài; mở rộng thành trình phát đầy đủ bằng một chạm \\
+\midrule
+Thu nhỏ video thành cửa sổ nổi & Bấm ``Thu nhỏ \& khám phá'' hoặc rời tab khi video đang phát & Video tiếp tục phát trong cửa sổ nhỏ ở góc & Cửa sổ kèm nhãn ``Đang phát'' và ba nút: Mở rộng, Tạm dừng, Đóng & Quay lại trình phát đầy đủ giữ nguyên vị trí; đóng thì dừng hẳn \\
+\midrule
+Popup xung đột âm thanh & Mở nhạc khi video đang phát, lần đầu của cặp nội dung & Ba lựa chọn; lựa chọn được lưu theo cặp (case C1) & Hộp thoại liệt kê video đang phát kèm ba nút hành động & Từ lần thứ hai của cùng cặp: áp dụng im lặng, không hỏi lại \\
+\midrule
+Trạng thái rỗng & Mở danh mục không có nội dung (``Đã lưu'') & Hiển thị thông điệp kèm một hành động thoát khỏi tình huống & Biểu tượng, tiêu đề và nút ``Xem tin mới nhất'' & Không bao giờ để màn hình trống trơn không lối đi \\
+\midrule
+Trạng thái mất mạng & Feed không tải được dữ liệu & Hiển thị thông điệp ``Không có kết nối'' & Nút ``Thử lại'' ở giữa màn hình & Nhấn thử lại để tải lại; khi có mạng tự phục hồi \\
+\midrule
+Bàn chơi 2048 & Vuốt trên bàn chơi & Ô cùng giá trị gộp nhau theo hướng vuốt & Bàn chơi và điểm số cập nhật tức thì sau mỗi nước & Điểm cao nhất được ghi lại và hiện ở đầu màn chơi \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Quy tắc phản hồi và thời gian chờ.} Nguyên tắc xuyên suốt là \textit{giao diện không bao giờ đứng im khi chờ dữ liệu}: mọi thao tác đều có phản hồi tức thời trong ngưỡng 100~ms của \texttt{UX-01}~--~hiệu ứng ripple khi chạm, khung skeleton khi feed đang tải (mục~\ref{sec:wireframes-prototypes}). Việc phân biệt hai loại chỉ báo tuân theo quy tắc đặt ở mục~\ref{sec:quality-pillars}: \textit{skeleton} dùng cho màn hình nhiều thông tin (feed) vì người dùng thấy ngay hình dáng kết quả cuối sẽ ra sao; \textit{spinner/nút trạng thái} dùng cho thao tác nhẹ và ngắn (chuẩn bị quiz, đăng nhập). Khi thao tác thất bại, phản hồi chuyển từ ``đang chờ'' sang ``thông điệp lỗi + nút thử lại''. Gười dùng luôn có bước tiếp theo thay vì màn hình chết.
+
+\textbf{Phản hồi xúc giác (haptic).} Ứng dụng hiện chưa sử dụng rung haptic: các tương tác đã đủ phản hồi thị giác rõ ràng ở giai đoạn này, và nhóm muốn tránh cảm giác rung gây khó chịu khi chưa có dữ liệu người dùng nào yêu cầu. Haptic được ghi nhận là hướng cân nhắc cho hai thời điểm có ý nghĩa rõ ràng nhất (ghép ô trong 2048 và trứng thú cưng nở), sẽ thêm sau khi có phản hồi từ người dùng thử nghiệm.
+
+\textbf{Phản hồi âm thanh trong game.} Khi người dùng vào game trong lúc nhạc đang phát, hiệu ứng game không đè lên nhạc: theo quy tắc xử lý xung đột âm thanh ở mục~\ref{sec:mvp-scope}, nhạc được duck xuống (case C5)~--~phản hồi âm thanh vì vậy tuân theo cùng một bộ quy tắc với mọi luồng khác, thay vì mỗi phân hệ tự xử lý một kiểu.

@@ -1,44 +1,42 @@
 \subsection{User Personas}
 \label{sec:user-personas}
 
-Thay vì phân loại chỉ theo tuổi hoặc nghề nghiệp, nhóm xây dựng \textbf{sáu User Persona} theo \textit{nhu cầu và hành vi sử dụng}. Sáu persona không chỉ đại diện cho những độ tuổi khác nhau mà quan trọng hơn là sáu kiểu nhu cầu sử dụng khác nhau --~từ đó chi phối trực tiếp đến việc ưu tiên tính năng (mục~\ref{sec:feature-prioritization}), phạm vi MVP (mục~\ref{sec:mvp-scope}) và các case hành vi chuyển phân hệ (ma trận C1--C9 ở mục~\ref{sec:mvp-scope}).
-
-Toàn bộ persona hiện là \textbf{proto-persona}: được xây dựng dựa trên kịch bản sử dụng dự kiến, chưa được kiểm chứng bằng khảo sát hay phỏng vấn người dùng. Sau buổi khảo sát nhóm (kế hoạch ở mục~\ref{sec:market-research}), các giả định này sẽ được đối chiếu và điều chỉnh theo dữ liệu thực tế.
+Nhóm xây dựng sáu User Persona theo nhu cầu và hành vi sử dụng, thay vì chỉ theo tuổi hay nghề nghiệp. Sáu persona đại diện cho sáu kiểu nhu cầu khác nhau, từ đó ảnh hưởng trực tiếp đến việc ưu tiên tính năng (mục~\ref{sec:feature-prioritization}), phạm vi MVP (mục~\ref{sec:mvp-scope}) và ma trận hành vi chuyển tab C1--C9 (mục~\ref{sec:mvp-scope}).
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{2.4cm} >{\raggedright\arraybackslash}p{3.4cm} >{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}p{4.2cm}}
 \caption{Tổng quan sáu User Persona của OneSpace}
 \label{tab:persona-overview}\\
 \toprule
-\textbf{Persona} & \textbf{Nhóm người dùng} & \textbf{Nhu cầu nổi bật} & \textbf{Trụ USP liên quan} \\
+\textbf{Persona} & \textbf{Nhóm người dùng} & \textbf{Nhu cầu nổi bật} & \textbf{Trụ USP} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Persona} & \textbf{Nhóm người dùng} & \textbf{Nhu cầu nổi bật} & \textbf{Trụ USP liên quan} \\
+\textbf{Persona} & \textbf{Nhóm người dùng} & \textbf{Nhu cầu nổi bật} & \textbf{Trụ USP} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Nguyễn Minh Anh \newline (Primary) & Người dùng đa nhiệm & Chuyển đổi liền mạch nhiều nội dung & W1, W2 \\
+Nguyễn Minh Anh \newline (Primary) & Người dùng đa nhiệm & Chuyển đổi nhiều nội dung không gián đoạn & W1, W2 \\
 \midrule
-Trần Hoàng Nam & Người ưu tiên tiện lợi & Mở lên dùng ngay, không mất thao tác & W1, W5 \\
+Trần Hoàng Nam & Ưu tiên tiện lợi & Mở lên dùng ngay, ít thao tác & W1, W5 \\
 \midrule
-Lê Quốc Huy & Game chơi hiệu năng, offline & Chơi game và nghe nhạc trên máy yếu & W2, W5 \\
+Lê Quốc Huy & Game + hiệu năng thấp & Chơi game và nghe nhạc trên máy yếu & W2, W5 \\
 \midrule
-Phạm Thảo Vy & Người khám phá nội dung & Tìm, lưu và kết nối nội dung đa phân hệ & W1, W3 \\
+Phạm Thảo Vy & Khám phá nội dung & Tìm và kết nối nội dung đa dạng & W1, W3 \\
 \midrule
-Nguyễn Gia Bảo & Power user, tùy chỉnh & Chủ động kiểm soát hành vi đa nhiệm & W2, W5 \\
+Nguyễn Gia Bảo & Tùy chỉnh sâu & Chủ động kiểm soát hành vi đa nhiệm & W2, W5 \\
 \midrule
-Lê Thu Hà & Người ưu tiên đơn giản & Dễ hiểu, dễ đọc, không thao tác phức tạp & W1, W5 \\
+Lê Thu Hà & Ưu tiên đơn giản & Dễ hiểu, dễ đọc, không phức tạp & W1, W5 \\
 \end{longtable}
 
-Minh Anh được chọn làm \textbf{Primary Persona} vì nhu cầu của nhân vật thể hiện rõ nhất giá trị cốt lõi của OneSpace: chuyển đổi giữa nhiều hoạt động giải trí trong cùng một ứng dụng mà không gián đoạn~--~đúng hướng đi của ma trận case C1--C9 ở mục~\ref{sec:mvp-scope}.
+Minh Anh là Primary Persona vì nhu cầu của nhân vật thể hiện rõ nhất giá trị của OneSpace: chuyển đổi giữa nhiều hoạt động giải trí trong cùng một app mà không gián đoạn.
 
 %%===== PERSONA 1: MINH ANH (PRIMARY) =====%%
 \subsubsection{Nguyễn Minh Anh~--~người dùng đa nhiệm (Primary Persona)}
 \label{sec:persona-minhanh}
 
 \begin{quote}
-\textit{``Mình muốn vừa xem video, vừa đọc tin hoặc nghe nhạc trong lúc làm việc khác, nhưng không muốn phải chuyển qua lại nhiều ứng dụng.''}
+``Mình muốn vừa xem video, vừa đọc tin hoặc nghe nhạc, nhưng không muốn chuyển qua lại nhiều ứng dụng.''
 \end{quote}
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{12.6cm}}
@@ -56,22 +54,22 @@ Thời gian giải trí & 3--5 giờ/ngày \\
 Kết nối & Chủ yếu Wi-Fi, đôi khi 4G/5G \\
 \end{longtable}
 
-\textbf{Mục tiêu:} dùng nhiều loại nội dung trong cùng một app; xem video khi đọc tin mà không dừng video; nghe nhạc khi lướt tin hoặc chơi game; chuyển đổi nhanh mà không mất phiên; kéo được trình phát nổi đến góc khác; giảm số lần mở/đóng app.
+\textbf{Mục tiêu:} dùng nhiều loại nội dung trong cùng một app; xem video khi đọc tin; nghe nhạc khi lướt tin hoặc chơi game; chuyển đổi nhanh; kéo PIP đến góc khác; giảm số lần mở/đóng app.
 
-\textbf{Pain points:} liên tục chuyển giữa các app riêng lẻ; nội dung bị dừng hoặc tải lại khi đổi hoạt động; khó tìm lại video/bài đang xem; trình phát nổi che nội dung; âm thanh chồng khi không quản lý; thiếu tùy chỉnh đồng thời nhiều nội dung.
+\textbf{Pain points:} liên tục chuyển giữa các app; nội dung bị dừng khi đổi hoạt động; khó tìm lại video/bài đang xem; PIP che nội dung; âm thanh chồng khi không quản lý.
 
-\textbf{Hành vi mobile đặc trưng:} xem video ngắn, nghe nhạc, đọc tin trong giờ nghỉ và buổi tối; quen vuốt, chạm, kéo thả; thích nội dung tiếp tục từ chỗ cũ; thường làm một việc chính + một việc phụ.
+\textbf{Hành vi mobile:} xem video ngắn, nghe nhạc, đọc tin trong giờ nghỉ và buổi tối; quen vuốt, chạm, kéo thả; thích nội dung tiếp tục từ chỗ cũ; thường làm một việc chính + một việc phụ.
 
-\textbf{Tình huống điển hình:} Minh Anh đang xem video, muốn đọc một bài báo mới. Chạm vào tab Tin~--~thay vì đóng video, OneSpace chuyển video thành cửa sổ nhỏ (Floating Player) cho video tiếp tục phát. Cô kéo cửa sổ sang góc khác để không che đoạn văn. Đọc xong, chạm trình phát để quay lại video đầy đủ~--~video phát tiếp từ đúng vị trí, không cần tải lại.
+\textbf{Tình huống:} Minh Anh đang xem video, muốn đọc một bài báo mới. Chạm vào tab Tin. Video tự thu thành PIP, tiếp tục phát. Cô kéo PIP sang góc khác để không che đoạn văn. Đọc xong, chạm PIP để quay lại video. Video phát tiếp từ đúng vị trí.
 
-Luồng: \texttt{Video → Tin → Floating Video → quay lại Video}~--~trùng khớp case \textbf{C3} trong ma trận mục~\ref{sec:mvp-scope}.
+Luồng: Video → Tin → PIP → quay lại Video. Trùng case C3.
 
 %%===== PERSONA 2: HOÀNG NAM =====%%
 \subsubsection{Trần Hoàng Nam~--~người ưu tiên tiện lợi}
 \label{sec:persona-hoangnam}
 
 \begin{quote}
-\textit{``Mình chỉ có một chút thời gian rảnh, nên muốn mở nội dung lên là dùng ngay, không cần mất thời gian tìm lại hay thao tác quá nhiều.''}
+``Mình chỉ có một chút thời gian rảnh, nên muốn mở lên là dùng ngay, không cần tìm lại hay thao tác nhiều.''
 \end{quote}
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{12.6cm}}
@@ -89,22 +87,22 @@ Thời gian giải trí & 1--2 giờ/ngày \\
 Kết nối & Wi-Fi và dữ liệu di động \\
 \end{longtable}
 
-\textbf{Mục tiêu:} đọc nhanh tin quan trọng trong giờ nghỉ; nghe nhạc khi di chuyển; tiếp tục playlist/bài viết trước đó bằng ít thao tác; điều khiển âm thanh từ notification hoặc màn hình khoá; hạn chế tương tác thừa.
+\textbf{Mục tiêu:} đọc nhanh tin trong giờ nghỉ; nghe nhạc khi di chuyển; tiếp tục bài viết trước đó bằng ít thao tác; điều khiển âm thanh từ notification hoặc màn hình khoá.
 
-\textbf{Pain points:} không có thời gian tìm kiếm nội dung; thao tác qua nhiều màn gây bất tiện; âm thanh bị gián đoạn khi có sự kiện hệ thống; phải tìm lại bài đang nghe/đọc; giao diện nhiều tùy chọn gây rối; lo app chạy tác vụ nền tốn pin.
+\textbf{Pain points:} không có thời gian tìm nội dung; thao tác nhiều màn gây bất tiện; âm thanh gián đoạn khi có cuộc gọi; phải tìm lại bài đang nghe/đọc; giao diện nhiều tùy chọn gây rối.
 
-\textbf{Hành vi mobile đặc trưng:} dùng điện thoại khi di chuyển, nghỉ trưa, sau giờ làm; nghe nhạc qua tai nghe Bluetooth; thói quen khoá màn khi nghe nhạc; thích nút điều khiển rõ ràng; ưu tiên tính năng ``tiếp tục gần đây''.
+\textbf{Hành vi mobile:} dùng điện thoại khi di chuyển, nghỉ trưa, sau giờ làm; nghe nhạc qua tai nghe Bluetooth; thói quen khoá màn khi nghe nhạc; thích nút điều khiển rõ ràng.
 
-\textbf{Tình huống điển hình:} Trên đường đến công ty, Hoàng Nam phát playlist yêu thích rồi khoá điện thoại. Đến giờ nghỉ trưa, mở app đọc tin~--~nhạc vẫn phát và điều khiển qua Mini Player dock (case \textbf{C2}). Khi có cuộc gọi, app tự nhường (audio focus); sau cuộc gọi nhạc phát lại từ đúng chỗ.
+\textbf{Tình huống:} Trên đường đến công ty, Hoàng Nam phát playlist rồi khoá điện thoại. Đến giờ nghỉ trưa, mở app đọc tin. Nhạc vẫn phát, điều khiển qua dock (case C2). Khi có cuộc gọi, app tự nhường; sau cuộc gọi nhạc phát lại từ đúng chỗ.
 
-Luồng: \texttt{Music → khoá màn hình → Tin → tiếp tục Music}~--~trùng khớp case \textbf{C2} và xử lý gián đoạn ``cuộc gọi đến''.
+Luồng: Music → khoá màn → Tin → tiếp tục Music. Trùng case C2.
 
 %%===== PERSONA 3: QUỐC HUY =====%%
-\subsubsection{Lê Quốc Huy~--~game chơi hiệu năng, offline}
+\subsubsection{Lê Quốc Huy~--~game trên máy yếu}
 \label{sec:persona-quochuy}
 
 \begin{quote}
-\textit{``Mình muốn vừa chơi game vừa nghe nhạc, nhưng điện thoại phải mượt, không bị mất tiến độ và không tốn quá nhiều dữ liệu.''}
+``Mình muốn vừa chơi game vừa nghe nhạc, nhưng điện thoại phải mượt, không mất tiến độ và không tốn nhiều dữ liệu.''
 \end{quote}
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{12.6cm}}
@@ -117,27 +115,27 @@ Luồng: \texttt{Music → khoá màn hình → Tin → tiếp tục Music}~--~t
 Tuổi / nghề nghiệp & 19, sinh viên năm nhất \\
 Nơi sống & Bình Dương \\
 Thành thạo công nghệ & Trung bình \\
-Thiết bị & Android, \textbf{RAM 3~GB} \\
+Thiết bị & Android, RAM 3~GB \\
 Thời gian giải trí & 2--3 giờ/ngày \\
 Kết nối & Wi-Fi, dữ liệu giới hạn \\
 \end{longtable}
 
-\textbf{Mục tiêu:} chơi minigame đơn giản để thư giãn; nghe nhạc nền khi chơi game; chơi tiếp cả khi mất mạng; không mất tiến độ khi chuyển phân hệ; hạn chế giật lag và hao pin; chỉnh chất lượng streaming để tiết kiệm dữ liệu.
+\textbf{Mục tiêu:} chơi minigame đơn giản; nghe nhạc khi chơi game; chơi tiếp khi mất mạng; không mất tiến độ; hạn chế giật lag; tiết kiệm dữ liệu.
 
-\textbf{Pain points:} điện thoại chậm khi nhiều tác vụ; mạng không ổn định; game mất tiến độ nếu app bị dừng; video HQ tốn dữ liệu; SFX game xung đột nhạc nền; tác vụ nền tốn pin; khó chịu khi quảng cáo chèn vào giữa lượt chơi.
+\textbf{Pain points:} máy chậm khi nhiều tác vụ; mạng không ổn định; game mất tiến độ khi app bị đóng; video HQ tốn dữ liệu; âm game xung đột nhạc nền.
 
-\textbf{Hành vi mobile đặc trưng:} chơi game giờ nghỉ hoặc khi chờ đợi; ưu tiên game nhẹ, thời lượng ngắn; mở nhạc khi chơi game; chọn chất lượng thấp để tiết kiệm data; muốn game tiếp tục từ lần trước.
+\textbf{Hành vi mobile:} chơi game giờ nghỉ; ưu tiên game nhẹ, ngắn; mở nhạc khi chơi; chọn chất lượng thấp để tiết kiệm data.
 
-\textbf{Tình huống điển hình:} Quốc Huy đang nghe nhạc, chuyển sang Games và mở 2048. App cho phép tắt âm game nhưng nhạc vẫn phát (case \textbf{C5}). Mạng bị ngắt~--~game vẫn chạy vì offline. Huy chuyển sang Tin đọc bài đã lưu; app tạm dừng game và tự lưu điểm số, trạng thái bàn. Quay lại Games, chọn Tiếp tục để chơi từ chỗ cũ.
+\textbf{Tình huống:} Quốc Huy đang nghe nhạc, chuyển sang Games mở 2048. Nhạc vẫn phát, game âm thanh giảm (case C5). Mạng ngắt nhưng game vẫn chạy vì offline. Huy chuyển sang Tin đọc bài đã lưu; app tạm dừng game, lưu điểm. Quay lại Games, chọn Tiếp tục.
 
-Luồng: \texttt{Music → Games → Tin → Resume Game}~--~trùng khớp case \textbf{C5} (nhạc + game) và xử lý gián đoạn ``mất mạng'' + ``OS hủy app''. Persona này là lý do \textbf{F-GAME-12/13} (2048, Snake) vào MVP Phương án 1.
+Luồng: Music → Games → Tin → Resume Game. Trùng case C5.
 
 %%===== PERSONA 4: THẢO VY =====%%
 \subsubsection{Phạm Thảo Vy~--~người khám phá nội dung}
 \label{sec:persona-thaovy}
 
 \begin{quote}
-\textit{``Khi thấy một chủ đề thú vị, mình muốn xem video, đọc thêm tin tức liên quan và lưu lại nội dung mà không phải tìm kiếm từ đầu ở nhiều nơi.''}
+``Khi thấy một chủ đề thú vị, mình muốn xem video, đọc tin liên quan và lưu lại mà không phải tìm ở nhiều nơi.''
 \end{quote}
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{12.6cm}}
@@ -155,22 +153,22 @@ Thời gian giải trí & 3--4 giờ/ngày \\
 Kết nối & Wi-Fi và 5G \\
 \end{longtable}
 
-\textbf{Mục tiêu:} khám phá nhanh nội dung mới; chuyển đổi giữa video và bài báo cùng chủ đề; tìm kiếm trên nhiều phân hệ; lưu nội dung để xem sau; tiếp tục đọc/xem từ chỗ cũ; trải nghiệm khám phá nhất quán.
+\textbf{Mục tiêu:} khám phá nội dung mới; chuyển đổi giữa video và bài báo cùng chủ đề; tìm kiếm trên nhiều phân hệ; lưu nội dung xem sau; tiếp tục từ chỗ cũ.
 
-\textbf{Pain points:} nội dung cùng chủ đề nằm rải rác trên nhiều app; phải tìm lại chủ đề khi chuyển video~$\rightarrow$~tin; khó quản lý danh sách xem sau; kết quả tìm không tổ chức thống nhất; dễ mất dấu nội dung đã xem; gợi ý không phù hợp quan tâm hiện tại.
+\textbf{Pain points:} nội dung cùng chủ đề nằm rải rác trên nhiều app; phải tìm lại chủ đề khi chuyển video sang tin; khó quản lý danh sách xem sau; dễ mất dấu nội dung đã xem.
 
-\textbf{Hành vi mobile đặc trưng:} xem video, đọc báo, tìm chủ đề mới; thường dùng search và bộ lọc; có thói quen bookmark; hay chuyển từ nội dung này sang nội dung liên quan; ưu tiên khám phá hơn chơi game.
+\textbf{Hành vi mobile:} xem video, đọc báo, tìm chủ đề mới; thường dùng search và bộ lọc; hay chuyển từ nội dung này sang nội dung liên quan.
 
-\textbf{Tình huống điển hình:} Thảo Vy đang đọc bài báo về công nghệ mới. Muốn xem video trực quan về công nghệ đó, cô dùng Search xuyên nội dung (F-COM-11) để tìm video liên quan. Trước khi chuyển sang tab Video, vị trí đọc bài được lưu lại. Xem video xong, quay lại Tin~--~app khôi phục đúng đoạn cũ. Đánh dấu cả bài và video để xem cuối tuần.
+\textbf{Tình huống:} Thảo Vy đang đọc bài báo về công nghệ mới. Muốn xem video liên quan, cô dùng Search xuyên nội dung (F-COM-11). Vị trí đọc được lưu. Xem video xong, quay lại Tin; app khôi phục đúng đoạn cũ. Đánh dấu cả bài và video để xem cuối tuần.
 
-Luồng: \texttt{Tin → Search → Video → Tin → Saved Content}~--~thể hiện W1 qua phân hệ và hỗ trợ W3 (chuyển đổi hình thức nếu bấm nghe tin hoặc trích mp3).
+Luồng: Tin → Search → Video → Tin → Saved.
 
 %%===== PERSONA 5: GIA BẢO =====%%
-\subsubsection{Nguyễn Gia Bảo~--~power user, tùy chỉnh đa nhiệm}
+\subsubsection{Nguyễn Gia Bảo~--~tùy chỉnh sâu}
 \label{sec:persona-giabao}
 
 \begin{quote}
-\textit{``Mình muốn tự quyết định video nào được tiếp tục phát, nhạc nào phải tạm dừng, và cửa sổ nào được hiển thị khi chuyển sang chức năng khác.''}
+``Mình muốn tự quyết định video nào tiếp tục phát, nhạc nào tạm dừng, cửa sổ nào hiển thị khi chuyển sang tab khác.''
 \end{quote}
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{12.6cm}}
@@ -180,7 +178,7 @@ Luồng: \texttt{Tin → Search → Video → Tin → Saved Content}~--~thể hi
 \endhead
 \bottomrule
 \endfoot
-Tuổi / nghề nghiệp & 23, sinh viên Công nghệ thông tin \\
+Tuổi / nghề nghiệp & 23, sinh viên CNTT \\
 Nơi sống & TP.\ Hồ Chí Minh \\
 Thành thạo công nghệ & Rất cao \\
 Thiết bị & Android, RAM 12~GB \\
@@ -188,22 +186,22 @@ Thời gian giải trí & 3--4 giờ/ngày \\
 Kết nối & Wi-Fi và 5G \\
 \end{longtable}
 
-\textbf{Mục tiêu:} chủ động chọn cách chuyển phân hệ; điều khiển trạng thái phát video và nhạc; tùy chỉnh vị trí và kích thước Floating Player; quyết định giữ video khi vào game; quản lý âm thanh theo từng hoạt động; tối ưu trải nghiệm qua cài đặt nhanh.
+\textbf{Mục tiêu:} chủ động chọn cách chuyển tab; điều khiển trạng thái phát; tùy chỉnh vị trí PIP; quyết định giữ video khi vào game; quản lý âm thanh theo từng hoạt động.
 
-\textbf{Pain points:} app tự dừng/tiếp tục không đúng ý; không có tùy chọn đổi hành vi khi chuyển màn; Floating Player kích thước/vị trí cố định; khó biết nguồn âm nào đang ưu tiên; phải thao tác nhiều để đổi một cài đặt thường dùng; hệ thống không giải thích vì sao nội dung bị dừng.
+\textbf{Pain points:} app tự dừng/tiếp tục không đúng ý; không có tùy chọn đổi hành vi chuyển màn; PIP kích thước cố định; khó biết nguồn âm nào đang phát; phải thao tác nhiều để đổi cài đặt.
 
-\textbf{Hành vi mobile đặc trưng:} quen cài đặt nâng cao và thao tác nhanh; trải nghiệm nhiều app đa phương tiện; tùy chỉnh app sau khi cài; chấp nhận giao diện phức tạp nếu tổ chức rõ; ưu tiên trạng thái minh bạch.
+\textbf{Hành vi mobile:} quen cài đặt nâng cao; trải nghiệm nhiều app đa phương tiện; chấp nhận giao diện phức tạp nếu tổ chức rõ.
 
-\textbf{Tình huống điển hình:} Gia Bảo đang xem video và muốn chuyển sang chơi minigame. Trước đó anh đã thiết lập ``giữ video dạng Floating Player khi vào Games'' (tuỳ chọn nâng cao). Khi mở game,/video tự thu nhỏ~--~anh kéo đến góc không che nút. Sau đó phát nhạc: app áp dụng chính sách âm thanh đã chọn~--~tạm dừng video, ưu tiên bài mới. Quay lại video qua trình điều khiển (case \textbf{C4} + điều phối C5).
+\textbf{Tình huống:} Gia Bảo đang xem video và muốn chơi minigame. Anh đã thiết lập ``giữ PIP khi vào Games''. Mở game, video tự thu nhỏ. Sau đó phát nhạc: app dừng video, ưu tiên bài mới. Quay lại video qua trình điều khiển.
 
-Luồng: \texttt{Video → Games (Floating) → Music → điều phối âm thanh}~--~trùng case \textbf{C4} (game + video song song) và quy tắc trọng tài âm thanh.
+Luồng: Video → Games (PIP) → Music. Trùng case C4.
 
 %%===== PERSONA 6: THU HÀ =====%%
-\subsubsection{Lê Thu Hà~--~người ưu tiên đơn giản, dễ đọc}
+\subsubsection{Lê Thu Hà~--~ưu tiên đơn giản, dễ đọc}
 \label{sec:persona-thuha}
 
 \begin{quote}
-\textit{``Mình cần một ứng dụng dễ hiểu, chữ rõ ràng, biết đang phát nội dung gì và có thể tạm dừng hoặc quay lại bất cứ lúc nào.''}
+``Mình cần một ứng dụng dễ hiểu, chữ rõ ràng, biết đang phát nội dung gì và có thể dừng bất cứ lúc nào.''
 \end{quote}
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{12.6cm}}
@@ -221,74 +219,69 @@ Thời gian giải trí & 1--2 giờ/ngày \\
 Kết nối & Wi-Fi và 4G \\
 \end{longtable}
 
-\textbf{Mục tiêu:} đọc tin trên giao diện rõ ràng; điều khiển nhạc bằng nút quen thuộc; không bị nhầm khi chuyển màn; biết nội dung nào đang hoạt động; có thể dừng hoặc đóng trình phát bất cứ lúc nào; tăng kích thước chữ khi đọc.
+\textbf{Mục tiêu:} đọc tin trên giao diện rõ ràng; điều khiển nhạc bằng nút quen thuộc; biết nội dung nào đang hoạt động; dừng hoặc đóng trình phát bất cứ lúc nào; tăng cỡ chữ khi đọc.
 
-\textbf{Pain points:} biểu tượng không nhãn gây nhầm; chữ nhỏ hoặc tương phản thấp; không biết âm thanh đang phát từ đâu; cửa sổ nổi che nội dung hoặc nút bấm; cử chỉ ẩn khó phát hiện; lo nhấn nhầm làm mất bài đang đọc.
+\textbf{Pain points:} biểu tượng không nhãn; chữ nhỏ hoặc tương phản thấp; không biết âm thanh phát từ đâu; PIP che nội dung; lo nhấn nhầm mất bài đang đọc.
 
-\textbf{Hành vi mobile đặc trưng:} dùng trong nhà và lúc nghỉ; đọc tin, xem video, nghe nhạc nhiều hơn chơi game; ưu tiên nút bấm rõ hơn cử chỉ; thường dùng một tay; không thay đổi cài đặt nâng cao; muốn dễ quay lại màn trước.
+\textbf{Hành vi mobile:} dùng trong nhà và lúc nghỉ; đọc tin, xem video, nghe nhạc nhiều hơn chơi game; ưu tiên nút bấm rõ hơn cử chỉ; thường dùng một tay.
 
-\textbf{Tình huống điển hình:} Thu Hà mở OneSpace đọc bài báo. Vì nội dung nhiều chữ, cô tăng cỡ chữ bằng nút A+ (trình đọc sạch, F-NEWS-02). Trong lúc đọc, mở một video liên quan~--~quay lại, video xuất hiện dạng Floating Player. Muốn tập trung đọc, cô nhấn nút đóng rõ ràng với nhãn ``Tạm dừng video''. App hiển thị trạng thái để cô biết video đã dừng. Tiếp tục đọc đúng vị trí cũ.
+\textbf{Tình huống:} Thu Hà mở OneSpace đọc bài báo. Cô tăng cỡ chữ bằng nút A+ (F-NEWS-02). Mở một video liên quan; video hiện dạng PIP. Muốn tập trung đọc, cô nhấn nút ``Tạm dừng video''. App hiển thị video đã dừng. Tiếp tục đọc đúng chỗ cũ.
 
-Luồng: \texttt{Tin → Video → Tin → tạm dừng video → tiếp tục đọc}~--~đối thoại với case \textbf{C2} từ phía người dùng không muốn đa nhiệm: hành vi ``mặc định dễ dùng'' của case C2 phải cho phép tắt/tạm dừng, không ép dùng dock.
+Luồng: Tin → Video → Tin → tạm dừng video → tiếp tục đọc. Tương ứng case C2.
 
 %%===== SO SÁNH & LIÊN HỆ =====%%
 
-\textbf{So sánh hành vi sử dụng theo persona.}
-
 \begin{longtable}{>{\raggedright\arraybackslash}p{2.2cm} >{\raggedright\arraybackslash}p{3.4cm} >{\raggedright\arraybackslash}p{7.0cm} >{\raggedright\arraybackslash}p{2.4cm}}
-\caption{Hành vi và tình huống đặc trưng theo persona}
+\caption{Hành vi đặc trưng theo persona}
 \label{tab:persona-behavior}\\
 \toprule
-\textbf{Persona} & \textbf{Nội dung ưu tiên} & \textbf{Tình huống đặc trưng} & \textbf{Case tương ứng} \\
+\textbf{Persona} & \textbf{Nội dung ưu tiên} & \textbf{Tình huống đặc trưng} & \textbf{Case} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Persona} & \textbf{Nội dung ưu tiên} & \textbf{Tình huống đặc trưng} & \textbf{Case tương ứng} \\
+\textbf{Persona} & \textbf{Nội dung ưu tiên} & \textbf{Tình huống đặc trưng} & \textbf{Case} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Minh Anh & Video, Tin, Nhạc & Xem video khi đọc tin & C1, C3, C8 \\
-Hoàng Nam & Music, Tin & Nghe nhạc khi khoá màn hình & C2, gián đoạn cuộc gọi \\
-Quốc Huy & Games, Music & Chơi game offline khi nghe nhạc & C5, gián đoạn mất mạng \\
-Thảo Vy & Tin, Video & Tìm kiếm nội dung liên quan & C6, C8 \\
-Gia Bảo & Video, Music, Games & Tùy chỉnh việc phát và chuyển đổi & C1, C4, trọng tài \\
-Thu Hà & Tin, Video, Music & Đọc tin với điều khiển đơn giản & C2 (hành vi tắt/tạm dừng) \\
+Minh Anh & Video, Tin, Nhạc & Xem video khi đọc tin & C1, C3 \\
+Hoàng Nam & Music, Tin & Nghe nhạc khi khoá màn & C2 \\
+Quốc Huy & Games, Music & Chơi game offline + nhạc & C5 \\
+Thảo Vy & Tin, Video & Tìm nội dung liên quan & C6, C8 \\
+Gia Bảo & Video, Music, Games & Tùy chỉnh hành vi & C1, C4 \\
+Thu Hà & Tin, Video, Music & Đọc tin đơn giản & C2 \\
 \end{longtable}
 
-\textbf{Mối liên hệ persona~--~tính năng.} Mỗi persona hưởng lợi chính từ một nhóm tính năng khác nhau~--~điều này khẳng định OneSpace cần cả bốn phân hệ chứ không thể bỏ phân hệ nào:
+Mỗi persona hưởng lợi từ một nhóm tính năng khác nhau. Điều này khẳng định OneSpace cần cả bốn phân hệ:
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{3.8cm} >{\raggedright\arraybackslash}p{8.0cm} >{\raggedright\arraybackslash}p{3.2cm}}
-\caption{Persona hưởng lợi chính theo nhóm tính năng}
+\caption{Persona hưởng lợi theo nhóm tính năng}
 \label{tab:persona-features}\\
 \toprule
-\textbf{Tính năng} & \textbf{Persona hưởng lợi} & \textbf{Mã tương ứng} \\
+\textbf{Tính năng} & \textbf{Persona hưởng lợi} & \textbf{Mã} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Tính năng} & \textbf{Persona hưởng lợi} & \textbf{Mã tương ứng} \\
+\textbf{Tính năng} & \textbf{Persona hưởng lợi} & \textbf{Mã} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Mini player dock xuyên suốt & Minh Anh, Hoàng Nam, Thu Hà & F-MUS-02 \\
-Floating Video Player (PIP) & Minh Anh, Gia Bảo & F-VID-08 \\
-Session Restoration & Cả sáu persona & F-VID-05, F-COM-16 \\
-Hệ điểm + nhiệm vụ (gamification) & Quốc Huy, Hoàng Nam, Thu Hà & F-COM-04/05/06 \\
-Audio Focus + popup xung đột & Minh Anh, Gia Bảo & F-COM-14, F-MUS-10 \\
-Trọng tài âm thanh tùy chỉnh & Gia Bảo, Minh Anh & F-MUS-10, F-COM-14 \\
+Mini player dock & Minh Anh, Hoàng Nam, Thu Hà & F-MUS-02 \\
+PIP (Floating Video) & Minh Anh, Gia Bảo & F-VID-08 \\
+Khôi phục phiên & Cả sáu persona & F-VID-05, F-COM-16 \\
+Hệ điểm + nhiệm vụ & Quốc Huy, Hoàng Nam, Thu Hà & F-COM-04/05/06 \\
+Xử lý xung đột âm thanh & Minh Anh, Gia Bảo & F-MUS-10, F-COM-14 \\
 Offline minigames & Quốc Huy & F-GAME-12, F-GAME-13 \\
 Tiết kiệm dữ liệu & Quốc Huy & F-COM-13 \\
 Search xuyên nội dung & Thảo Vy & F-COM-11 \\
-Bookmark + lịch sử & Thảo Vy, Hoàng Nam & F-NEWS-03, F-VID-04 \\
-Converting (nghe tin, trích mp3) & Minh Anh, Thảo Vy & F-NEWS-05, F-VID-10 \\
-Cỡ chữ điều chỉnh + nhãn rõ & Thu Hà & F-NEWS-02, accessibility \\
+Lưu bài + lịch sử & Thảo Vy, Hoàng Nam & F-NEWS-03, F-VID-04 \\
+Chuyển đổi nội dung (TTS, mp3) & Minh Anh, Thảo Vy & F-NEWS-05, F-VID-10 \\
+Cỡ chữ + nhãn rõ & Thu Hà & F-NEWS-02 \\
 \end{longtable}
 
-\textbf{Trả lời câu hỏi định hướng của mục này:}
+Toàn bộ sáu persona hiện là proto-persona, xây dựng từ kịch bản dự kiến thay vì dữ liệu khảo sát thực tế. Kế hoạch khảo sát (20--30 người) và phỏng vấn (6--8 người) đề xuất ở mục~\ref{sec:market-research}.
 
-\begin{itemize}
-    \item \textit{Mỗi persona xây dựng từ dữ liệu khảo sát nào ở mục~\ref{sec:market-research}?}~--~Hiện tại sáu persona đều là proto-persona (giả định). Kế hoạch khảo sát 20--30 người (định lượng) và 6--8 người (phỏng vấn định tính) được đề xuất ở mục~\ref{sec:market-research}; kết quả sẽ đối chiếu và cập nhật persona trước khi chốt thiết kế.
-    \item \textit{Persona nào là primary?}~--~\textbf{Minh Anh}, vì nhu cầu đa nhiệm của nhân vật thể hiện rõ nhất giá trị cốt lõi của OneSpace và khớp trực tiếp với ma trận case C1--C9. Khi nhu cầu của các persona mâu thuẫn: thiết kế ưu tiên cho Minh Anh ở hành vi chuyển đổi; ưu tiên cho Thu Hà ở mức độ đơn giản giao diện (cùng hướng ``mặc định dễ dùng, nâng cao giấu sâu'' theo đúng đề xuất của Gia Bảo).
-    \item \textit{Ngữ cảnh dùng một tay và mạng yếu ảnh hưởng ra sao đến thiết kế?}~--~Quốc Huy (máy RAM 3~GB, mạng giới hạn) và Thu Hà (một tay, ưu tiên nút bấm) đặt ra hai ràng buộc thiết kế quan trọng: bottom navigation với vùng chạm đủ to (48~dp), và chế độ offline/tiết kiệm dữ liệu mặc định khi không có Wi-Fi. Ảnh hưởng trực tiếp đến mục~\ref{sec:ui-ux-design} và Phần~\ref{sec:technical-architecture}.
-\end{itemize}
+Trong sáu persona, \textbf{Minh Anh} là Primary Persona. Khi nhu cầu các persona mâu thuẫn, thiết kế ưu tiên cho Minh Anh ở hành vi chuyển tab, đồng thời ưu tiên cho Thu Hà ở mức độ đơn giản giao diện.
+
+Hai ràng buộc ảnh hưởng trực tiếp đến thiết kế: Quốc Huy (RAM 3~GB, mạng giới hạn) đặt ra yêu cầu vùng chạm đủ lớn (48dp) và chế độ tiết kiệm dữ liệu mặc định khi không có Wi-Fi. Thu Hà (dùng một tay, ưu tiên nút bấm) yêu cầu nhãn rõ ràng và điều khiển đơn giản.
