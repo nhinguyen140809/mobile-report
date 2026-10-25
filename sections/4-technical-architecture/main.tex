@@ -1,30 +1,20 @@
 \section{Kiến trúc kỹ thuật}
 \label{sec:technical-architecture}
+\begingroup
+\setlength{\emergencystretch}{3em}
+\captionsetup[table]{name=Bảng}
+\clubpenalty=10000
+\widowpenalty=10000
 
-Phần này mô tả kiến trúc kỹ thuật và cách phát triển ứng dụng, đáp ứng chuẩn đầu ra L.O.1.1 (phan tích khác biệt kiến trúc mobile vs desktop), L.O.1.2 (phan tích kiến trúc và luồng thực thi), L.O.1.3 (thiết kế kiến trúc đa module) và L.O.4.1 (phát triển bằng framework phù hợp) của môn học.
+OneSpace tích hợp video, âm nhạc, tin tức và trò chơi trong cùng một ứng dụng Android. Khác với việc xây dựng bốn giao diện độc lập, sự tích hợp này đòi hỏi các phân hệ phối hợp tài nguyên, duy trì trạng thái nội dung và phản ứng nhất quán khi người dùng chuyển hoạt động. Chẳng hạn, việc mở một bài báo trong khi nghe nhạc chỉ thay đổi ngữ cảnh giao diện; trong khi bắt đầu phát một video có tiếng lại làm phát sinh yêu cầu phân xử âm thanh.
 
-Với mỗi quyết định kỹ thuật, nhóm nêu các phương án đã cân nhắc, lý do chọn phương án cuối cùng vàBehaviour mong đợi~--~đồng thời ghi thành Architecture Decision Records (ADR) ở mục~\ref{sec:adr} để đảm bảo mọi thành viên code theo cùng một hướng.
+Chương này trình bày cơ sở thiết kế kiến trúc cho các tình huống trên. Các quyết định được xem xét theo bốn tiêu chí: tính liên tục của trải nghiệm, khả năng thích ứng với vòng đời Android, mức sử dụng tài nguyên và khả năng bảo trì. Nội dung lần lượt phân tích ràng buộc môi trường di động, lựa chọn công nghệ, tổ chức các thành phần và mô hình quản lý trạng thái khi thực thi.
 
-\textbf{Technical Baseline} được chốt cho MVP:
-
-\begin{longtable}{>{\raggedright\arraybackslash}p{3.6cm} >{\raggedright\arraybackslash}p{11.4cm}}
-\caption{Technical Baseline}
-\label{tab:baseline}\\
-\toprule
-\textbf{Thành phần} & \textbf{Quyết định} \\
-\midrule
-\endhead
-\bottomrule
-\endfoot
-Platform & Android Native \\
-Language / UI & Kotlin + Jetpack Compose \\
-Minimum Android & Android 8.0 (API 26) \\
-Target minimum RAM & 3~GB \\
-Architecture & 3 Layers + MVVM \\
-Media engine & AndroidX Media3 \\
-\end{longtable}
+Kiến trúc đề xuất sử dụng mô hình ba lớp Presentation--Domain--Data, kết hợp mô hình Model--View--ViewModel (MVVM) và luồng dữ liệu một chiều (Unidirectional Data Flow, UDF). Mã nguồn được tổ chức thành các mô-đun Gradle có trách nhiệm xác định; mô-đun ứng dụng đảm nhiệm khởi tạo và kết nối các thành phần. Đây là cách áp dụng các khuyến nghị Android vào nhu cầu của OneSpace, thay vì coi một cấu trúc mô-đun cụ thể là yêu cầu bắt buộc của nền tảng~\cite{android-architecture,android-modularization}. Phạm vi hiện thực hóa trong bản nguyên mẫu và các giới hạn được trình bày riêng tại mục~\ref{sec:architecture-scope}.
 
 \input{sections/4-technical-architecture/mobile-constraints}
 \input{sections/4-technical-architecture/platform-selection}
 \input{sections/4-technical-architecture/layered-architecture}
 \input{sections/4-technical-architecture/lifecycle-state}
+
+\endgroup

@@ -1,25 +1,7 @@
 \subsection{Phạm vi MVP}
 \label{sec:mvp-scope}
 
-\begin{guide}
-\guidepart{Nội dung}
-\begin{compactitem}
-    \item Bảng rút gọn các tính năng cốt lõi bắt buộc có trong bản phát hành đầu tiên, nhóm theo phân hệ.
-    \item Các tính năng để lại cho phiên bản sau (out of scope) và lý do.
-    \item Giả thuyết thị trường mà MVP cần kiểm chứng, và chỉ số dùng để kiểm chứng.
-\end{compactitem}
-\guidepart{Câu hỏi cần trả lời}
-\begin{compactitem}
-    \item Mỗi tính năng trong MVP giải quyết pain point nào của persona ở mục~\ref{sec:user-personas}?
-    \item Nếu bỏ một tính năng, MVP có còn kiểm chứng được giả thuyết không? Đây là tiêu chí để giữ hay loại tính năng đó.
-    \item MVP có cần đủ cả 4 phân hệ không, hay mỗi phân hệ chỉ cần một luồng cơ bản?
-    \item Sau khi phát hành, chỉ số nào cho biết MVP thành công (số người dùng hoạt động, tỉ lệ giữ chân, thời gian sử dụng)?
-\end{compactitem}
-\guidepart{Hình/bảng nên có}
-Bảng phạm vi MVP: Phân hệ -- Tính năng -- Mức ưu tiên (Must, Should, Could) -- Trong hay ngoài MVP.
-\end{guide}
-
-Phạm vi MVP của OneSpace gồm toàn bộ tính năng trong bảng~\ref{tab:mvp-scope-full}, được xác nhận khả thi qua bản demo HTML v4. Nguyên tắc: bốn phân hệ đều phải hiện diện (đề bài yêu cầu cả 4), và MVP phải \textit{kiểm chứng được USP}~--~ít nhất một trụ Winning Zone của từng nhóm trụ phải chạy được end-to-end. Mã tính năng tham chiếu bảng~\ref{tab:feature-pool}; các tính năng đều truy vết được về pain point ở mục~\ref{sec:problem-statement} hoặc nhân tố Winning Zone ở bảng~\ref{tab:winning-zone}.
+MVP của OneSpace gồm toàn bộ tính năng trong bảng~\ref{tab:mvp-scope-full}. Bốn phân hệ đều phải có mặt. Cả năm trụ Winning Zone W1--W5 phải chạy được end-to-end. Mã tính năng tham chiếu bảng~\ref{tab:feature-pool}; mỗi tính năng đều truy vết được về pain point ở mục~\ref{sec:problem-statement} hoặc nhân tố Winning Zone ở bảng~\ref{tab:winning-zone}.
 
 \begin{table}[H]
 \centering
@@ -29,44 +11,29 @@ Phạm vi MVP của OneSpace gồm toàn bộ tính năng trong bảng~\ref{tab:
     \toprule
     \textbf{Phân hệ} & \textbf{Tính năng trong MVP} \\
     \midrule
-    Video & Xem video cơ bản (F-VID-01); feed theo chuyên mục (F-VID-02); picture-in-picture (F-VID-08); tua nhanh double-tap (F-VID-17); watchlist và lịch sử tiếp tục từ chỗ dừng (F-VID-04, F-VID-05); chất lượng tự động (F-VID-06); trích mp3 vào kho cá nhân (F-VID-10) \\
-    Music & Player nhạc đầy đủ (F-MUS-01); mini player dock xuyên suốt (F-MUS-02); audio focus động (F-MUS-10); playlist và queue (F-MUS-04, F-MUS-05); kho nhạc cá nhân chứa mp3 trích (F-MUS-07) \\
-    News & Feed theo chuyên mục (F-NEWS-01); trình đọc sạch đổi cỡ chữ (F-NEWS-02); nghe nhạc khi đọc (F-NEWS-09); lưu bài (F-NEWS-03); \textbf{nghe tin TTS} (F-NEWS-05); quiz sinh từ chính bài báo (F-NEWS-10) \\
-    Games & Hub minigame (F-GAME-01); \textbf{đoán bài hát} từ kho nhạc (F-GAME-02); quiz tin tức nối với F-NEWS-10 (F-GAME-03); ``beat tiles'' theo bài đang phát (F-GAME-14); một game phổ biến nhanh (Snake hoặc 2048~-- F-GAME-12/13); điểm thưởng khi thắng (F-GAME-09) \\
-    Dùng chung & Tài khoản (F-COM-01); onboarding chọn sở thích (F-COM-02); hệ điểm + nhiệm vụ hằng ngày + streak (F-COM-04/05/06); cửa sổ xác nhận khi xung đột âm thanh (F-COM-14); thú cưng mức tối giản~-- trứng nở sau 3 nhiệm vụ (F-COM-07); cửa hàng đổi quà (F-COM-15); khung avatar (F-COM-09); cài đặt sáng/tối + tiết kiệm dữ liệu (F-COM-13) \\
+    Video & Xem video (F-VID-01); feed theo sở thích (F-VID-02); tìm kiếm (F-VID-03); PIP (F-VID-08); tua nhanh double-tap (F-VID-17); watchlist + tiếp tục từ chỗ dừng (F-VID-04, F-VID-05); chất lượng tự động (F-VID-06); audio-only (F-VID-09); tải video tùy bản quyền (F-VID-07); trích mp3 (F-VID-10); chia sẻ link (F-VID-11); màn hồ sơ nghệ sĩ (F-VID-14); playlist video (F-VID-15); thẻ quiz cuối video (F-VID-18) \\
+    Music & Player đầy đủ (F-MUS-01); dock mini player (F-MUS-02); nhạc nền ngoài app (F-MUS-03); playlist + queue (F-MUS-04, F-MUS-05); tìm kiếm nhạc (F-MUS-06); kho nhạc cá nhân (F-MUS-07); gợi ý theo sở thích (F-MUS-08); siêu playlist (F-MUS-09); audio focus (F-MUS-10); tải nhạc tùy bản quyền (F-MUS-12) \\
+    News & Feed theo sở thích (F-NEWS-01); trình đọc + đổi cỡ chữ (F-NEWS-02); tìm kiếm (F-NEWS-04); nghe tin TTS (F-NEWS-05); sắp xếp mới nhất/phổ biến (F-NEWS-06); nghe nhạc khi đọc (F-NEWS-09); quiz từ bài báo (F-NEWS-10); gợi ý bài liên quan (F-NEWS-11); thẻ nổi khi rời tab (F-NEWS-12) \\
+    Games & Hub minigame (F-GAME-01); đoán bài hát (F-GAME-02); quiz tin tức (F-GAME-03); Snake (F-GAME-13); bảng xếp hạng (F-GAME-07); game + video hai nửa màn (F-GAME-08); điểm thưởng khi thắng (F-GAME-09) \\
+    Dùng chung & Tài khoản (F-COM-01); onboarding chọn sở thích (F-COM-02); hồ sơ + đổi avatar + khung (F-COM-03, F-COM-09); hệ điểm XP (F-COM-04); nhiệm vụ hằng ngày (F-COM-05); streak (F-COM-06); pet (F-COM-07); huy hiệu (F-COM-08); wrapped (F-COM-10); tìm kiếm xuyên nội dung (F-COM-11); nhắc nhiệm vụ (F-COM-12); cài đặt (F-COM-13); popup xung đột âm thanh (F-COM-14); cửa hàng đổi quà (F-COM-15); offline (F-COM-16); chế độ khách (F-COM-18) \\
     \bottomrule
 \end{tabularx}
 \end{table}
 
-Phạm vi này phủ đủ cả năm trụ Winning Zone từ W1 (dock xuyên suốt) đến W5 (gamification xuyên phân hệ); trụ W6 (tổng kết cá nhân kiểu wrapped) được giữ cho giai đoạn sau vì không ảnh hưởng kiểm chứng USP lõi.
+MVP bao gồm cả năm trụ Winning Zone W1--W5. Trụ W6 (wrapped) để sau.
 
-\textbf{Mục tiêu mở rộng cho giai đoạn sau MVP} (chỉ bắt đầu sau khi mọi tính năng trong bảng~\ref{tab:mvp-scope-full} hoàn tất và ổn định):
-
-\begin{itemize}
-    \item Phát nhạc nền ngoài app: notification và màn hình khoá (F-MUS-03).
-    \item Siêu playlist trộn nhạc + audio tin + mp3 trích phát liên tiếp (F-MUS-09).
-    \item Bảng xếp hạng tuần (F-GAME-07).
-    \item Song song game + video trên hai nửa màn hình (F-GAME-08).
-    \item Tổng kết tháng kiểu wrapped, xuất thẻ chia sẻ (F-COM-10).
-    \item Tìm kiếm xuyên nội dung~-- một ô search cho cả bốn phân hệ (F-COM-11).
-\end{itemize}
-
-\textbf{Ngoài phạm vi ở giai đoạn đầu (out of scope v1).} Các mục dưới đây bị loại khỏi giai đoạn đầu, lý do ghi kèm:
+\textbf{Giai đoạn v2 (sau khi MVP hoàn tất).} Các tính năng còn lại chia theo lý do:
 
 \begin{itemize}
-    \item Lời bài hát (F-MUS-14): bản quyền phức tạp và rủi ro pháp lý cao nhất danh mục.
-    \item Tải video và tải nhạc offline (F-VID-07, F-MUS-12): vướng điều khoản nguồn nội dung, công sức lưu trữ lớn.
-    \item Karaoke chấm điểm giọng hát (F-GAME-04): pitch detection là bài toán khó, dễ làm sai trải nghiệm nhất.
-    \item Bình luận và tính xã hội đầy đủ (F-VID-13, feed theo dõi): cần kiểm duyệt nội dung, không phục vụ giả thuyết MVP.
-    \item Equalizer (F-MUS-11), đồng bộ đa thiết bị (F-MUS-13), rhythm game (F-GAME-05): giá trị thấp so với công sức ở giai đoạn này.
-    \item Thuật toán gợi ý học máy thật: MVP chỉ lọc theo sở thích khai báo; ML là hướng phát triển v2.
-    \item Thanh toán, gói Premium, quảng cáo: để giai đoạn đánh giá mô hình doanh thu ở mục chất lượng~--~v1 phát hành miễn phí và không quảng cáo để đo hành vi thuần.
+    \item Rhythm game (F-GAME-05) và equalizer (F-MUS-11): giá trị thấp so với công sức.
+    \item Thuật toán gợi ý học máy thật: MVP chỉ lọc theo sở thích khai báo.
+    \item Thanh toán, gói Premium và quảng cáo: v1 phát hành miễn phí để đo hành vi người dùng.
 \end{itemize}
 
-\textbf{Giả thuyết thị trường và chỉ số kiểm chứng.} MVP ngoài chạy được còn phải trả lời được câu hỏi: \textit{giá trị ``giải trí liền mạch 4-trong-1'' có đủ lớn để người dùng rời bộ ứng dụng chuyên biệt không?} Giả thuyết chính và các giả thuyết phụ, kèm chỉ số đề xuất (ngưỡng chỉ mang tính đề xuất, nhóm chốt lại~--~các con số cần đối chiếu với khảo sát ở mục~\ref{sec:market-research} khi có kết quả):
+\textbf{Chỉ số kiểm chứng MVP.} MVP phải trả lời câu hỏi: người dùng có sẵn sàng rời các app chuyên biệt để dùng OneSpace không? Bảng~\ref{tab:mvp-metrics} liệt kê các chỉ số đo lường.
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{4.2cm} >{\raggedright\arraybackslash}p{8cm} >{\raggedright\arraybackslash}p{3.2cm}}
-\caption{Chỉ số kiểm chứng MVP (đề xuất để nhóm chốt)}
+\caption{Chỉ số kiểm chứng MVP}
 \label{tab:mvp-metrics}\\
 \toprule
 \textbf{Chỉ số} & \textbf{Trả lời câu hỏi gì} & \textbf{Ngưỡng đề xuất} \\
@@ -78,167 +45,163 @@ Phạm vi này phủ đủ cả năm trụ Winning Zone từ W1 (dock xuyên su�
 \endhead
 \bottomrule
 \endfoot
-Retention ngày 7 (D7) & Giá trị cốt lõi có giữ chân người dùng không? & $\geq$ 20\% (bản demo nội bộ thì đo bằng tỉ lệ quay lại sau 1 tuần của người thử) \\
+Retention ngày 7 & Giá trị sản phẩm có giữ chân người dùng không? & $\geq$ 4\% theo \texttt{BIZ-01} (mục~\ref{sec:quality-pillars}) \\
 \midrule
-Tỉ lệ phiên dùng từ 2 phân hệ trở lên & ``Liền mạch'' có thật sự xảy ra không? & $\geq$ 40\% số phiên \\
+Tỉ lệ phiên dùng từ 2 phân hệ trở lên & Người dùng có chuyển tab không? & $\geq$ 40\% số phiên \\
 \midrule
-Số lượt chuyển phân hệ không qua màn hình chính & Chuyển đổi có ``mượt'' không (dock, PIP)? & Theo dõi, chưa cần ngưỡng \\
+Số lượt chuyển tab không qua màn hình chính & Chuyển tab có mượt không (dock, PIP)? & Theo dõi, chưa cần ngưỡng \\
 \midrule
-Adoption tính năng USP trong tuần đầu & Trụ nào hấp dẫn nhất (nghe tin, PIP, đoán bài hát, streak)? & $\geq$ 30\% người dùng mới chạm ít nhất 1 trụ \\
+Adoption tính năng USP trong tuần đầu & Tính năng nào hấp dẫn nhất? & $\geq$ 30\% người dùng mới dùng từng tính năng \\
 \midrule
 Tỉ lệ giữ streak $\geq$ 7 ngày & Gamification có tạo thói quen không? & $\geq$ 15\% người dùng hoạt động \\
 \midrule
-Thời gian phiên trung bình & Mức độ dính tổng thể & $\geq$ 15 phút/người/ngày \\
+Thời gian phiên trung bình & Mức độ sử dụng tổng thể & $\geq$ 15 phút/người/ngày \\
 \midrule
-Crash-free sessions và thời gian mở app & Chất lượng kỹ thuật nền, đối chiếu trụ cột ở mục~\ref{sec:quality-pillars} & Crash-free $\geq$ 99\%, mở app $<$ 3 giây \\
+Crash-free và thời gian mở app & Chất lượng kỹ thuật & Crash-free $\geq$ 99,5\%, mở app $\leq$ 2 giây (\texttt{UX-03}, \texttt{UX-07}) \\
 \end{longtable}
 
-\textbf{Hành vi khi chuyển giữa các phân hệ~--~từng case một.} Đây là phần chi tiết nhất của tài liệu này và là thứ làm nên lời hứa ``liền mạch'': mỗi dòng dưới đây định nghĩa người dùng sẽ \textit{thấy} gì xảy ra khi chuyển từ tính năng này sang tính năng khác. Bảng~\ref{tab:switch-matrix} là bản đề xuất hành vi mặc định; cột cuối là những quyết định nhóm phải chốt tối nay vì nó quyết định trực tiếp khối lượng code của Phần~\ref{sec:ui-ux-design} và Phần~\ref{sec:technical-architecture}. Ký hiệu: A = Video, B = Music, C = News, D = Games.
+\textbf{Hành vi khi chuyển giữa các phân hệ.} Bảng~\ref{tab:switch-matrix} định nghĩa điều gì xảy ra khi người dùng chuyển tab. Cột cuối ghi quyết định ảnh hưởng đến khối lượng code của Phần~\ref{sec:ui-ux-design} và Phần~\ref{sec:technical-architecture}. Ký hiệu: A = Video, B = Music, C = News, D = Games.
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{1.5cm} >{\raggedright\arraybackslash}p{8.6cm} >{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}p{2.6cm}}
-\caption{Ma trận hành vi chuyển phân hệ (đề xuất mặc định, chốt theo cột cuối)}
+\caption{Ma trận hành vi chuyển phân hệ}
 \label{tab:switch-matrix}\\
 \toprule
-\textbf{Case} & \textbf{Người dùng thấy gì, từng bước} & \textbf{Tính năng bám} & \textbf{Việc cần chốt} \\
+\textbf{Case} & \textbf{Người dùng thấy gì} & \textbf{Tính năng liên quan} & \textbf{Quyết định} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Case} & \textbf{Người dùng thấy gì, từng bước} & \textbf{Tính năng bám} & \textbf{Việc cần chốt} \\
+\textbf{Case} & \textbf{Người dùng thấy gì} & \textbf{Tính năng liên quan} & \textbf{Quyết định} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
 C1 \newline A$\rightarrow$B \newline đang xem video, mở nhạc &
-(1) Chạm một bài ở tab Nhạc; video không đột ngột chết mà tự thu thành PIP góc. \newline
-(2) Lần đầu, popup 3 lựa chọn: \textit{Tắt tiếng video / Tạm dừng nhạc / Phát cả hai} (video mute, nhạc phát). \newline
-(3) Lựa chọn được nhớ cho cặp video+nhạc; các lần sau áp dụng im lặng. \newline
-(4) Dock hiện bài nhạc; PIP video và dock cùng tồn tại, chạm độc lập nhau. &
+(1) Chạm một bài ở tab Nhạc; video tự thu thành PIP góc màn hình. \newline
+(2) Lần đầu cho cặp này: popup 3 lựa chọn: \textit{Tắt tiếng video / Tạm dừng nhạc / Phát cả hai}. \newline
+(3) Lựa chọn được lưu; lần sau áp dụng luôn không hỏi lại. \newline
+(4) Dock hiện bài nhạc; PIP video và dock cùng tồn tại. &
 F-VID-08, F-COM-14, F-MUS-02 &
-Tập lựa chọn popup; nhớ theo cặp nội dung hay toàn cục \\
+Nhớ theo cặp nội dung; đổi được trong Cài đặt \\
 \midrule
 C2 \newline B$\rightarrow$C \newline nghe nhạc, đọc tin &
-(1) Đổi tab: nhạc không đổi gì. \newline
-(2) Dock hiện trên mọi màn feed; kéo lên mở trình phát đầy đủ; vuốt ngang đổi bài ngay tại chỗ. \newline
-(3) Vào trình đọc toàn màn hình: dock tự ẩn để dành chỗ, trở ra feed thì hiện lại (có tuỳ chọn ghim). \newline
-(4) Bấm quiz cuối bài: màn game mở, nhạc vẫn phát, điểm của hai việc cộng song song. &
+(1) Đổi tab: nhạc vẫn phát. \newline
+(2) Dock hiện trên mọi màn; kéo lên mở trình phát đầy đủ; vuốt ngang đổi bài. \newline
+(3) Vào trình đọc toàn màn hình: dock ẩn, có tuỳ chọn ghim. \newline
+(4) Bấm quiz cuối bài: màn game mở, nhạc vẫn phát. &
 F-MUS-02, F-NEWS-09, F-NEWS-10 &
-Dock ẩn trong trình đọc full mặc định hay không \\
+Dock ẩn trong trình đọc toàn màn hình; có tuỳ chọn ghim \\
 \midrule
 C3 \newline A$\rightarrow$C \newline xem video, đọc tin &
-(1) Đổi tab: video thành PIP góc, giữ nguyên tiếng theo chính sách đã chọn ở C1. \newline
-(2) PIP kéo được 4 góc; vuốt ngang = dừng và tự ghi vào Watchlist kèm vị trí; vuốt xuống = chuyển chế độ chỉ-âm-thanh. \newline
-(3) Quay lại tab Video: PIP phóng full đúng vị trí, sai lệch tối đa 2 giây. &
+(1) Đổi tab: video thành PIP góc, giữ nguyên tiếng theo lựa chọn ở C1. \newline
+(2) PIP kéo được 4 góc; vuốt ngang = dừng + lưu vào Watchlist; vuốt xuống = chỉ nghe âm thanh. \newline
+(3) Quay lại tab Video: PIP phóng to đúng vị trí, lệch tối đa 2 giây. &
 F-VID-08, F-VID-04, F-VID-05, F-VID-09 &
-PIP tự thu khi rời tab hay phải bấm nút \\
+PIP tự thu nhỏ khi rời tab \\
 \midrule
 C4 \newline A$\rightarrow$D \newline video + game &
-(1) Vào game khi video đang phát: hỏi \textit{``Thu nhỏ video xuống góc và tiếp tục?''} [Thu nhỏ / Dừng]. \newline
-(2) Thu nhỏ: bàn chơi chiếm khoảng 60\% chiều cao dưới, PIP ở trên; game vẫn nhận đủ cảm ứng vùng dưới. \newline
-(3) Máy yếu: ưu tiên FPS game, PIP hạ độ phân giải; hiện chỉ báo ``đang tối ưu''. \newline
-(4) Thoát một bên thì bên kia chạy tiếp; thoát cả hai thì video vào Watchlist. &
+(1) Vào game khi video đang phát: hỏi \textit{``Thu nhỏ video và tiếp tục?''} [Thu nhỏ / Dừng]. \newline
+(2) Thu nhỏ: game chiếm 60\% dưới, PIP ở trên; game nhận đủ cảm ứng. \newline
+(3) Máy yếu: ưu tiên FPS game, PIP hạ độ phân giải. \newline
+(4) Thoát một bên thì bên kia chạy tiếp. &
 F-GAME-08, F-VID-08 &
-Sản phẩm này vào MVP (P3) hay v2; hao pin quá thì ngưỡng cảnh báo \\
+Làm sau MVP; cần ngưỡng cảnh báo pin \\
 \midrule
 C5 \newline B$\rightarrow$D \newline nhạc + game &
-(1) Nhạc vẫn phát; hiệu ứng game phát đè, nhạc tự duck xuống khoảng 30\% (tắt duck được). \newline
-(2) Trong game chọn được ``nhạc nền của tôi / nhạc game''. \newline
-(3) Thắng ván: điểm cộng tức thì; nhạc không ngắt giữa câu. &
+(1) Nhạc vẫn phát; hiệu ứng game phát, nhạc giảm còn 30\% (tắt được). \newline
+(2) Trong game chọn được ``nhạc của tôi / nhạc game''. \newline
+(3) Thắng ván: điểm cộng ngay; nhạc không ngắt. &
 F-MUS-02, F-MUS-10, F-GAME-09 &
-Mức duck mặc định; có cho tắt duck không \\
+Giảm âm lượng mặc định 30\%, cho tắt \\
 \midrule
 C6 \newline đang phát nhạc $\rightarrow$ bấm \textit{Nghe tin} &
-(1) Bấm ``Nghe bài này'': TTS render theo đoạn, có tiến trình nhỏ. \newline
-(2) Hàng phát đang có bài: audio tin chèn ngay sau bài hiện tại (``phát tiếp theo''); hàng trống mới hỏi [Phát ngay / Thêm vào hàng]. \newline
-(3) Trên dock, audio tin có icon tin riêng để phân biệt với nhạc. &
+(1) Bấm ``Nghe bài này'': TTS đọc theo đoạn, có tiến trình. \newline
+(2) Hàng phát đang có bài: chèn sau bài hiện tại; hàng trống thì hỏi [Phát ngay / Thêm vào hàng]. \newline
+(3) Trên dock, audio tin có icon riêng. &
 F-NEWS-05, F-MUS-05 &
-Mặc định chèn-đếm-nhạc hay hỏi mỗi lần \\
+Hàng đang phát: chèn tiếp theo; hàng trống: hỏi \\
 \midrule
-C7 \newline trích mp3 \newline (chuyển hoá A$\rightarrow$B) &
-(1) Nhấn giữ video $\rightarrow$ menu \textit{Trích âm thanh} $\rightarrow$ thanh tiến trình theo thời lượng video. \newline
-(2) Xong: toast xác nhận; tệp vào kho custom; đếm là một nội dung cho nhiệm vụ (đề xuất: ``converting 1 video / tuần''). &
+C7 \newline trích mp3 \newline (A$\rightarrow$B) &
+(1) Nhấn giữ video $\rightarrow$ menu \textit{Trích âm thanh} $\rightarrow$ thanh tiến trình. \newline
+(2) Xong: toast xác nhận; tệp vào kho cá nhân. &
 F-VID-10, F-MUS-07, F-COM-05 &
-Giới hạn số lần trích / miễn phí hoàn toàn \\
+Miễn phí trong phạm vi catalog môn học \\
 \midrule
-C8 \newline siêu playlist \newline (chạy W1+W2+W3 cùng lúc) &
+C8 \newline siêu \newline playlist &
 (1) Người dùng thêm tệp trích, audio tin và bài nhạc vào cùng một hàng phát. \newline
-(2) Engine phát liên tiếp, gián đoạn giữa các mục tối đa 1 giây; icon loại nội dung đổi theo mục đang phát. \newline
-(3) Đây là demo ``wow'' để chấm điểm cao nhất khi thuyết trình. &
+(2) Phát liên tiếp, gián đoạn tối đa 1 giây giữa các mục. &
 F-MUS-09 (cùng F-MUS-07, F-NEWS-05) &
-Có đáng vào MVP không hay giữ làm demo cuối \\
+Làm sau MVP \\
 \midrule
-C9 \newline 3 luồng cùng lúc \newline (nhạc + đọc tin + PIP video) &
-(1) Đề xuất \textbf{không} hỗ trợ ở v1: luồng thứ 3 bị dừng và lưu lại, kèm toast giải thích. \newline
-(2) Lý do: hiệu năng thiết bị phổ thông và mức phức tạp UX chưa kiểm soát được; ghi nhận để cân nhắc v2. &
+C9 \newline 3 luồng cùng lúc &
+(1) Không hỗ trợ ở v1: luồng thứ 3 bị dừng và lưu lại, kèm thông báo. \newline
+(2) Lý do: hiệu năng thiết bị phổ thông chưa đủ; ghi nhận cho v2. &
 F-MUS-10, F-COM-14 &
-Chốt ``tối đa 2 luồng có tiếng'' thành quy tắc chính thức \\
+Tối đa 2 luồng có tiếng ở v1 \\
 \end{longtable}
 
-\textbf{Quy tắc trọng tài âm thanh (đề xuất cho mọi case).}
+\textbf{Quy tắc xử lý xung đột âm thanh (áp dụng cho mọi case).}
 
 \begin{itemize}
-    \item \textbf{Lớp 1 -- hệ thống:} cuộc gọi và báo thức luôn cao nhất (audio focus của Android); mọi luồng của ứng dụng nhường ngay lập tức.
-    \item \textbf{Lớp 2 -- nội dung người dùng vừa chủ động mở:} video, TTS nghe tin, game mới mở giữ quyền; luồng trước đó duck khoảng 30\% hoặc dừng theo lựa chọn đã nhớ (popup C1).
-    \item \textbf{Lớp 3 -- nhạc dock là nền:} nhường mọi luồng nội dung chủ động, chỉ tiếp tục khi người dùng chọn ``phát cả hai''.
-    \item \textbf{TTS là nội dung chính khi đang phát nghe tin:} hiệu ứng game chỉ được duck nhạc, không đè lên TTS.
-    \item \textbf{Không có luồng vô hình:} mọi luồng đều thấy và điều khiển được từ dock, notification hoặc màn hình khoá.
+    \item Cuộc gọi và báo thức luôn cao nhất (audio focus của Android); mọi luồng của ứng dụng nhường ngay.
+    \item Nội dung người dùng vừa mở: video, TTS, game giữ quyền; luồng trước giảm còn 30\% hoặc dừng theo lựa chọn đã lưu (C1).
+    \item Nhạc dock là nền: nhường mọi luồng chính, chỉ tiếp tục khi người dùng chọn ``phát cả hai''.
+    \item TTS là nội dung chính khi đang phát: hiệu ứng game chỉ giảm nhạc, không đè lên TTS.
+    \item Mọi luồng đều thấy và điều khiển được từ dock, notification hoặc màn hình khoá.
 \end{itemize}
 
-\textbf{Gián đoạn từ bên ngoài (áp dụng cho mọi case).}
+\textbf{Gián đoạn từ bên ngoài.}
 
 \begin{itemize}
-    \item \textbf{Cuộc gọi đến:} mọi luồng tạm dừng trong tối đa 0.5 giây; sau cuộc gọi: nhạc tự phát lại, video hiện nút ``Tiếp tục từ chỗ dừng'' (vị trí sai lệch tối đa 2 giây), game hiện nút tiếp tục kèm đếm 3 giây.
-    \item \textbf{Rút tai nghe:} nhạc và TTS dừng ngay (chuẩn Android), không tự phát loa ngoài; PIP video dừng kèm toast nhắc.
-    \item \textbf{Mất mạng giữa video:} khung hình đứng + đếm ngược 5--15 giây tự thử lại; tin đã tải đọc tiếp; game offline chơi tiếp, điểm ghi cục bộ rồi đồng bộ khi có mạng.
-    \item \textbf{Hệ điều hành hủy ứng dụng:} state store đã ghi trước; mở lại khôi phục đủ 4 vị trí (bài nhạc, tin đang đọc, ván dở, video dở) trong 2 giây, không phải thao tác lại từ đầu.
-    \item \textbf{Người dùng thoát hẳn ứng dụng:} nhạc tiếp tục nếu đã kích hoạt F-MUS-03 (mở rộng); video, TTS dừng; game pause và lưu.
+    \item Cuộc gọi đến: mọi luồng tạm dừng trong tối đa 0,5 giây; sau cuộc gọi nhạc tự phát lại, video hiện nút ``Tiếp tục'', game hiện nút tiếp tục kèm đếm 3 giây.
+    \item Rút tai nghe: nhạc và TTS dừng ngay (chuẩn Android), không phát loa ngoài; PIP video dừng kèm thông báo.
+    \item Mất mạng khi đang xem video: khung hình đứng + tự thử lại sau 5--15 giây; tin đã tải đọc tiếp; game offline chơi tiếp, điểm lưu cục bộ rồi đồng bộ khi có mạng.
+    \item Hệ điều hành đóng ứng dụng: mở lại khôi phục đủ 4 vị trí (bài nhạc, tin đang đọc, ván dở, video dở) trong 2 giây.
+    \item Người dùng thoát ứng dụng: nhạc tiếp tục nếu đã bật nhạc nền (F-MUS-03); video, TTS dừng; game tạm dừng và lưu.
 \end{itemize}
 
-\textbf{Mở rộng tự do (không nằm trong bộ câu hỏi định hướng).} Các khối dưới đây do người soạn đề xuất thêm để buổi chốt đầy hơn; nhóm có quyền bỏ qua nếu thấy dư.
-
-\textit{(1) Câu chuyện phiên đầu tiên (first-run).} MVP không chỉ được định nghĩa bởi tính năng mà bởi 5 phút đầu tiên: nếu người dùng mới không \textit{chạm} được USP trong phiên đầu, mọi thiết kế phía sau là vô nghĩa. Kịch bản đề xuất, từng bước:
+\textbf{Luồng lần đầu mở app.} Nếu người dùng mới không dùng được tính năng chính trong lần đầu thì mọi thiết kế phía sau vô nghĩa. Kịch bản:
 
 \begin{enumerate}
-    \item Mở ứng dụng trong tối đa 3 giây (không bắt đăng nhập trước).
-    \item Chọn tối thiểu 3 chủ đề trong chip chọn của 4 phân hệ (cho phép ``Bỏ qua'', 30 giây tối đa).
-    \item Vào Home và thấy ngay một danh sách ``thử ngay'': một video, một bài hát, một tin.
-    \item Chạm một bài hát: dock mini xuất hiện lần đầu với nhãn ngắn ``nhạc vẫn chạy khi bạn đi chỗ khác''.
-    \item Banner nhiệm vụ ngày đầu: \textit{Nghe 1 bài -- Đọc 1 tin -- Thắng 1 ván} (kèm tổng điểm).
-    \item Khi mở bài tin đầu tiên, gợi ý nhỏ: ``đọc bản tin và nghe nhạc cùng lúc'' -- chạm để bật nhạc nền; đây là lần chạm đầu tiên vào song song hoá.
-    \item Hoàn thành đủ ba nhiệm vụ ngày đầu tiên: nhận trứng thú cưng đầu tiên, nở ngay trong 2 giây kèm hiệu ứng.
-    \item Cuối phiên: streak = 1, hiện dòng nhắc ``mai quay lại giữ mốc 7 ngày''.
+    \item Mở app trong tối đa 2 giây (không bắt đăng nhập).
+    \item Chọn tối thiểu 3 chủ đề trong 30 giây (cho phép Bỏ qua).
+    \item Vào Home thấy ngay danh sách ``thử ngay'': một video, một bài hát, một tin.
+    \item Chạm một bài hát: dock mini hiện ra kèm nhãn ``nhạc vẫn chạy khi bạn chuyển tab''.
+    \item Banner nhiệm vụ ngày đầu: \textit{Nghe 1 bài -- Đọc 1 tin -- Thắng 1 ván}.
+    \item Mở bài tin đầu tiên: gợi ý ``đọc tin và nghe nhạc cùng lúc''.
+    \item Hoàn thành 3 nhiệm vụ: nhận trứng thú cưng, nở trong 2 giây.
+    \item Cuối phiên: streak = 1, nhắc ``mai quay lại giữ mốc 7 ngày''.
 \end{enumerate}
 
-Đề xuất biến thành chỉ số: \textbf{tỉ lệ người mới chạm tối thiểu 3 trên 6 trụ USP trong phiên đầu} $\geq$ 60\%; dưới ngưỡng đó thì onboarding phải làm lại trước khi chất thêm bất cứ gì.
+Chỉ số: \textbf{tỉ lệ người mới dùng ít nhất 3 trong 5 tính năng chính trong lần đầu} $\geq$ 60\%.
 
-\textit{(2) Kinh tế điểm đề xuất (số liệu chỉ mang tính khởi điểm, sẽ điều chỉnh bằng thử nghiệm).} Không có bảng cân bằng nguồn--điểm thì buổi họp không thể chốt ``mức gamification'' được; bảng~\ref{tab:point-economy} là khởi điểm để sửa.
+\textbf{Hệ thống điểm.} Bảng~\ref{tab:point-economy} xác định cách kiếm điểm và tiêu điểm.
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{7.6cm} >{\raggedright\arraybackslash}p{6.4cm}}
-\caption{Nguồn và chỗ tiêu điểm (kinh tế bản khởi điểm)}
+\caption{Cách kiếm điểm và tiêu điểm}
 \label{tab:point-economy}\\
 \toprule
-\textbf{Nguồn cộng điểm} & \textbf{Chỗ trừ điểm} \\
+\textbf{Kiếm điểm} & \textbf{Tiêu điểm} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Nguồn cộng điểm} & \textbf{Chỗ trừ điểm} \\
+\textbf{Kiếm điểm} & \textbf{Tiêu điểm} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Thắng một ván minigame: +10 & Cho thú cưng ăn một bữa: $-$30 (tối đa 2 bữa/ngày) \\
-Nhiệm vụ hằng ngày: +20 mỗi việc (3--5 việc, khoảng 60--100 điểm/ngày) & Mở khoá game mới: $-$300 đến $-$800 theo độ hiếm \\
-Quiz hoàn thành từ bài báo: +15 & Khung avatar theo mốc: $-$200 đến $-$800 \\
-Lần đầu trong tuần trích mp3 / nghe tin: +20 (tổng tối đa 2 lần/tuần) & Hiệu ứng và phụ kiện pet: $-$50 đến $-$200 \\
-Bonus streak mốc: +50 (ngày 7), +150 (ngày 30) & (v2, ngoài phạm vi: đổi quà vật lý, voucher) \\
-Chia sẻ wrapped tháng: +50 (một lần/tháng) & \\
+Thắng minigame: +10 & Cho thú cưng ăn: $-$30 (tối đa 2 bữa/ngày) \\
+Nhiệm vụ hằng ngày: +20 mỗi việc (60--100 điểm/ngày) & Mở khoá game: $-$300 đến $-$800 \\
+Quiz từ bài báo: +15 & Khung avatar: $-$200 đến $-$800 \\
+Lần đầu trong tuần trích mp3 / nghe tin: +20 (tối đa 2 lần/tuần) & Phụ kiện pet: $-$50 đến $-$200 \\
+Bonus streak: +50 (ngày 7), +150 (ngày 30) & (v2: đổi quà vật lý, voucher) \\
 \end{longtable}
 
-Nguyên tắc: người chơi ở mức trung bình kiếm 60--100 điểm/ngày, đủ cho một bữa pet và tiết kiệm mở game sau 5--10 ngày; nhóm tuyệt đối \textbf{không bán điểm bằng tiền} ở v1 (để hành vi đo được thuần); toàn bộ hệ số là hằng số cấu hình, chỉnh không cần phát hành lại bản build.
+Người chơi trung bình kiếm 60--100 điểm/ngày. Không bán điểm bằng tiền ở v1. Toàn bộ hệ số là hằng số cấu hình, chỉnh không cần build lại.
 
-\textit{(3) Bảng rủi ro và phương án giảm thiểu.}
+\textbf{Rủi ro và cách giảm thiểu.}
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{3.9cm} >{\centering\arraybackslash}p{1.1cm} >{\raggedright\arraybackslash}p{5.4cm} >{\raggedright\arraybackslash}p{4.2cm}}
-\caption{Rủi ro chính và giảm thiểu}
+\caption{Rủi ro và giảm thiểu}
 \label{tab:risk-register}\\
 \toprule
 \textbf{Rủi ro} & \textbf{Mức} & \textbf{Nếu xảy ra} & \textbf{Giảm thiểu} \\
@@ -250,55 +213,40 @@ Nguyên tắc: người chơi ở mức trung bình kiếm 60--100 điểm/ngày
 \endhead
 \bottomrule
 \endfoot
-Bản quyền trích mp3 và nguồn nội dung & Cao & Bị khiếu nại, gỡ ứng dụng khỏi store; mất trụ W3 & Chỉ trích từ nội dung catalog tự dựng (được phép) hoặc chọn nghe--tin TTS thay thế; ghi rõ phạm vi ``demo môn học'' khi giới thiệu \\
-TTS tiếng Việt chất lượng kém & Trung bình & Trụ W3 nghe tệ, làm hỏng cảm giác liền mạch & Chọn engine có mẫu giọng tiếng Việt ổn, thử 20 bài thực tế trước khi chốt; fallback hiển thị bản chữ kèm \\
-OEM dừng ứng dụng nền (tiết kiệm pin của Xiaomi, Oppo, Samsung\ldots) & Cao & Nhạc nền chết, case B$\rightarrow$C gãy nơi máy thật & Dùng foreground service đúng chuẩn; màn hướng dẫn ``loại trừ tối ưu pin'' sau lần nhạc bị kill đầu tiên; test trên 2--3 máy OEM thật \\
-Hiệu năng chơi game kèm video trên máy yếu & Trung bình & Case C4 giật, chấm điểm demo thấp & PIP tự hạ độ phân giải; quy định matrix test máy RAM 3 GB; feature giữ nhãn Could \\
-Scope creep (pet, wrapped, leaderboard lôi kéo thêm) & Cao & MVP trễ, phần lõi rớt chất lượng & Chốt ``freeze'' danh sách MVP tại bảng~\ref{tab:mvp-scope-full}; mọi đề nghị mới vào danh sách mở rộng, không bổ giữa chừng \\
-Gian lận điểm khi có bảng xếp hạng (F-GAME-07) & Trung bình & Leaderboard vô nghĩa & v1 ghi điểm cục bộ + xác thực đơn giản khi đồng bộ; chống gian lận nghiêm túc để sau \\
-Mảnh ghép Android quá rộng (phiên bản, màn hình) & Trung bình & Lỗi chỉ xuất hiện trên máy người thẩm định & Chốt sớm cấu hình tối thiểu (đề nghị Android 8.0/API 26 trở lên), danh sách 3 máy test cố định \\
-Thành viên phụ trách module nghỉ giữa chừng & Trung bình & Module trễ, người khác khó nhảy vào & Mỗi module có OWNER và tài liệu ngắn theo chuẩn chung; review chéo ít nhất 2 người hiểu mỗi module \\
+Bản quyền trích mp3 & Cao & Bị khiếu nại, gỡ app & Chỉ trích từ catalog tự dựng; ghi rõ phạm vi nội dung tự dựng \\
+TTS tiếng Việt kém & Trung bình & Trụ W3 nghe tệ & Chọn engine giọng Việt ổn; thử 20 bài; fallback hiện bản chữ \\
+OEM tắt ứng dụng nền & Cao & Nhạc nền chết trên máy Xiaomi/Oppo & Foreground service đúng chuẩn; hướng dẫn người dùng tắt tối ưu pin; test trên 2--3 máy OEM \\
+Game + video trên máy yếu & Trung bình & C4 giật, người bỏ ván & PIP tự hạ độ phân giải; test máy RAM 3 GB \\
+Phạm vi phình to & Cao & MVP trễ, chất lượng giảm & Freeze danh sách MVP; mọi đề nghị mới vào danh sách v2 \\
+Gian lận điểm & Trung bình & BXH vô nghĩa & v1 ghi điểm cục bộ; chống gian lận sau \\
+Thiết bị Android đa dạng & Trung bình & Lỗi chỉ trên máy của giảng viên & Android 8.0+; test trên 3 máy cố định \\
+Thành viên nghỉ giữa chừng & Trung bình & Module trễ & Mỗi module có người phụ trách + tài liệu; review chéo \\
 \end{longtable}
 
-\textit{(4) Quyền hệ thống tối thiểu (chỉ xin đúng lúc).} Gắn với trụ Security \& Privacy ở mục~\ref{sec:quality-pillars}: bảng~\ref{tab:permissions} liệt kê toàn bộ quyền ứng dụng cần --~danh sách này chính là ``bản cam kết không xin thừa'' để viết vào màn cài đặt và thuyết trình.
+\textbf{Quyền hệ thống.} Bảng~\ref{tab:permissions} liệt kê toàn bộ quyền ứng dụng cần.
 
 \begin{table}[H]
-\caption{Quyền hệ thống tối thiểu}
+\caption{Quyền hệ thống}
 \label{tab:permissions}
 \centering
-\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.1cm} >{\raggedright\arraybackslash}p{4.9cm} >{\raggedright\arraybackslash}p{3.7cm} >{\raggedright\arraybackslash}p{3.0cm}}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.4cm} >{\raggedright\arraybackslash}p{4.6cm} >{\raggedright\arraybackslash}p{3.7cm} >{\raggedright\arraybackslash}p{3.0cm}}
 \toprule
-\textbf{Quyền} & \textbf{Tính năng nào cần} & \textbf{Xin khi nào} & \textbf{Nếu người dùng từ chối} \\
+\textbf{Quyền} & \textbf{Tính năng nào cần} & \textbf{Xin khi nào} & \textbf{Nếu từ chối} \\
 \midrule
-INTERNET & Mọi tính năng tải nội dung & Khai báo mặc định, không hỏi runtime & Ứng dụng vào chế độ ngoại tuyến \\
-POST\_NOTIFICATIONS & Nhắc nhiệm vụ, tin nóng, điều khiển nhạc (Android 13+) & Chỉ khi người dùng bật từng loại nhắc & Loại nhắc đó tắt; phần lõi hoạt động bình thường \\
-FOREGROUND\_SERVICE + mediaPlayback & Nhạc nền (F-MUS-03) & Tại lần đầu rời ứng dụng khi đang phát nhạc & Nhạc dừng khi rời app; chức năng trong app vẫn đầy đủ \\
-(RECORD\_AUDIO) & Chỉ dùng cho karaoke v2 & Không xin trong v1 & Không ảnh hưởng: tính năng chưa có \\
-\midrule
-\multicolumn{4}{l}{\textit{Không đề xuất xin quyền đọc thư viện media hay ghi ngoài bộ nhớ riêng: kho mp3 trích chỉ nằm trong thư mục riêng của ứng dụng.}} \\
+INTERNET & Mọi tính năng tải nội dung & Khai báo mặc định, không hỏi & Vào chế độ ngoại tuyến \\
+POST\_\newline NOTIFICATIONS & Nhắc nhiệm vụ, điều khiển nhạc & Chỉ khi người dùng bật nhắc & Loại nhắc đó tắt; phần còn lại hoạt động bình thường \\
+FOREGROUND\_\newline SERVICE & Nhạc nền (F-MUS-03) & Lần đầu rời app khi đang phát nhạc & Nhạc dừng khi rời app \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\textit{(5) Ranh giới thiết kế để không chặn tương lai.} Bốn quy tắc để MVP hôm nay không làm hỏng các hướng doanh thu hoặc mở rộng của v2:
+\textbf{Thiết kế để mở rộng sau này.} Bốn quy tắc để MVP không chặn hướng phát triển của v2:
 
 \begin{itemize}
-    \item \textbf{Không chèn quảng cáo vào giữa các lượt chuyển phân hệ} -- sau này có quảng cáo đổi thưởng cũng đặt ở điểm dừng tự nhiên (màn nhiệm vụ, kết thúc ván), không đặt giữa case C1--C9.
-    \item \textbf{Điểm chỉ đổi hàng phi chức năng} (pet, khung, mở game): không khóa nội dung -- để phía sau có thể áp Premium vào chất lượng/offline mà không phá lời hứa với người dùng miễn phí.
-    \item \textbf{Converter là module độc lập} với engine thay được (on-device/cloud): đổi nhà cung cấp TTS không đụng UI.
-    \item \textbf{Nội dung trừu tượng hoá thành ``content ID'' chung} -- v2 thêm nguồn tin hoặc kho phim mới không phải sửa feature pool.
+    \item Không chèn quảng cáo vào giữa các lần chuyển tab. Sau này có quảng cáo thì đặt ở điểm dừng tự nhiên (kết thúc ván, màn nhiệm vụ).
+    \item Điểm chỉ đổi hàng phi chức năng (pet, khung, mở game): không khóa nội dung. Sau này thêm Premium không ảnh hưởng người dùng miễn phí.
+    \item Converter (TTS, trích mp3) là module riêng, engine thay được: đổi nhà cung cấp TTS không đụng UI.
+    \item Nội dung quy về ``content ID'' chung: v2 thêm nguồn mới không phải sửa danh mục tính năng.
 \end{itemize}
 
-\textit{(6) Ước lượng khối lượng (đơn vị tuần-người, sai số lớn).} Media engine + dock + audio focus: 3--4 tuần-người, làm trước vì giữ trụ W1--W2; bốn phân hệ UI: khoảng 1,5--2 mỗi phân hệ; hệ điểm + nhiệm vụ + pet mức tối giản: 1,5--2; TTS nghe tin: 1--2; mỗi minigame cụ thể: 1--2; PIP + ma trận case C1--C9: 1--1,5. Với quy mô nhóm 3 người làm 8--10 tuần, phạm vi MVP nằm vừa vặn nếu không trượt vào mục tiêu mở rộng.
-
-\textbf{Quyết định sản phẩm đã chốt} (kèm theo bảng MVP, không lặp lại):
-
-\begin{enumerate}
-    \item \textbf{Nguồn nội dung:} tự dựng catalog mẫu trong phạm vi môn học; câu hỏi quiz soạn sẵn khi đăng nội dung.
-    \item \textbf{Converting:} cả hai chiều~--~nghe tin TTS (F-NEWS-05) \textbf{và} trích mp3 (F-VID-10).
-    \item \textbf{Mức gamification:} điểm + nhiệm vụ + streak; \textbf{pet mức tối giản} (trứng nở sau 3 nhiệm vụ); cửa hàng đổi quà gồm: mở game mới, đồ pet, khung avatar.
-    \item \textbf{Chế độ khách (F-COM-18):} có; lưu dữ liệu yêu cầu tạo tài khoản tại thời điểm đó.
-    \item \textbf{Popup xung đột (C1):} ba lựa chọn, nhớ theo cặp nội dung, đổi được trong Cài đặt.
-    \item \textbf{PIP (C3):} tự thu nhỏ khi rời tab; tối đa 2 luồng có tiếng.
-    \item \textbf{Duck mặc định 30\%} (C5); hành vi sau cuộc gọi/rút tai nghe/mất mạng giữ như bảng~\ref{tab:switch-matrix}.
-\end{enumerate}
+\textbf{Ước lượng khối lượng.} Media engine + dock + audio focus: 3--4 tuần-người (làm trước). Bốn phân hệ UI: 1,5--2 tuần-người mỗi phân hệ. Hệ điểm + nhiệm vụ + pet: 1,5--2. TTS: 1--2. Mỗi minigame: 1--2. PIP + ma trận case: 1--1,5. Tổng cho nhóm 3 người làm 8--10 tuần: vừa đủ nếu không phình phạm vi.

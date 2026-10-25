@@ -1,84 +1,75 @@
-\subsection{Lựa chọn nền tảng và framework}
+\subsection{Lựa chọn nền tảng và công nghệ}
 \label{sec:platform-selection}
 
-\subsubsection{Bảng so sánh}
+\subsubsection{Tiêu chí và đối chiếu phương án}
 \label{sec:platform-comparison}
 
-Bảng~\ref{tab:platform-comparison} so sánh năm phương án theo các tiêu chí ảnh hưởng trực tiếp đến trải nghiệm media đa nhiệm của OneSpace. Các đánh giá hiệu năng là \textbf{định tính}; không nên tuyên bố framework này luôn nhanh hơn framework kia nếu chưa có benchmark tương ứng.
-
-\begin{longtable}{>{\raggedright\arraybackslash}p{2.2cm} >{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}p{4.4cm}}
-\caption{So sánh các nền tảng và framework}
+Việc lựa chọn nền tảng dựa trên ba nhóm tiêu chí: khả năng tích hợp media và vòng đời hệ thống; chi phí triển khai, kiểm thử trong phạm vi đồ án; mức độ phù hợp với kinh nghiệm của nhóm. Do ưu tiên của OneSpace là chuyển đổi nội dung và phối hợp phiên phát trên Android, khả năng tiếp cận trực tiếp các API nền tảng có trọng số cao hơn nhu cầu chia sẻ mã giao diện giữa nhiều hệ điều hành.
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.19\linewidth}>{\RaggedRight\arraybackslash}p{0.35\linewidth}>{\RaggedRight\arraybackslash}p{0.38\linewidth}}
+\caption{Đối chiếu phương án nền tảng theo nhu cầu của OneSpace}
 \label{tab:platform-comparison}\\
 \toprule
-\textbf{Tiêu chí} & \textbf{Android Native} & \textbf{iOS Native} & \textbf{Flutter} & \textbf{React Native / KMP} \\
+\textbf{Phương án} & \textbf{Đặc điểm phù hợp} & \textbf{Đánh đổi trong phạm vi đồ án} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Tiêu chí} & \textbf{Android Native} & \textbf{iOS Native} & \textbf{Flutter} & \textbf{React Native / KMP} \\
+\textbf{Phương án} & \textbf{Đặc điểm phù hợp} & \textbf{Đánh đổi trong phạm vi đồ án} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Ngôn ngữ & Kotlin & Swift & Dart & TypeScript / Kotlin \\
-UI & Jetpack Compose & SwiftUI / UIKit & Flutter Widgets & Native-backed / Compose MP \\
-Hiệu năng & Rất tốt & Rất tốt & Tốt & Tốt \\
-Code tái sử dụng & Thấp (chỉ Android) & Thấp (chỉ iOS) & Cao (2 nền) & Cao (2+ nền) \\
-Background media & Trực tiếp qua API & Qua iOS API & Plugin/native module & Native module \\
-Video player & AndroidX Media3 & AVPlayer & video\_player, plugin & Video library / native \\
-Minigame & Compose Canvas & SwiftUI / SpriteKit & Flutter / Flame engine & Skia / native \\
-Kinh nghiệm nhóm & \textbf{Cao} & Chưa có & Chưa có & Chưa có \\
-Phạm vi & Android & iOS & Android + iOS & Android + iOS \\
-Nhu cầu tích hợp native & Không cần & Không cần & Platform channel cho audio nền & Native module cho audio nền \\
+Android Native với Kotlin & Tích hợp trực tiếp lifecycle, Media3, audio focus và service & Tập trung một nền tảng; cần thiết kế riêng nếu mở rộng sang iOS \\
+iOS Native với Swift & Tiếp cận trực tiếp cơ chế media và vòng đời của iOS & Cần hệ công cụ, thiết bị và triển khai độc lập với bản Android \\
+Flutter & Chia sẻ giao diện và logic giữa các nền tảng & Cần đánh giá plugin và tích hợp nền tảng cho các tình huống media cụ thể \\
+React Native & Chia sẻ giao diện và logic bằng JavaScript hoặc TypeScript & Cần đánh giá thư viện và phần tích hợp native cho phát nền, điều khiển media \\*
+Kotlin Multiplatform & Có thể chia sẻ mô hình và logic Kotlin & Vẫn cần xác định chiến lược giao diện, media và kiểm thử cho từng nền tảng \\
 \end{longtable}
+\endgroup
 
-\subsubsection{Quyết định cuối cùng}
-\label{sec:platform-choice}
+Trên cơ sở các tiêu chí này, nhóm lựa chọn Android Native với Kotlin. Lựa chọn giúp tập trung việc thiết kế và kiểm thử vào một mô hình vòng đời, một cơ chế phân xử âm thanh và một hệ công cụ. Chi phí của quyết định là chưa cung cấp ứng dụng iOS. Các phương án đa nền tảng vẫn có khả năng đáp ứng nhiều yêu cầu tương tự; chúng không được chọn do nhu cầu chia sẻ mã chưa bù đắp chi phí mở rộng phạm vi tích hợp và kiểm thử của đồ án.
 
-Chọn: \textbf{Kotlin + Jetpack Compose + AndroidX Media3}.
-
-Năm lý do:
-
-\begin{enumerate}
-\item Nhóm đã có kinh nghiệm Android nên giảm thời gian học framework mới.
-\item Compose giao diện theo state-driven model, phù hợp floating video và mini-player~--~hai thành phần cốt lõi của trải nghiệm đa nhiệm OneSpace.
-\item AndroidX Media3 hỗ trợ ExoPlayer, MediaSession và tích hợp phát nhạc nền đầy đủ.
-\item Xử lý trực tiếp Activity Lifecycle, AudioManager, Picture-in-Picture và notification~--~không qua lớp trung gian.
-\item Tránh lớp tích hợp native bổ sung thường cần khi dùng framework cross-platform.
-\end{enumerate}
-
-Quan trọng: nhóm vẫn \textbf{phân tích} iOS Native và cross-platform trong bảng~\ref{tab:platform-comparison} để chứng minh quyết định có cơ sở so sánh, nhưng \textbf{không ghi iOS là nền tảng được hỗ trợ} trong MVP vì không có phiên bản iOS thực tế. Tương ứng câu trả lời cho guide box: không có phần nào cần platform channel hay native module vì toàn bộ hệ thống (audio focus, PiP, notification, background service) được gọi trực tiếp qua Android API.
-
-\subsubsection{Technology Stack}
+\subsubsection{Các thành phần công nghệ và vai trò kiến trúc}
 \label{sec:tech-stack}
 
-\begin{longtable}{>{\raggedright\arraybackslash}p{3.8cm} >{\raggedright\arraybackslash}p{11.2cm}}
-\caption{Technology Stack của OneSpace}
+Các công nghệ được lựa chọn theo trách nhiệm trong kiến trúc, thay vì ghép thành danh sách thư viện độc lập. Bảng~\ref{tab:tech-stack} phân biệt công nghệ sử dụng trong bản nguyên mẫu với các lựa chọn dành cho phần mở rộng của thiết kế.
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.2\linewidth}>{\RaggedRight\arraybackslash}p{0.27\linewidth}>{\RaggedRight\arraybackslash}p{0.45\linewidth}}
+\caption{Công nghệ được lựa chọn và cơ sở sử dụng}
 \label{tab:tech-stack}\\
 \toprule
-\textbf{Thành phần} & \textbf{Công nghệ} \\
+\textbf{Vai trò} & \textbf{Công nghệ} & \textbf{Cơ sở lựa chọn} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Thành phần} & \textbf{Công nghệ} \\
+\textbf{Vai trò} & \textbf{Công nghệ} & \textbf{Cơ sở lựa chọn} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Programming & Kotlin \\
-UI & Jetpack Compose + Material 3 \\
-Navigation & Navigation Compose \\
-State & ViewModel + StateFlow \\
-Dependency Injection & Hilt \\
-Networking & Retrofit + OkHttp \\
-Serialization & Kotlinx Serialization \\
-Local Database & Room \\
-Preferences & DataStore \\
-Video / Audio & AndroidX Media3 (ExoPlayer) \\
-Background Audio & MediaSessionService \\
-Image Loading & Coil \\
-Background Sync & WorkManager \\
-Mini Game & Compose Canvas hoặc custom rendering \\
-Testing & JUnit, Compose UI Test \\
+Giao diện & Jetpack Compose, Material 3 & Giao diện khai báo theo trạng thái; dùng chung màu sắc, kiểu chữ và thành phần tương tác \\
+Điều hướng & Navigation Compose, Kotlin Serialization & Biểu diễn đồ thị lồng nhau và route có kiểu; tập trung quản lý ngăn xếp tại ứng dụng \\
+Trạng thái giao diện & ViewModel, StateFlow, coroutines & Tách xử lý khỏi giao diện; cung cấp trạng thái quan sát được và tác vụ bất đồng bộ \\
+Kết nối thành phần & Hilt, KSP & Cấp phát phụ thuộc theo phạm vi; kết nối hợp đồng nghiệp vụ với triển khai cụ thể \\
+Phát đa phương tiện & Media3 ExoPlayer & Cung cấp bộ phát, playlist và sự kiện trạng thái để xây dựng adapter media \\
+Dữ liệu có cấu trúc & Room & Lưu tiến độ và dữ liệu nghiệp vụ cần truy vấn hoặc phục hồi lâu dài \\
+Thiết lập nhỏ & DataStore & Lưu sở thích, trạng thái onboarding và metadata nhỏ của phiên \\
+Phát nhạc nền (đề xuất) & MediaSessionService, MediaController & Tách quyền sở hữu phiên phát khỏi Activity; kết nối điều khiển hệ thống \\
+Dữ liệu từ xa (đề xuất) & Retrofit, OkHttp, Kotlin Serialization; Coil cho ảnh & Tách giao tiếp HTTP, ánh xạ dữ liệu và tải ảnh khỏi lớp giao diện \\*
+Đồng bộ trì hoãn (đề xuất) & WorkManager & Lập lịch công việc theo điều kiện mạng và chính sách thử lại \\
 \end{longtable}
+\endgroup
 
-Về minigame: nên chọn \textbf{2048} hoặc \textbf{Tic-Tac-Toe} (hoặc Snake, đã có trong bảng~\ref{tab:feature-pool}). Không cần game engine phức tạp vì mục tiêu chính của dự án là đa nhiệm, không phải đồ họa game~--~khớp với ghi chú F-GAME-14 (``beat tiles'') và F-GAME-12/13 (2048, Snake) đã xếp vào MVP.
+Compose kết hợp Material 3 tạo cơ sở cho một hệ thống thiết kế dùng chung~\cite{material3}. Màu sắc, kiểu chữ và hình dạng được tập trung tại mô-đun design system; các phân hệ sử dụng cùng bộ quy ước thay vì định nghĩa lại theo từng màn hình. Phông chữ được đóng gói cùng ứng dụng để cách trình bày không phụ thuộc vào việc tải phông lúc chạy.
+
+Room và DataStore được sử dụng cho hai nhóm dữ liệu khác nhau. Room phục vụ dữ liệu có cấu trúc và các snapshot cần truy vấn; DataStore phục vụ thiết lập và metadata nhỏ. Các hợp đồng Domain che giấu lựa chọn lưu trữ, cho phép thay dữ liệu mô phỏng bằng nguồn thực mà không yêu cầu giao diện biết chi tiết database hoặc HTTP client.
+
+Đối với phát nhạc nền, thiết kế lựa chọn MediaSessionService làm chủ sở hữu bộ phát và media session theo hướng dẫn Media3~\cite{media3-background}. WorkManager đảm nhiệm đồng bộ có thể trì hoãn~\cite{android-workmanager}; hai cơ chế có mục đích và vòng đời khác nhau. Những thành phần được đánh dấu đề xuất trong bảng là lựa chọn cho kiến trúc mở rộng, không được xem là khả năng đã hiện thực hóa của bản nguyên mẫu.
+
+Đối với trò chơi nhỏ, thiết kế lựa chọn logic Kotlin kết hợp Compose hoặc Canvas để biểu diễn bàn chơi. Phạm vi này phù hợp với tương tác đơn giản và cho phép tái sử dụng hệ thống trạng thái, điều hướng của ứng dụng. Game engine chuyên dụng chỉ trở nên cần thiết khi có yêu cầu đồ họa hoặc mô phỏng vượt quá phạm vi trên. Kiểm thử sử dụng JUnit cho quy tắc nghiệp vụ và Compose UI tests cho luồng giao diện; các thử nghiệm media bổ sung kiểm tra hành vi thực tế của adapter.

@@ -1,19 +1,79 @@
 \subsection{Kiến trúc thông tin và điều hướng}
 \label{sec:information-architecture}
 
-\begin{guide}
-\guidepart{Nội dung}
-\begin{compactitem}
-    \item Sơ đồ điều hướng phân cấp (sitemap) của toàn ứng dụng: màn hình chính, 4 phân hệ và các màn hình con.
-    \item Bottom Navigation Bar với tối đa 5 tab chính: những tab nào, thứ tự và biểu tượng.
-    \item Navigation Drawer hoặc Modal Sheet cho các tác vụ phụ (tài khoản, cài đặt, \ldots), kết hợp thanh tìm kiếm và bộ lọc.
-\end{compactitem}
-\guidepart{Câu hỏi cần trả lời}
-\begin{compactitem}
-    \item Vì sao chọn các tab này cho Bottom Navigation Bar? Tab nào là màn hình mặc định khi mở ứng dụng?
-    \item Từ màn hình chính, người dùng cần bao nhiêu lần chạm để tới nội dung dùng thường xuyên nhất?
-    \item Tìm kiếm hoạt động riêng trong từng phân hệ hay tìm chung trên toàn bộ nội dung? Bộ lọc gồm những tiêu chí nào?
-\end{compactitem}
-\guidepart{Hình/bảng nên có}
-Sơ đồ điều hướng (sitemap), wireframe của Bottom Navigation Bar và Navigation Drawer.
-\end{guide}
+Kiến trúc thông tin của OneSpace gồm hai tầng: \textit{luồng giới thiệu} chỉ chạy lần đầu mở ứng dụng (Splash $\rightarrow$ Onboarding ba bước $\rightarrow$ Đăng nhập) và \textit{vỏ chính} chứa năm tab của thanh điều hướng dưới (Bottom Navigation). Trong vỏ chính, mọi màn hình nội dung đều được tổ chức quanh hai nguyên tắc:
+
+\begin{itemize}
+    \item \textbf{Một phân hệ một tab.} Video, Music, News và Games mỗi phân hệ chiếm đúng một tab; Home là tab mặc định khi mở ứng dụng, đóng vai trò mặt khám phá: phần ``Tiếp tục'' khôi phục video đang xem dở, phần ``Đề xuất hôm nay'' giới thiệu mỗi phân hệ đúng một nội dung (một video, một bài hát, một bài tin). Cách tổ chức này phục vụ trực tiếp kịch bản phiên đầu tiên ở mục~\ref{sec:mvp-scope}: người dùng mới chạm được vào đủ bốn loại nội dung ngay trên màn đầu tiên.
+    \item \textbf{Đường dẫn sâu, không lặp lại tab.} Thẻ nội dung trên Home mở thẳng màn chi tiết của nội dung đó (trình phát video, trình phát nhạc đầy đủ, trình đọc bài) thay vì chỉ chuyển sang tab tương ứng. Nếu thẻ chỉ chuyển tab, người dùng phải tìm lại nội dung vừa thấy trong feed của phân hệ~--~tạo thêm một bước thừa và vi phạm ràng buộc số chạm \texttt{UX-08} (tối đa 3 chạm từ màn hình chính đến nội dung).
+\end{itemize}
+
+Hình~\ref{fig:sitemap} mô tả sơ đồ điều hướng (sitemap) của toàn ứng dụng, khớp với cấu hình Navigation Compose trong mã nguồn: luồng giới thiệu kết thúc bằng điều hướng vào Home; từ đó, năm tab dẫn tới các màn hình con của từng phân hệ.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    font=\scriptsize,
+    node distance=1.2cm and 1.5cm,
+    box/.style={draw=black!55, rounded corners=2pt, inner sep=3pt, fill=gray!8, align=center},
+    tab/.style={box, fill=gray!22},
+    shell/.style={draw=black!55, rounded corners=3pt, inner sep=4pt, fill=gray!3, align=center},
+    lnk/.style={draw=black!50, -{Latex[length=1.2mm]}}]
+    % Hàng 1: luồng mở app
+    \node[box] (splash) {Splash};
+    \node[box, right=of splash] (onb) {Onboarding};
+    \node[box, right=of onb] (login) {Đăng nhập};
+    \draw[lnk] (splash) -- (onb);
+    \draw[lnk] (onb) -- (login);
+    % Hàng 2: bottom nav
+    \node[shell, below=1.0cm of login, minimum width=8cm] (nav) {\textbf{Bottom Navigation 5 tab}};
+    \draw[lnk] (login.south) -- (nav.north -| login);
+    % Hàng 3: 5 tab
+    \node[tab, below left=0.8cm and 3.2cm of nav.south] (home) {Home};
+    \node[tab, right=0.4cm of home] (video) {Video};
+    \node[tab, right=0.4cm of video] (music) {Music};
+    \node[tab, right=0.4cm of music] (news) {News};
+    \node[tab, right=0.4cm of news] (games) {Games};
+    \foreach \t in {home,video,music,news,games} \draw[lnk] (nav.south -| \t) -- (\t);
+    % Hàng 4: màn con
+    \node[box, below=0.8cm of home] (acct) {Tài khoản};
+    \node[box, below=0.4cm of acct] (sett) {Cài đặt};
+    \draw[lnk] (home) -- (acct);
+    \draw[lnk] (acct) -- (sett);
+    \node[box, below=0.8cm of video] (vdetail) {Player video};
+    \draw[lnk] (video) -- (vdetail);
+    \node[box, below=0.8cm of music] (nowp) {Player nhạc};
+    \draw[lnk] (music) -- (nowp);
+    \node[box, below=0.8cm of news] (read) {Trình đọc};
+    \draw[lnk] (news) -- (read);
+    \node[box, below=0.8cm of games] (play) {Màn chơi};
+    \draw[lnk] (games) -- (play);
+\end{tikzpicture}
+\caption{Sơ đồ điều hướng OneSpace}
+\label{fig:sitemap}
+\end{figure}
+
+Bảng~\ref{tab:bottom-nav} liệt kê năm tab của Bottom Navigation. Thanh này hiện cố định ở đáy mọi màn hình của vỏ chính, mỗi tab kèm một biểu tượng Material Icons (bộ \texttt{Icons.Filled} trong mã nguồn) và nhãn chữ; tab đang chọn được tô bằng màu chính của ứng dụng.
+
+\begin{table}[H]
+\centering
+\caption{Năm tab của Bottom Navigation}
+\label{tab:bottom-nav}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{1.8cm} >{\raggedright\arraybackslash}p{3.4cm} >{\raggedright\arraybackslash}X}
+\toprule
+\textbf{Tab} & \textbf{Biểu tượng} & \textbf{Vai trò và nội dung chính} \\
+\midrule
+Home (mặc định) & \texttt{Home} & Mặt khám phá: ``Tiếp tục'' (video đang xem dở) và ``Đề xuất hôm nay'' (một video, một bài hát, một bài tin); nút Tài khoản đặt ở góc phải thanh trên. \\
+Video & \texttt{SmartDisplay} & Feed video theo danh mục; mở bài phát trong trình phát riêng, có thể thu nhỏ thành cửa sổ nổi. \\
+Music & \texttt{MusicNote} & Thư viện nhạc (phần ``Đã tải'' và ``Dành cho bạn''); trình phát đầy đủ hiển thị bài đang phát. \\
+News & \texttt{Newspaper} & Feed tin theo chuyên mục (chip ``Mới nhất'' và ``Đã lưu''); trình đọc bài sạch, hỗ trợ lưu bài. \\
+Games & \texttt{SportsEsports} & Hub minigame: thẻ game kèm điểm cao; mở màn chơi riêng. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Hai tác vụ phụ không nằm trong tab: \textbf{Tài khoản} và \textbf{Cài đặt} được vào bằng nút Tài khoản ở góc phải thanh trên của Home, rồi đi tiếp một bước sang Cài đặt. Nhóm không dùng Navigation Drawer cho các tác vụ này vì chúng có tần suất sử dụng thấp, trong khi drawer che gần nửa màn hình và làm chậm việc quay lại nội dung đang xem; một nút cố định trên Home chỉ mất một chạm và không che khuất nội dung nào.
+
+Về độ sâu điều hướng, mọi nội dung dùng thường xuyên nhất đều nằm trong giới hạn của \texttt{UX-08} (mục~\ref{sec:quality-pillars}): từ Home, chạm một thẻ đề xuất là tới nội dung (1 chạm); chuyển phân hệ cũng đúng một chạm trên thanh tab; đường dài nhất là Home $\rightarrow$ tab phân hệ $\rightarrow$ nội dung chi tiết (2 chạm). Trạng thái tiêu thụ (bài đang phát, video nổi, ván chơi dở) đi theo người dùng khi chuyển tab nhờ dock mini player và cửa sổ nổi, nên việc chuyển phân hệ không làm mất ngữ cảnh.
+
+Tìm kiếm chưa nằm trong phiên bản đầu: ô tìm xuyên nội dung (F-COM-11) thuộc danh sách mở rộng sau MVP ở mục~\ref{sec:mvp-scope}, và các màn tìm kiếm riêng của từng phân hệ cũng không nằm trong bảng MVP. Thay vào đó, việc khám phá nội dung trong v1 dựa vào ba cơ chế có sẵn: chọn sở thích khi onboarding, chip chuyên mục trên feed News, và phần ``Đề xuất hôm nay'' trên Home. Khi F-COM-11 được triển khai, ô tìm này sẽ đặt trên thanh của vỏ chính (không thuộc tab nào) để giữ nguyên nguyên tắc một phân hệ một tab.

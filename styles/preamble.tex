@@ -1,6 +1,5 @@
 % Preamble: packages, page layout, header/footer and heading format. main.tex \inputs this file right after \documentclass.
 \usepackage{
-    a4wide,
     amssymb,
     epsfig,
     latexsym,
@@ -41,6 +40,7 @@
 \usepackage{tabularx}
 \usepackage[labelfont=bf, labelsep=colon]{caption}
 \captionsetup[figure]{name=Hình}
+\captionsetup[table]{name=Bảng}
 \usepackage{multirow}
 \usepackage[framemethod=tikz]{mdframed}
 \usepackage{rotating}
@@ -52,7 +52,7 @@
 \usepackage{listings}
 % top/bottom are the margins of the body text. The header (logo, 9.5mm tall) sits headsep above the body
 % and the footer baseline footskip below it, so that both stay about 15mm away from the paper edge.
-\geometry{top=3cm, bottom=2.5cm, left=2cm, right=2cm, headheight=10mm, headsep=5mm, footskip=10mm}
+\geometry{a4paper, top=3cm, bottom=2.5cm, left=2cm, right=2cm, headheight=10mm, headsep=5mm, footskip=10mm}
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
@@ -165,3 +165,4 @@ sensitive=false, morecomment=[l]{--}, morecomment=[s]{/*}{*/}, morestring=[b]', 
 \newcommand*{\subsubsubsectionmark}[1]{}
 \makeatother
 \input{styles/guide} % "Hướng dẫn viết" boxes in each subsection
+\input{styles/diagrams} % custom rating symbols and TikZ helpers

@@ -1,19 +1,112 @@
 \subsection{User Flows}
 \label{sec:user-flows}
 
-\begin{guide}
-\guidepart{Nội dung}
-\begin{compactitem}
-    \item Sơ đồ luồng cho các tác vụ chính của từng phân hệ: đăng nhập, xem video, nghe nhạc, đọc tin, chơi minigame.
-    \item Luồng chuyển tiếp giữa các phân hệ, ví dụ: đọc tin tức $\rightarrow$ mở nhạc nền $\rightarrow$ xem video $\rightarrow$ chơi minigame.
-    \item Các nhánh lỗi và ngoại lệ: mất mạng, hết phiên đăng nhập, nội dung chỉ dành cho tài khoản Premium.
-\end{compactitem}
-\guidepart{Câu hỏi cần trả lời}
-\begin{compactitem}
-    \item Khi chuyển từ phân hệ này sang phân hệ khác, trạng thái nào được giữ lại (bài nhạc đang phát, vị trí đang đọc, tiến độ minigame)?
-    \item Đang nghe nhạc nền mà mở video thì âm thanh được xử lý thế nào?
-    \item Mỗi luồng tương ứng với user story nào ở mục~\ref{sec:user-stories}?
-\end{compactitem}
-\guidepart{Hình/bảng nên có}
-Sơ đồ user flow cho từng tác vụ chính và cho luồng chuyển tiếp giữa các phân hệ.
-\end{guide}
+Phần này đặc tả các luồng thao tác chính bằng sơ đồ, so le giữa \textit{định nghĩa hành vi đã chốt} ở ma trận case C1--C9 (bảng~\ref{tab:switch-matrix}) và \textit{ảnh chụp thật từ ứng dụng}. Mỗi luồng được truy vết về user story ở mục~\ref{sec:user-stories} và về kịch bản kiểm thử TC01--TC14 của nhóm.
+
+\textbf{Luồng phiên đầu tiên.} Đây là luồng quan trọng nhất vì quyết định người dùng có ``chạm'' được USP ngay lần đầu mở ứng dụng hay không. Hình~\ref{fig:flow-first-run} mô tả luồng này theo đúng các con số đã chốt ở mục~\ref{sec:mvp-scope}.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    font=\footnotesize,
+    stp/.style={draw=black!55, rounded corners=2pt, inner sep=4pt, minimum height=8mm, fill=gray!8, align=center, text width=3.0cm},
+    lnk/.style={draw=black!50, -{Latex[length=1.6mm]}}]
+    \node[stp] (a) at (0,0) {Mở app trong tối đa 2 giây};
+    \node[stp] (b) at (3.8,0) {Chọn tối thiểu 3 chủ đề};
+    \node[stp] (c) at (7.6,0) {Home hiện ``thử ngay''};
+    \node[stp] (d) at (11.4,0) {Chạm bài hát: dock mini hiện};
+    \node[stp] (e) at (0,-2.5) {Banner nhiệm vụ ngày đầu};
+    \node[stp] (f) at (3.8,-2.5) {Gợi ý ``đọc tin + nghe nhạc''};
+    \node[stp] (g) at (7.6,-2.5) {Hoàn thành 3 nhiệm vụ: trứng nở};
+    \node[stp] (h) at (11.4,-2.5) {Cuối phiên: streak = 1};
+    \draw[lnk] (a) -- (b);
+    \draw[lnk] (b) -- (c);
+    \draw[lnk] (c) -- (d);
+    \draw[lnk] (a.south) -- ++(0,-0.8) -| (e);
+    \draw[lnk] (e) -- (f);
+    \draw[lnk] (f) -- (g);
+    \draw[lnk] (g) -- (h);
+    \draw[lnk] (d.south) -- ++(0,-0.8) -| (e.north);
+\end{tikzpicture}
+\caption{Luồng phiên đầu tiên}
+\label{fig:flow-first-run}
+\end{figure}
+
+\textbf{Xung đột âm thanh (case C1).} Khi người dùng mở một bài nhạc trong lúc video đang phát, lần đầu tiên của cặp nội dung này ứng dụng hỏi bằng popup ba lựa chọn; lựa chọn được nhớ theo cặp và các lần sau áp dụng im lặng, đổi lại được trong Cài đặt. Hình~\ref{fig:flow-c1} là sơ đồ theo đúng định nghĩa đã chốt; Hình~\ref{fig:app-c1} là popup thật trên ứng dụng.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    font=\footnotesize,
+    stp/.style={draw=black!55, rounded corners=2pt, inner sep=4pt, minimum height=8mm, fill=gray!8, align=center, text width=2.8cm},
+    dec/.style={draw=black!55, rounded corners=10pt, inner sep=4pt, fill=gray!18, align=center, text width=2.5cm},
+    lnk/.style={draw=black!50, -{Latex[length=1.6mm]}}]
+    \node[stp] (v) at (0,0) {Video đang phát};
+    \node[stp] (m) at (3.5,0) {Người dùng mở bài nhạc};
+    \node[dec] (q) at (7.0,0) {Lần đầu của cặp?};
+    \node[dec] (q2) at (10.5,0) {Đã nhớ lựa chọn?};
+    \node[stp] (p) at (7.0,-3.0) {Popup 3 lựa chọn};
+    \node[stp] (r) at (10.5,-3.0) {Áp dụng im lặng};
+    \node[stp] (s) at (8.7,-5.5) {Lưu lựa chọn theo cặp};
+    \draw[lnk] (v) -- (m);
+    \draw[lnk] (m) -- (q);
+    \draw[lnk] (q) -- node[above, font=\scriptsize]{có} (q2);
+    \draw[lnk] (q.south) -- node[right, font=\scriptsize]{chưa} ++(0,-1.0) -| (p.north);
+    \draw[lnk] (q2.south) -- node[right, font=\scriptsize]{có} ++(0,-1.0) -| (r.north);
+    \draw[lnk] (p.south) -- ++(0,-1.0) -| (s.north);
+\end{tikzpicture}
+\caption{Luồng xử lý xung đột âm thanh (C1)}
+\label{fig:flow-c1}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.28\textwidth]{figures/app/c1-audio-conflict-light.png}
+\caption{Popup xung đột âm thanh thật trên ứng dụng: video ``Gần với thiên nhiên thêm chút'' đang phát, người dùng mở bài ``Nơi nào yên tĩnh''}
+\label{fig:app-c1}
+\end{figure}
+
+\textbf{Video nổi khi rời tab (case C3).} Đang xem video mà chuyển sang tab khác, video tự thu nhỏ thành cửa sổ nổi (PIP) ở góc màn hình và tiếp tục phát theo chính sách âm thanh đã chọn ở C1; người dùng có thể kéo cửa sổ giữa bốn góc, vuốt ngang để dừng video và ghi vào Watchlist đúng vị trí, hoặc chạm để quay lại trình phát đầy đủ với sai lệch tối đa 2 giây. Hình~\ref{fig:app-pip} chụp cửa sổ nổi thật đang chạy trên tab News: cửa sổ hiển thị nhãn ``Đang phát'', kèm ba nút Mở rộng, Tạm dừng và Đóng.
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.48\textwidth}
+\centering
+\includegraphics[width=0.55\textwidth]{figures/app/news-pip-light.png}
+\caption{Video thu nhỏ thành cửa sổ nổi trên tab News (case C3)}
+\label{fig:app-pip}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+\centering
+\includegraphics[width=0.55\textwidth]{figures/app/article-music-dock-light.png}
+\caption{Dock mini player hiển thị trong trình đọc bài, nhạc vẫn phát khi đọc tin (case C2)}
+\label{fig:app-dock-reader}
+\end{minipage}
+\end{figure}
+
+\textbf{Nghe nhạc khi đọc tin (case C2).} Ngược lại với C3, khi nhạc đang phát và người dùng sang tab News, dock mini player vẫn hiện trên feed và cả trong trình đọc bài để nhạc không bao giờ ``biến mất'' ngoài tầm điều khiển (Hình~\ref{fig:app-dock-reader}). Dock luôn hiển thị tên bài và nút tạm dừng; mở rộng dock ra trình phát đầy đủ cũng chỉ là một chạm.
+
+\textbf{Khôi phục trạng thái.} Mọi trạng thái tiêu thụ~--~bài nhạc đang phát, video nổi, ván chơi dở. SessionCoordinator lưu ngay khi thay đổi và khôi phục khi quay lại tab hoặc khi hệ điều hành hủy tiến trình rồi mở lại (truy vết bằng TC05, TC09, TC10). Điều này bảo đảm các luồng chuyển phân hệ ở trên không bị ``đặt lại về đầu'' bởi gián đoạn.
+
+Bảng~\ref{tab:flow-trace} tổng hợp việc truy vết từng luồng tới case, user story và bằng chứng tương ứng.
+
+\begin{table}[H]
+\centering
+\caption{Truy vết luồng -- case -- user story}
+\label{tab:flow-trace}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.7cm} >{\raggedright\arraybackslash}p{1.4cm} >{\raggedright\arraybackslash}p{4.3cm} >{\raggedright\arraybackslash}X}
+\toprule
+\textbf{Luồng} & \textbf{Case} & \textbf{User story} & \textbf{Bằng chứng / kiểm thử} \\
+\midrule
+Phiên đầu tiên & -- & US-COM-02, US-COM-03 & Hình~\ref{fig:flow-first-run} \\
+Xung đột âm thanh & C1 & US-MUS-03, US-CROSS-02 & Hình~\ref{fig:flow-c1}, \ref{fig:app-c1}; TC02 \\
+Video nổi khi rời tab & C3 & US-VID-02, US-CROSS-03 & Hình~\ref{fig:app-pip}; TC01 \\
+Nghe nhạc khi đọc tin & C2 & US-NEWS-03, US-CROSS-01 & Hình~\ref{fig:app-dock-reader} \\
+Nhạc tiếp tục khi vào game & C5 & US-GAME-01 & Dock vẫn hiện trên tab Games; TC04 \\
+Khôi phục ván chơi & -- & US-CROSS-07 & TC05, TC10 \\
+Mất mạng khi đọc tin / xem video & -- & US-CROSS-07 & mục~\ref{sec:wireframes-prototypes} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Các nhánh lỗi và gián đoạn.} Nhánh ngoại lệ được định nghĩa bằng con số cụ thể để kiểm thử kết luận được ngay, thống nhất với bảng~\ref{tab:switch-matrix} và mục~\ref{sec:quality-pillars}: khi mất mạng giữa video, khung hình đứng kèm đếm ngược 5--15 giây tự thử lại; tin đã tải đọc tiếp; game offline chơi tiếp và điểm ghi cục bộ rồi đồng bộ khi có mạng. Khi mạng mất hẳn, feed chuyển sang trạng thái thông báo rõ ràng kèm nút ``Thử lại'' thay vì để màn hình trống trơn — trạng thái này được mô tả trong mục~\ref{sec:wireframes-prototypes}. Rút tai nghe: nhạc dừng ngay, không tự phát ra loa ngoài (TC12); cuộc gọi đến: mọi luồng nhường trong tối đa 0,5 giây và quay lại đúng chỗ sau cuộc gọi (TC11). Riêng nhánh ``nội dung chỉ dành cho tài khoản Premium'' không xuất hiện trong phiên bản đầu vì MVP phát hành miễn phí, không quảng cáo và không gói trả phí (quyết định ở mục~\ref{sec:mvp-scope}).

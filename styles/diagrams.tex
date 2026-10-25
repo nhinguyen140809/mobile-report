@@ -1,0 +1,19 @@
+% Drawing pieces shared by the tables and figures of the sections. preamble.tex \inputs this file.
+
+% Rating symbols for comparison tables: full, half and empty circles, sized and aligned like a letter.
+% Example row: Xem video & \ratingfull & \ratinghalf & \ratingnone \\
+\newcommand{\ratingfull}{\tikz[baseline=-0.6ex]\fill (0,0) circle (0.7ex);}
+\newcommand{\ratinghalf}{\tikz[baseline=-0.6ex]{\fill (0,-0.7ex) arc (-90:90:0.7ex) -- cycle; \draw[line width=0.5pt] (0,0) circle (0.7ex);}}
+\newcommand{\ratingnone}{\tikz[baseline=-0.6ex]\draw[line width=0.5pt] (0,0) circle (0.7ex);}
+
+% Boxes of a 2x2 matrix (SWOT, Impact vs. Effort, ...): \node[quadrant={<color>}{<content height>}] at (x,y) {...};
+% Each box is a top-aligned minipage of a fixed height, so the four boxes line up whatever their content: use the same
+% height for all four, large enough for the longest one. Two boxes side by side, the second one at x = 7.9 (cm), plus
+% the axis titles (quadrant label) fill the text width.
+\tikzset{
+    quadrant/.style 2 args={draw=#1!70!black, fill=#1!7, rounded corners=2pt, inner sep=6pt, anchor=north west,
+        font=\small,
+        execute at begin node={\begin{minipage}[t][#2][t]{7.25cm}\raggedright},
+        execute at end node={\end{minipage}}},
+    quadrant label/.style={font=\small\bfseries, text=black!70},
+}

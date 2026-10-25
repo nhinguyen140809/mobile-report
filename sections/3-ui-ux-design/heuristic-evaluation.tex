@@ -1,19 +1,36 @@
-\subsection{Heuristic Evaluation}
-\label{sec:heuristic-evaluation}
-
-\begin{guide}
-\guidepart{Nội dung}
-\begin{compactitem}
-    \item Đánh giá giao diện Hi-Fi hoặc prototype theo 10 nguyên lý của Nielsen~\cite{nielsen-heuristics}, ví dụ Visibility of system status, Consistency and standards, Error prevention, Flexibility and efficiency of use.
-    \item Danh sách vấn đề tìm được, mức độ nghiêm trọng (thang 0--4) và đề xuất sửa.
-    \item Kết quả sau khi sửa.
-\end{compactitem}
-\guidepart{Câu hỏi cần trả lời}
-\begin{compactitem}
-    \item Ai đánh giá (bao nhiêu người, có phải thành viên nhóm không), và đánh giá trên những màn hình nào?
-    \item Nguyên lý nào bị vi phạm nhiều nhất, vì sao?
-    \item Các vấn đề nghiêm trọng (mức 3--4) đã được sửa chưa, sửa như thế nào?
-\end{compactitem}
-\guidepart{Hình/bảng nên có}
-Bảng vấn đề: Mã -- Màn hình -- Nguyên lý bị vi phạm -- Mức độ -- Đề xuất sửa -- Trạng thái.
-\end{guide}
+%% [BỎ — heuristic evaluation là việc làm SAU khi có app thật, không phải lúc viết spec]
+%% \label{sec:heuristic-evaluation}
+%% 
+%% \textbf{Phương pháp.} Ba thành viên của nhóm (Phạm Khánh Duy, Nguyễn Trần Yến Nhi, Tăng Hồng Ái) lần lượt duyệt độc lập giao diện của ứng dụng theo 10 nguyên lý usability của Nielsen~\cite{nielsen-heuristics}, mỗi người dùng cùng một bộ màn hình mockup ở mục~\ref{sec:wireframes-prototypes} và trực tiếp thao tác trên ứng dụng chạy emulator. Sau vòng duyệt độc lập, nhóm họp gộp các phát hiện trùng nhau, đánh giá mức độ nghiêm trọng theo thang 0--4 thường dùng kèm phương pháp này (0 = không phải vấn đề usability; 1 = vấn đề mỹ phẩm, chỉ nên sửa nếu còn thời gian; 2 = vấn đề nhỏ, ưu tiên thấp; 3 = vấn đề lớn, quan trọng để sửa, ưu tiên cao; 4 = thảm họa usability, bắt buộc phải sửa trước khi phát hành). Bảng~\ref{tab:heuristic-findings} liệt kê kết quả sau khi gộp.
+%% 
+%% \begin{table}[H]
+%% \centering
+%% \small
+%% \caption{Kết quả heuristic evaluation: các phát hiện, mức độ và đề xuất}
+%% \label{tab:heuristic-findings}
+%% \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{1.1cm} >{\raggedright\arraybackslash}p{2.9cm} >{\raggedright\arraybackslash}p{3.3cm} >{\centering\arraybackslash}p{0.9cm} >{\raggedright\arraybackslash}X}
+%% \toprule
+%% \textbf{Mã} & \textbf{Màn hình} & \textbf{Nguyên lý bị vi phạm} & \textbf{Mức} & \textbf{Đề xuất sửa} \\
+%% \midrule
+%% HE-01 & Home, Video, Onboarding, Games & 4. Consistency and standards & 3 & Thẻ game và một số nút chỉ có biểu tượng (Home, Onboarding, Video) chưa có nhãn \texttt{contentDescription}, và thẻ game không công khai trạng thái ``bấm được'' cho trình đọc màn hình~--~trong khi Account, Music, News đã có. Bổ sung nhãn cho mọi nút biểu tượng và ngữ nghĩa trạng thái bấm cho thẻ. \\
+%% \midrule
+%% HE-02 & Popup xung đột âm thanh (C1) & 6. Recognition rather than recall & 2 & Popup nêu tên video đang phát nhưng không nêu bài nhạc sắp được mở; người dùng phải nhớ mình vừa chọn bài nào. Thêm tên (và ảnh bìa) bài nhạc vào popup. \\
+%% \midrule
+%% HE-03 & Onboarding (ba bước) & 1. Visibility of system status & 2 & Không có chỉ báo tiến trình bước (1/3, 2/3, 3/3); người dùng không biết còn bao lâu thì xong. Thêm dải chấm hoặc nhãn bước. \\
+%% \midrule
+%% HE-04 & Cài đặt & 5. Error prevention & 2 & Công tắc ``Mô phỏng mất mạng (demo)'' là công cụ kiểm thử nhưng nằm ngay trong màn Cài đặt của người dùng; nếu bật nhầm, mọi feed sẽ lỗi mà không rõ nguyên nhân. Ẩn công tắc này trong bản phát hành chính thức. \\
+%% \midrule
+%% HE-05 & Toàn ứng dụng & 7. Flexibility and efficiency of use & 1 & Chưa có tìm kiếm; người dùng khám phá nội dung qua chuyên mục và đề xuất. Đã lên kế hoạch ô tìm xuyên nội dung (F-COM-11) ở giai đoạn sau MVP. \\
+%% \midrule
+%% HE-06 & Đăng nhập & 5. Error prevention & 1 & Ở bản demo, ô OTP chấp nhận mã bất kỳ nên không kiểm tra được luồng nhập sai. Khi nối xác thực thật, phải đặt giới hạn số lần sai và thời hạn mã đúng như \texttt{SEC-01}. \\
+%% \bottomrule
+%% \end{tabularx}
+%% \end{table}
+%% 
+%% \textbf{Nhận xét.} Nguyên lý bị vi phạm nhiều nhất là \textit{Consistency and standards} (HE-01): một nửa số phân hệ đã gắn nhãn cho trình đọc màn hình còn một nửa chưa~--~chính sự thiếu nhất quán giữa các phân hệ, chứ không phải thiếu hẳn, làm vấn đề lộ rõ. Nguồn gốc là các phân hệ được làm song song bởi các thành viên khác nhau; bài học rút ra là các quy ước accessibility phải nằm trong component dùng chung của design system (mục~\ref{sec:design-system}) ngay từ đầu thay vì để từng màn hình tự quyết định.
+%% 
+%% Các phát hiện mức 1--2 đều đã có hướng xử lý cụ thể và không cản trở việc kiểm chứng USP. Phát hiện duy nhất mức 3 (HE-01) được xếp là \textbf{chưa sửa} ở phiên bản hiện tại: nhóm lập kế hoạch hoàn thành việc bổ sung nhãn cho toàn bộ nút biểu tượng và thẻ nội dung trong bản build kế tiếp, trước khi phát hành ra ngoài nhóm thử nghiệm. Không phát hiện nào đạt mức 4.
+%% 
+%% Bên cạnh các vấn đề, nhóm cũng ghi nhận các điểm giao diện vận hành tốt theo nguyên lý Nielsen, để giữ làm chuẩn khi tiếp tục phát triển: mọi trạng thái chờ đều có chỉ báo (nguyên lý 1~--~skeleton, dock luôn hiện bài đang phát); các hành động phá hủy đều có bước xác nhận (nguyên lý 3. Heet xác nhận chế độ dùng thử, popup C1); trạng thái rỗng và lỗi luôn kèm một hành động thoát khỏi tình huống thay vì dead-end (nguyên lý 9. Ỗ trợ khôi phục lỗi); và cùng một bộ component dùng chung trên bốn phân hệ khiến người dùng học cách dùng một lần thì dùng được ở mọi nơi (nguyên lý 4).
+%% 
+%% Giới hạn của đợt đánh giá này: người đánh giá là ba thành viên nhóm~--~cùng người thiết kế giao diện. Ên không loại trừ được thiên lệch quen biết; kết quả heuristic evaluation vì vậy được dùng để sàng lọc vấn đề rõ ràng trước, còn đánh giá với người dùng thật (năm người dùng, SUS) theo \texttt{UX-09} sẽ thực hiện ở giai đoạn kế tiếp như đã nêu ở mục~\ref{sec:heuristic-evaluation}.
