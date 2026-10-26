@@ -40,13 +40,13 @@ Hình~\ref{fig:sitemap} mô tả sơ đồ điều hướng (sitemap) của toà
     \node[box, below=0.4cm of acct] (sett) {Cài đặt};
     \draw[lnk] (home) -- (acct);
     \draw[lnk] (acct) -- (sett);
-    \node[box, below=0.8cm of video] (vdetail) {Player video};
+    \node[box, below=0.8cm of video, text width=1.1cm] (vdetail) {Player video};
     \draw[lnk] (video) -- (vdetail);
-    \node[box, below=0.8cm of music] (nowp) {Player nhạc};
+    \node[box, below=0.8cm of music, text width=1.1cm] (nowp) {Player nhạc};
     \draw[lnk] (music) -- (nowp);
-    \node[box, below=0.8cm of news] (read) {Trình đọc};
+    \node[box, below=0.8cm of news, text width=1.1cm] (read) {Trình đọc};
     \draw[lnk] (news) -- (read);
-    \node[box, below=0.8cm of games] (play) {Màn chơi};
+    \node[box, below=0.8cm of games, text width=1.1cm] (play) {Màn chơi};
     \draw[lnk] (games) -- (play);
 \end{tikzpicture}
 \caption{Sơ đồ điều hướng OneSpace}
@@ -72,8 +72,10 @@ Games & \texttt{SportsEsports} & Hub minigame: thẻ game kèm điểm cao; mở
 \end{tabularx}
 \end{table}
 
+Bố cục mỗi màn theo nguyên tắc giảm \textit{cognitive load}: một màn chỉ có một hành động chính, mọi thành phần phụ phục vụ cho hành động đó. Trình đọc bài là ví dụ rõ nhất~--~hành động chính là đọc, nên chỉ có ba nút nhỏ (xem sau, tải, nghe) xếp góc phải cùng hai nút cỡ chữ; không nút nào cạnh tranh sự chú ý. Khoảng trắng (whitespace) giữa các card trên feed là 16dp cố định, đủ để mắt phân tách từng mục mà không cần viền dày. Thông tin chi tiết giấu theo cấp độ (progressive disclosure): menu cài đặt phát chỉ mở khi bấm biểu tượng bánh răng, khối quiz chỉ xuất hiện khi người dùng bấm ``Chơi nhanh'', hàng đợi nhạc chỉ mở khi bấm ``Xem hàng đợi''~--~người dùng không phải đọc những gì mình chưa cần. Ngược lại với màn hình lớn, màn hình điện thoại không đủ không gian nên mọi ô nhập đều rút gọn: đăng nhập chỉ hỏi đúng số điện thoại và mật khẩu, phần còn lại (OTP, Google, chế độ dùng thử) nằm ở lớp sau.
+
 Hai tác vụ phụ không nằm trong tab: \textbf{Tài khoản} và \textbf{Cài đặt} được vào bằng nút Tài khoản ở góc phải thanh trên của Home, rồi đi tiếp một bước sang Cài đặt. Nhóm không dùng Navigation Drawer cho các tác vụ này vì chúng có tần suất sử dụng thấp, trong khi drawer che gần nửa màn hình và làm chậm việc quay lại nội dung đang xem; một nút cố định trên Home chỉ mất một chạm và không che khuất nội dung nào.
 
 Về độ sâu điều hướng, mọi nội dung dùng thường xuyên nhất đều nằm trong giới hạn của \texttt{UX-08} (mục~\ref{sec:quality-pillars}): từ Home, chạm một thẻ đề xuất là tới nội dung (1 chạm); chuyển phân hệ cũng đúng một chạm trên thanh tab; đường dài nhất là Home $\rightarrow$ tab phân hệ $\rightarrow$ nội dung chi tiết (2 chạm). Trạng thái tiêu thụ (bài đang phát, video nổi, ván chơi dở) đi theo người dùng khi chuyển tab nhờ dock mini player và cửa sổ nổi, nên việc chuyển phân hệ không làm mất ngữ cảnh.
 
-Tìm kiếm chưa nằm trong phiên bản đầu: ô tìm xuyên nội dung (F-COM-11) thuộc danh sách mở rộng sau MVP ở mục~\ref{sec:mvp-scope}, và các màn tìm kiếm riêng của từng phân hệ cũng không nằm trong bảng MVP. Thay vào đó, việc khám phá nội dung trong v1 dựa vào ba cơ chế có sẵn: chọn sở thích khi onboarding, chip chuyên mục trên feed News, và phần ``Đề xuất hôm nay'' trên Home. Khi F-COM-11 được triển khai, ô tìm này sẽ đặt trên thanh của vỏ chính (không thuộc tab nào) để giữ nguyên nguyên tắc một phân hệ một tab.
+Tìm kiếm đặt ngay trên thanh của Home: một ô ``Tìm trong OneSpace'' (F-COM-11) gợi ý nội dung của cả bốn phân hệ từ cùng một chỗ, không thuộc riêng tab nào~--~giữ nguyên nguyên tắc một phân hệ một tab. Ngoài ô tìm xuyên nội dung này, mỗi phân hệ vẫn có ô tìm riêng (tiêu đề và kênh cho Video, bài hát và nghệ sĩ cho Music, bài báo cho News) vì ngữ cảnh tìm trong phân hệ hẹp hơn và gợi ý chính xác hơn.

@@ -11,21 +11,22 @@ MVP của OneSpace gồm toàn bộ tính năng trong bảng~\ref{tab:mvp-scope-
     \toprule
     \textbf{Phân hệ} & \textbf{Tính năng trong MVP} \\
     \midrule
-    Video & Xem video (F-VID-01); feed theo sở thích (F-VID-02); tìm kiếm (F-VID-03); PIP (F-VID-08); tua nhanh double-tap (F-VID-17); watchlist + tiếp tục từ chỗ dừng (F-VID-04, F-VID-05); chất lượng tự động (F-VID-06); audio-only (F-VID-09); tải video tùy bản quyền (F-VID-07); trích mp3 (F-VID-10); chia sẻ link (F-VID-11); màn hồ sơ nghệ sĩ (F-VID-14); playlist video (F-VID-15); thẻ quiz cuối video (F-VID-18) \\
-    Music & Player đầy đủ (F-MUS-01); dock mini player (F-MUS-02); nhạc nền ngoài app (F-MUS-03); playlist + queue (F-MUS-04, F-MUS-05); tìm kiếm nhạc (F-MUS-06); kho nhạc cá nhân (F-MUS-07); gợi ý theo sở thích (F-MUS-08); siêu playlist (F-MUS-09); audio focus (F-MUS-10); tải nhạc tùy bản quyền (F-MUS-12) \\
-    News & Feed theo sở thích (F-NEWS-01); trình đọc + đổi cỡ chữ (F-NEWS-02); tìm kiếm (F-NEWS-04); nghe tin TTS (F-NEWS-05); sắp xếp mới nhất/phổ biến (F-NEWS-06); nghe nhạc khi đọc (F-NEWS-09); quiz từ bài báo (F-NEWS-10); gợi ý bài liên quan (F-NEWS-11); thẻ nổi khi rời tab (F-NEWS-12) \\
-    Games & Hub minigame (F-GAME-01); đoán bài hát (F-GAME-02); quiz tin tức (F-GAME-03); Snake (F-GAME-13); bảng xếp hạng (F-GAME-07); game + video hai nửa màn (F-GAME-08); điểm thưởng khi thắng (F-GAME-09) \\
+    Video & Xem video (F-VID-01); feed theo sở thích (F-VID-02); tìm kiếm (F-VID-03); PIP (F-VID-08); tua nhanh double-tap (F-VID-14); watchlist + tiếp tục từ chỗ dừng (F-VID-04, F-VID-05); chọn chất lượng Auto/1080p/720p/360p (F-VID-06); audio-only (F-VID-09); tải video tùy bản quyền (F-VID-07); trích mp3 (F-VID-10); chia sẻ link (F-VID-11); màn hồ sơ nghệ sĩ (F-VID-12); playlist video (F-VID-13); thẻ quiz cuối video (F-VID-15) \\
+    Music & Player đầy đủ (F-MUS-01); dock mini player (F-MUS-02); nhạc nền ngoài app (F-MUS-03); playlist + queue (F-MUS-04, F-MUS-05); tìm kiếm nhạc (F-MUS-06); kho nhạc cá nhân (F-MUS-07); gợi ý theo sở thích (F-MUS-08); audio focus (F-MUS-10); tải nhạc tùy bản quyền (F-MUS-12) \\
+    News & Feed theo sở thích (F-NEWS-01); trình đọc + đổi cỡ chữ (F-NEWS-02); tìm kiếm (F-NEWS-04); nghe tin TTS (F-NEWS-05); sắp xếp mới nhất/phổ biến (F-NEWS-06); nghe nhạc khi đọc (F-NEWS-07); quiz từ bài báo (F-NEWS-08); gợi ý bài liên quan (F-NEWS-09); thẻ nổi khi rời tab (F-NEWS-10) \\
+    Games & Hub minigame (F-GAME-01); đoán bài hát (F-GAME-02); quiz tin tức (F-GAME-03); Snake (F-GAME-12); bảng xếp hạng (F-GAME-06); game + video hai nửa màn (F-GAME-07); điểm thưởng khi thắng (F-GAME-08); Beat Tiles --- nốt nhạc rơi theo bài đang phát (F-GAME-13) \\
     Dùng chung & Tài khoản (F-COM-01); onboarding chọn sở thích (F-COM-02); hồ sơ + đổi avatar + khung (F-COM-03, F-COM-09); hệ điểm XP (F-COM-04); nhiệm vụ hằng ngày (F-COM-05); streak (F-COM-06); pet (F-COM-07); huy hiệu (F-COM-08); wrapped (F-COM-10); tìm kiếm xuyên nội dung (F-COM-11); nhắc nhiệm vụ (F-COM-12); cài đặt (F-COM-13); popup xung đột âm thanh (F-COM-14); cửa hàng đổi quà (F-COM-15); offline (F-COM-16); chế độ khách (F-COM-18) \\
     \bottomrule
 \end{tabularx}
 \end{table}
 
-MVP bao gồm cả năm trụ Winning Zone W1--W5. Trụ W6 (wrapped) để sau.
+MVP bao gồm đủ sáu trụ Winning Zone W1--W6: trụ W6 (wrapped~--~tổng kết tháng, F-COM-10) nằm trong MVP và đã có màn tổng kết chi tiết từng mảng kèm chia sẻ.
 
 \textbf{Giai đoạn v2 (sau khi MVP hoàn tất).} Các tính năng còn lại chia theo lý do:
 
 \begin{itemize}
-    \item Rhythm game (F-GAME-05) và equalizer (F-MUS-11): giá trị thấp so với công sức.
+    \item Rhythm game (F-GAME-04) và equalizer (F-MUS-11): giá trị thấp so với công sức.
+    \item Siêu playlist trộn nhạc, audio tin tức và video (F-MUS-09): đợi phản hồi từ người dùng thực tế trước khi làm.
     \item Thuật toán gợi ý học máy thật: MVP chỉ lọc theo sở thích khai báo.
     \item Thanh toán, gói Premium và quảng cáo: v1 phát hành miễn phí để đo hành vi người dùng.
 \end{itemize}
@@ -60,7 +61,7 @@ Thời gian phiên trung bình & Mức độ sử dụng tổng thể & $\geq$ 1
 Crash-free và thời gian mở app & Chất lượng kỹ thuật & Crash-free $\geq$ 99,5\%, mở app $\leq$ 2 giây (\texttt{UX-03}, \texttt{UX-07}) \\
 \end{longtable}
 
-\textbf{Hành vi khi chuyển giữa các phân hệ.} Bảng~\ref{tab:switch-matrix} định nghĩa điều gì xảy ra khi người dùng chuyển tab. Cột cuối ghi quyết định ảnh hưởng đến khối lượng code của Phần~\ref{sec:ui-ux-design} và Phần~\ref{sec:technical-architecture}. Ký hiệu: A = Video, B = Music, C = News, D = Games.
+\textbf{Hành vi khi chuyển giữa các phân hệ.} Bảng~\ref{tab:switch-matrix} định nghĩa điều gì xảy ra khi người dùng chuyển tab, bằng vuốt ngang hoặc chạm thanh tab. Ma trận phủ \textbf{đủ 12 chiều chuyển} giữa bốn phân hệ A--D (mỗi phân hệ sang ba phân hệ còn lại, hai chiều \textit{không đối xứng}: A$\rightarrow$B và B$\rightarrow$A hành xử khác nhau), cộng bốn case đặc biệt C13--C16. Cột cuối ghi quyết định ảnh hưởng đến khối lượng code của Phần~\ref{sec:ui-ux-design} và Phần~\ref{sec:technical-architecture}. Ký hiệu: A = Video, B = Music, C = News, D = Games.
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{1.5cm} >{\raggedright\arraybackslash}p{8.6cm} >{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}p{2.6cm}}
 \caption{Ma trận hành vi chuyển phân hệ}
@@ -76,77 +77,115 @@ Crash-free và thời gian mở app & Chất lượng kỹ thuật & Crash-free 
 \bottomrule
 \endfoot
 C1 \newline A$\rightarrow$B \newline đang xem video, mở nhạc &
-(1) Chạm một bài ở tab Nhạc; video tự thu thành PIP góc màn hình. \newline
-(2) Lần đầu cho cặp này: popup 3 lựa chọn: \textit{Tắt tiếng video / Tạm dừng nhạc / Phát cả hai}. \newline
-(3) Lựa chọn được lưu; lần sau áp dụng luôn không hỏi lại. \newline
+(1) Rời tab Video: video thu thành PIP góc dưới phải, vẫn còn tiếng. Sang tab Nhạc và chạm một bài: popup xuất hiện. \newline
+(2) Popup hai lựa chọn \textit{Tắt tiếng video / Dừng video} kèm ô tick \textit{Không hỏi lại}; chọn áp dụng ngay cho lần đó — nhạc vẫn phát ở cả hai. \newline
+(3) Không tick: lần xung đột sau vẫn hỏi lại; tick: ghi nhớ đúng lựa chọn vừa chọn, đặt lại được trong Cài đặt. \newline
 (4) Dock hiện bài nhạc; PIP video và dock cùng tồn tại. &
 F-VID-08, F-COM-14, F-MUS-02 &
-Nhớ theo cặp nội dung; đổi được trong Cài đặt \\
+Hỏi mỗi lần; tick Không hỏi lại để ghi nhớ \\
 \midrule
-C2 \newline B$\rightarrow$C \newline nghe nhạc, đọc tin &
-(1) Đổi tab: nhạc vẫn phát. \newline
-(2) Dock hiện trên mọi màn; kéo lên mở trình phát đầy đủ; vuốt ngang đổi bài. \newline
-(3) Vào trình đọc toàn màn hình: dock ẩn, có tuỳ chọn ghim. \newline
-(4) Bấm quiz cuối bài: màn game mở, nhạc vẫn phát. &
-F-MUS-02, F-NEWS-09, F-NEWS-10 &
-Dock ẩn trong trình đọc toàn màn hình; có tuỳ chọn ghim \\
+C2 \newline B$\rightarrow$A \newline đang nghe nhạc, mở video &
+(1) Mở video khi nhạc đang phát: popup hai lựa chọn --- \textit{Tắt tiếng video, nhạc vẫn phát} hoặc \textit{Tắt tiếng nhạc, video có tiếng} --- kèm ô tick \textit{Không hỏi lại}; tick để ghi nhớ. \newline
+(2) Chọn tắt tiếng video: video mở có badge ``Tắt tiếng'', nhạc ở dock. \newline
+(3) Chọn tắt tiếng nhạc: video phát tiếng, nhạc tạm dừng ở dock, bấm Phát để nghe lại. &
+F-VID-01, F-VID-09, F-MUS-02 &
+Luồng mới phát chiếm quyền; nhạc nhường thầm lặng \\
 \midrule
-C3 \newline A$\rightarrow$C \newline xem video, đọc tin &
-(1) Đổi tab: video thành PIP góc, giữ nguyên tiếng theo lựa chọn ở C1. \newline
-(2) PIP kéo được 4 góc; vuốt ngang = dừng + lưu vào Watchlist; vuốt xuống = chỉ nghe âm thanh. \newline
-(3) Quay lại tab Video: PIP phóng to đúng vị trí, lệch tối đa 2 giây. &
-F-VID-08, F-VID-04, F-VID-05, F-VID-09 &
-PIP tự thu nhỏ khi rời tab \\
+C3 \newline A$\rightarrow$C \newline đang xem video, đọc tin &
+(1) Rời tab Video: video thành PIP góc, giữ tiếng theo chính sách đã chọn ở C1. \newline
+(2) Đọc bài bình thường; cửa sổ nổi có nhãn ``Đang phát'' kèm ba nút Mở rộng, Tạm dừng, Đóng. \newline
+(3) Chạm Mở rộng: quay lại trình phát đúng vị trí, lệch tối đa 2 giây. \newline
+(4) Rời tab News: bài đang đọc thu thành thẻ ``Đang đọc'' nổi. &
+F-VID-08, F-NEWS-10 &
+PIP tự thu nhỏ khi rời tab; thẻ đọc nổi khi rời News \\
 \midrule
-C4 \newline A$\rightarrow$D \newline video + game &
-(1) Vào game khi video đang phát: hỏi \textit{``Thu nhỏ video và tiếp tục?''} [Thu nhỏ / Dừng]. \newline
-(2) Thu nhỏ: game chiếm 60\% dưới, PIP ở trên; game nhận đủ cảm ứng. \newline
-(3) Máy yếu: ưu tiên FPS game, PIP hạ độ phân giải. \newline
-(4) Thoát một bên thì bên kia chạy tiếp. &
-F-GAME-08, F-VID-08 &
-Làm sau MVP; cần ngưỡng cảnh báo pin \\
+C4 \newline C$\rightarrow$A \newline đang đọc tin, mở video &
+(1) Đang đọc bài, mở video từ tab Video: video phát; thẻ ``Đang đọc'' nổi ở mọi tab. \newline
+(2) Chạm bất kỳ đâu trên thẻ: quay lại đúng chỗ đang đọc. &
+F-NEWS-10, F-VID-01 &
+Bài đọc dở không bao giờ mất \\
 \midrule
-C5 \newline B$\rightarrow$D \newline nhạc + game &
-(1) Nhạc vẫn phát; hiệu ứng game phát, nhạc giảm còn 30\% (tắt được). \newline
-(2) Trong game chọn được ``nhạc của tôi / nhạc game''. \newline
-(3) Thắng ván: điểm cộng ngay; nhạc không ngắt. &
-F-MUS-02, F-MUS-10, F-GAME-09 &
-Giảm âm lượng mặc định 30\%, cho tắt \\
+C5 \newline A$\rightarrow$D \newline đang xem video, vào game &
+(1) Vào game khi video đang phát: video chiếm khoảng hai phần năm phía trên kèm hàng điều khiển (phát/dừng, thanh tua, thời gian), game chiếm phần còn lại và nhận đủ cảm ứng. \newline
+(2) Thoát game: video chạy tiếp; thoát video: game vẫn chạy. &
+F-GAME-07, F-VID-08 &
+Chia màn thay vì popup hỏi \\
 \midrule
-C6 \newline đang phát nhạc $\rightarrow$ bấm \textit{Nghe tin} &
-(1) Bấm ``Nghe bài này'': TTS đọc theo đoạn, có tiến trình. \newline
-(2) Hàng phát đang có bài: chèn sau bài hiện tại; hàng trống thì hỏi [Phát ngay / Thêm vào hàng]. \newline
-(3) Trên dock, audio tin có icon riêng. &
-F-NEWS-05, F-MUS-05 &
-Hàng đang phát: chèn tiếp theo; hàng trống: hỏi \\
+C6 \newline D$\rightarrow$A \newline đang trong game, mở video &
+(1) Rời game: ván tự tạm dừng và lưu điểm. \newline
+(2) Video phát; quay lại Games: chọn Tiếp tục ván dở. &
+F-GAME (pause/restore) &
+Rời game luôn tạm dừng + lưu \\
 \midrule
-C7 \newline trích mp3 \newline (A$\rightarrow$B) &
-(1) Nhấn giữ video $\rightarrow$ menu \textit{Trích âm thanh} $\rightarrow$ thanh tiến trình. \newline
-(2) Xong: toast xác nhận; tệp vào kho cá nhân. &
-F-VID-10, F-MUS-07, F-COM-05 &
-Miễn phí trong phạm vi catalog môn học \\
+C7 \newline B$\rightarrow$C \newline đang nghe nhạc, đọc tin &
+(1) Rời tab Music: nhạc vẫn phát; dock hiện ở feed và cả trong trình đọc bài. \newline
+(2) Chạm dock mở trình phát đầy đủ, quay lại đọc tiếp bằng một chạm. \newline
+(3) Chơi quiz cuối bài: nhạc vẫn phát. &
+F-MUS-02, F-NEWS-07, F-NEWS-08 &
+Dock không biến mất trong trình đọc \\
 \midrule
-C8 \newline siêu \newline playlist &
-(1) Người dùng thêm tệp trích, audio tin và bài nhạc vào cùng một hàng phát. \newline
-(2) Phát liên tiếp, gián đoạn tối đa 1 giây giữa các mục. &
-F-MUS-09 (cùng F-MUS-07, F-NEWS-05) &
-Làm sau MVP \\
+C8 \newline C$\rightarrow$B \newline đang đọc tin, mở nhạc &
+(1) Đang đọc, mở bài nhạc từ tab Music: nhạc phát; thẻ ``Đang đọc'' nổi theo dõi. \newline
+(2) Quay lại bài bằng thẻ. &
+F-MUS-01, F-NEWS-10 &
+Đọc dở vẫn kiểm soát được \\
 \midrule
-C9 \newline 3 luồng cùng lúc &
-(1) Không hỗ trợ ở v1: luồng thứ 3 bị dừng và lưu lại, kèm thông báo. \newline
-(2) Lý do: hiệu năng thiết bị phổ thông chưa đủ; ghi nhận cho v2. &
+C9 \newline B$\rightarrow$D \newline đang nghe nhạc, vào game &
+(1) Nhạc vẫn phát trong game; game không phát âm thanh đè lên (một nguồn tiếng chính). \newline
+(2) Thắng ván: điểm cộng ngay, nhạc không ngắt. &
+F-MUS-02, F-GAME-08 &
+Game im tiếng khi nhạc phát \\
+\midrule
+C10 \newline D$\rightarrow$B \newline đang trong game, mở nhạc &
+(1) Rời game: ván tạm dừng, lưu điểm. \newline
+(2) Nhạc phát; quay lại game chọn Tiếp tục. &
+F-MUS-01, F-GAME (pause/restore) &
+Rời game luôn tạm dừng + lưu \\
+\midrule
+C11 \newline C$\rightarrow$D \newline đang đọc tin, vào game &
+(1) Thẻ ``Đang đọc'' nổi; game chạy bình thường. \newline
+(2) Quay lại bài qua thẻ. &
+F-NEWS-10, F-GAME-01 &
+Thẻ đọc nổi dùng chung mọi luồng \\
+\midrule
+C12 \newline D$\rightarrow$C \newline đang trong game, đọc tin &
+(1) Game tạm dừng; bài đọc mở; rời News thì thẻ ``Đang đọc'' nổi. &
+F-GAME (pause/restore), F-NEWS-10 &
+Rời game luôn tạm dừng + lưu \\
+\midrule
+C13 \newline B$\rightarrow$TTS \newline đang nghe nhạc, bấm \textit{Nghe} bài tin &
+(1) Bấm nút Nghe trên bài báo: nếu nhạc đang phát, nhạc tự tạm dừng nhường. \newline
+(2) TTS đọc theo đoạn kèm thanh tiến trình và nút dừng; nghe xong bật lại nhạc bằng dock. &
+F-NEWS-05, F-MUS-10 &
+TTS là luồng nói chính \\
+\midrule
+C14 \newline trích MP3 \newline (A$\rightarrow$B) &
+(1) Nhấn giữ video $\rightarrow$ xác nhận \textit{Trích xuất} $\rightarrow$ bản ghi vào mục ``Từ video của bạn'' của kho Nhạc; phát như một bài nhạc thật, +5 XP lần đầu mỗi nội dung. \newline
+(2) Nhấn giữ bài báo: tương tự. &
+F-VID-10, F-MUS-07 &
+Trích xuất dùng chung engine nhạc \\
+\midrule
+C15 \newline siêu playlist &
+(1) Trộn nhạc, audio tin và video trích vào cùng một hàng phát. \newline
+(2) Chuyển sang giai đoạn v2, xem mục các tính năng hoãn. &
+F-MUS-09 &
+Sau MVP (v2) \\
+\midrule
+C16 \newline ba luồng cùng lúc &
+(1) Không hỗ trợ ở v1: giữ tối đa một nguồn tiếng chính và một PIP video. \newline
+(2) Lý do: hiệu năng thiết bị phổ thông; ghi nhận cho v2. &
 F-MUS-10, F-COM-14 &
-Tối đa 2 luồng có tiếng ở v1 \\
+Tối đa 1 nguồn tiếng + 1 PIP ở v1 \\
 \end{longtable}
 
 \textbf{Quy tắc xử lý xung đột âm thanh (áp dụng cho mọi case).}
 
 \begin{itemize}
     \item Cuộc gọi và báo thức luôn cao nhất (audio focus của Android); mọi luồng của ứng dụng nhường ngay.
-    \item Nội dung người dùng vừa mở: video, TTS, game giữ quyền; luồng trước giảm còn 30\% hoặc dừng theo lựa chọn đã lưu (C1).
-    \item Nhạc dock là nền: nhường mọi luồng chính, chỉ tiếp tục khi người dùng chọn ``phát cả hai''.
-    \item TTS là nội dung chính khi đang phát: hiệu ứng game chỉ giảm nhạc, không đè lên TTS.
-    \item Mọi luồng đều thấy và điều khiển được từ dock, notification hoặc màn hình khoá.
+    \item Một nguồn tiếng chính tại một thời điểm: TTS làm nhạc tạm dừng (C13), game không phát âm thanh khi nhạc đang chạy (C9).
+    \item Mở nhạc khi video đang phát: hỏi (C1); mở video khi nhạc đang phát: hỏi (C2) --- cả hai chiều đều hỏi.
+    \item Nhạc dock là luồng nền: hiện trên mọi tab, nhường ngay khi luồng chính cần tiếng, tiếp tục bằng một chạm.
+    \item Mọi luồng đều thấy và điều khiển được từ dock mini player trong ứng dụng.
 \end{itemize}
 
 \textbf{Gián đoạn từ bên ngoài.}
@@ -163,13 +202,13 @@ Tối đa 2 luồng có tiếng ở v1 \\
 
 \begin{enumerate}
     \item Mở app trong tối đa 2 giây (không bắt đăng nhập).
-    \item Chọn tối thiểu 3 chủ đề trong 30 giây (cho phép Bỏ qua).
-    \item Vào Home thấy ngay danh sách ``thử ngay'': một video, một bài hát, một tin.
-    \item Chạm một bài hát: dock mini hiện ra kèm nhãn ``nhạc vẫn chạy khi bạn chuyển tab''.
+    \item Chọn tối thiểu 3 chủ đề (cho phép Bỏ qua).
+    \item Vào Home thấy ngay ``Đề xuất hôm nay'': một video, một bài hát, một tin.
+    \item Chạm một bài hát: dock mini hiện ra ở đáy mọi màn hình.
     \item Banner nhiệm vụ ngày đầu: \textit{Nghe 1 bài -- Đọc 1 tin -- Thắng 1 ván}.
-    \item Mở bài tin đầu tiên: gợi ý ``đọc tin và nghe nhạc cùng lúc''.
+    \item Mở bài tin đầu tiên: dock nhạc vẫn hiện trong trình đọc.
     \item Hoàn thành 3 nhiệm vụ: nhận trứng thú cưng, nở trong 2 giây.
-    \item Cuối phiên: streak = 1, nhắc ``mai quay lại giữ mốc 7 ngày''.
+    \item Cuối phiên: streak = 1; huy hiệu ``Chuỗi 7 ngày'\,hiện trong lưới huy hiệu.
 \end{enumerate}
 
 Chỉ số: \textbf{tỉ lệ người mới dùng ít nhất 3 trong 5 tính năng chính trong lần đầu} $\geq$ 60\%.
@@ -216,7 +255,7 @@ Người chơi trung bình kiếm 60--100 điểm/ngày. Không bán điểm b�
 Bản quyền trích mp3 & Cao & Bị khiếu nại, gỡ app & Chỉ trích từ catalog tự dựng; ghi rõ phạm vi nội dung tự dựng \\
 TTS tiếng Việt kém & Trung bình & Trụ W3 nghe tệ & Chọn engine giọng Việt ổn; thử 20 bài; fallback hiện bản chữ \\
 OEM tắt ứng dụng nền & Cao & Nhạc nền chết trên máy Xiaomi/Oppo & Foreground service đúng chuẩn; hướng dẫn người dùng tắt tối ưu pin; test trên 2--3 máy OEM \\
-Game + video trên máy yếu & Trung bình & C4 giật, người bỏ ván & PIP tự hạ độ phân giải; test máy RAM 3 GB \\
+Game + video trên máy yếu & Trung bình & C5 giật, người bỏ ván & PIP tự hạ độ phân giải; test máy RAM 3 GB \\
 Phạm vi phình to & Cao & MVP trễ, chất lượng giảm & Freeze danh sách MVP; mọi đề nghị mới vào danh sách v2 \\
 Gian lận điểm & Trung bình & BXH vô nghĩa & v1 ghi điểm cục bộ; chống gian lận sau \\
 Thiết bị Android đa dạng & Trung bình & Lỗi chỉ trên máy của giảng viên & Android 8.0+; test trên 3 máy cố định \\

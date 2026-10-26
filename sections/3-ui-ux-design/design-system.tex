@@ -6,27 +6,28 @@
 
 Design system của OneSpace được xây trên \textbf{Material 3}~\cite{material3} và tổ chức hoàn toàn theo \textit{token theo vai trò} (role-based): mã nguồn không-hardcode màu, mọi màn hình đều tham chiếu các vai trò màu của Material Theme (\texttt{primary}, \texttt{onSurface}, \texttt{surfaceContainer}, \ldots) được định nghĩa tập trung trong một tệp theme duy nhất của ứng dụng. Cách đặt tên theo vai trò này bảo đảm khi thay đổi bảng màu, toàn bộ giao diện cập nhật đồng loạt mà không cần sửa từng màn hình~--~đây cũng là câu trả lời cho câu hỏi tái sử dụng token khi lập trình: một token được khai báo một lần, dùng ở mọi nơi.
 
-Bảng màu theo định hướng thương hiệu \textit{mint--teal trên nền xanh mực}: màu chính light là xanh lá đậm (đậm hơn nền một bậc), ở dark chuyển thành mint sáng; màu phụ là teal. Mọi vai trò đều được khai báo thành cặp \texttt{role/onRole} (chữ trên nền tương ứng) để component tự giữ tương phản đọc được ở cả hai chế độ. Bảng~\ref{tab:design-tokens} liệt kê các token tiêu biểu; giá trị hex lấy trực tiếp từ mã nguồn theme của ứng dụng.
+Bảng màu theo định hướng thương hiệu \textit{teal trên nền xanh lục nhạt}: màu chính light là teal đậm, ở dark chuyển thành mint sáng; màu phụ là xanh lục xám; màu nhấn ba (tertiary) là tím lavender. Mọi vai trò đều được khai báo thành cặp \texttt{role/onRole} (chữ trên nền tương ứng) để component tự giữ tương phản đọc được ở cả hai chế độ. Bảng~\ref{tab:design-tokens} liệt kê các token tiêu biểu; giá trị hex lấy trực tiếp từ mã nguồn theme của ứng dụng.
 
 \begin{table}[H]
 \centering
 \small
 \caption{Design token màu theo vai trò Material 3}
 \label{tab:design-tokens}
-\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{3.5cm} >{\centering\arraybackslash}p{1.3cm} >{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{3.2cm} >{\centering\arraybackslash}p{1.6cm} >{\raggedright\arraybackslash}X@{}}
 \toprule
 \textbf{Vai trò (Light / Dark)} & \textbf{Màu} & \textbf{Dùng cho} \\
 \midrule
-primary / onPrimary \newline 41690F / B8F36E & \sw{41690F}{B8F36E} & Nút chính, tab đang chọn, liên kết \\
-primaryContainer \newline C3F491 / 334E00 & \sw{C3F491}{334E00} & Vùng nhấn mạnh, nền icon thẻ \\
-secondary / onSecondary \newline 006A68 / 9BD8D1 & \sw{006A68}{9BD8D1} & Nút phụ, chip chuyên mục \\
-tertiary / onTertiary \newline 566516 / BDE886 & \sw{566516}{BDE886} & Điểm nhấn phụ (gamification) \\
-error / onError \newline BA1A1A / FFB4AB & \sw{BA1A1A}{FFB4AB} & Thông báo lỗi, nút thử lại \\
-background / onBackground \newline F8FAF2 / 10140E & \sw{F8FAF2}{10140E} & Nền màn hình và chữ chính \\
-surface / onSurface \newline F8FAF2 / 10140E & \sw{F8FAF2}{10140E} & Bề mặt card, thanh công cụ \\
-surfaceVariant \newline DEE3D0 / 43483D & \sw{DEE3D0}{43483D} & Chữ phụ, nền chip \\
-surfaceContainer\allowbreak{}High \newline E5E8D6 / 272F25 & \sw{E5E8D6}{272F25} & Card nổi, dock mini player \\
-outline \newline 75796D / 8E927F & \sw{75796D}{8E927F} & Viền phân tách, gợi ý ô nhập \\
+primary / onPrimary \newline 006B5F / 82D5C3 & \sw{006B5F}{82D5C3} & Nút chính; tab đang chọn; icon bài hát; chữ ``Đang phát''; nút phát/dừng đang bật; logo OneSpace \\
+primaryContainer \newline 9EF2DF / 005045 & \sw{9EF2DF}{005045} & Nền icon trong ContentCard; ô quiz đúng; huy hiệu đã đạt; thẻ nhiệm vụ hoàn thành \\
+secondary / onSecondary \newline 526460 / BACCC5 & \sw{526460}{BACCC5} & Icon trong onboarding; màu phụ logo \\
+tertiary / onTertiary \newline 66587B / D1BFE7 & \sw{66587B}{D1BFE7} & Icon streak trên Home; nhãn đề xuất \\
+tertiaryContainer \newline ED DCFF / 4E4261 & \sw{EDDCFF}{4E4261} & Chip chuỗi ngày trên banner nhiệm vụ; card thú cưng \\
+error / onError \newline BA1A1A / FFB4AB & \sw{BA1A1A}{FFB4AB} & Thông báo lỗi phát; ô quiz sai; icon yêu thích (tim đỏ) \\
+background / onBackground \newline F5FBF7 / 0F1512 & \sw{F5FBF7}{0F1512} & Nền mọi màn hình; chữ chính \\
+surface / onSurface \newline F5FBF7 / 0F1512 & \sw{F5FBF7}{0F1512} & Nền card đang kéo (queue nhạc) \\
+surfaceVariant \newline DBE5DF / 3F4945 & \sw{DBE5DF}{3F4945} & Nền ô vuông 2048; nền ô Beat Tiles; nền avatar chưa chọn \\
+surfaceContainer\allowbreak{}High \newline E3EAE5 / 252B28 & \sw{E3EAE5}{252B28} & Nền card menu trong quiz; nền ô input \\
+outline \newline 6F7974 / 89938D & \sw{6F7974}{89938D} & Icon radio chưa chọn; vạch phân tách TrackCard \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -35,7 +36,7 @@ Hai quyết định quan trọng về màu:
 
 \begin{itemize}
     \item \textbf{Chế độ tối đi theo hệ thống, có ghi đè thủ công.} Ứng dụng đọc chế độ tối của hệ điều hành làm mặc định (tương ứng F-COM-13); trong Cài đặt người dùng chọn được Sáng, Tối hoặc Theo hệ thống~--~tùy chọn này được lưu và áp dụng cho toàn bộ ứng dụng ở lần mở sau.
-    \item \textbf{Dynamic color tắt mặc định.} Android 12+ cho phép lấy màu theo hình nền của người dùng (dynamic color); ứng dụng hỗ trợ cơ chế này nhưng tắt mặc định để nhận diện thương hiệu mint--teal ổn định trên mọi thiết bị, vì bảng màu là một phần nhận diện sản phẩm chứ không phải trang trí.
+    \item \textbf{Dynamic color tắt mặc định.} Android 12+ cho phép lấy màu theo hình nền của người dùng (dynamic color); ứng dụng hỗ trợ cơ chế này nhưng tắt mặc định để nhận diện thương hiệu teal ổn định trên mọi thiết bị, vì bảng màu là một phần nhận diện sản phẩm chứ không phải trang trí.
 \end{itemize}
 
 Hình~\ref{fig:design-modes} so sánh cùng ba màn hình ở hai chế độ: cùng một hệ vai trò token giữ bố cục nguyên vẹn, chỉ đổi giá trị màu.
@@ -83,5 +84,7 @@ Trình phát video + cửa sổ nổi, Now Playing, trình đọc bài, bàn ch�
 \bottomrule
 \end{tabularx}
 \end{table}
+
+Bảng component trên có thể đọc theo ba nhóm chức năng quen thuộc của thiết kế giao diện: \textbf{input control} (người dùng cung cấp thông tin cho chương trình), \textbf{navigation} (di chuyển giữa các vị trí trong ứng dụng mà không lo lạc đường) và \textbf{information / container} (hiển thị dữ liệu và nhóm chúng lại). Trong OneSpace: ô OTP và mật khẩu, thanh trượt tốc độ phát và âm lượng, chip chọn chất lượng, ô tick ``Không hỏi lại'' là input control; thanh 5 tab, vuốt ngang đổi phân hệ, nút Quay lại và bottom sheet là navigation; \texttt{ContentCard}, skeleton feed, snackbar và các bottom sheet xác nhận là information và container. Cách nhóm này giúp khi thiết kế một màn mới, việc đầu tiên là hỏi màn đó cần input gì và điều hướng đi đâu~--~thay vì chọn component theo cảm tính.
 
 Về quy chuẩn nền tảng: ứng dụng Android-native tuân theo Material Design~\cite{material3} cho toàn bộ ngôn ngữ tương tác~--~ripple khi chạm, elevation của card và bottom sheet, vùng chạm tối thiểu 48dp, motion theo chuẩn M3. Nhóm không áp dụng song song Apple Human Interface Guidelines vì sản phẩm chỉ phát hành trên Android (quyết định chọn nền tảng ở Phần~\ref{sec:technical-architecture}); giữ một quy chuẩn nền tảng duy nhất cũng giúp giao diện nhất quán hơn là pha trộn hai bộ quy chuẩn khác nhau.

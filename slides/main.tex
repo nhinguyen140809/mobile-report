@@ -1,0 +1,1817 @@
+% Slide thuyết trình -- build bằng pdfLaTeX + vntex (giống report).
+% Build: python3 scripts/build_slides.py  (xuất slides.pdf ở gốc repo)
+% Tiêu đề/nhóm/GVHD đọc từ metadata.tex (nguồn duy nhất, sửa ở đó).
+%
+% CẤU TRÚC: mỗi mục của report là MỘT \section (hiện trong mục lục).
+% Slide liên tiếp của cùng section dùng chung title, kèm số (i/n).
+% Placeholder: Web Services, Kiểm thử & Triển khai, heuristic evaluation.
+
+\documentclass[aspectratio=169]{beamer}
+\usepackage{vntex}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+
+% Ký hiệu ma trận đối thủ
+\newcommand{\cmark}{\textcolor{brandteal}{\checkmark}}
+\newcommand{\pmark}{\textcolor{brandteal!65!black}{$\triangle$}}
+\newcommand{\xmark}{\textcolor{brandgray}{$\times$}}
+
+% ---------- Thương hiệu: mint/teal trên nền xanh mực (đúng design system trong report) ----------
+\definecolor{brandteal}{RGB}{16,163,127}
+\definecolor{brandmint}{RGB}{110,220,185}
+\definecolor{brandnavy}{RGB}{11,26,42}
+\definecolor{brandink}{RGB}{28,41,59}
+\definecolor{brandpaper}{RGB}{248,250,252}
+\definecolor{brandgray}{RGB}{90,102,118}
+\definecolor{vennneeds}{RGB}{37,99,235}
+\definecolor{vennours}{RGB}{16,163,127}
+\definecolor{venncomp}{RGB}{220,38,38}
+\definecolor{winzone}{RGB}{255,215,0}
+
+\usetheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize items}[triangle]
+\setbeamertemplate{itemize subitem}[circle]
+\setbeamercolor{structure}{fg=brandteal}
+\setbeamercolor{frametitle}{fg=brandnavy}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{author}{fg=brandmint}
+\setbeamercolor{institute}{fg=brandmint!70}
+\setbeamercolor{date}{fg=brandmint!70}
+\setbeamercolor{normal text}{fg=brandink}
+\setbeamercolor{block title}{bg=brandteal,fg=white}
+\setbeamercolor{block body}{bg=brandpaper,fg=brandink}
+\setbeamercolor{block title alerted}{bg=brandgray,fg=white}
+\setbeamercolor{block body alerted}{bg=brandpaper,fg=brandink}
+\setbeamercolor{section in toc}{fg=brandink}
+\setbeamerfont{frametitle}{series=\bfseries,size=\large}
+\setbeamerfont{title}{series=\bfseries,size=\large}
+\setbeamerfont{section in toc}{size=\small}
+\setbeamertemplate{frametitle}{%
+  \vspace{2mm}%
+  {\color{brandteal}\hrule height 1.2pt}%
+  \vspace{1.5mm}%
+  \insertframetitle\par%
+}
+
+% Tiêu đề, nhóm, GVHD: đọc từ metadata của report
+\input{metadata}
+
+\title{\reporttitle}
+\subtitle{\coursecode{} -- \coursename{} \\ \reportkind}
+\author{\reportauthor}
+\institute{GVHD: \reportadvisors}
+\date{\reportplace{} -- \reportyear}
+
+\begin{document}
+
+% ============================================================
+% MÀN TRÌNH BÀY
+% ============================================================
+\begin{frame}[plain]
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[brandnavy] (current page.south west) rectangle (current page.north east);
+    \fill[brandteal] ([yshift=-3.2cm]current page.north west) rectangle ([yshift=-3.35cm]current page.north east);
+  \end{tikzpicture}%
+  \vspace{12mm}
+  \begin{center}
+    {\color{brandmint}\LARGE\itshape Thiết kế và hiện thực hóa ứng dụng giải trí tích hợp video, âm nhạc, tin tức và minigame trên nền tảng Android}\\[6mm]
+    {\color{white}\large \coursecode{} -- \coursename{} -- \reportkind}\\[6mm]
+    {\color{white}\large \reportauthor}\\[2mm]
+    {\color{white}\normalsize GVHD: \reportadvisors}\\[4mm]
+    {\color{white}\normalsize \reportplace{}, \reportyear}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Nội dung (1/2)}
+  \tableofcontents[sections={1-14}]
+\end{frame}
+
+\begin{frame}{Nội dung (2/2)}
+  \tableofcontents[sections={15-27}]
+\end{frame}
+
+% ============================================================
+\section{Bối cảnh}
+% ============================================================
+\begin{frame}{Bối cảnh}
+  \begin{itemize}
+    \item Điện thoại là thiết bị giải trí chính của người Việt:
+          137 triệu kết nối di động (134\% dân số); 85,6 triệu người dùng Internet (84,2\%)
+    \item 82\% người được khảo sát dùng TikTok trong 7 ngày gần nhất;
+          dành \textbf{7,1 giờ/ngày} cho ứng dụng di động và dùng hơn \textbf{27 ứng dụng/tuần}
+    \item Mỗi loại nội dung một bộ ứng dụng riêng:
+      \begin{itemize}\small
+        \item \textbf{Video:} YouTube, TikTok\ldots
+        \item \textbf{Âm nhạc:} Spotify, Zing\ldots
+        \item \textbf{Tin tức:} VnExpress, Báo Mới\ldots
+        \item \textbf{Minigame:} rời rạc trên TikTok, YouTube Playables, Shopee\ldots
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% ============================================================
+\section{Phát biểu bài toán}
+% ============================================================
+\begin{frame}{Phát biểu bài toán}
+  \begin{columns}
+    \begin{column}{0.52\textwidth}
+      \begin{itemize}\small
+        \item \textbf{Trải nghiệm đứt gãy}: nội dung không theo người dùng khi đổi ngữ cảnh; chế độ thu nhỏ picture-in-picture (PIP) tuỳ app; không phối hợp âm thanh
+        \item \textbf{Tài khoản \& thông báo}: đăng nhập nhiều lần, thông báo đẩy chồng chéo
+        \item \textbf{Tài nguyên}: nhiều app = chiếm lưu trữ, RAM khi chạy nền, cạn pin
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \begin{alertblock}{Bài toán}
+        \small\itshape ``Làm thế nào để thiết kế một ứng dụng Android hợp nhất bốn phân hệ Streaming Video, Listening to Music, Reading News và Playing Minigames trong một trải nghiệm liền mạch, và giá trị khác biệt nào khiến người dùng chọn ứng dụng này thay vì tiếp tục dùng các ứng dụng quen thuộc hiện tại?''
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ============================================================
+\section{Thị trường}
+% ============================================================
+\begin{frame}{Thị trường (1/5)}
+  \begin{center}
+  \begin{tikzpicture}[scale=0.85,
+      card/.style={rounded corners=3pt, draw=brandgray!40, fill=brandpaper, thick}]
+    % ----- Thẻ 1: người dùng Internet -----
+    \draw[card] (0,0) rectangle (5.0,2.7);
+    \draw[brandteal, thick] (0.72,1.9) circle (0.38);
+    \draw[brandteal] (0.72,1.9) ellipse (0.38 and 0.15);
+    \draw[brandteal] (0.72,1.9) ellipse (0.15 and 0.38);
+    \node[anchor=west, font=\Large\bfseries, text=brandnavy] at (1.35,1.95) {85,6 triệu};
+    \node[anchor=west, font=\scriptsize, text=brandink] at (1.35,1.45) {người dùng Internet};
+    \draw[brandgray!35, line width=4pt] (0.72,0.62) circle (0.3);
+    \draw[brandteal, line width=4pt] ([shift={(-90:0.3)}]0.72,0.62) arc[start angle=-90, end angle=213.1, radius=0.3];
+    \node[anchor=west, font=\scriptsize, text=brandgray] at (1.35,0.62) {84,2\% dân số, cuối 2025};
+    % ----- Thẻ 2: lượt tải ứng dụng -----
+    \begin{scope}[shift={(5.6,0)}]
+      \draw[card] (0,0) rectangle (5.0,2.7);
+      \fill[brandteal] (0.62,2.32) -- (0.86,2.32) -- (0.86,1.98) -- (1.02,1.98) -- (0.74,1.66) -- (0.46,1.98) -- (0.62,1.98) -- cycle;
+      \draw[brandteal, line width=2.2pt] (0.46,1.48) -- (1.02,1.48);
+      \node[anchor=west, font=\Large\bfseries, text=brandnavy] at (1.35,1.95) {2,88 tỷ};
+      \node[anchor=west, font=\scriptsize, text=brandink] at (1.35,1.45) {lượt tải ứng dụng, 2025};
+      \node[anchor=west, draw=brandteal, fill=brandteal!12, rounded corners=2pt, inner sep=3pt,
+            font=\scriptsize\bfseries, text=brandteal!60!black] at (1.35,0.62) {Top 11 thế giới};
+    \end{scope}
+    % ----- Thẻ 3: thị phần HĐH -----
+    \begin{scope}[shift={(11.2,0)}]
+      \draw[card] (0,0) rectangle (5.0,2.7);
+      \node[font=\scriptsize\bfseries, text=brandink] at (2.5,2.35) {Thị phần HĐH di động (9/2026)};
+      \draw[draw=brandgray, fill=brandpaper, thick] (0.7,1.15) rectangle (4.3,1.75);
+      \fill[brandteal] (0.7,1.15) rectangle (2.73,1.75);
+      \node[font=\tiny, text=white] at (1.71,1.45) {Android};
+      \fill[brandnavy!70] (2.73,1.15) rectangle (4.3,1.75);
+      \node[font=\tiny, text=white] at (3.51,1.45) {iOS};
+      \node[font=\scriptsize\bfseries, text=brandteal!60!black] at (1.71,0.82) {59,79\%};
+      \node[font=\scriptsize\bfseries, text=brandnavy!70] at (3.51,0.82) {40,19\%};
+      \node[font=\tiny, text=brandgray] at (2.5,0.38) {nguồn: StatCounter, 9/2026};
+    \end{scope}
+  \end{tikzpicture}
+  \end{center}
+  \vfill
+  \begin{center}
+    {\small\color{brandgray} Android chiếm đa số thị phần~--~nên chọn Android trước khi làm iOS hay đa nền tảng}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Thị trường (2/5)}
+  \begin{center}
+  \begin{tikzpicture}[
+      card/.style={rounded corners=4pt, draw=brandgray!40, fill=brandpaper, thick},
+      bar/.style={draw=none, fill=brandteal}]
+    \draw[card] (0,0) rectangle (13.6,5.8);
+    \node[anchor=west, font=\large\bfseries, text=brandteal!60!black] at (0.35,5.3) {VIDEO};
+    \node[anchor=west, font=\Large\bfseries, text=brandnavy] at (0.35,4.3) {62,1 triệu};
+    \node[anchor=west, font=\small, text=brandink] at (0.35,3.85) {người dùng YouTube};
+    \node[anchor=west, font=\Large\bfseries, text=brandnavy] at (0.35,2.95) {76,1 triệu};
+    \node[anchor=west, font=\small, text=brandink] at (0.35,2.5) {người dùng TikTok (18+)};
+    \node[anchor=west, font=\scriptsize, text=brandgray, text width=3.6cm, align=left] at (0.35,1.6) {hai nền tảng video phổ biến nhất tại Việt Nam};
+    \draw[brandgray!25] (4.9,1.4) -- (4.9,5.3);
+    \node[anchor=west, font=\small\bfseries, text=brandink] at (5.3,5.05) {Xem phim theo nền tảng (Decision Lab, Q2/2024)};
+    \node[anchor=east, font=\small, text=brandink] at (7.15,4.5) {YouTube};
+    \fill[bar] (7.35,4.33) rectangle +(5.25,0.34);
+    \node[anchor=west, font=\small, text=brandink] at (12.72,4.5) {68\%};
+    \node[anchor=east, font=\small, text=brandink] at (7.15,3.95) {Facebook};
+    \fill[bar] (7.35,3.78) rectangle +(2.47,0.34);
+    \node[anchor=west, font=\small, text=brandink] at (9.94,3.95) {32\%};
+    \node[anchor=east, font=\small, text=brandink] at (7.15,3.4) {FPT Play};
+    \fill[bar] (7.35,3.23) rectangle +(2.24,0.34);
+    \node[anchor=west, font=\small, text=brandink] at (9.71,3.4) {29\%};
+    \node[anchor=east, font=\small, text=brandink] at (7.15,2.85) {Netflix};
+    \fill[bar] (7.35,2.68) rectangle +(2.16,0.34);
+    \node[anchor=west, font=\small, text=brandink] at (9.63,2.85) {28\%};
+    \node[anchor=east, font=\small, text=brandink] at (7.15,2.3) {VTV Go};
+    \fill[bar] (7.35,2.13) rectangle +(2.08,0.34);
+    \node[anchor=west, font=\small, text=brandink] at (9.55,2.3) {27\%};
+  \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Thị trường (3/5)}
+  \begin{center}
+  \begin{tikzpicture}[
+      card/.style={rounded corners=4pt, draw=brandgray!40, fill=brandpaper, thick},
+      bar/.style={draw=none, fill=brandteal}]
+    \draw[card] (0,0) rectangle (13.6,5.8);
+    \node[anchor=west, font=\large\bfseries, text=brandteal!60!black] at (0.35,5.3) {ÂM NHẠC};
+    \node[anchor=west, font=\small\bfseries, text=brandink] at (0.35,4.75) {Ứng dụng nghe nhạc được dùng (Decision Lab, Q1/2024)};
+    \node[anchor=east, font=\small, text=brandink] at (3.1,4.1) {YouTube};
+    \fill[bar] (3.3,3.9) rectangle +(8.66,0.4);
+    \node[anchor=west, font=\small\bfseries, text=brandink] at (12.1,4.1) {77\%};
+    \node[anchor=east, font=\small, text=brandink] at (3.1,3.4) {Zing MP3};
+    \fill[bar] (3.3,3.2) rectangle +(5.85,0.4);
+    \node[anchor=west, font=\small, text=brandink] at (9.29,3.4) {52\%};
+    \node[anchor=east, font=\small, text=brandink] at (3.1,2.7) {NhacCuaTui};
+    \fill[bar] (3.3,2.5) rectangle +(3.6,0.4);
+    \node[anchor=west, font=\small, text=brandink] at (7.04,2.7) {32\%};
+    \node[anchor=east, font=\small, text=brandink] at (3.1,2.0) {Spotify};
+    \fill[bar] (3.3,1.8) rectangle +(3.15,0.4);
+    \node[anchor=west, font=\small, text=brandink] at (6.59,2.0) {28\%};
+    \node[anchor=west, font=\scriptsize, text=brandgray, text width=12.8cm, align=left] at (0.35,1.05) {YouTube vừa là nền tảng video lớn nhất, vừa là ứng dụng nghe nhạc phổ biến nhất~--~kho nhạc và video không tách riêng.};
+  \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Thị trường (4/5)}
+  \begin{center}
+  \begin{tikzpicture}[
+      card/.style={rounded corners=4pt, draw=brandgray!40, fill=brandpaper, thick}]
+    \draw[card] (0,0) rectangle (13.6,5.8);
+    \node[anchor=west, font=\large\bfseries, text=brandteal!60!black] at (0.35,5.3) {TIN TỨC};
+    \node[anchor=west, font=\small\bfseries, text=brandink] at (0.35,4.85) {Ứng dụng của từng báo điện tử};
+    \fill[brandteal] (0.55,4.32) circle (0.07);
+    \node[anchor=west, font=\small, text=brandink] at (0.8,4.32) {VnExpress};
+    \fill[brandteal] (0.55,3.77) circle (0.07);
+    \node[anchor=west, font=\small, text=brandink] at (0.8,3.77) {Tuổi Trẻ};
+    \fill[brandteal] (0.55,3.22) circle (0.07);
+    \node[anchor=west, font=\small, text=brandink] at (0.8,3.22) {Dân trí};
+    \node[anchor=west, font=\scriptsize, text=brandgray, text width=5.0cm, align=left] at (0.35,2.35) {người dùng đọc tin trên ứng dụng riêng của từng báo};
+    \draw[brandgray!25] (6.6,1.7) -- (6.6,5.2);
+    \node[anchor=west, font=\small\bfseries, text=brandink] at (7.0,4.85) {Ứng dụng tổng hợp tin};
+    \node[anchor=west, font=\Large\bfseries, text=brandnavy] at (7.0,4.05) {Báo Mới};
+    \node[anchor=west, font=\LARGE\bfseries, text=brandteal] at (7.0,3.1) {150+};
+    \node[anchor=west, font=\small, text=brandink] at (7.0,2.6) {báo điện tử lấy nguồn};
+    \draw[rounded corners=2pt, draw=brandgray!50, fill=brandpaper] (11.2,2.5) rectangle (12.3,3.4);
+    \draw[rounded corners=2pt, draw=brandgray!60, fill=brandpaper] (11.35,2.65) rectangle (12.45,3.55);
+    \draw[rounded corners=2pt, draw=brandteal, thick, fill=white] (11.5,2.8) rectangle (12.6,3.7);
+    \draw[brandgray!40] (11.68,3.5) -- (12.42,3.5);
+    \draw[brandgray!40] (11.68,3.34) -- (12.42,3.34);
+    \draw[brandgray!40] (11.68,3.18) -- (12.25,3.18);
+  \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Thị trường (5/5)}
+  \begin{center}
+  \begin{tikzpicture}[
+      card/.style={rounded corners=4pt, draw=brandgray!40, fill=brandpaper, thick}]
+    \draw[card] (0,0) rectangle (13.6,5.8);
+    \node[anchor=west, font=\large\bfseries, text=brandteal!60!black] at (0.35,5.3) {MINIGAME};
+    \draw[brandgray!25] (4.6,1.2) -- (4.6,5.2);
+    \draw[brandgray!25] (9.2,1.2) -- (9.2,5.2);
+    % ----- Cột 1: lượt tải -----
+    \fill[brandteal] (1.55,4.95) -- (2.05,4.95) -- (2.05,4.3) -- (2.4,4.3) -- (1.8,3.58) -- (1.2,4.3) -- (1.55,4.3) -- cycle;
+    \draw[brandteal, line width=2.5pt] (1.35,3.3) -- (2.25,3.3);
+    \node[anchor=west, font=\Large\bfseries, text=brandnavy] at (0.35,2.5) {1,29 tỷ};
+    \node[anchor=west, font=\small, text=brandink] at (0.35,2.0) {lượt tải game trong 2025};
+    \node[anchor=west, draw=brandteal, fill=brandteal!12, rounded corners=2pt, inner sep=4pt,
+          font=\scriptsize\bfseries, text=brandteal!60!black, text width=3.1cm, align=center]
+          at (0.35,1.15) {nhóm ứng dụng được tải nhiều nhất};
+    % ----- Cột 2: số phiên chơi -----
+    \node[font=\small\bfseries, text=brandink, text width=3.9cm, align=center] at (6.95,5.02)
+          {Số phiên chơi tăng\\trong Q1/2026};
+    \node[font=\scriptsize\bfseries, text=brandteal!60!black] at (6.5,3.3) {gấp 3 lần};
+    \fill[brandgray!40] (5.55,1.35) rectangle +(0.55,0.73);
+    \node[font=\small, text=brandgray] at (5.83,2.35) {4\%};
+    \fill[brandteal] (7.35,1.35) rectangle +(0.55,2.75);
+    \node[font=\small\bfseries, text=brandteal!60!black] at (7.63,4.35) {+15\%};
+    \node[font=\scriptsize, text=brandgray] at (5.83,1.0) {toàn cầu};
+    \node[font=\scriptsize, text=brandgray] at (7.63,1.0) {Việt Nam};
+    % ----- Cột 3: thời lượng phiên -----
+    \draw[brandteal, very thick] (11.4,4.2) circle (0.55);
+    \draw[brandteal, very thick] (11.4,4.2) -- (11.4,4.67);
+    \draw[brandteal, very thick] (11.4,4.2) -- (11.7,4.02);
+    \node[font=\Large\bfseries, text=brandnavy] at (11.4,2.9) {33 phút};
+    \node[font=\small, text=brandink] at (11.4,2.4) {trung bình mỗi phiên};
+  \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+% ============================================================
+\section{Đối thủ}
+% ============================================================
+\begin{frame}{Đối thủ (1/2)}
+  \begin{columns}
+    \begin{column}{0.32\textwidth}
+      \begin{block}{\small YouTube~--~62,1 triệu}
+        \scriptsize
+        \begin{itemize}
+          \item Video dài + ngắn, hệ sinh thái lớn nhất
+          \item Premium: nghe nền, nghe chỉ âm thanh
+          \item Playables: minigame nhẹ trong app
+          \item \textbf{Thiếu:} tin tức, kho nhạc riêng; nội dung không phối hợp với nhau
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \begin{block}{\small TikTok~--~76,1 triệu}
+        \scriptsize
+        \begin{itemize}
+          \item Video ngắn số 1, người dùng 18+
+          \item Minigame trong app (tách rời nội dung)
+          \item Khuyến khích tạo thử thách theo hashtag
+          \item \textbf{Thiếu:} đọc tin, kho nhạc, nghe khi tắt màn
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \begin{block}{\small Mocha~--~$\sim$16 triệu}
+        \scriptsize
+        \begin{itemize}
+          \item Video + Keeng (nhạc) + tin tức + game có thưởng~--~\textbf{gần nhất với đề xuất}
+          \item Data miễn phí cho thuê bao Viettel
+          \item Chat, voice sticker, cùng nghe nhạc khi chat
+          \item \textbf{Thiếu:} liên kết giữa các loại nội dung (playlist trộn, game sinh từ nội dung)
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+  \vfill
+  {\scriptsize\color{brandgray} Đối thủ gián tiếp: Spotify/Zing MP3 (nhạc), Báo Mới/VnExpress (tin), Shopee (quiz, ticket game)~--~mỗi app giữ một mảnh ghép.}
+\end{frame}
+
+\begin{frame}{Đối thủ (2/2)}
+  \begin{center}
+    \small
+    \begin{tabular}{@{}p{2.3cm}cccc@{}}
+      \toprule
+      \textbf{Ứng dụng} & \textbf{Video} & \textbf{Nhạc} & \textbf{Tin tức} & \textbf{Minigame} \\
+      \midrule
+      YouTube & \cmark & \pmark$^{\text{\tiny Premium}}$ & \xmark & \pmark$^{\text{\tiny Playables}}$ \\
+      TikTok & \cmark & \pmark$^{\text{\tiny qua sound}}$ & \xmark & \pmark \\
+      Mocha & \cmark & \cmark$^{\text{\tiny Keeng}}$ & \cmark & \cmark \\
+      Spotify/Zing & \xmark & \cmark & \pmark$^{\text{\tiny podcast}}$ & \xmark \\
+      Báo Mới & \xmark & \xmark & \cmark & \xmark \\
+      Shopee & \xmark & \xmark & \xmark & \pmark$^{\text{\tiny quiz}}$ \\
+      \midrule
+      \textbf{Đề xuất} & \textbf{\cmark} & \textbf{\cmark} & \textbf{\cmark} & \textbf{\cmark} \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+  \vspace{-1mm}
+  \begin{center}
+    {\scriptsize \cmark~có \quad \pmark~một phần / kèm điều kiện \quad \xmark~không có}
+  \end{center}
+  \begin{block}{Khoảng trống}
+    \footnotesize Mocha hướng tới đủ bốn loại nội dung nhưng \textbf{không liên kết} chúng với nhau; các ứng dụng còn lại mỗi app một phân hệ. Không ai cho nội dung \textbf{phối hợp với nhau}: dock dùng chung, xử lý xung đột âm thanh, chuyển đổi hình thức nội dung.
+  \end{block}
+\end{frame}
+
+% ============================================================
+\section{SWOT}
+% ============================================================
+\definecolor{swots}{RGB}{16,163,127}
+\definecolor{swotw}{RGB}{217,119,6}
+\definecolor{swoto}{RGB}{37,99,235}
+\definecolor{swott}{RGB}{220,38,38}
+
+\begin{frame}{SWOT}
+  \begin{center}
+  \begin{tikzpicture}[
+      qbodys/.style={rounded corners=4pt, draw=swots!70, fill=swots!6, thick},
+      qbodyw/.style={rounded corners=4pt, draw=swotw!70, fill=swotw!6, thick},
+      qbodyo/.style={rounded corners=4pt, draw=swoto!70, fill=swoto!6, thick},
+      qbodyt/.style={rounded corners=4pt, draw=swott!70, fill=swott!6, thick},
+      qhead/.style={rounded corners=3pt}]
+    % ---- S: Điểm mạnh ----
+    \begin{scope}[shift={(0,3.15)}]
+      \draw[qbodys] (0,0) rectangle (6.7,2.95);
+      \fill[swots,qhead] (0.07,2.42) rectangle (6.63,2.88);
+      \node[anchor=west, font=\scriptsize\bfseries, text=white] at (0.3,2.65) {S~--~Điểm mạnh};
+      \node[anchor=north west, text width=6.1cm, align=left, font=\tiny] at (0.3,2.28) {%
+        \begin{itemize}\itemsep2pt
+          \item[S1] Một tài khoản cho bốn phân hệ; nhạc không ngắt khi chuyển tab
+          \item[S2] Playlist trộn nhạc, video, tin; chuyển nội dung sang dạng nghe
+          \item[S3] Minigame từ nội dung: đố tin, đoán bài hát, karaoke
+          \item[S4] Gamification chung: nhiệm vụ, streak, thú ảo
+        \end{itemize}};
+    \end{scope}
+    % ---- W: Điểm yếu ----
+    \begin{scope}[shift={(6.9,3.15)}]
+      \draw[qbodyw] (0,0) rectangle (6.7,2.95);
+      \fill[swotw,qhead] (0.07,2.42) rectangle (6.63,2.88);
+      \node[anchor=west, font=\scriptsize\bfseries, text=white] at (0.3,2.65) {W~--~Điểm yếu};
+      \node[anchor=north west, text width=6.1cm, align=left, font=\tiny] at (0.3,2.28) {%
+        \begin{itemize}\itemsep2pt
+          \item[W1] Kho nội dung nhỏ; không ngân sách mua bản quyền
+          \item[W2] Phân hệ nông hơn ứng dụng chuyên biệt, nhất là gợi ý
+          \item[W3] Gộp bốn phân hệ tăng dung lượng, chậm khởi động
+          \item[W4] Thương hiệu mới, nhóm nhỏ, thời gian có hạn
+        \end{itemize}};
+    \end{scope}
+    % ---- O: Cơ hội ----
+    \begin{scope}[shift={(0,0)}]
+      \draw[qbodyo] (0,0) rectangle (6.7,2.95);
+      \fill[swoto,qhead] (0.07,2.42) rectangle (6.63,2.88);
+      \node[anchor=west, font=\scriptsize\bfseries, text=white] at (0.3,2.65) {O~--~Cơ hội};
+      \node[anchor=north west, text width=6.1cm, align=left, font=\tiny] at (0.3,2.28) {%
+        \begin{itemize}\itemsep2pt
+          \item[O1] 85,6 triệu người dùng Internet, mạng tốc độ cao
+          \item[O2] Retention giải trí chỉ 1\% sau 30 ngày~--~vấn đề chung
+          \item[O3] Gamification quen thuộc qua MoMo, Shopee
+          \item[O4] YouTube nền cần Premium; TikTok Music đã đóng
+        \end{itemize}};
+    \end{scope}
+    % ---- T: Thách thức ----
+    \begin{scope}[shift={(6.9,0)}]
+      \draw[qbodyt] (0,0) rectangle (6.7,2.95);
+      \fill[swott,qhead] (0.07,2.42) rectangle (6.63,2.88);
+      \node[anchor=west, font=\scriptsize\bfseries, text=white] at (0.3,2.65) {T~--~Thách thức};
+      \node[anchor=north west, text width=6.1cm, align=left, font=\tiny] at (0.3,2.28) {%
+        \begin{itemize}\itemsep1pt
+          \item[T1] Đối thủ lớn đã có minigame, sao chép nhanh
+          \item[T2] Bản quyền nhạc, video; tổng hợp tin cần giấy phép
+          \item[T3] Điểm thưởng không được quy đổi ra tiền
+          \item[T4] Luật BVDLCN 2025 chặt hơn về đồng ý
+          \item[T5] Người dùng ngại rời playlist, lịch sử cũ
+        \end{itemize}};
+    \end{scope}
+  \end{tikzpicture}
+  \end{center}
+  \vfill
+  \begin{center}
+    {\footnotesize\color{brandgray} Mã S1--T5 tham chiếu chiến lược và bảng rủi ro trong report: khai thác S $\times$ O, tránh vùng W $\times$ T.}
+  \end{center}
+\end{frame}
+
+% ============================================================
+\section{User Personas}
+% ============================================================
+\begin{frame}{User Personas (1/3)}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries Nguyễn Minh Anh~--~người dùng đa nhiệm {\tiny(Primary)}}
+        {\tiny\color{brandgray} 21, sinh viên đại học $\cdot$ TP.\ HCM $\cdot$ công nghệ cao $\cdot$ Android RAM 6~GB $\cdot$ 3--5 giờ/ngày $\cdot$ Wi-Fi, đôi khi 4G/5G}\par\vspace{0.6mm}
+        {\tiny\textbf{Mục tiêu:} dùng nhiều loại nội dung trong một app; xem video khi đọc tin; nghe nhạc khi lướt tin hoặc chơi game; chuyển đổi nhanh; kéo PIP đổi góc; giảm mở/đóng app.}\par\vspace{0.3mm}
+        {\tiny\textbf{Pain points:} liên tục chuyển app; nội dung bị dừng khi đổi hoạt động; khó tìm lại video/bài đang xem; PIP che nội dung; âm thanh chồng nhau.}\par\vspace{0.3mm}
+        {\tiny\textbf{Hành vi:} giải trí giờ nghỉ và buổi tối; quen vuốt, chạm, kéo thả; thích tiếp tục từ chỗ cũ; một việc chính + một việc phụ.}\par\vspace{0.3mm}
+        {\tiny\textbf{Tình huống:} đang xem video, muốn đọc báo $\rightarrow$ chạm tab Tin, video tự thu PIP tiếp tục phát; kéo PIP sang góc khác khỏi đoạn văn; đọc xong chạm PIP quay lại, phát tiếp đúng vị trí.}\par\vspace{0.3mm}
+        {\tiny\textbf{Luồng:} \textcolor{brandteal!60!black}{Video $\rightarrow$ Tin $\rightarrow$ PIP $\rightarrow$ Video}~--~case C3}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries Trần Hoàng Nam~--~ưu tiên tiện lợi}
+        {\tiny\color{brandgray} 27, nhân viên văn phòng $\cdot$ TP.\ HCM $\cdot$ công nghệ TB--khá $\cdot$ Android RAM 8~GB $\cdot$ 1--2 giờ/ngày $\cdot$ Wi-Fi + data}\par\vspace{0.6mm}
+        {\tiny\textbf{Mục tiêu:} đọc nhanh tin trong giờ nghỉ; nghe nhạc khi di chuyển; tiếp tục bài viết trước đó bằng ít thao tác; nhạc nền chạy khi rời app, điều khiển lại bằng một chạm.}\par\vspace{0.3mm}
+        {\tiny\textbf{Pain points:} không có thời gian tìm nội dung; thao tác nhiều màn gây bất tiện; âm thanh gián đoạn khi có cuộc gọi; phải tìm lại bài đang nghe/đọc; giao diện nhiều tùy chọn gây rối.}\par\vspace{0.3mm}
+        {\tiny\textbf{Hành vi:} dùng khi di chuyển, nghỉ trưa, sau giờ làm; nghe nhạc qua tai nghe Bluetooth; khoá màn khi nghe nhạc; thích nút điều khiển rõ ràng.}\par\vspace{0.3mm}
+        {\tiny\textbf{Tình huống:} trên đường đến công ty phát playlist rồi khoá điện thoại; nghỉ trưa mở app đọc tin, nhạc vẫn phát, điều khiển qua dock; có cuộc gọi thì app tự nhường, sau đó phát lại từ đúng chỗ.}\par\vspace{0.3mm}
+        {\tiny\textbf{Luồng:} \textcolor{brandteal!60!black}{Music $\rightarrow$ khoá màn $\rightarrow$ Tin $\rightarrow$ Music}~--~case C7}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{User Personas (2/3)}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries Lê Quốc Huy~--~game trên máy yếu}
+        {\tiny\color{brandgray} 19, sinh viên năm nhất $\cdot$ Bình Dương $\cdot$ công nghệ TB $\cdot$ Android RAM 3~GB $\cdot$ 2--3 giờ/ngày $\cdot$ Wi-Fi, dữ liệu giới hạn}\par\vspace{0.6mm}
+        {\tiny\textbf{Mục tiêu:} chơi minigame đơn giản; nghe nhạc khi chơi game; chơi tiếp khi mất mạng; không mất tiến độ; hạn chế giật lag; tiết kiệm dữ liệu.}\par\vspace{0.3mm}
+        {\tiny\textbf{Pain points:} máy chậm khi nhiều tác vụ; mạng không ổn định; game mất tiến độ khi app bị đóng; video HQ tốn dữ liệu; âm game xung đột nhạc nền.}\par\vspace{0.3mm}
+        {\tiny\textbf{Hành vi:} chơi game giờ nghỉ; ưu tiên game nhẹ, ngắn; mở nhạc khi chơi; chọn chất lượng thấp để tiết kiệm data.}\par\vspace{0.3mm}
+        {\tiny\textbf{Tình huống:} đang nghe nhạc, vào Games mở 2048 $\rightarrow$ nhạc vẫn phát, âm thanh game giảm (C5); mạng ngắt nhưng game vẫn chạy offline; chuyển sang Tin đọc bài đã lưu, app tạm dừng game và lưu điểm; quay lại chọn Tiếp tục.}\par\vspace{0.3mm}
+        {\tiny\textbf{Luồng:} \textcolor{brandteal!60!black}{Music $\rightarrow$ Games $\rightarrow$ Tin $\rightarrow$ Resume game}~--~case C9}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries Phạm Thảo Vy~--~khám phá nội dung}
+        {\tiny\color{brandgray} 24, nhân viên marketing $\cdot$ TP.\ HCM $\cdot$ công nghệ cao $\cdot$ Android RAM 8~GB $\cdot$ 3--4 giờ/ngày $\cdot$ Wi-Fi + 5G}\par\vspace{0.6mm}
+        {\tiny\textbf{Mục tiêu:} khám phá nội dung mới; chuyển đổi video $\leftrightarrow$ bài báo cùng chủ đề; tìm kiếm trên nhiều phân hệ; lưu nội dung xem sau; tiếp tục từ chỗ cũ.}\par\vspace{0.3mm}
+        {\tiny\textbf{Pain points:} nội dung cùng chủ đề rải rác nhiều app; phải tìm lại chủ đề khi chuyển video sang tin; khó quản lý danh sách xem sau; dễ mất dấu nội dung đã xem.}\par\vspace{0.3mm}
+        {\tiny\textbf{Hành vi:} xem video, đọc báo, tìm chủ đề mới; hay dùng search và bộ lọc; chuyển từ nội dung này sang nội dung liên quan.}\par\vspace{0.3mm}
+        {\tiny\textbf{Tình huống:} đọc bài báo về công nghệ, muốn xem video liên quan $\rightarrow$ dùng Search xuyên nội dung; vị trí đọc được lưu; xem xong quay lại Tin, khôi phục đúng đoạn cũ; đánh dấu cả bài và video để xem cuối tuần.}\par\vspace{0.3mm}
+        {\tiny\textbf{Luồng:} \textcolor{brandteal!60!black}{Tin $\rightarrow$ Search $\rightarrow$ Video $\rightarrow$ Tin $\rightarrow$ Saved}}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{User Personas (3/3)}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries Nguyễn Gia Bảo~--~tùy chỉnh sâu}
+        {\tiny\color{brandgray} 23, sinh viên CNTT $\cdot$ TP.\ HCM $\cdot$ công nghệ rất cao $\cdot$ Android RAM 12~GB $\cdot$ 3--4 giờ/ngày $\cdot$ Wi-Fi + 5G}\par\vspace{0.6mm}
+        {\tiny\textbf{Mục tiêu:} chọn cách chuyển tab; điều khiển trạng thái phát; tùy chỉnh vị trí PIP; giữ video khi vào game; quản lý âm thanh từng hoạt động.}\par\vspace{0.3mm}
+        {\tiny\textbf{Pain points:} app tự dừng/tiếp tục không đúng ý; không đổi được hành vi chuyển màn; PIP cỡ cố định; không biết nguồn âm nào đang phát; thao tác nhiều để đổi cài đặt.}\par\vspace{0.3mm}
+        {\tiny\textbf{Hành vi:} quen cài đặt nâng cao; dùng nhiều app đa phương tiện; chấp nhận giao diện phức tạp nếu rõ ràng.}\par\vspace{0.3mm}
+        {\tiny\textbf{Tình huống:} đã đặt ``giữ PIP khi vào Games'': mở game, video tự thu nhỏ; phát nhạc thì app dừng video ưu tiên bài mới; quay lại video qua trình điều khiển.}\par\vspace{0.3mm}
+        {\tiny\textbf{Luồng:} \textcolor{brandteal!60!black}{Video $\rightarrow$ Games (PIP) $\rightarrow$ Music}~--~case C5}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries Lê Thu Hà~--~ưu tiên đơn giản, dễ đọc}
+        {\tiny\color{brandgray} 37, nhân viên hành chính $\cdot$ Đồng Nai $\cdot$ công nghệ TB $\cdot$ Android RAM 4~GB $\cdot$ 1--2 giờ/ngày $\cdot$ Wi-Fi + 4G}\par\vspace{0.6mm}
+        {\tiny\textbf{Mục tiêu:} giao diện đọc rõ ràng; điều khiển nhạc bằng nút quen thuộc; biết nội dung đang hoạt động; dừng trình phát bất cứ lúc nào; tăng cỡ chữ.}\par\vspace{0.3mm}
+        {\tiny\textbf{Pain points:} biểu tượng không nhãn; chữ nhỏ, tương phản thấp; không biết âm phát từ đâu; PIP che nội dung; lo nhấn nhầm mất bài đang đọc.}\par\vspace{0.3mm}
+        {\tiny\textbf{Hành vi:} dùng trong nhà, lúc nghỉ; đọc tin, xem video, nghe nhạc hơn chơi game; ưu tiên nút bấm; thường dùng một tay.}\par\vspace{0.3mm}
+        {\tiny\textbf{Tình huống:} đọc bài báo, tăng cỡ chữ bằng nút A+; mở video liên quan hiện PIP; muốn tập trung đọc $\rightarrow$ nhấn ``Tạm dừng video'', đọc tiếp đúng chỗ cũ.}\par\vspace{0.3mm}
+        {\tiny\textbf{Luồng:} \textcolor{brandteal!60!black}{Tin $\rightarrow$ Video $\rightarrow$ Tin $\rightarrow$ tạm dừng video $\rightarrow$ đọc tiếp}~--~case C4}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ============================================================
+\section{USP \& Winning Zone}
+% ============================================================
+\begin{frame}{USP \& Winning Zone (1/4)}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.72]
+      \begin{scope}
+        \clip (0,2.2) circle (2.6);
+        \clip (-1.905,-1.1) circle (2.6);
+        \fill[winzone, opacity=0.35] (-4,-2) rectangle (4,5);
+      \end{scope}
+      \fill[venncomp, opacity=0.18] (1.905,-1.1) circle (2.6);
+      \fill[vennneeds, opacity=0.10] (0,2.2) circle (2.6);
+      \fill[vennours, opacity=0.10] (-1.905,-1.1) circle (2.6);
+      \draw[vennneeds, very thick] (0,2.2) circle (2.6);
+      \draw[vennours, very thick] (-1.905,-1.1) circle (2.6);
+      \draw[venncomp, very thick] (1.905,-1.1) circle (2.6);
+      \node[align=center, font=\small\bfseries, text=vennneeds] at (0,3.45) {Nhu cầu\\người dùng};
+      \node[align=center, font=\small\bfseries, text=vennours] at (-3.5,-1.6) {Thế mạnh\\đề xuất};
+      \node[align=center, font=\small\bfseries, text=venncomp] at (3.5,-1.6) {Thế mạnh\\đối thủ};
+      \node[fill=winzone!25, draw=black!40, rounded corners=2pt, inner sep=4pt] at (-1.4,0.7) {\small\textbf{Winning Zone}};
+    \end{tikzpicture}
+  \end{center}
+  \begin{center}\small
+    Nhu cầu $\cap$ thế mạnh của đề xuất, \textbf{nằm ngoài} vùng đối thủ đã phủ
+  \end{center}
+\end{frame}
+
+\begin{frame}{USP \& Winning Zone (2/4)}
+  \begin{center}
+  \begin{tikzpicture}[
+      needc/.style={rounded corners=4pt, draw=vennneeds!70, fill=vennneeds!6, thick},
+      ourc/.style={rounded corners=4pt, draw=vennours!70, fill=vennours!6, thick},
+      compc/.style={rounded corners=4pt, draw=venncomp!70, fill=venncomp!6, thick},
+      hstrip/.style={rounded corners=3pt}]
+    % ---- Nhu cầu người dùng ----
+    \begin{scope}[shift={(0,0)}]
+      \draw[needc] (0,0) rectangle (4.4,3.4);
+      \fill[vennneeds,hstrip] (0.07,2.92) rectangle (4.33,3.33);
+      \node[anchor=west, font=\scriptsize\bfseries, text=white] at (0.25,3.12) {Nhu cầu người dùng};
+      \node[anchor=north west, text width=3.9cm, align=left, font=\tiny] at (0.25,2.78) {%
+        \begin{itemize}\itemsep1pt
+          \item Chỉ cài và đăng \textbf{một} ứng dụng duy nhất
+          \item Chuyển đổi loại nội dung \textbf{không gián đoạn}
+          \item Dùng được \textbf{hai loại nội dung song song}
+          \item Tiết kiệm dung lượng, RAM và pin
+        \end{itemize}};
+    \end{scope}
+    % ---- Thế mạnh của đề xuất ----
+    \begin{scope}[shift={(4.6,0)}]
+      \draw[ourc] (0,0) rectangle (4.4,3.4);
+      \fill[vennours,hstrip] (0.07,2.92) rectangle (4.33,3.33);
+      \node[anchor=west, font=\scriptsize\bfseries, text=white] at (0.25,3.12) {Thế mạnh của đề xuất};
+      \node[anchor=north west, text width=3.9cm, align=left, font=\tiny] at (0.25,2.78) {%
+        \begin{itemize}\itemsep1pt
+          \item Bốn phân hệ dùng chung \textbf{một media engine}
+          \item \textbf{Dock mini player} xuyên suốt
+          \item Song song hai nội dung, popup xác nhận khi xung đột âm thanh
+          \item Chuyển đổi hình thức: video $\rightarrow$ mp3, báo $\rightarrow$ audio
+          \item Minigame sinh từ nội dung đang xem, điểm thưởng dùng chung
+        \end{itemize}};
+    \end{scope}
+    % ---- Thế mạnh đối thủ ----
+    \begin{scope}[shift={(9.2,0)}]
+      \draw[compc] (0,0) rectangle (4.4,3.4);
+      \fill[venncomp,hstrip] (0.07,2.92) rectangle (4.33,3.33);
+      \node[anchor=west, font=\scriptsize\bfseries, text=white] at (0.25,3.12) {Thế mạnh đối thủ};
+      \node[anchor=north west, text width=3.9cm, align=left, font=\tiny] at (0.25,2.78) {%
+        \begin{itemize}\itemsep1pt
+          \item Kho bản quyền lớn (phim HD, Keeng)
+          \item Cơ sở người dùng khổng lồ (Mocha 16 triệu)
+          \item Data miễn phí thuê bao nhà mạng
+          \item Mạng xã hội chat + voice sticker
+          \item {\color{brandgray}\itshape Vùng không cạnh tranh trực diện}
+        \end{itemize}};
+    \end{scope}
+  \end{tikzpicture}
+  \end{center}
+  \vfill
+  \begin{block}{\small\bfseries $\Rightarrow$ Rút ra Unique Selling Point}
+    \small\itshape Ứng dụng giải trí ``4 trong 1'' trên Android: \textbf{chuyển đổi, chạy song song và chuyển đổi hình thức} giữa video, nhạc, tin tức và minigame trong cùng một app. Ngoài ra có \textbf{hệ thống gamification}: nhiệm vụ mỗi ngày, streak, thú cưng ảo và điểm thưởng dùng chung cho cả bốn phân hệ.
+  \end{block}
+\end{frame}
+
+\begin{frame}{USP \& Winning Zone (3/4)}
+  \small
+  \begin{tabular}{@{}p{0.5cm}p{3.4cm}p{8.2cm}@{}}
+    \toprule
+    \textbf{} & \textbf{Trụ} & \textbf{Biểu hiện cụ thể} \\
+    \midrule
+    W1 & Xuyên phân hệ & Dock mini dùng chung 4 loại nội dung; một tài khoản; trạng thái giữ nguyên khi đổi tab \\
+    W2 & Song song hoá & Nghe nhạc khi đọc tin; PIP video khi lướt; popup xác nhận khi xung đột âm thanh \\
+    W3 & Converting & Nhấn giữ video $\rightarrow$ trích mp3; bài báo $\rightarrow$ audio ``nghe tin'' \\
+    W4 & Game gắn nội dung & Đoán bài hát từ kho nhạc; quiz từ bài báo đang đọc \\
+    W5 & Gamification & Nhiệm vụ, streak, thú cưng, điểm thưởng dùng chung bốn phân hệ \\
+    W6 & Tổng kết cá nhân & Thẻ tổng kết hoạt động trong tháng, xuất ảnh chia sẻ \\
+    \bottomrule
+  \end{tabular}
+\end{frame}
+
+% ============================================================
+\section{Tiêu chí chất lượng}
+% ============================================================
+\begin{frame}{Tiêu chí chất lượng (1/3)}
+  \begin{center}\tiny
+  \begin{tabular}{@{}p{1.0cm}p{3.1cm}p{7.6cm}@{}}
+    \toprule
+    \textbf{Mã} & \textbf{Tiêu chí} & \textbf{Ngưỡng đạt} \\
+    \midrule
+    UX-01 & Phản hồi thao tác & $\leq$ 100~ms (mốc phản ứng tức thì) \\
+    UX-02 & Tải nội dung & $\leq$ 3 giây trên mạng 4G \\
+    UX-03 & Khởi động lạnh & $\leq$ 2 giây; không lần đo nào $\geq$ 5 giây \\
+    UX-04 & Bắt đầu phát & Video $\leq$ 2 giây, nhạc $\leq$ 1 giây \\
+    UX-05 & Phát liên tục & $\leq$ 1 lần dừng tải / 10 phút; nhạc không dừng khi chuyển phân hệ \\
+    UX-06 & Độ mượt & $\geq$ 95\% khung hình $<$ 16~ms; không frozen frame \\
+    UX-07 & Độ ổn định & Crash $\leq$ 0,5\%, ANR $\leq$ 0,2\% (chặt hơn Android vitals) \\
+    UX-08 & Số bước thao tác & $\leq$ 3 chạm tới nội dung; chuyển phân hệ 1 chạm \\
+    UX-09 & Dễ dùng & Hoàn thành tác vụ $\geq$ 90\%; điểm SUS $\geq$ 70 \\
+    UX-10 & Dung lượng & $\leq$ 50~MB tải về \\
+    UX-11 & Pin & $\leq$ 5\% / 60 phút phát nhạc nền \\
+    UX-12 & Accessibility & Vùng chạm $\geq$ 48dp; tương phản $\geq$ 4,5:1 (WCAG AA) \\
+    UX-13 & Tương thích & Android 8.0+ (API 26), RAM $\geq$ 3~GB \\
+    UX-14 & Ngôn ngữ & Tiếng Việt mặc định; chuyển ngôn ngữ tức thì \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \vfill
+  {\tiny\color{brandgray} Đo trên máy tham chiếu Android tầm trung RAM 4~GB, mạng 4G; chuẩn đối chiếu Android vitals, Nielsen, WCAG.}
+\end{frame}
+
+\begin{frame}{Tiêu chí chất lượng (2/3)}
+  \begin{center}\tiny
+  \begin{tabular}{@{}p{1.0cm}p{3.1cm}p{7.6cm}@{}}
+    \toprule
+    \textbf{Mã} & \textbf{Tiêu chí} & \textbf{Ngưỡng đạt} \\
+    \midrule
+    SEC-01 & Xác thực OTP & 6 chữ số, dùng 1 lần, hiệu lực 5 phút; gửi lại sau 60 giây \\
+    SEC-02 & Lưu trữ an toàn & Token chỉ nằm trong Android Keystore; không dữ liệu dạng rõ \\
+    SEC-03 & Truyền dữ liệu & 100\% request HTTPS, TLS 1.2 trở lên \\
+    SEC-04 & Quyền truy cập & Xin đúng ngữ cảnh; từ chối vẫn dùng được phần còn lại \\
+    SEC-05 & Đồng ý dữ liệu & Cá nhân hóa chỉ khi người dùng đồng ý; tắt được trong Cài đặt \\
+    SEC-06 & Xóa tài khoản & Xóa trong app và qua web; hoàn tất trong 20 ngày \\
+    SEC-07 & Bản ghi giọng hát & Chấm trên thiết bị, xóa ngay sau khi chấm (tính năng v2) \\
+    SEC-08 & Kiểm tra bảo mật & 0 lỗi mức High trở lên trước mỗi bản phát hành (MobSF) \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \vfill
+  {\tiny\color{brandgray} Chuẩn đối chiếu: NIST 800-63B, OWASP MASVS, chính sách Google Play, Luật Bảo vệ dữ liệu cá nhân 2025.}
+\end{frame}
+
+\begin{frame}{Tiêu chí chất lượng (3/3)}
+  \begin{center}\tiny
+  \begin{tabular}{@{}p{1.0cm}p{3.1cm}p{7.6cm}@{}}
+    \toprule
+    \textbf{Mã} & \textbf{Tiêu chí} & \textbf{Ngưỡng đạt} \\
+    \midrule
+    BIZ-01 & Retention & D1 / D7 / D30 $\geq$ 16\% / 4\% / 2\% (gấp đôi trung bình ngành) \\
+    BIZ-02 & Mức độ gắn bó & DAU/MAU $\geq$ 20\% \\
+    BIZ-03 & Dùng nhiều phân hệ & $\geq$ 40\% người dùng tuần dùng từ 2 phân hệ trở lên \\
+    BIZ-04 & Gamification & $\geq$ 30\% người dùng hoạt động hoàn thành $\geq$ 1 nhiệm vụ/ngày \\
+    BIZ-05 & Chuyển đổi Premium & $\geq$ 2\% MAU sau 3 tháng (khi bật thanh toán) \\
+    BIZ-06 & Giới hạn quảng cáo & Không hiện khi mở/thoát/đang chơi; tối đa 1 lần / 5 phút \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \vfill
+  {\tiny\color{brandgray} 28 tiêu chí $=$ yêu cầu phi chức năng, bổ sung cho yêu cầu chức năng là user stories. Khi mâu thuẫn: \textbf{Security $>$ UX $>$ Business}.}
+\end{frame}
+
+% ============================================================
+\section{Phân loại và ưu tiên tính năng}
+% ============================================================
+\begin{frame}{Phân loại và ưu tiên tính năng (1/4)}
+  \begin{columns}
+    \begin{column}{0.56\textwidth}
+      \begin{itemize}\small
+        \item \textbf{69 tính năng ứng viên}: Video 15 $\cdot$ Music 12 $\cdot$ News 10 $\cdot$ Games 14 $\cdot$ Dùng chung 18
+        \item Mỗi tính năng chấm \textbf{Impact (1--5) $\times$ Effort (1--5)}
+        \item Ma trận $2\times2$ chia 4 nhóm ưu tiên
+        \item \textbf{8 nền tảng kỹ thuật} làm trước: dock, media engine, quản lý xung đột âm thanh, PIP, state store, hệ điểm, converter, notification hub~--~nhiều tính năng phụ thuộc vào chúng
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      \small
+      \begin{tabular}{@{}p{3.4cm}p{1.0cm}@{}}
+        \toprule
+        \textbf{Nhóm} & \textbf{Số} \\
+        \midrule
+        Quick Wins & 25 \\
+        Major Projects & 25 \\
+        Fill-ins & 15 \\
+        Thankless & 4 \\
+        \bottomrule
+      \end{tabular}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Phân loại và ưu tiên tính năng (2/5)~--~Ma trận Impact $\times$ Effort}
+  \begin{center}
+  \begin{tikzpicture}[
+      qboxqw/.style={rounded corners=3pt, thick, draw=vennours!80, fill=vennours!8},
+      qboxmp/.style={rounded corners=3pt, thick, draw=vennneeds!80, fill=vennneeds!8},
+      qboxfi/.style={rounded corners=3pt, thick, draw=brandgray!60, fill=brandgray!8},
+      qboxtt/.style={rounded corners=3pt, thick, draw=venncomp!80, fill=venncomp!8}]
+    % trục
+    \draw[-{Latex}, brandgray, thick] (-0.55,0) -- (-0.55,5.6);
+    \node[rotate=90, font=\small\bfseries, text=brandgray] at (-0.95,2.8) {Impact: thấp $\rightarrow$ cao};
+    \draw[-{Latex}, brandgray, thick] (-0.55,-0.6) -- (12.6,-0.6);
+    \node[font=\small\bfseries, text=brandgray] at (6, -1.0) {Effort: thấp $\rightarrow$ cao};
+    % QW -- trên trái
+    \node[qboxqw, anchor=south west, align=center, text width=5.3cm, minimum height=2.2cm] at (0,2.85) {%
+      {\Large\bfseries QW}\\[0.5mm]
+      {\large\bfseries Quick Wins}\\[1.5mm]
+      {\footnotesize\itshape\color{brandgray} Impact cao $\cdot$ Effort thấp}};
+    % MP -- trên phải
+    \node[qboxmp, anchor=south west, align=center, text width=5.3cm, minimum height=2.2cm] at (6.3,2.85) {%
+      {\Large\bfseries MP}\\[0.5mm]
+      {\large\bfseries Major Projects}\\[1.5mm]
+      {\footnotesize\itshape\color{brandgray} Impact cao $\cdot$ Effort cao}};
+    % FI -- dưới trái
+    \node[qboxfi, anchor=south west, align=center, text width=5.3cm, minimum height=2.2cm] at (0,0.1) {%
+      {\Large\bfseries FI}\\[0.5mm]
+      {\large\bfseries Fill-ins}\\[1.5mm]
+      {\footnotesize\itshape\color{brandgray} Impact thấp $\cdot$ Effort thấp}};
+    % TT -- dưới phải
+    \node[qboxtt, anchor=south west, align=center, text width=5.3cm, minimum height=2.2cm] at (6.3,0.1) {%
+      {\Large\bfseries TT}\\[0.5mm]
+      {\large\bfseries Thankless}\\[1.5mm]
+      {\footnotesize\itshape\color{brandgray} Impact thấp $\cdot$ Effort cao}};
+  \end{tikzpicture}
+  \end{center}
+  \vfill
+  {\tiny\color{brandgray} [$Wn$] = trụ USP (W1--W6): đánh dấu tính năng mang nhân tố Winning Zone trong các bảng ở các slide sau.}
+\end{frame}
+
+\begin{frame}{Phân loại và ưu tiên tính năng (3/5)~--~Phân hệ Video}
+  \begin{center}\tiny
+\begin{tabular}{@{}p{1.6cm}p{7.2cm}p{0.35cm}p{0.35cm}p{1.6cm}@{}}
+\toprule
+\textbf{Mã} & \textbf{Tính năng} & \textbf{I} & \textbf{E} & \textbf{Nhóm} \\
+\midrule
+\texttt{F-VID-01} & Xem video streaming cơ bản (HLS/MP4) & 5 & 4 & MP \\
+\texttt{F-VID-02} & Feed ``Dành cho bạn'' theo sở thích & 4 & 3 & MP \\
+\texttt{F-VID-03} & Tìm kiếm video & 4 & 2 & QW \\
+\texttt{F-VID-04} & Danh sách xem sau (watchlist) & 3 & 1 & QW \\
+\texttt{F-VID-05} & Lịch sử xem, tiếp tục từ chỗ dừng & 3 & 1 & QW \\
+\texttt{F-VID-06} & Chất lượng tự động theo băng thông & 4 & 3 & MP \\
+\texttt{F-VID-07} & Tải video xem offline & 3 & 4 & TT \\
+\texttt{F-VID-08} & Picture-in-picture (PIP) & 5 & 3 & MP [W2] \\
+\texttt{F-VID-09} & Chế độ chỉ phát âm thanh của video & 3 & 2 & FI \\
+\texttt{F-VID-10} & Nhấn giữ video để trích mp3 & 5 & 4 & MP [W3] \\
+\texttt{F-VID-11} & Chia sẻ link video ra ngoài app & 2 & 1 & FI \\
+\texttt{F-VID-12} & Màn hồ sơ nghệ sĩ / kênh & 3 & 2 & FI \\
+\texttt{F-VID-13} & Playlist video theo chủ đề & 3 & 2 & FI \\
+\texttt{F-VID-14} & Tua nhanh double-tap, đổi tốc độ & 4 & 1 & QW \\
+\texttt{F-VID-15} & Thẻ game cuối video (quiz soạn sẵn) & 4 & 2 & QW [W4] \\
+\bottomrule
+\end{tabular}
+  \end{center}
+  \vfill
+  {\tiny\color{brandgray} QW = Quick Wins (làm trước) $\cdot$ MP = Major Projects $\cdot$ FI = Fill-ins (dư thời gian) $\cdot$ TT = Thankless (hoãn / bỏ) $\cdot$ [W$n$] = trụ USP}
+\end{frame}
+
+\begin{frame}{Phân loại và ưu tiên tính năng (4/5)~--~Music \& News}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}\begin{center}\tiny\setlength{\tabcolsep}{1.5pt}
+\begin{tabular}{@{}p{1.35cm}p{3.2cm}p{0.22cm}p{0.22cm}p{1.15cm}@{}}
+\toprule
+\textbf{Mã} & \textbf{Tính năng} & \textbf{I} & \textbf{E} & \textbf{Nhóm} \\
+\midrule
+\texttt{F-MUS-01} & Player nhạc đầy đủ & 5 & 3 & MP \\
+\texttt{F-MUS-02} & Mini player dock xuyên suốt & 5 & 3 & MP [W1] \\
+\texttt{F-MUS-03} & Nhạc nền khi rời app / khoá màn & 5 & 4 & MP \\
+\texttt{F-MUS-04} & Tự tạo / sửa / xoá playlist & 4 & 2 & QW \\
+\texttt{F-MUS-05} & Hàng phát (queue), kéo sắp lại & 4 & 2 & QW \\
+\texttt{F-MUS-06} & Tìm kiếm nhạc & 4 & 2 & QW \\
+\texttt{F-MUS-07} & Kho nhạc cá nhân chứa mp3 trích & 4 & 3 & MP [W3] \\
+\texttt{F-MUS-08} & Gợi ý nhạc theo sở thích & 4 & 3 & MP \\
+\texttt{F-MUS-09} & ``Siêu playlist'' trộn 3 loại nội dung & 4 & 3 & MP [W1 W2] \\
+\texttt{F-MUS-10} & Xử lý audio focus: duck / pause & 5 & 3 & MP [W2] \\
+\texttt{F-MUS-11} & Equalizer & 2 & 3 & TT \\
+\texttt{F-MUS-12} & Tải bài hát offline & 3 & 4 & TT \\
+\bottomrule
+\end{tabular}
+    \end{center}\end{column}
+    \begin{column}{0.48\textwidth}\begin{center}\tiny\setlength{\tabcolsep}{1.5pt}
+\begin{tabular}{@{}p{1.35cm}p{3.2cm}p{0.22cm}p{0.22cm}p{1.15cm}@{}}
+\toprule
+\textbf{Mã} & \textbf{Tính năng} & \textbf{I} & \textbf{E} & \textbf{Nhóm} \\
+\midrule
+\texttt{F-NEWS-01} & Feed tin theo chuyên mục, sở thích & 5 & 3 & MP \\
+\texttt{F-NEWS-02} & Trình đọc sạch, đổi cỡ chữ, chế độ tối & 4 & 2 & QW \\
+\texttt{F-NEWS-03} & Lưu bài đọc sau & 3 & 1 & QW \\
+\texttt{F-NEWS-04} & Tìm kiếm bài báo & 3 & 2 & FI \\
+\texttt{F-NEWS-05} & Báo thành audio (TTS nghe tin; TTS $=$ chuyển chữ thành giọng nói) & 5 & 4 & MP [W3] \\
+\texttt{F-NEWS-06} & Sắp xếp mới nhất / phổ biến & 3 & 1 & QW \\
+\texttt{F-NEWS-07} & Nghe nhạc khi đọc tin (dock vẫn phát) & 5 & 1 & QW [W1 W2] \\
+\texttt{F-NEWS-08} & Quiz sinh ra từ bài báo đang đọc & 4 & 3 & MP [W4] \\
+\texttt{F-NEWS-09} & Gợi ý bài liên quan & 3 & 2 & FI \\
+\texttt{F-NEWS-10} & Bài đang đọc thu nhỏ thành thẻ nổi & 5 & 3 & MP [W1] \\
+\bottomrule
+\end{tabular}
+    \end{center}\end{column}
+  \end{columns}
+  \vfill
+  {\tiny\color{brandgray} QW = Quick Wins (làm trước) $\cdot$ MP = Major Projects $\cdot$ FI = Fill-ins (dư thời gian) $\cdot$ TT = Thankless (hoãn / bỏ) $\cdot$ [W$n$] = trụ USP}
+\end{frame}
+
+\begin{frame}{Phân loại và ưu tiên tính năng (5/5)~--~Games \& Dùng chung}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}\begin{center}\tiny\setlength{\tabcolsep}{1.5pt}
+\begin{tabular}{@{}p{1.35cm}p{3.2cm}p{0.22cm}p{0.22cm}p{1.15cm}@{}}
+\toprule
+\textbf{Mã} & \textbf{Tính năng} & \textbf{I} & \textbf{E} & \textbf{Nhóm} \\
+\midrule
+\texttt{F-GAME-01} & Hub minigame: danh sách, mở khoá, thưởng & 4 & 2 & QW \\
+\texttt{F-GAME-02} & Game đoán bài hát & 5 & 3 & MP [W4] \\
+\texttt{F-GAME-03} & Quiz tin tức & 4 & 3 & MP [W4] \\
+\texttt{F-GAME-04} & Rhythm game theo bài hát & 3 & 4 & TT \\
+\texttt{F-GAME-05} & Trivia tổng hợp & 3 & 2 & FI \\
+\texttt{F-GAME-06} & Bảng xếp hạng tuần / tháng & 4 & 3 & MP \\
+\texttt{F-GAME-07} & Game nửa dưới, video phía trên & 4 & 4 & MP [W2] \\
+\texttt{F-GAME-08} & Phần thưởng khi thắng (điểm) & 5 & 2 & QW [W5] \\
+\texttt{F-GAME-09} & Memory match từ hình nội dung & 2 & 2 & FI \\
+\texttt{F-GAME-10} & Đập chuột (whack-a-mole) & 3 & 2 & FI \\
+\texttt{F-GAME-11} & 2048 (ghép số) & 3 & 2 & FI \\
+\texttt{F-GAME-12} & Snake -- rắn săn mồi & 3 & 1 & FI \\
+\texttt{F-GAME-13} & ``Beat tiles'' theo bài đang phát & 4 & 2 & QW [W4] \\
+\texttt{F-GAME-14} & Bay xuyên vật cản (kiểu flappy) & 3 & 2 & FI \\
+\bottomrule
+\end{tabular}
+    \end{center}\end{column}
+    \begin{column}{0.48\textwidth}\begin{center}\tiny\setlength{\tabcolsep}{1.5pt}
+\begin{tabular}{@{}p{1.35cm}p{3.2cm}p{0.22cm}p{0.22cm}p{1.15cm}@{}}
+\toprule
+\textbf{Mã} & \textbf{Tính năng} & \textbf{I} & \textbf{E} & \textbf{Nhóm} \\
+\midrule
+\texttt{F-COM-01} & Một tài khoản cho 4 phân hệ (OTP/Google) & 5 & 3 & MP \\
+\texttt{F-COM-02} & Onboarding chọn sở thích lần đầu & 4 & 1 & QW \\
+\texttt{F-COM-03} & Hồ sơ: avatar, khung ảnh & 3 & 2 & FI [W5 W6] \\
+\texttt{F-COM-04} & Hệ điểm thưởng dùng chung (XP) & 5 & 2 & QW [W5] \\
+\texttt{F-COM-05} & Nhiệm vụ hằng ngày (3--5 việc) & 4 & 2 & QW [W5] \\
+\texttt{F-COM-06} & Streak & 4 & 1 & QW [W5] \\
+\texttt{F-COM-07} & Thú cưng ảo: nuôi bằng điểm & 4 & 3 & MP [W5] \\
+\texttt{F-COM-08} & Huy hiệu thành tựu & 3 & 2 & FI [W5] \\
+\texttt{F-COM-09} & Khung avatar theo mốc & 3 & 1 & QW [W5 W6] \\
+\texttt{F-COM-10} & Tổng kết tháng kiểu wrapped & 4 & 3 & MP [W6] \\
+\texttt{F-COM-11} & Tìm kiếm xuyên nội dung & 4 & 3 & MP \\
+\texttt{F-COM-12} & Nhắc nhiệm vụ / streak & 3 & 1 & QW \\
+\texttt{F-COM-13} & Cài đặt: sáng/tối, ngôn ngữ, dữ liệu & 4 & 2 & QW \\
+\texttt{F-COM-14} & Popup xác nhận xung đột âm thanh & 5 & 2 & QW [W2] \\
+\texttt{F-COM-15} & Cửa hàng đổi quà bằng điểm & 4 & 2 & QW [W5] \\
+\texttt{F-COM-16} & Chế độ ngoại tuyến cơ bản & 3 & 3 & MP \\
+\texttt{F-COM-17} & Báo nội dung không phù hợp & 2 & 1 & FI \\
+\texttt{F-COM-18} & Chế độ khách dùng thử & 3 & 2 & QW \\
+\bottomrule
+\end{tabular}
+    \end{center}\end{column}
+  \end{columns}
+  \vfill
+  {\tiny\color{brandgray} QW = Quick Wins (làm trước) $\cdot$ MP = Major Projects $\cdot$ FI = Fill-ins (dư thời gian) $\cdot$ TT = Thankless (hoãn / bỏ) $\cdot$ [W$n$] = trụ USP}
+\end{frame}
+
+% ============================================================
+\section{Ma trận chuyển phân hệ}
+% ============================================================
+\begin{frame}{Ma trận chuyển phân hệ (1/2)}
+  \begin{center}
+  \begin{tikzpicture}
+    \fill[brandteal, rounded corners=2pt] (1.75,5.05) rectangle +(2.88,0.42);
+    \node[font=\scriptsize\bfseries, text=white] at (3.23,5.26) {Video};
+    \fill[brandteal, rounded corners=2pt] (4.80,5.05) rectangle +(2.88,0.42);
+    \node[font=\scriptsize\bfseries, text=white] at (6.28,5.26) {Music};
+    \fill[brandteal, rounded corners=2pt] (7.85,5.05) rectangle +(2.88,0.42);
+    \node[font=\scriptsize\bfseries, text=white] at (9.32,5.26) {News};
+    \fill[brandteal, rounded corners=2pt] (10.90,5.05) rectangle +(2.88,0.42);
+    \node[font=\scriptsize\bfseries, text=white] at (12.38,5.26) {Games};
+    \fill[brandteal, rounded corners=2pt] (0.05,3.95) rectangle +(1.6,0.95);
+    \node[font=\scriptsize\bfseries, text=white, rotate=90] at (0.85,4.42) {Video};
+    \fill[brandteal, rounded corners=2pt] (0.05,2.95) rectangle +(1.6,0.95);
+    \node[font=\scriptsize\bfseries, text=white, rotate=90] at (0.85,3.43) {Music};
+    \fill[brandteal, rounded corners=2pt] (0.05,1.95) rectangle +(1.6,0.95);
+    \node[font=\scriptsize\bfseries, text=white, rotate=90] at (0.85,2.42) {News};
+    \fill[brandteal, rounded corners=2pt] (0.05,0.95) rectangle +(1.6,0.95);
+    \node[font=\scriptsize\bfseries, text=white, rotate=90] at (0.85,1.42) {Games};
+    \fill[brandgray!8, rounded corners=2pt] (1.75,3.95) rectangle +(2.88,0.95);
+    \node[font=\tiny, text=brandgray] at (3.23,4.42) {--};
+    \fill[brandgray!8, rounded corners=2pt] (4.80,2.95) rectangle +(2.88,0.95);
+    \node[font=\tiny, text=brandgray] at (6.28,3.43) {--};
+    \fill[brandgray!8, rounded corners=2pt] (7.85,1.95) rectangle +(2.88,0.95);
+    \node[font=\tiny, text=brandgray] at (9.32,2.42) {--};
+    \fill[brandgray!8, rounded corners=2pt] (10.90,0.95) rectangle +(2.88,0.95);
+    \node[font=\tiny, text=brandgray] at (12.38,1.42) {--};
+    \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (4.80,3.95) rectangle +(2.88,0.95);
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (4.90,4.82) {{\bfseries\textcolor{brandteal!60!black}{C1}} Video thu thành cửa sổ nổi; hỏi 2 lựa chọn, tick ``Không hỏi lại'' để ghi nhớ};
+    \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (7.85,3.95) rectangle +(2.88,0.95);
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (7.95,4.82) {{\bfseries\textcolor{brandteal!60!black}{C3}} Video nổi có nhãn ``Đang phát''; rời News hiện thẻ ``Đang đọc''};
+    \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (10.90,3.95) rectangle +(2.88,0.95);
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (11.00,4.82) {{\bfseries\textcolor{brandteal!60!black}{C5}} Chia màn hai phần năm trên, ba phần năm dưới; video tua và dừng được};
+    \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (1.75,2.95) rectangle +(2.88,0.95);
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (1.85,3.82) {{\bfseries\textcolor{brandteal!60!black}{C2}} Mở video: hỏi 2 lựa chọn + tick ``Không hỏi lại\textquotesingle{}};
+    \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (7.85,2.95) rectangle +(2.88,0.95);
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (7.95,3.82) {{\bfseries\textcolor{brandteal!60!black}{C7}} Nhạc vẫn phát; dock hiện ở mọi tab, kể cả trình đọc bài};
+    \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (10.90,2.95) rectangle +(2.88,0.95);
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (11.00,3.82) {{\bfseries\textcolor{brandteal!60!black}{C9}} Nhạc vẫn phát trong game; game không đè tiếng};
+    \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (1.75,1.95) rectangle +(2.88,0.95);
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (1.85,2.82) {{\bfseries\textcolor{brandteal!60!black}{C4}} Thẻ ``Đang đọc'' nổi mọi tab; chạm quay lại đúng chỗ};
+    \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (4.80,1.95) rectangle +(2.88,0.95);
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (4.90,2.82) {{\bfseries\textcolor{brandteal!60!black}{C8}} Thẻ ``Đang đọc'' nổi; quay lại bài bằng một chạm};
+    \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (10.90,1.95) rectangle +(2.88,0.95);
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (11.00,2.82) {{\bfseries\textcolor{brandteal!60!black}{C11}} Thẻ ``Đang đọc'' nổi; game chạy bình thường};
+    \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (1.75,0.95) rectangle +(2.88,0.95);
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (1.85,1.82) {{\bfseries\textcolor{brandteal!60!black}{C6}} Ván game tự tạm dừng và lưu điểm};
+    \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (4.80,0.95) rectangle +(2.88,0.95);
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (4.90,1.82) {{\bfseries\textcolor{brandteal!60!black}{C10}} Ván tạm dừng, lưu điểm; chọn ``Tiếp tục'' khi quay lại};
+    \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (7.85,0.95) rectangle +(2.88,0.95);
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (7.95,1.82) {{\bfseries\textcolor{brandteal!60!black}{C12}} Game tạm dừng, lưu điểm; thẻ đọc nổi khi rời News};
+    \draw[rounded corners=2pt, draw=brandteal!50, fill=brandteal!6, thick] (0.00,-0.15) rectangle +(3.35,1.0);
+    \node[anchor=north west, text width=3.15cm, align=left, font=\tiny] at (0.10,0.72) {{\bfseries\textcolor{brandteal!60!black}{C13 Nghe tin}} TTS là luồng nói chính; nhạc đang phát tự nhường};
+    \draw[rounded corners=2pt, draw=brandteal!50, fill=brandteal!6, thick] (3.45,-0.15) rectangle +(3.35,1.0);
+    \node[anchor=north west, text width=3.15cm, align=left, font=\tiny] at (3.55,0.72) {{\bfseries\textcolor{brandteal!60!black}{C14 Trích mp3}} Giữ video hoặc bài báo: vào kho Nhạc, cộng 5 XP lần đầu};
+    \draw[rounded corners=2pt, draw=brandteal!50, fill=brandteal!6, thick] (6.90,-0.15) rectangle +(3.35,1.0);
+    \node[anchor=north west, text width=3.15cm, align=left, font=\tiny] at (7.00,0.72) {{\bfseries\textcolor{brandteal!60!black}{C15 Siêu playlist}} Trộn ba loại nội dung vào một hàng phát (v2)};
+    \draw[rounded corners=2pt, draw=brandteal!50, fill=brandteal!6, thick] (10.35,-0.15) rectangle +(3.35,1.0);
+    \node[anchor=north west, text width=3.15cm, align=left, font=\tiny] at (10.45,0.72) {{\bfseries\textcolor{brandteal!60!black}{C16 Ba luồng}} v1 giới hạn: một nguồn tiếng và một cửa sổ nổi};
+  \end{tikzpicture}
+  \end{center}
+  \vfill
+  {\tiny\color{brandgray} Hàng $=$ đang ở, cột $=$ chuyển sang. Hai chiều \textit{không đối xứng} (A$\rightarrow$B $\neq$ B$\rightarrow$A): đủ 12 chiều $+$ 4 case đặc biệt.}
+\end{frame}
+
+\begin{frame}{Xung đột âm thanh (case C1)~--~Luồng xử lý}
+  \begin{center}
+  \begin{tikzpicture}[
+      font=\scriptsize,
+      stp/.style={draw=brandteal, thick, rounded corners=2pt, fill=brandteal!8, minimum height=8mm, align=center, text width=2.6cm},
+      dec/.style={draw=brandteal, thick, rounded corners=10pt, fill=brandteal!12, minimum height=8mm, align=center, text width=2.4cm},
+      lnk/.style={draw=black!50, -{Latex[length=1.6mm]}}]
+    \node[stp] (v) at (0,0) {Video đang phát};
+    \node[stp, right=1.2cm of v] (m) {Người dùng mở bài nhạc};
+    \node[dec, right=1.2cm of m] (q) {Đã lưu quy tắc?};
+    \node[stp, right=1.2cm of q] (r) {Áp dụng im lặng};
+    \node[stp, below=1.2cm of q] (p) {Popup 2 lựa chọn + ô tick};
+    \node[stp, below=1.2cm of p] (s) {Tick: ghi nhớ đúng lựa chọn này};
+    \draw[lnk] (v) -- (m);
+    \draw[lnk] (m) -- (q);
+    \draw[lnk] (q) -- node[above, font=\tiny]{có} (r);
+    \draw[lnk] (q.south) -- node[right, font=\tiny]{chưa} ++(0,-0.4) -| (p.north);
+    \draw[lnk] (p.south) -- ++(0,-0.4) -| (s.north);
+  \end{tikzpicture}
+  \end{center}
+  \vfill
+  {\tiny\color{brandgray} Lựa chọn áp dụng cho lần đó; lần sau vẫn hỏi. Tích ``Không hỏi lại'' để ghi nhớ; đặt lại ``Luôn hỏi'' được trong Cài đặt.}
+\end{frame}
+
+\begin{frame}{Ma trận chuyển phân hệ (2/2)}
+  \begin{columns}
+    \begin{column}{0.54\textwidth}
+      {\small\textbf{Quy tắc xử lý xung đột âm thanh}}
+      \vspace{1mm}
+      {\tiny
+      \begin{itemize}\itemsep2.5pt
+        \item \textbf{Cuộc gọi, báo thức} ưu tiên cao nhất (audio focus Android); ứng dụng nhường ngay
+        \item \textbf{Một thời điểm chỉ một nguồn tiếng:} video làm nhạc nhường (C2), TTS làm nhạc nhường (C13), game im tiếng khi nhạc phát (C9)
+        \item \textbf{Video và nhạc:} hỏi ở cả hai chiều (C1, C2), kèm ô tick ``Không hỏi lại\textquotesingle{}; vì cả hai đều là lựa chọn chủ động
+        \item \textbf{Nhạc chạy nền} trên mọi tab; điều khiển lại bằng một chạm trên dock
+        \item \textbf{Mọi luồng đều hiện} và điều khiển được trên dock mini player
+      \end{itemize}}
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \begin{block}{\small Gián đoạn từ bên ngoài}
+        {\tiny
+        \begin{itemize}\itemsep1.5pt
+          \item \textbf{Cuộc gọi:} nhường trong 0,5~s; sau cuộc gọi nhạc phát lại, game mở lại bằng nút Tiếp tục
+          \item \textbf{Rút tai nghe:} nhạc và TTS dừng ngay, không phát loa ngoài
+          \item \textbf{Mất mạng:} thử lại sau 5--15~s; tin đã tải đọc tiếp; game offline chơi tiếp
+          \item \textbf{App bị đóng:} mở lại khôi phục đủ 4 vị trí trong 2~s
+          \item \textbf{Thoát app:} nhạc tiếp tục; video, TTS dừng; game tạm dừng và lưu
+        \end{itemize}}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ============================================================
+\section{User Stories}
+% ============================================================
+\begin{frame}{User Stories (1/2)}
+  \begin{itemize}
+    \item \textbf{45 user story} kèm acceptance criteria $=$ \textbf{yêu cầu chức năng} của sản phẩm
+    \item Mỗi story viết theo mẫu: ``\textbf{Là} \textit{vai trò}, \textbf{tôi muốn} \textit{hành động}, \textbf{để} \textit{lợi ích}''
+    \item Điều kiện kiểm tra: ``\textbf{Cho trước / Khi / Thì}'' hoặc danh sách mốc đo được (thời gian, số lượng, trạng thái)
+    \item Mức ưu tiên \textbf{Must / Should / Could}; mỗi story gắn \textbf{mã tính năng} để truy vết
+    \item Tên trong story gắn persona: Minh Anh (đa nhiệm), Hoàng Nam (tiện lợi), Quốc Huy (game), Thảo Vy (khám phá), Gia Bảo (tùy chỉnh), Thu Hà (đơn giản)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{User Stories -- Video}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries VID-01~--~Must}
+        {\tiny Là người dùng, tôi muốn chạm một video trong feed và xem ngay trong ứng dụng, để xem video không bị gián đoạn bởi việc chuyển app.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries VID-02~--~Must}
+        {\tiny Là người dùng đang xem video, tôi muốn video tự thu nhỏ về một góc màn hình khi tôi chuyển sang tab khác, để vừa xem vừa đọc tin hoặc làm việc khác.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries VID-03~--~Must}
+        {\tiny Là người dùng, tôi muốn tua nhanh bằng cú chạm đôi và đổi tốc độ phát, để bỏ qua đoạn không cần xem.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries VID-04~--~Should}
+        {\tiny Là người dùng có sở thích riêng, tôi muốn feed video ưu tiên theo chuyên mục tôi chọn, để mở app là thấy nội dung mình muốn.}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries VID-05~--~Should}
+        {\tiny Là người dùng, tôi muốn lưu video để xem sau và quay lại đúng chỗ tôi dừng, để không mất dấu nội dung.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries VID-06~--~Should}
+        {\tiny Là người dùng, tôi muốn nhấn giữ một video để trích phần âm thanh thành tệp mp3 trong kho nhạc của tôi, để nghe được nội dung đó khi không tiện nhìn màn hình.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries VID-07~--~Could}
+        {\tiny Là người dùng thích thử thách, tôi muốn có gợi ý "chơi game liên quan video này" ở cuối video, để giải trí chủ động sau khi xem.}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{User Stories -- Music}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries M01~--~Must}
+        {\tiny Là người dùng, tôi muốn chọn một bài từ thư viện và điều khiển phát đầy đủ, để nghe nhạc như ở một ứng dụng nhạc thực thụ.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries M02~--~Must}
+        {\tiny Là người dùng, tôi muốn bài nhạc đang phát hiện thành một dock mini ở mọi màn hình chính, để nghe nhạc trong khi dùng phân hệ khác.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries M03~--~Must}
+        {\tiny Là người dùng, tôi muốn hệ thống hỏi rõ khi tôi mở một luồng âm thanh khác trong khi đang nghe nhạc, để âm thanh không tự giành nhau gây khó chịu.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries M04~--~Must}
+        {\tiny Là người dùng, tôi muốn tự tạo playlist và sắp hàng chờ phát, để nghe nhạc theo trình tự mình muốn.}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries M05~--~Should}
+        {\tiny Là người dùng, tôi muốn kho nhạc cá nhân chứa các tệp tôi trích từ video, để quản lý tập trung tại một nơi.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries M06~--~Could}
+        {\tiny Là người dùng, tôi muốn nhạc tiếp tục phát khi tôi rời ứng dụng hoặc khoá màn hình, để nghe nhạc khi làm việc khác.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries M07~--~Could}
+        {\tiny Là người dùng, tôi muốn tìm bài hát theo tên, nghệ sĩ hoặc album, để tới được nội dung mình muốn nhanh hơn là lướt.}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{User Stories -- News}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries NEWS-01~--~Must}
+        {\tiny Là người dùng, tôi muốn feed tin được sắp theo chuyên mục tôi quan tâm, để cập nhật tin nhanh và đủ.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries NEWS-02~--~Must}
+        {\tiny Là người dùng đọc lâu, tôi muốn trình đọc sạch và chỉnh cỡ chữ, để đọc không mỏi mắt.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries NEWS-03~--~Must}
+        {\tiny Là người dùng, tôi muốn vừa đọc bài báo vừa nghe nhạc nền, để không phải chọn giữa hai việc.}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries NEWS-04~--~Should}
+        {\tiny Là người dùng trên đường đi, tôi muốn chuyển một bài báo thành bản audio, để tiếp tục "đọc" tin khi không nhìn được màn hình.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries NEWS-05~--~Should}
+        {\tiny Là người dùng, tôi muốn lưu bài đọc sau, để đọc đúng lúc mình rảnh.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries NEWS-06~--~Should}
+        {\tiny Là người dùng thích thử thách, tôi muốn một quiz 3 câu hỏi sinh từ bài báo tôi vừa đọc, để vừa đọc vừa chơi và nhận điểm.}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{User Stories -- Games}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries GAME-01~--~Must}
+        {\tiny Là người dùng, tôi muốn một tab tập hợp các minigame và trạng thái mở khoá, để biết được chơi gì hôm nay.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries GAME-02~--~Must}
+        {\tiny Là người dùng, tôi muốn chơi game đoán bài hát từ thư viện, để thử thách thấy mình thuộc bài đến đâu.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries GAME-03~--~Must}
+        {\tiny Là người dùng, tôi muốn điểm thưởng tích lũy dùng chung cho toàn app, để mọi hoạt động đều có giá trị.}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries GAME-04~--~Could}
+        {\tiny Là người dùng, tôi muốn vừa chơi game vừa xem video trên hai nửa màn hình, để giải trí song song trọn vẹn hai phân hệ.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries GAME-05~--~Could}
+        {\tiny Là người dùng, tôi muốn bảng xếp hạng tuần, để có động lực cạnh tranh.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries GAME-06~--~Should}
+        {\tiny Là người dùng, tôi muốn một game phổ biến, khởi động nhanh và không cần biết nội dung (Snake hoặc 2048), để có chỗ vui một phút chờ đợi mà vẫn góp được điểm.}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{User Stories -- Dùng chung (1/2)}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries COM-01~--~Must}
+        {\tiny Là người dùng, tôi muốn đăng ký một tài khoản duy nhất cho cả 4 phân hệ, để không phải quản lý nhiều tài khoản.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries COM-02~--~Must}
+        {\tiny Là người dùng mới, tôi muốn chọn nhanh sở thích lần đầu mở app, để nội dung phù hợp với tôi từ đầu.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries COM-03~--~Must}
+        {\tiny Là người dùng, tôi muốn nhiệm vụ hằng ngày và chuỗi streak, để có lý do mở app mỗi ngày.}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries COM-04~--~Should}
+        {\tiny Là người dùng, tôi muốn một thú cưng ảo nuôi bằng điểm thưởng, để điểm kiếm được có mục tiêu để tiêu.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries COM-05~--~Should}
+        {\tiny Là người dùng, tôi muốn đổi điểm lấy quà (mở game mới, đồ pet, khung avatar), để thời gian dành cho ứng dụng được trả lại bằng phần thưởng hữu hình.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries COM-06~--~Could}
+        {\tiny Là người dùng, tôi muốn tổng kết tháng kiểu "wrapped" để chia sẻ, để có nội dung độc đáo khoe lên mạng.}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{User Stories -- Dùng chung (2/2)}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries COM-07~--~Must}
+        {\tiny Là người dùng, tôi muốn cài đặt sáng/tối, ngôn ngữ và tiết kiệm dữ liệu, để app tôn trọng thiết bị và gói dữ liệu của tôi.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries COM-08~--~Should}
+        {\tiny Là người dùng, tôi muốn đổi khung avatar theo mốc thành tích tôi đạt được, để hồ sơ thể hiện được quá trình dùng của mình.}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries COM-09~--~Could}
+        {\tiny Là người dùng dễ quên, tôi muốn một lời nhắc nhẹ lúc buổi tối nếu hôm nay chưa hoàn thành nhiệm vụ nào, để không đánh mất streak đang có.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries COM-10~--~Should}
+        {\tiny Là người mới muốn thử, tôi muốn dùng thử một phiên không cần đăng ký, để quyết định đăng ký sau khi đã cảm nhận được ứng dụng.}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{User Stories -- Liên phân hệ (Cross) (1/2)}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries CROSS-01~--~Must}
+        {\tiny Là người dùng, tôi muốn dock mini player xuất hiện ở mọi tab khi có nội dung đang phát, để luôn biết và điều khiển được đang nghe gì bất kể đang ở đâu.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries CROSS-02~--~Must}
+        {\tiny Là người dùng, tôi muốn được hỏi mỗi khi hai luồng âm thanh đánh nhau, và có nút để ngừng câu hỏi khi tôi chán, để sự kiểm soát nằm ở tôi.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries CROSS-03~--~Should}
+        {\tiny Là người dùng đang xem video, tôi muốn video theo tôi sang tab khác dưới dạng PIP, để không bỏ sót nội dung vì đổi việc.}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries CROSS-04~--~Could}
+        {\tiny Là người dùng, tôi muốn vừa chơi game vừa theo dõi video trên hai nửa màn hình, để giải trí song song thật sự.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries CROSS-05~--~Must}
+        {\tiny Là người dùng nhận cuộc gọi, tôi muốn mọi nội dung tự nhường và trở lại đúng chỗ sau cuộc gọi, để không phải tìm lại vị trí cũ.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries CROSS-06~--~Must}
+        {\tiny Là người dùng dùng tai nghe, tôi muốn ứng dụng dừng âm thanh khi tôi rút tai nghe, để không phát ra loa ngoài ngoài ý muốn.}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{User Stories -- Liên phân hệ (Cross) (2/2)}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\scriptsize\bfseries CROSS-07~--~Should}
+        {\tiny Là người dùng, tôi muốn ứng dụng khôi phục đúng chỗ tôi dừng cả khi hệ điều hành đã từng hủy app, để phiên dùng của tôi không bị xóa sạch.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries CROSS-08~--~Should}
+        {\tiny Là người dùng đang nghe nhạc, tôi muốn bấm "Nghe tin" mà không bị cướp bài đang nghe, để hai việc nhập vào một hàng phát trơn tru.}
+      \end{block}
+      \begin{block}{\scriptsize\bfseries CROSS-09~--~Could}
+        {\tiny Là người dùng, tôi muốn một hàng phát trộn bài hát, tệp trích từ video và audio tin, để cả ba loại nội dung cùng chảy trong một trải nghiệm.}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ============================================================
+\section{First-run \& Gamification}
+% ============================================================
+\begin{frame}{First-run \& Gamification (1/2)}
+  \begin{center}
+  \begin{tikzpicture}[
+      stp/.style={circle, draw=brandteal, thick, fill=brandteal!12, minimum size=0.72cm, font=\small\bfseries, text=brandteal!60!black},
+      desc/.style={text width=2.75cm, align=center, font=\tiny}]
+    \node[stp] (s1) at (0.9,4.1) {1};
+    \node[desc, below=0.12cm of s1] {Mở app $\leq$ 2 giây, không bắt đăng nhập};
+    \node[stp] (s2) at (4.5,4.1) {2};
+    \node[desc, below=0.12cm of s2] {Chọn $\geq$ 3 chủ đề (bỏ qua được)};
+    \node[stp] (s3) at (8.1,4.1) {3};
+    \node[desc, below=0.12cm of s3] {Home hiện ``Đề xuất hôm nay'': 1 video, 1 bài hát, 1 tin};
+    \node[stp] (s4) at (11.7,4.1) {4};
+    \node[desc, below=0.12cm of s4] {Chạm bài hát $\rightarrow$ dock mini hiện ở đáy};
+    \node[stp] (s5) at (11.7,1.5) {5};
+    \node[desc, below=0.12cm of s5] {Banner nhiệm vụ: nghe 1 bài -- đọc 1 tin -- thắng 1 ván};
+    \node[stp] (s6) at (8.1,1.5) {6};
+    \node[desc, below=0.12cm of s6] {Mở bài tin: dock nhạc vẫn hiện trong trình đọc};
+    \node[stp] (s7) at (4.5,1.5) {7};
+    \node[desc, below=0.12cm of s7] {Hoàn 3 nhiệm vụ $\rightarrow$ trứng thú cưng nở};
+    \node[stp] (s8) at (0.9,1.5) {8};
+    \node[desc, below=0.12cm of s8] {Cuối phiên: streak = 1, huy hiệu ``Chuỗi 7 ngày''};
+    \draw[-{Latex}, brandteal!60] (s1) -- (s2);
+    \draw[-{Latex}, brandteal!60] (s2) -- (s3);
+    \draw[-{Latex}, brandteal!60] (s3) -- (s4);
+    \draw[-{Latex}, brandteal!60] (s4) -- (s5);
+    \draw[-{Latex}, brandteal!60] (s5) -- (s6);
+    \draw[-{Latex}, brandteal!60] (s6) -- (s7);
+    \draw[-{Latex}, brandteal!60] (s7) -- (s8);
+  \end{tikzpicture}
+  \end{center}
+  \vfill
+  {\tiny\color{brandgray} Onboarding 3 nguyên tắc: \textbf{giá trị} (ba màn đầu nói app giải quyết được gì) $\cdot$ \textbf{quyền riêng tư} (không xin quyền lúc mở) $\cdot$ \textbf{liền mạch} (không bắt đăng nhập trước khi thấy sản phẩm).\\
+  Chỉ số: $\geq$ 60\% người mới dùng ít nhất 3 trong 5 tính năng chính ngay lần đầu mở app.}
+\end{frame}
+
+\begin{frame}{First-run \& Gamification (2/2)}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Kiếm điểm}
+        {\tiny
+        \begin{itemize}\itemsep2pt
+          \item Thắng minigame: \textbf{+10}
+          \item Nhiệm vụ hằng ngày: \textbf{+20}/việc (60--100 điểm/ngày)
+          \item Quiz từ bài báo: \textbf{+15}
+          \item Lần đầu trong tuần trích mp3 / nghe tin: \textbf{+20} (2 lần/tuần)
+          \item Bonus streak: \textbf{+50} (ngày 7), \textbf{+150} (ngày 30)
+        \end{itemize}}
+      \end{block}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \begin{alertblock}{\small Tiêu điểm}
+        {\tiny
+        \begin{itemize}\itemsep2pt
+          \item Cho thú cưng ăn: \textbf{$-$30} (tối đa 2 bữa/ngày)
+          \item Mở khoá game: \textbf{$-$300 đến $-$800}
+          \item Khung avatar: \textbf{$-$200 đến $-$800}
+          \item Phụ kiện pet: \textbf{$-$50 đến $-$200}
+        \end{itemize}}
+      \end{alertblock}
+      \vspace{1mm}
+      {\tiny\color{brandgray} Không bán điểm bằng tiền ở v1; v2 mới xét đổi quà vật lý, voucher.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ============================================================
+\section{Gamification}
+% ============================================================
+\begin{frame}{Gamification~--~Vòng lặp giữ người dùng}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      {\small\textbf{Kiếm điểm (điểm thật trong app)}}\vspace{1mm}
+      {\tiny
+      \begin{itemize}\itemsep2.5pt
+        \item Thắng Tic-Tac-Toe: \textbf{+20}
+        \item Snake: \textbf{score $\times$ 2}
+        \item Beat Tiles: \textbf{score / 2}
+        \item Đoán bài hát: \textbf{+10}/câu đúng
+        \item Quiz từ bài báo: \textbf{+15}
+        \item Quiz cuối video: \textbf{+20}
+        \item Nhiệm vụ hằng ngày: \textbf{+20}/việc (3 việc)
+        \item Trích MP3 lần đầu: \textbf{+5}
+      \end{itemize}}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      {\small\textbf{Tiêu điểm (giá thật trong app)}}\vspace{1mm}
+      {\tiny
+      \begin{itemize}\itemsep2.5pt
+        \item Cho thú cưng ăn: \textbf{$-$30} (1 lần/ngày)
+        \item Phụ kiện pet: \textbf{$-$50} -- \textbf{$-$100}
+        \item Khung avatar: \textbf{$-$200} -- \textbf{$-$800}
+        \item Mở khoá game: \textbf{$-$300} -- \textbf{$-$500}
+      \end{itemize}}\vspace{2mm}
+      {\small\textbf{Tiến hoá thú cưng}}\vspace{1mm}
+      {\tiny
+      \begin{itemize}\itemsep2pt
+        \item Hoàn thành 3 nhiệm vụ/ngày $\rightarrow$ trứng nở
+        \item Cho ăn hằng ngày $\rightarrow$ lớn theo mốc
+      \end{itemize}}
+    \end{column}
+  \end{columns}
+  \vfill
+  {\tiny\color{brandgray} Điểm không mua bằng tiền ở v1; chỉ đổi được vật phẩm ảo trong app. Điểm cộng qua Room \texttt{point\_entries}, trừ có kiểm tra số dư âm.}
+\end{frame}
+
+% ============================================================
+\section{Chỉ số kiểm chứng MVP}
+% ============================================================
+\begin{frame}{Chỉ số kiểm chứng MVP}
+  \small
+  \begin{tabular}{@{}p{6.6cm}p{4.6cm}@{}}
+    \toprule
+    \textbf{Chỉ số} & \textbf{Ngưỡng} \\
+    \midrule
+    Retention ngày 7 (D7) & $\geq$ 4\% (gấp đôi trung bình ngành) \\
+    Phiên dùng $\geq$ 2 phân hệ & $\geq$ 40\% số phiên \\
+    Người mới chạm 3/5 trụ USP ngay phiên đầu & $\geq$ 60\% \\
+    Giữ streak $\geq$ 7 ngày & $\geq$ 15\% người hoạt động \\
+    Crash-free / khởi động lạnh & $\geq$ 99,5\% / $\leq$ 2 giây \\
+    \bottomrule
+  \end{tabular}
+  \vfill
+  {\small Giả thuyết cốt lõi: giá trị ``liền mạch 4-trong-1'' có đủ lớn để người dùng rời bộ ứng dụng chuyên biệt không?}
+\end{frame}
+
+% ============================================================
+\section{Kiến trúc thông tin}
+% ============================================================
+\begin{frame}{Kiến trúc thông tin (IA)~--~Cấu trúc và điều hướng}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      {\small\textbf{IA tổ chức nội dung để người dùng điều hướng tự nhiên}}\vspace{2mm}
+      {\tiny
+      \begin{itemize}\itemsep4pt
+        \item \textbf{Cấu trúc phân cấp:} \newline Thanh tab chính $\rightarrow$ danh mục $\rightarrow$ màn chi tiết
+        \item \textbf{Bottom Navigation:} \newline 5 tab (Home -- Video -- Music -- News -- Games); đây là điều hướng chính
+        \item \textbf{Bottom Sheet / Dialog:} \newline tác vụ tạm (xác nhận đăng xuất, chọn khung avatar, hàng đợi nhạc)
+        \item \textbf{Không dùng Navigation Drawer:} \newline tần suất thấp; che gần nửa màn hình
+      \end{itemize}}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \begin{tikzpicture}[scale=0.75]
+        \node[draw=brandteal!60, rounded corners=3pt, fill=brandteal!8, font=\tiny\bfseries, minimum width=2.4cm] (nav) at (0,0) {Thanh tab chính (5)};
+        \node[draw=brandteal!60, rounded corners=2pt, fill=brandteal!5, font=\tiny, minimum width=1.4cm] (home) at (-1.8,-1.0) {Home};
+        \node[draw=brandteal!60, rounded corners=2pt, fill=brandteal!5, font=\tiny, minimum width=1.4cm] (video) at (-0.6,-1.0) {Video};
+        \node[draw=brandteal!60, rounded corners=2pt, fill=brandteal!5, font=\tiny, minimum width=1.4cm] (music) at (0.6,-1.0) {Music};
+        \node[draw=brandteal!60, rounded corners=2pt, fill=brandteal!5, font=\tiny, minimum width=1.4cm] (news) at (1.8,-1.0) {News};
+        \draw[-{Latex}, brandteal!50] (nav) -- (home);
+        \draw[-{Latex}, brandteal!50] (nav) -- (video);
+        \draw[-{Latex}, brandteal!50] (nav) -- (music);
+        \draw[-{Latex}, brandteal!50] (nav) -- (news);
+        \node[draw=brandgray!40, rounded corners=2pt, fill=brandgray!5, font=\tiny, minimum width=1.4cm] (games) at (0,-2.0) {Games};
+        \draw[-{Latex}, brandgray!50] (nav.south) -- ++(0,-0.3) -| (games.north);
+        \node[draw=brandgray!40, rounded corners=2pt, fill=brandgray!5, font=\tiny, text width=1.2cm, align=center] (detail) at (-1.2,-3.1) {Màn chi tiết};
+        \node[draw=brandgray!40, rounded corners=2pt, fill=brandgray!5, font=\tiny, text width=1.2cm, align=center] (play) at (1.2,-3.1) {Màn chơi};
+        \draw[-{Latex}, brandgray!50] (home.south) -- ++(0,-0.3) -| (detail.north);
+        \draw[-{Latex}, brandgray!50] (games) -- (play);
+        \node[font=\tiny, text=brandgray] at (-1.2,-1.6) {\textit{danh mục / feed}};
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Kiến trúc thông tin (IA)~--~Tìm kiếm và bố cục}
+  \begin{itemize}\small
+    \item \textbf{Tìm kiếm và lọc:} ô tìm trên Home gợi ý cả bốn phân hệ (F-COM-11); mỗi phân hệ có ô tìm riêng (tiêu đề, nghệ sĩ, bài báo)
+    \item \textbf{Độ sâu điều hướng:} thẻ Home mở thẳng màn chi tiết (1 chạm); đường dài nhất Home $\rightarrow$ tab $\rightarrow$ chi tiết (2 chạm, ngưỡng UX-08: $\leq$ 3)
+    \item \textbf{Một màn một hành động chính;} chi tiết giấu theo cấp độ (progressive disclosure)
+    \item Trạng thái (bài đang phát, video nổi, ván dở) đi theo người dùng khi đổi tab
+  \end{itemize}
+\end{frame}
+
+% ============================================================
+\section{Design System}
+% ============================================================
+\begin{frame}{Design System (1/4)~--~Token màu theo vai trò}
+  \begin{columns}
+    \begin{column}{0.55\textwidth}
+      {\small\textbf{Nguyên tắc: token theo vai trò, không hardcode}}\vspace{1mm}
+      {\tiny
+      \begin{itemize}\itemsep3pt
+        \item Mọi màn tham chiếu vai trò M3 (\texttt{primary}, \texttt{surfaceVariant}, \ldots)
+        \item Tệp theme duy nhất: \texttt{Color.kt} $\rightarrow$ đổi bảng màu = sửa 1 file
+        \item Mọi vai trò khai báo \textbf{cặp role/onRole} $\rightarrow$ component tự giữ tương phản
+        \item \textbf{Dynamic color tắt mặc định} (Android 12+); giữ thương hiệu teal ổn định
+      \end{itemize}}\vspace{2mm}
+      {\small\textbf{Vì sao role-based?}}\vspace{1mm}
+      {\tiny Nếu hardcode màu, việc đổi bảng màu cần sửa từng màn. Với token theo vai trò, chỉ cần đổi giá trị trong \texttt{Color.kt} là toàn bộ giao diện cập nhật đồng loạt. Cũng dễ bật \textbf{dark mode}: cùng một vai trò, hai bộ giá trị.}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \begin{tikzpicture}[scale=0.82]
+        % Light mode column
+        \node[font=\tiny\bfseries, text=brandgray] at (0,3.6) {Light};
+        \fill[fill=teal!80!black, rounded corners=2pt] (-0.5,3.0) rectangle (0.5,3.4);
+        \node[font=\tiny, text=white] at (0,3.2) {primary};
+        \node[font=\tiny, text=brandgray, anchor=west] at (0.6,3.2) {006B5F};
+        \fill[fill=teal!40, rounded corners=2pt] (-0.5,2.4) rectangle (0.5,2.8);
+        \node[font=\tiny, text=black] at (0,2.6) {pContainer};
+        \node[font=\tiny, text=brandgray, anchor=west] at (0.6,2.6) {9EF2DF};
+        \fill[fill=gray!30, rounded corners=2pt] (-0.5,1.8) rectangle (0.5,2.2);
+        \node[font=\tiny, text=black] at (0,2.0) {surface};
+        \node[font=\tiny, text=brandgray, anchor=west] at (0.6,2.0) {F5FBF7};
+        % Dark mode column
+        \node[font=\tiny\bfseries, text=brandgray] at (0,1.4) {Dark};
+        \fill[fill=teal!50, rounded corners=2pt] (-0.5,0.8) rectangle (0.5,1.2);
+        \node[font=\tiny, text=black] at (0,1.0) {primary};
+        \node[font=\tiny, text=brandgray, anchor=west] at (0.6,1.0) {82D5C3};
+        \fill[fill=teal!80!black, rounded corners=2pt] (-0.5,0.2) rectangle (0.5,0.6);
+        \node[font=\tiny, text=white] at (0,0.4) {pContainer};
+        \node[font=\tiny, text=brandgray, anchor=west] at (0.6,0.4) {005045};
+        \fill[fill=black!80, rounded corners=2pt] (-0.5,-0.4) rectangle (0.5,0.0);
+        \node[font=\tiny, text=white] at (0,-0.2) {surface};
+        \node[font=\tiny, text=brandgray, anchor=west] at (0.6,-0.2) {0F1512};
+        % Arrow between modes
+        \draw[-{Latex}, brandteal!60] (1.8,3.2) -- (1.8,1.0) node[midway, right, font=\tiny, text=brandgray] {đổi giá trị};
+        \draw[-{Latex}, brandteal!60] (1.8,1.0) -- (1.8,3.2) node[midway, left, font=\tiny, text=brandgray] {cùng vai trò};
+      \end{tikzpicture}\vspace{2mm}
+      {\tiny\textbf{Dark mode:} theo hệ thống mặc định; ghi đè thủ công (Sáng / Tối / Theo hệ thống) trong Cài đặt $\rightarrow$ F-COM-13}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Design System (2/4)~--~Bảng token chi tiết}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      {\scriptsize\textbf{Màu chính \& nhấn}}\vspace{1mm}
+      {\tiny
+      \begin{itemize}\itemsep4pt
+        \item \colorbox[HTML]{006B5F}{\rule{8pt}{8pt}}\colorbox[HTML]{82D5C3}{\rule{8pt}{8pt}} \texttt{primary} 006B5F / 82D5C3 \newline Nút chính; tab đang chọn; icon bài hát; chữ ``Đang phát''
+        \item \colorbox[HTML]{9EF2DF}{\rule{8pt}{8pt}}\colorbox[HTML]{005045}{\rule{8pt}{8pt}} \texttt{pContainer} 9EF2DF / 005045 \newline Nền icon ContentCard; ô quiz đúng; huy hiệu; nhiệm vụ xong
+        \item \colorbox[HTML]{526460}{\rule{8pt}{8pt}}\colorbox[HTML]{BACCC5}{\rule{8pt}{8pt}} \texttt{secondary} 526460 / BACCC5 \newline Icon onboarding; màu phụ logo
+        \item \colorbox[HTML]{66587B}{\rule{8pt}{8pt}}\colorbox[HTML]{D1BFE7}{\rule{8pt}{8pt}} \texttt{tertiary} 66587B / D1BFE7 \newline Icon streak; nhãn đề xuất
+        \item \colorbox[HTML]{EDDCFF}{\rule{8pt}{8pt}}\colorbox[HTML]{4E4261}{\rule{8pt}{8pt}} \texttt{tContainer} EDDCFF / 4E4261 \newline Chip chuỗi ngày; card thú cưng
+        \item \colorbox[HTML]{BA1A1A}{\rule{8pt}{8pt}}\colorbox[HTML]{FFB4AB}{\rule{8pt}{8pt}} \texttt{error} BA1A1A / FFB4AB \newline Lỗi phát; quiz sai; icon yêu thích (tim đỏ)
+      \end{itemize}}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      {\scriptsize\textbf{Nền, bề mặt \& viền}}\vspace{1mm}
+      {\tiny
+      \begin{itemize}\itemsep4pt
+        \item \colorbox[HTML]{F5FBF7}{\rule{8pt}{8pt}}\colorbox[HTML]{0F1512}{\rule{8pt}{8pt}} \texttt{background} F5FBF7 / 0F1512 \newline Nền mọi màn hình; chữ chính
+        \item \colorbox[HTML]{F5FBF7}{\rule{8pt}{8pt}}\colorbox[HTML]{0F1512}{\rule{8pt}{8pt}} \texttt{surface} (same as bg) \newline Nền card đang kéo (queue)
+        \item \colorbox[HTML]{DBE5DF}{\rule{8pt}{8pt}}\colorbox[HTML]{3F4945}{\rule{8pt}{8pt}} \texttt{surfVariant} DBE5DF / 3F4945 \newline Nền ô 2048; ô Beat Tiles; avatar chưa chọn
+        \item \colorbox[HTML]{E3EAE5}{\rule{8pt}{8pt}}\colorbox[HTML]{252B28}{\rule{8pt}{8pt}} \texttt{surfContainerHigh} \newline Nền card menu quiz; ô input
+        \item \colorbox[HTML]{6F7974}{\rule{8pt}{8pt}}\colorbox[HTML]{89938D}{\rule{8pt}{8pt}} \texttt{outline} 6F7974 / 89938D \newline Icon radio chưa chọn; vạch TrackCard
+      \end{itemize}}\vspace{2mm}
+      {\tiny\color{brandgray} Mọi cặp đạt WCAG AA ($\geq$ 4,5:1). \texttt{outline} 4,29:1 (viền, chuẩn 3:1).}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Design System (3/4)~--~Typography \& Component}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      {\small\textbf{Typography}}\vspace{1mm}
+      {\tiny
+      \begin{tabular}{@{}lll@{}}
+        \toprule
+        \textbf{Mức} & \textbf{Ví dụ} & \textbf{Dùng ở} \\
+        \midrule
+        display & 57sp & Splash logo \\
+        headline & 24--28sp & Tiêu đề màn \\
+        title & 14--16sp & Tiêu đề card, tab \\
+        body & 14sp & Nội dung, mô tả \\
+        label & 11--12sp & Chip, nhãn phụ \\
+        \bottomrule
+      \end{tabular}}\vspace{2mm}
+      {\tiny
+      \begin{itemize}\itemsep2pt
+        \item Nguyên thang M3, không font riêng
+        \item Đơn vị \texttt{sp} $\rightarrow$ phóng theo cỡ chữ hệ thống
+        \item Trình đọc bài: riêng 2 nút A$-$/A$+$ (0,8x--1,6x, bước 15\%)
+      \end{itemize}}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      {\small\textbf{Component: 3 nhóm chức năng}}\vspace{1mm}
+      {\small\textbf{1. Input control}}\vspace{1mm}
+      {\tiny Ô OTP / mật khẩu; thanh trượt (tốc độ 0,5--2x, âm lượng); chip chất lượng Auto/1080p/720p/360p; ô tick ``Không hỏi lại''}\vspace{2mm}
+      {\small\textbf{2. Navigation}}\vspace{1mm}
+      {\tiny 5 tab Bottom Nav; vuốt ngang đổi phân hệ; nút Quay lại; bottom sheet}\vspace{2mm}
+      {\small\textbf{3. Information / Container}}\vspace{1mm}
+      {\tiny ContentCard (thẻ 4 phân hệ); skeleton feed; snackbar; Modal Bottom Sheet (xác nhận, hàng đợi, chọn khung avatar)}\vspace{2mm}
+      {\small\textbf{Thư viện dùng chung}}\vspace{1mm}
+      {\tiny FeaturePage; SectionTitle; ContentCard; CatalogContent; SkeletonFeed; EmptyState --- định nghĩa trong module design system}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Design System (4/4)~--~Accessibility}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      {\small\textbf{Vùng chạm $\geq$ 48$\times$48 dp}}\vspace{1mm}
+      {\tiny
+      \begin{itemize}\itemsep2pt
+        \item Mọi nút dùng component M3 $\rightarrow$ tự kế thừa
+        \item Thẻ nội dung cao $>$ 48dp
+        \item Ô vuôn 2048: 4$\times$4 ô, mỗi ô $>$ 48dp
+      \end{itemize}}\vspace{2mm}
+      {\small\textbf{Tương phản màu (WCAG 2.x)}}\vspace{1mm}
+      {\tiny
+      \begin{tabular}{@{}lll@{}}
+        \toprule
+        \textbf{Cặp} & \textbf{Light} & \textbf{Dark} \\
+        \midrule
+        onBackground/bg & 16,3:1 & 14,4:1 \\
+        onPrimary/primary & 6,4:1 & 7,6:1 \\
+        onSurfaceVar/surf & 8,9:1 & 10,9:1 \\
+        outline/bg & 4,3:1 & 5,8:1 \\
+        \bottomrule
+      \end{tabular}}\vspace{1mm}
+      {\tiny\color{brandgray} outline chỉ dùng cho viền (chuẩn 3:1) $\rightarrow$ đạt}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      {\small\textbf{Cỡ chữ}}\vspace{1mm}
+      {\tiny
+      \begin{itemize}\itemsep2pt
+        \item Mọi chữ theo \texttt{sp} $\rightarrow$ phóng 130--200\% theo hệ thống
+        \item Bố cục co giãn, không chồng chữ
+        \item \textbf{Trình đọc bài:} 2 nút A$-$/A$+$ riêng (F-NEWS-02)
+        \item $\rightarrow$ bước 15\%, phạm vi 0,8x -- 1,6x
+        \item $\rightarrow$ lưu theo từng bài (\texttt{rememberSaveable})
+      \end{itemize}}\vspace{2mm}
+      {\small\textbf{Trình đọc màn hình}}\vspace{1mm}
+      {\tiny
+      \begin{itemize}\itemsep2pt
+        \item TalkBack: nhãn \texttt{contentDescription}
+        \item Đã phủ: Account, Music, News
+        \item Còn nợ: Home, Video, Onboarding
+      \end{itemize}}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ============================================================
+\section{Micro-interactions}
+% ============================================================
+\begin{frame}{Micro-interactions (1/2)~--~Mô hình Saffer 4 thành phần}
+  \begin{center}
+  \begin{tikzpicture}[
+      font=\scriptsize,
+      comp/.style={draw=brandteal, thick, rounded corners=3pt, fill=brandteal!8, minimum height=10mm, minimum width=2.4cm, align=center},
+      arrow/.style={-{Latex[length=2mm]}, brandteal!60, thick}]
+    \node[comp] (trg) at (0,0) {\textbf{Trigger}\\Người dùng làm gì};
+    \node[comp, right=1.5cm of trg] (rul) {\textbf{Rules}\\Điều kiện áp};
+    \node[comp, right=1.5cm of rul] (fdb) {\textbf{Feedback}\\Người dùng thấy gì};
+    \node[comp, below=1.2cm of fdb] (lp) {\textbf{Loops \& Modes}\\Hành vi lặp / giới hạn};
+    \draw[arrow] (trg) -- (rul);
+    \draw[arrow] (rul) -- (fdb);
+    \draw[arrow] (fdb) -- (lp);
+    \draw[arrow, bend right=30] (lp.south) to[out=-90,in=-90] (trg.south);
+  \end{tikzpicture}
+  \end{center}
+  \vfill
+  {\small\textbf{Ví dụ: Dock mini player}}\vspace{1mm}
+  {\tiny
+  \begin{tabular}{@{}llll@{}}
+    \toprule
+    \textbf{Trigger} & \textbf{Rules} & \textbf{Feedback} & \textbf{Loops} \\
+    \midrule
+    Bắt đầu phát một bài & Bài đang phát hiện dock ở đáy & Tên bài + nút tạm dừng + nút đóng & Hiện mọi feed \& trình đọc; mở rộng = 1 chạm \\
+    \bottomrule
+  \end{tabular}}
+\end{frame}
+
+\begin{frame}{Micro-interactions (2/2)~--~12 tương tác đã cài}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      {\scriptsize\textbf{Tải \& điều hướng}}\vspace{1mm}
+      {\tiny
+      \begin{itemize}\itemsep3pt
+        \item \textbf{Skeleton:} 4 hàng khung + shimmer khi tải feed; dừng khi có dữ liệu
+        \item \textbf{Ripple:} vòng sóng lan từ điểm chạm; mặc định toàn hệ thống
+        \item \textbf{Vuốt ngang:} đổi phân hệ ở feed; tắt trong game
+        \item \textbf{Dock mini:} tên bài + phát/dừng + đóng; hiện mọi feed \& trình đọc
+        \item \textbf{Cửa sổ nổi:} video nhỏ ở góc + 3 nút; quay lại giữ vị trí
+        \item \textbf{Thẻ đang đọc:} nổi khi rời News; chạm = quay lại đúng chỗ
+      \end{itemize}}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      {\scriptsize\textbf{Tương tác nội dung}}\vspace{1mm}
+      {\tiny
+      \begin{itemize}\itemsep3pt
+        \item \textbf{Popup C1:} 2 lựa chọn + tick ``Không hỏi lại'' khi mở nhạc
+        \item \textbf{Popup C2:} 2 lựa chọn + tick khi mở video (nhạc đang phát)
+        \item \textbf{Trạng thái rỗng:} icon + thông điệp + nút hành động
+        \item \textbf{Mất mạng:} ``Không có kết nối'' + nút Thử lại; tự phục hồi
+        \item \textbf{2048:} vuốt gộp ô; điểm cao ghi lại
+        \item \textbf{Beat Tiles:} nốt rơi bốn làn; combo tăng; nhạc vẫn phát
+      \end{itemize}}
+    \end{column}
+  \end{columns}
+  \vfill
+  {\tiny\color{brandgray} Mỗi màn rà theo \textbf{4 câu hỏi}: Control (khớp dữ liệu?) $\cdot$ Flow (bớt công sức?) $\cdot$ Access (đọc/chạm được?) $\cdot$ State (khôi phục thấy được?)}
+\end{frame}
+
+% ============================================================
+\section{Accessibility}
+% ============================================================
+\begin{frame}{Accessibility}
+  \begin{itemize}
+    \item Vùng chạm \textbf{48$\times$48 dp} toàn hệ thống; thẻ nội dung cao hơn
+    \item Mọi cặp màu chính đạt \textbf{WCAG AA ($\geq$ 4,5:1)} cả light lẫn dark
+    \item Cặp thấp nhất 4,23:1 chỉ dùng cho viền (chuẩn 3:1)
+    \item Chữ dùng sp: phóng theo hệ thống 130--200\%, không chồng chữ
+    \item TalkBack mới phủ một phần (Account, Music, News)~--~\textbf{còn nợ}
+  \end{itemize}
+\end{frame}
+
+% ============================================================
+\section{Ràng buộc môi trường di động}
+% ============================================================
+\begin{frame}{Ràng buộc môi trường di động}
+  \begin{columns}
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}\small
+        \item Tài nguyên hữu hạn: RAM 3 GB mục tiêu, $\sim$200 MB cài đặt + đệm
+        \item Vòng đời Android hủy app mọi lúc $\rightarrow$ \textbf{phải tự khôi phục trạng thái}
+        \item Mạng không ổn định $\rightarrow$ offline-first theo nghiệp vụ
+        \item Tối đa \textbf{1 bộ phát video + 1 bộ phát âm thanh} dùng chung
+        \item Hỗ trợ tối thiểu \textbf{Android 8.0 (API 26)}
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.4\textwidth}
+      \begin{tikzpicture}[node distance=4mm,
+        box/.style={draw=brandteal, thick, rounded corners=2pt, minimum width=3.4cm, minimum height=7mm, font=\scriptsize, fill=brandpaper}]
+        \node[box] (data) {Data: Room + DataStore};
+        \node[box, below=of data] (domain) {Domain: Kotlin thuần};
+        \node[box, below=of domain] (pres) {Presentation: Compose};
+        \draw[-{Latex}, brandteal, thick] (data) -- (domain);
+        \draw[-{Latex}, brandteal, thick] (domain) -- (pres);
+        \node[font=\scriptsize, text=brandgray] at (0,-2.35) {Luồng dữ liệu một chiều (UDF)};
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ============================================================
+\section{Lựa chọn nền tảng}
+% ============================================================
+\begin{frame}{Lựa chọn nền tảng}
+  \small
+  \begin{tabular}{@{}p{2.6cm}p{3.2cm}p{4.2cm}p{2.4cm}@{}}
+    \toprule
+    \textbf{Phương án} & \textbf{Tích hợp media} & \textbf{Chi phí đồ án} & \textbf{Kết luận} \\
+    \midrule
+    \textbf{Android Native} & 1 vòng đời, 1 audio focus, Media3 & Hạng vừa & \textbf{Chọn} \\
+    iOS & Tốt nhưng thiếu máy + tài khoản dev & Cao & Bỏ \\
+    Flutter & Engine riêng, phải bọc native media & Vừa & Cân nhắc \\
+    React Native & Bridge JS/native cho media & Vừa & Cân nhắc \\
+    KMP & Chia sẻ logic, UI vẫn native $\times$ 2 & Cao & Bỏ \\
+    \bottomrule
+  \end{tabular}
+  \vfill
+  {\small Kotlin + Jetpack Compose: một hệ công cụ duy nhất cho cả 4 phân hệ; nhóm đã có kinh nghiệm.}
+\end{frame}
+
+% ============================================================
+\section{Tech Stack}
+% ============================================================
+\begin{frame}{Tech Stack}
+  \small
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \textbf{Có trong nguyên mẫu:}
+      \begin{itemize}\small
+        \item Jetpack Compose + Material 3
+        \item Navigation Compose + Kotlin Serialization
+        \item ViewModel + StateFlow + coroutines
+        \item Hilt + KSP
+        \item Media3 ExoPlayer (media engine)
+        \item Room + DataStore
+        \item Game: Kotlin + Compose/Canvas (không cần game engine)
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \textbf{Đề xuất mở rộng (v2):}
+      \begin{itemize}\small
+        \item MediaSessionService + MediaController (nhạc nền)
+        \item Retrofit + OkHttp + Kotlin Serialization (dữ liệu từ xa)
+        \item Coil (ảnh)
+        \item WorkManager (đồng bộ trì hoãn)
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ============================================================
+\section{Kiến trúc \& mô-đun}
+% ============================================================
+\begin{frame}{Kiến trúc \& mô-đun}
+  \begin{itemize}
+    \item 3 lớp Presentation--Domain--Data + MVVM + UDF
+    \item \textbf{Domain là Kotlin thuần}~--~không phụ thuộc Android, kiểm thử không cần emulator
+    \item \textbf{21 module Gradle}: app + domain + 7 feature + 4 data + 8 core
+    \item Phối hợp phiên: SessionPolicy $\rightarrow$ SessionCoordinator $\rightarrow$ MediaPlaybackCoordinator (Media3)
+    \item 1 Activity, 1 NavController~--~màn hình không giữ NavController
+    \item Kiểm tra phụ thuộc \textbf{tự động} bằng tác vụ \texttt{verifyArchitecture}
+  \end{itemize}
+\end{frame}
+
+% ============================================================
+\section{Vòng đời \& trạng thái}
+% ============================================================
+\begin{frame}{Vòng đời \& trạng thái}
+  \begin{itemize}
+    \item Khởi động \textbf{từ trạng thái đã lưu}, không mặc định Home; video/nhạc mở lại ở trạng thái tạm dừng
+    \item Snapshot sạch: không chứa Player, ViewModel, bitmap
+    \item Mục tiêu phục hồi: lệch $\leq$ 2 giây cùng phiên, $\leq$ 5 giây từ checkpoint
+    \item Audio focus Android 15+ (API 35): yêu cầu top app hoặc foreground service
+    \item 7 thuộc tính kiến trúc có test case kiểm chứng riêng
+  \end{itemize}
+\end{frame}
+
+% ============================================================
+\section{Phạm vi nguyên mẫu}
+% ============================================================
+\begin{frame}{Phạm vi nguyên mẫu}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{block}{Đã hiện thực}
+        \small Module hóa 23 module $\cdot$ điều hướng + vuốt ngang đổi tab $\cdot$ onboarding chọn chủ đề (DataStore) $\cdot$ chế độ khách $\cdot$ auth mô phỏng $\cdot$ Media3 phát video/nhạc thật $\cdot$ TTS nghe tin + trích mp3 $\cdot$ gamification thật (nhiệm vụ, streak, thú ảo, điểm, cửa hàng) $\cdot$ audio focus mọi luồng $\cdot$ 6 minigame kể cả Beat Tiles $\cdot$ Room + DataStore thật
+      \end{block}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \begin{alertblock}{Đang hiện thực dần}
+        \small MediaSessionService (notification điều khiển nhạc) $\cdot$ PIP do hệ điều hành quản lý $\cdot$ auth thật (server)
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+  \vfill
+  {\small Bảng đối chiếu ``làm chưa'' theo từng mã tính năng đang được rà soát song song với report.}
+\end{frame}
+
+% ============================================================
+\section{Web Services}
+% ============================================================
+\begin{frame}{Web Services}
+  \begin{center}
+    \vspace{10mm}
+    {\Large\color{brandgray} Phần đang được soạn cho báo cáo}\\[3mm]
+    {\small Định hướng: API nội dung, đồng bộ điểm/luồng giữa thiết bị, caching $\rightarrow$ cập nhật slide khi report chốt}
+  \end{center}
+\end{frame}
+
+% ============================================================
+\section{Kiểm thử \& Triển khai}
+% ============================================================
+\begin{frame}{Kiểm thử \& Triển khai}
+  \begin{center}
+    \vspace{10mm}
+    {\Large\color{brandgray} Phần đang được soạn cho báo cáo}\\[3mm]
+    {\small Định hướng: 14 test case TC01--TC14 theo user flow, chuẩn đầu ra L.O.4.2--4.3 $\rightarrow$ cập nhật slide khi report chốt}
+  \end{center}
+\end{frame}
+
+% ============================================================
+\section{Kết luận}
+% ============================================================
+\begin{frame}{Kết luận}
+  \begin{itemize}
+    \item \textbf{Sản phẩm}: giải trí 4-trong-1 với 6 trụ USP, phạm vi MVP chốt với 7 quyết định sản phẩm
+    \item \textbf{Tài liệu}: truy vết khép kín pain point $\rightarrow$ thị trường $\rightarrow$ Winning Zone $\rightarrow$ tính năng $\rightarrow$ user story $\rightarrow$ acceptance criteria
+    \item \textbf{Kỹ thuật}: kiến trúc 3 lớp + MVVM + UDF, 21 module, media engine dùng chung Media3
+    \item \textbf{Nguyên mẫu}: đang hoàn thiện theo bảng MVP, ảnh chụp thật đã phủ 16/48 tính năng
+    \item \textbf{Tiếp theo}: hoàn thiện Phần 5--6, heuristic evaluation, đo các chỉ số UX/SEC/BIZ
+  \end{itemize}
+  \vfill
+  \begin{center}
+    {\color{brandteal}\hrule height 1pt}
+    \vspace{2mm}
+    {\large\bfseries Cảm ơn thầy/cô và các bạn đã lắng nghe}
+  \end{center}
+\end{frame}
+
+\end{document}

@@ -1,7 +1,7 @@
 \subsection{Micro-interactions và phản hồi tức thì}
 \label{sec:micro-interactions}
 
-Mỗi tương tác nhỏ của OneSpace được thiết kế theo mô hình bốn thành phần của Saffer~\cite{saffer2013}: \textit{Trigger} (điều kiện khởi động), \textit{Rules} (logic quyết định điều gì xảy ra), \textit{Feedback} (hiệu ứng người dùng nhìn thấy) và \textit{Loops \& Modes} (lặp lại và điều kiện đặc biệt). Bảng~\ref{tab:micro-interactions} liệt kê các micro-interaction đã cài đặt trong ứng dụng, chỉ gồm những tương tác có thật trong mã nguồn.
+Bảng dưới đây liệt kê 	extbf{12 tương tác} đã cài trong ứng dụng. Mỗi tương tác nhỏ của OneSpace được thiết kế theo mô hình bốn thành phần của Saffer~\cite{saffer2013}: \textit{Trigger} (điều kiện khởi động), \textit{Rules} (logic quyết định điều gì xảy ra), \textit{Feedback} (hiệu ứng người dùng nhìn thấy) và \textit{Loops \& Modes} (lặp lại và điều kiện đặc biệt). Bảng~\ref{tab:micro-interactions} liệt kê các micro-interaction đã cài đặt trong ứng dụng, chỉ gồm những tương tác có thật trong mã nguồn.
 
 \begin{table}[H]
 \centering
@@ -13,26 +13,39 @@ Mỗi tương tác nhỏ của OneSpace được thiết kế theo mô hình b�
 \textbf{Tên} & \textbf{Trigger} & \textbf{Rules} & \textbf{Feedback} & \textbf{Loops \& Modes} \\
 \midrule
 Skeleton feed & Vào feed khi dữ liệu đang tải & Bốn hàng khung gồm một ô vuông và hai vạch ngang & Hiệu ứng shimmer (gradient chạy) trên khung xám & Dừng ngay khi có dữ liệu; chỉ dùng cho feed nhiều thông tin, không dùng cho thao tác nhẹ \\
+
 \midrule
 Ripple Material & Chạm mọi nút, thẻ, tab & Hiệu ứng chuẩn Material 3 & Vòng sóng lan từ điểm chạm & Mặc định toàn hệ thống \\
+\midrule
+Vuốt ngang đổi phân hệ & Đang ở màn hình chính (feed) của một tab, vuốt trái hoặc phải & Chuyển thẳng sang phân hệ kế bên mà không cần chạm thanh tab & Chuyển hướng như bấm thanh tab, giữ nguyên trạng thái từng phân hệ & Chỉ tắt trong game --- cử chỉ dành cho điều khiển game; mọi màn khác đều bật, kể cả khi nhạc hoặc video đang phát \\
 \midrule
 Dock mini player & Bắt đầu phát một bài & Bài đang phát luôn hiện một hàng dock ở đáy nội dung & Dock hiện tên bài, nút tạm dừng và nút đóng & Dock hiện trên mọi feed và trong trình đọc bài; mở rộng thành trình phát đầy đủ bằng một chạm \\
 \midrule
 Thu nhỏ video thành cửa sổ nổi & Bấm ``Thu nhỏ \& khám phá'' hoặc rời tab khi video đang phát & Video tiếp tục phát trong cửa sổ nhỏ ở góc & Cửa sổ kèm nhãn ``Đang phát'' và ba nút: Mở rộng, Tạm dừng, Đóng & Quay lại trình phát đầy đủ giữ nguyên vị trí; đóng thì dừng hẳn \\
 \midrule
-Popup xung đột âm thanh & Mở nhạc khi video đang phát, lần đầu của cặp nội dung & Ba lựa chọn; lựa chọn được lưu theo cặp (case C1) & Hộp thoại liệt kê video đang phát kèm ba nút hành động & Từ lần thứ hai của cùng cặp: áp dụng im lặng, không hỏi lại \\
+Popup xung đột âm thanh & Mở nhạc khi video đang phát (case C1) & Ba lựa chọn áp dụng cho lần đó; hỏi lại mỗi lần (case C1) & Hộp thoại hai dòng lựa chọn kèm ô tick Không hỏi lại, không có nút bỏ qua --- phải chọn một & Tích ô Không hỏi lại khi chọn: từ đó áp dụng im lặng đúng lựa chọn đó; đặt lại Luôn hỏi trong Cài đặt \\
 \midrule
 Trạng thái rỗng & Mở danh mục không có nội dung (``Đã lưu'') & Hiển thị thông điệp kèm một hành động thoát khỏi tình huống & Biểu tượng, tiêu đề và nút ``Xem tin mới nhất'' & Không bao giờ để màn hình trống trơn không lối đi \\
 \midrule
 Trạng thái mất mạng & Feed không tải được dữ liệu & Hiển thị thông điệp ``Không có kết nối'' & Nút ``Thử lại'' ở giữa màn hình & Nhấn thử lại để tải lại; khi có mạng tự phục hồi \\
 \midrule
 Bàn chơi 2048 & Vuốt trên bàn chơi & Ô cùng giá trị gộp nhau theo hướng vuốt & Bàn chơi và điểm số cập nhật tức thì sau mỗi nước & Điểm cao nhất được ghi lại và hiện ở đầu màn chơi \\
+\midrule
+Popup xung đột khi mở video (C2) & Mở video khi nhạc đang phát & Hai lựa chọn kèm ô tick ``Không hỏi lại'' & Hộp thoại hai dòng lựa chọn & Tick: từ đó tự áp dụng đúng lựa chọn đã lưu \\
+\midrule
+Thẻ bài đang đọc & Rời tab News khi đang đọc bài & Thu nhỏ thành thẻ nổi; ``Đang đọc''in đậm, tiêu đề bên dưới & Thẻ hiện ở đáy mọi tab khác & Chạm bất kỳ đâu trên thẻ quay lại đúng chỗ \\
+\midrule
+Beat Tiles & Vào game khi nhạc đang phát & Nốt nhạc rơi bốn làn, chạm đúng ô khi nốt vào vùng sáng & Điểm và combo tăng tức thì; nhạc vẫn phát & Thắng ván cộng điểm vào ví dùng chung \\
 \bottomrule
 \end{tabularx}
 \end{table}
+
+\textbf{Vì sao là skeleton chứ không phải spinner.} Skeleton mô phỏng đúng hình dạng nội dung sắp tới nên người dùng ``đoán trước'' được màn hình sẽ trông thế nào; spinner chỉ nói ``hãy chờ'' mà không cho biết chờ bao lâu hay chờ cái gì. Quy tắc nhóm áp dụng: thao tác nhẹ (bấm phát, bấm lưu) phản hồi tức thì bằng ripple, không cần trạng thái chờ; tải feed nhiều thông tin dùng skeleton; chỉ những tác vụ không hình dung trước được kết quả (đang chuẩn bị phát trực tiếp) mới dùng vòng xoay.
 
 \textbf{Quy tắc phản hồi và thời gian chờ.} Nguyên tắc xuyên suốt là \textit{giao diện không bao giờ đứng im khi chờ dữ liệu}: mọi thao tác đều có phản hồi tức thời trong ngưỡng 100~ms của \texttt{UX-01}~--~hiệu ứng ripple khi chạm, khung skeleton khi feed đang tải (mục~\ref{sec:wireframes-prototypes}). Việc phân biệt hai loại chỉ báo tuân theo quy tắc đặt ở mục~\ref{sec:quality-pillars}: \textit{skeleton} dùng cho màn hình nhiều thông tin (feed) vì người dùng thấy ngay hình dáng kết quả cuối sẽ ra sao; \textit{spinner/nút trạng thái} dùng cho thao tác nhẹ và ngắn (chuẩn bị quiz, đăng nhập). Khi thao tác thất bại, phản hồi chuyển từ ``đang chờ'' sang ``thông điệp lỗi + nút thử lại''. Gười dùng luôn có bước tiếp theo thay vì màn hình chết.
 
 \textbf{Phản hồi xúc giác (haptic).} Ứng dụng hiện chưa sử dụng rung haptic: các tương tác đã đủ phản hồi thị giác rõ ràng ở giai đoạn này, và nhóm muốn tránh cảm giác rung gây khó chịu khi chưa có dữ liệu người dùng nào yêu cầu. Haptic được ghi nhận là hướng cân nhắc cho hai thời điểm có ý nghĩa rõ ràng nhất (ghép ô trong 2048 và trứng thú cưng nở), sẽ thêm sau khi có phản hồi từ người dùng thử nghiệm.
 
 \textbf{Phản hồi âm thanh trong game.} Khi người dùng vào game trong lúc nhạc đang phát, hiệu ứng game không đè lên nhạc: theo quy tắc xử lý xung đột âm thanh ở mục~\ref{sec:mvp-scope}, nhạc được duck xuống (case C5)~--~phản hồi âm thanh vì vậy tuân theo cùng một bộ quy tắc với mọi luồng khác, thay vì mỗi phân hệ tự xử lý một kiểu.
+
+\textbf{Rà soát thiết kế theo bốn câu hỏi.} Nhóm dùng bốn câu hỏi đóng vai ``kính'' soi khi duyệt lại từng màn: (1)~\textit{Control}~--~thành phần có khớp với dữ liệu và hành động không (âm lượng liên tục dùng thanh trượt, chất lượng bốn mức rời rạc dùng chip, quy tắc xung đột dùng danh sách radio kèm tick); (2)~\textit{Flow}~--~bước tiếp có giảm bớt bất định và công sức không (đăng nhập bằng mật khẩu đi thẳng vào app, OTP chỉ là lựa chọn thay thế; bấm thẻ game là vào ngay màn chơi); (3)~\textit{Access}~--~trạng thái có đọc được, phóng to được, chạm được không (chữ theo \texttt{sp}, vùng chạm 48dp, tương phản AA~--~mục~\ref{sec:accessibility}); (4)~\textit{State}~--~tiến trình và khôi phục có nhìn thấy được không (skeleton khi tải, thanh tiến trình TTS, khôi phục đúng chỗ khi quay lại tab, nút ``Thử lại'' khi mất mạng). Một màn chỉ được coi là xong khi cả bốn câu trả lời ``có''.

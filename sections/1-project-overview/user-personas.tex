@@ -1,7 +1,7 @@
 \subsection{User Personas}
 \label{sec:user-personas}
 
-Nhóm xây dựng sáu User Persona theo nhu cầu và hành vi sử dụng, thay vì chỉ theo tuổi hay nghề nghiệp. Sáu persona đại diện cho sáu kiểu nhu cầu khác nhau, từ đó ảnh hưởng trực tiếp đến việc ưu tiên tính năng (mục~\ref{sec:feature-prioritization}), phạm vi MVP (mục~\ref{sec:mvp-scope}) và ma trận hành vi chuyển tab C1--C9 (mục~\ref{sec:mvp-scope}).
+Nhóm xây dựng sáu User Persona theo nhu cầu và hành vi sử dụng, thay vì chỉ theo tuổi hay nghề nghiệp. Sáu persona đại diện cho sáu kiểu nhu cầu khác nhau, từ đó ảnh hưởng trực tiếp đến việc ưu tiên tính năng (mục~\ref{sec:feature-prioritization}), phạm vi MVP (mục~\ref{sec:mvp-scope}) và ma trận hành vi chuyển phân hệ C1--C16 (mục~\ref{sec:mvp-scope}).
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{2.4cm} >{\raggedright\arraybackslash}p{3.4cm} >{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}p{4.2cm}}
 \caption{Tổng quan sáu User Persona của OneSpace}
@@ -93,9 +93,9 @@ Kết nối & Wi-Fi và dữ liệu di động \\
 
 \textbf{Hành vi mobile:} dùng điện thoại khi di chuyển, nghỉ trưa, sau giờ làm; nghe nhạc qua tai nghe Bluetooth; thói quen khoá màn khi nghe nhạc; thích nút điều khiển rõ ràng.
 
-\textbf{Tình huống:} Trên đường đến công ty, Hoàng Nam phát playlist rồi khoá điện thoại. Đến giờ nghỉ trưa, mở app đọc tin. Nhạc vẫn phát, điều khiển qua dock (case C2). Khi có cuộc gọi, app tự nhường; sau cuộc gọi nhạc phát lại từ đúng chỗ.
+\textbf{Tình huống:} Trên đường đến công ty, Hoàng Nam phát playlist rồi khoá điện thoại. Đến giờ nghỉ trưa, mở app đọc tin. Nhạc vẫn phát, điều khiển qua dock (case C7). Khi có cuộc gọi, app tự nhường; sau cuộc gọi nhạc phát lại từ đúng chỗ.
 
-Luồng: Music → khoá màn → Tin → tiếp tục Music. Trùng case C2.
+Luồng: Music → khoá màn → Tin → tiếp tục Music. Trùng case C7.
 
 %%===== PERSONA 3: QUỐC HUY =====%%
 \subsubsection{Lê Quốc Huy~--~game trên máy yếu}
@@ -126,9 +126,9 @@ Kết nối & Wi-Fi, dữ liệu giới hạn \\
 
 \textbf{Hành vi mobile:} chơi game giờ nghỉ; ưu tiên game nhẹ, ngắn; mở nhạc khi chơi; chọn chất lượng thấp để tiết kiệm data.
 
-\textbf{Tình huống:} Quốc Huy đang nghe nhạc, chuyển sang Games mở 2048. Nhạc vẫn phát, game âm thanh giảm (case C5). Mạng ngắt nhưng game vẫn chạy vì offline. Huy chuyển sang Tin đọc bài đã lưu; app tạm dừng game, lưu điểm. Quay lại Games, chọn Tiếp tục.
+\textbf{Tình huống:} Quốc Huy đang nghe nhạc, chuyển sang Games mở 2048. Nhạc vẫn phát, game không đè nhạc (case C9). Mạng ngắt nhưng game vẫn chạy vì offline. Huy chuyển sang Tin đọc bài đã lưu; app tạm dừng game, lưu điểm. Quay lại Games, chọn Tiếp tục.
 
-Luồng: Music → Games → Tin → Resume Game. Trùng case C5.
+Luồng: Music → Games → Tin → Resume Game. Trùng case C9.
 
 %%===== PERSONA 4: THẢO VY =====%%
 \subsubsection{Phạm Thảo Vy~--~người khám phá nội dung}
@@ -194,7 +194,7 @@ Kết nối & Wi-Fi và 5G \\
 
 \textbf{Tình huống:} Gia Bảo đang xem video và muốn chơi minigame. Anh đã thiết lập ``giữ PIP khi vào Games''. Mở game, video tự thu nhỏ. Sau đó phát nhạc: app dừng video, ưu tiên bài mới. Quay lại video qua trình điều khiển.
 
-Luồng: Video → Games (PIP) → Music. Trùng case C4.
+Luồng: Video → Games (PIP) → Music. Trùng case C5.
 
 %%===== PERSONA 6: THU HÀ =====%%
 \subsubsection{Lê Thu Hà~--~ưu tiên đơn giản, dễ đọc}
@@ -227,7 +227,7 @@ Kết nối & Wi-Fi và 4G \\
 
 \textbf{Tình huống:} Thu Hà mở OneSpace đọc bài báo. Cô tăng cỡ chữ bằng nút A+ (F-NEWS-02). Mở một video liên quan; video hiện dạng PIP. Muốn tập trung đọc, cô nhấn nút ``Tạm dừng video''. App hiển thị video đã dừng. Tiếp tục đọc đúng chỗ cũ.
 
-Luồng: Tin → Video → Tin → tạm dừng video → tiếp tục đọc. Tương ứng case C2.
+Luồng: Tin → Video → Tin → tạm dừng video → tiếp tục đọc. Tương ứng case C4.
 
 %%===== SO SÁNH & LIÊN HỆ =====%%
 
@@ -245,11 +245,11 @@ Luồng: Tin → Video → Tin → tạm dừng video → tiếp tục đọc. T
 \bottomrule
 \endfoot
 Minh Anh & Video, Tin, Nhạc & Xem video khi đọc tin & C1, C3 \\
-Hoàng Nam & Music, Tin & Nghe nhạc khi khoá màn & C2 \\
-Quốc Huy & Games, Music & Chơi game offline + nhạc & C5 \\
-Thảo Vy & Tin, Video & Tìm nội dung liên quan & C6, C8 \\
-Gia Bảo & Video, Music, Games & Tùy chỉnh hành vi & C1, C4 \\
-Thu Hà & Tin, Video, Music & Đọc tin đơn giản & C2 \\
+Hoàng Nam & Music, Tin & Nghe nhạc khi khoá màn & C7 \\
+Quốc Huy & Games, Music & Chơi game offline + nhạc & C9 \\
+Thảo Vy & Tin, Video & Tìm nội dung liên quan & C13, C15 \\
+Gia Bảo & Video, Music, Games & Tùy chỉnh hành vi & C1, C5 \\
+Thu Hà & Tin, Video, Music & Đọc tin đơn giản & C7 \\
 \end{longtable}
 
 Mỗi persona hưởng lợi từ một nhóm tính năng khác nhau. Điều này khẳng định OneSpace cần cả bốn phân hệ:
@@ -272,7 +272,7 @@ PIP (Floating Video) & Minh Anh, Gia Bảo & F-VID-08 \\
 Khôi phục phiên & Cả sáu persona & F-VID-05, F-COM-16 \\
 Hệ điểm + nhiệm vụ & Quốc Huy, Hoàng Nam, Thu Hà & F-COM-04/05/06 \\
 Xử lý xung đột âm thanh & Minh Anh, Gia Bảo & F-MUS-10, F-COM-14 \\
-Offline minigames & Quốc Huy & F-GAME-12, F-GAME-13 \\
+Offline minigames & Quốc Huy & F-GAME-11, F-GAME-12 \\
 Tiết kiệm dữ liệu & Quốc Huy & F-COM-13 \\
 Search xuyên nội dung & Thảo Vy & F-COM-11 \\
 Lưu bài + lịch sử & Thảo Vy, Hoàng Nam & F-NEWS-03, F-VID-04 \\

@@ -5,7 +5,7 @@ Mục này đối chiếu giao diện của OneSpace với ba nhóm yêu cầu t
 
 \textbf{Vùng chạm.} Toàn bộ nút của ứng dụng dùng component Material 3~--~từ \texttt{Button} đến \texttt{Switch} và các tab của Bottom Navigation. Ên kế thừa ràng buộc vùng tương tác tối thiểu $48 \times 48$~dp của Android~\cite{android-accessibility} ngay cả khi hình vẽ bên trong nhỏ hơn. Riêng các thẻ nội dung (\texttt{ContentCard}) và thẻ game cao hơn 48dp nên không phát sinh vấn đề. Với thang thiết kế của emulator thử nghiệm (420dpi), 48dp tương đương khoảng 126 px vật lý.
 
-\textbf{Độ tương phản màu.} Nhóm tính lại tỉ lệ tương phản của mọi cặp màu chữ--nền chính trong bảng token (mục~\ref{sec:design-system}) theo công thức WCAG 2.x (độ sáng tương đối của từng màu rồi lấy tỉ lệ hai độ sáng). Kết quả trong Bảng~\ref{tab:contrast-check}: tất cả các cặp chữ chính đạt mức AA cho văn bản thường ($\geq$ 4,5:1) ở cả hai chế độ sáng và tối. Cặp duy nhất dưới 4,5:1 là \texttt{outline} trên nền sáng (4,23:1), nhưng vai trò này chỉ dùng cho viền phân tách và gợi ý ô nhập~--~không bao giờ chứa văn bản. Ên vẫn đạt mức 3:1 yêu cầu cho thành phần giao diện.
+\textbf{Độ tương phản màu.} Nhóm tính lại tỉ lệ tương phản của mọi cặp màu chữ--nền chính trong bảng token (mục~\ref{sec:design-system}) theo công thức WCAG 2.x: mỗi màu được đổi sang độ sáng tương đối $L$, rồi lấy tỉ lệ $\text{contrast} = (L_1 + 0{,}05)/(L_2 + 0{,}05)$ giữa màu sáng hơn và màu tối hơn. Kết quả trong Bảng~\ref{tab:contrast-check}: tất cả các cặp chữ chính đạt mức AA cho văn bản thường ($\geq$ 4,5:1) ở cả hai chế độ sáng và tối. Cặp duy nhất dưới 4,5:1 là \texttt{outline} trên nền sáng (4,29:1), nhưng vai trò này chỉ dùng cho viền phân tách và gợi ý ô nhập~--~không bao giờ chứa văn bản. Ên vẫn đạt mức 3:1 yêu cầu cho thành phần giao diện.
 
 \begin{table}[H]
 \centering
@@ -16,15 +16,15 @@ Mục này đối chiếu giao diện của OneSpace với ba nhóm yêu cầu t
 \toprule
 \textbf{Cặp màu} & \textbf{Chế độ sáng} & \textbf{Chế độ tối} & \textbf{Kết luận} \\
 \midrule
-onBackground / background & 16,22:1 & 14,41:1 & AA văn bản thường \\
-onSurfaceVariant / surface & 8,93:1 & 11,25:1 & AA văn bản thường \\
-onSurfaceVariant / surfaceVariant & 7,17:1 & 5,68:1 & AA văn bản thường \\
-onPrimary / primary & 6,46:1 & 10,20:1 & AA văn bản thường \\
-onPrimaryContainer / primaryContainer & 13,60:1 & 7,47:1 & AA văn bản thường \\
-onSecondary / secondary & 6,44:1 & 8,22:1 & AA văn bản thường \\
+onBackground / background & 16,31:1 & 14,35:1 & AA văn bản thường \\
+onSurfaceVariant / surface & 8,90:1 & 10,88:1 & AA văn bản thường \\
+onSurfaceVariant / surfaceVariant & 7,24:1 & 5,49:1 & AA văn bản thường \\
+onPrimary / primary & 6,43:1 & 7,63:1 & AA văn bản thường \\
+onPrimaryContainer / primaryContainer & 13,27:1 & 7,26:1 & AA văn bản thường \\
+onSecondary / secondary & 6,27:1 & 7,78:1 & AA văn bản thường \\
 onError / error & 6,46:1 & 7,72:1 & AA văn bản thường \\
-primary (biểu tượng) / background & 6,13:1 & 14,25:1 & AA văn bản thường \\
-outline / background & 4,23:1 & 5,82:1 & AA thành phần giao diện (3:1) \\
+primary (biểu tượng) / background & 6,13:1 & 10,78:1 & AA văn bản thường \\
+outline / background & 4,29:1 & 5,83:1 & AA thành phần giao diện (3:1) \\
 \bottomrule
 \end{tabularx}
 
@@ -34,9 +34,9 @@ Ví dụ trực quan các cặp màu đạt AA (đọc được chữ trên nề
 \begin{figure}[H]
 \centering
 \begin{tabular}{c}
-\colorbox[HTML]{F8FAF2}{\textcolor[HTML]{191D17}{\rule{0pt}{0.5cm}\makebox[10cm][l]{~~Nền sáng, chữ tối (onBackground) — 16,2:1 \checkmark}}} \\[4pt]
-\colorbox[HTML]{10140E}{\textcolor[HTML]{E0E4D8}{\rule{0pt}{0.5cm}\makebox[10cm][l]{~~Nền tối, chữ sáng (onBackground) — 14,4:1 \checkmark}}} \\[4pt]
-\colorbox[HTML]{41690F}{\textcolor[HTML]{FFFFFF}{\rule{0pt}{0.5cm}\makebox[10cm][l]{~~Nút chính, chữ trắng (onPrimary) — 6,5:1 \checkmark}}} \\[4pt]
+\colorbox[HTML]{F5FBF7}{\textcolor[HTML]{171D1B}{\rule{0pt}{0.5cm}\makebox[10cm][l]{~~Nền sáng, chữ tối (onBackground) — 16,3:1 \checkmark}}} \\[4pt]
+\colorbox[HTML]{0F1512}{\textcolor[HTML]{DFE4DF}{\rule{0pt}{0.5cm}\makebox[10cm][l]{~~Nền tối, chữ sáng (onBackground) — 14,4:1 \checkmark}}} \\[4pt]
+\colorbox[HTML]{006B5F}{\textcolor[HTML]{FFFFFF}{\rule{0pt}{0.5cm}\makebox[10cm][l]{~~Nút chính, chữ trắng (onPrimary) — 6,4:1 \checkmark}}} \\[4pt]
 \colorbox[HTML]{BA1A1A}{\textcolor[HTML]{FFFFFF}{\rule{0pt}{0.5cm}\makebox[10cm][l]{~~Nút lỗi, chữ trắng (onError) — 6,5:1 \checkmark}}}
 \end{tabular}
 \caption{Ví dụ trực quan: chữ trên nền màu thật, kèm tỉ lệ tương phản}
@@ -65,7 +65,7 @@ Vùng chạm tối thiểu $48 \times 48$~dp so với kích thước biểu tư�
 
 Việc mọi cặp đều đạt AA một cách thoải mái (phần lớn trên 6:1) không phải ngẫu nhiên: đây là kết quả của nguyên tắc khai báo màu theo cặp vai trò \texttt{role/onRole} của Material 3~--~khi thêm một màu nền mới, nhóm bắt buộc khai báo kèm màu chữ của nó và đối chiếu bảng này trước khi merge.
 
-\textbf{Cỡ chữ theo hệ thống.} Toàn bộ chữ trong ứng dụng đặt theo đơn vị \texttt{sp}, nên cỡ chữ phóng to theo cài đặt hệ thống (người dùng khiếm thị thường đặt 130--200\%). Bố cục dùng cột dọc và card co giãn theo nội dung thay vì chiều cao cố định, nhờ đó không bị chồng chữ khi phóng to; thanh tab và các nút vẫn giữ kích thước vùng chạm.
+\textbf{Cỡ chữ theo hệ thống.} Toàn bộ chữ trong ứng dụng đặt theo đơn vị \texttt{sp}, nên cỡ chữ phóng to theo cài đặt hệ thống (người dùng khiếm thị thường đặt 130--200\%). Bố cục dùng cột dọc và card co giãn theo nội dung thay vì chiều cao cố định, nhờ đó không bị chồng chữ khi phóng to; thanh tab và các nút vẫn giữ kích thước vùng chạm. Ngoài ra, trình đọc bài có riêng hai nút A$-$/A$+$ (F-NEWS-02) chỉnh cỡ chữ ngay trong bài đang đọc theo bước 15\%, từ 0,8x đến 1,6x~--~tùy chọn này lưu theo từng bài (\texttt{rememberSaveable}) để lần đọc sau giữ nguyên.
 
 \textbf{Trình đọc màn hình (TalkBack).} Đây là mục nhóm tự đánh giá là \textbf{chưa đạt} ở phiên bản hiện tại. Việc rà soát mã nguồn cho thấy các nhãn \texttt{contentDescription} mới được thêm ở các phân hệ Account, Music và News (ví dụ ``Bài trước'', ``Tạm dừng'', ``Đóng''), trong khi thẻ game và một số nút chỉ có biểu tượng của Home, Video và Onboarding chưa có nhãn~--~trình đọc màn hình sẽ đọc ``nút'' hoặc bỏ qua thay vì đọc tên chức năng. Việc bổ sung nhãn cho toàn bộ nút biểu tượng là bắt buộc trước khi phát hành chính thức.
 
