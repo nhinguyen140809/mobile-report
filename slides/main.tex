@@ -150,7 +150,7 @@
     \node[anchor=west, font=\scriptsize, text=brandink] at (1.35,1.45) {người dùng Internet};
     \draw[brandgray!35, line width=4pt] (0.72,0.62) circle (0.3);
     \draw[brandteal, line width=4pt] ([shift={(-90:0.3)}]0.72,0.62) arc[start angle=-90, end angle=213.1, radius=0.3];
-    \node[anchor=west, font=\scriptsize, text=brandgray] at (1.35,0.62) {84,2\% dân số, cuối 2025};
+    \node[anchor=west, font=\scriptsize, text=brandgray] at (1.1,0.62) {84,2\% dân số, cuối 2025};
     % ----- Thẻ 2: lượt tải ứng dụng -----
     \begin{scope}[shift={(5.6,0)}]
       \draw[card] (0,0) rectangle (5.0,2.7);
@@ -548,8 +548,8 @@
       \draw[vennours, very thick] (-1.905,-1.1) circle (2.6);
       \draw[venncomp, very thick] (1.905,-1.1) circle (2.6);
       \node[align=center, font=\small\bfseries, text=vennneeds] at (0,3.45) {Nhu cầu\\người dùng};
-      \node[align=center, font=\small\bfseries, text=vennours] at (-3.5,-1.6) {Thế mạnh\\đề xuất};
-      \node[align=center, font=\small\bfseries, text=venncomp] at (3.5,-1.6) {Thế mạnh\\đối thủ};
+      \node[align=center, font=\small\bfseries, text=vennours] at (-3.2,-1.6) {Thế mạnh\\đề xuất};
+      \node[align=center, font=\small\bfseries, text=venncomp] at (3.2,-1.6) {Thế mạnh\\đối thủ};
       \node[fill=winzone!25, draw=black!40, rounded corners=2pt, inner sep=4pt] at (-1.4,0.7) {\small\textbf{Winning Zone}};
     \end{tikzpicture}
   \end{center}
@@ -932,7 +932,7 @@
     \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (10.90,3.95) rectangle +(2.88,0.95);
     \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (11.00,4.82) {{\bfseries\textcolor{brandteal!60!black}{C5}} Chia màn hai phần năm trên, ba phần năm dưới; video tua và dừng được};
     \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (1.75,2.95) rectangle +(2.88,0.95);
-    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (1.85,3.82) {{\bfseries\textcolor{brandteal!60!black}{C2}} Mở video: hỏi 2 lựa chọn + tick ``Không hỏi lại\textquotesingle{}};
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (1.85,3.82) {{\bfseries\textcolor{brandteal!60!black}{C2}} Mở video: hỏi 2 lựa chọn + tick ``Không hỏi lại''};
     \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (7.85,2.95) rectangle +(2.88,0.95);
     \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (7.95,3.82) {{\bfseries\textcolor{brandteal!60!black}{C7}} Nhạc vẫn phát; dock hiện ở mọi tab, kể cả trình đọc bài};
     \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (10.90,2.95) rectangle +(2.88,0.95);
@@ -971,9 +971,9 @@
       dec/.style={draw=brandteal, thick, rounded corners=10pt, fill=brandteal!12, minimum height=8mm, align=center, text width=2.4cm},
       lnk/.style={draw=black!50, -{Latex[length=1.6mm]}}]
     \node[stp] (v) at (0,0) {Video đang phát};
-    \node[stp, right=1.2cm of v] (m) {Người dùng mở bài nhạc};
-    \node[dec, right=1.2cm of m] (q) {Đã lưu quy tắc?};
-    \node[stp, right=1.2cm of q] (r) {Áp dụng im lặng};
+    \node[stp, right=0.7cm of v] (m) {Người dùng mở bài nhạc};
+    \node[dec, right=0.7cm of m] (q) {Đã lưu quy tắc?};
+    \node[stp, right=0.7cm of q] (r) {Áp dụng im lặng};
     \node[stp, below=1.2cm of q] (p) {Popup 2 lựa chọn + ô tick};
     \node[stp, below=1.2cm of p] (s) {Tick: ghi nhớ đúng lựa chọn này};
     \draw[lnk] (v) -- (m);
@@ -996,7 +996,7 @@
       \begin{itemize}\itemsep2.5pt
         \item \textbf{Cuộc gọi, báo thức} ưu tiên cao nhất (audio focus Android); ứng dụng nhường ngay
         \item \textbf{Một thời điểm chỉ một nguồn tiếng:} video làm nhạc nhường (C2), TTS làm nhạc nhường (C13), game im tiếng khi nhạc phát (C9)
-        \item \textbf{Video và nhạc:} hỏi ở cả hai chiều (C1, C2), kèm ô tick ``Không hỏi lại\textquotesingle{}; vì cả hai đều là lựa chọn chủ động
+        \item \textbf{Video và nhạc:} hỏi ở cả hai chiều (C1, C2), kèm ô tick ``Không hỏi lại''; vì cả hai đều là lựa chọn chủ động
         \item \textbf{Nhạc chạy nền} trên mọi tab; điều khiển lại bằng một chạm trên dock
         \item \textbf{Mọi luồng đều hiện} và điều khiển được trên dock mini player
       \end{itemize}}
@@ -1062,27 +1062,27 @@
 \begin{frame}{User Stories -- Music}
   \begin{columns}
     \begin{column}{0.48\textwidth}
-      \begin{block}{\scriptsize\bfseries M01~--~Must}
+      \begin{block}{\scriptsize\bfseries MUS-01~--~Must}
         {\tiny Là người dùng, tôi muốn chọn một bài từ thư viện và điều khiển phát đầy đủ, để nghe nhạc như ở một ứng dụng nhạc thực thụ.}
       \end{block}
-      \begin{block}{\scriptsize\bfseries M02~--~Must}
+      \begin{block}{\scriptsize\bfseries MUS-02~--~Must}
         {\tiny Là người dùng, tôi muốn bài nhạc đang phát hiện thành một dock mini ở mọi màn hình chính, để nghe nhạc trong khi dùng phân hệ khác.}
       \end{block}
-      \begin{block}{\scriptsize\bfseries M03~--~Must}
+      \begin{block}{\scriptsize\bfseries MUS-03~--~Must}
         {\tiny Là người dùng, tôi muốn hệ thống hỏi rõ khi tôi mở một luồng âm thanh khác trong khi đang nghe nhạc, để âm thanh không tự giành nhau gây khó chịu.}
       \end{block}
-      \begin{block}{\scriptsize\bfseries M04~--~Must}
+      \begin{block}{\scriptsize\bfseries MUS-04~--~Must}
         {\tiny Là người dùng, tôi muốn tự tạo playlist và sắp hàng chờ phát, để nghe nhạc theo trình tự mình muốn.}
       \end{block}
     \end{column}
     \begin{column}{0.48\textwidth}
-      \begin{block}{\scriptsize\bfseries M05~--~Should}
+      \begin{block}{\scriptsize\bfseries MUS-05~--~Should}
         {\tiny Là người dùng, tôi muốn kho nhạc cá nhân chứa các tệp tôi trích từ video, để quản lý tập trung tại một nơi.}
       \end{block}
-      \begin{block}{\scriptsize\bfseries M06~--~Could}
+      \begin{block}{\scriptsize\bfseries MUS-06~--~Could}
         {\tiny Là người dùng, tôi muốn nhạc tiếp tục phát khi tôi rời ứng dụng hoặc khoá màn hình, để nghe nhạc khi làm việc khác.}
       \end{block}
-      \begin{block}{\scriptsize\bfseries M07~--~Could}
+      \begin{block}{\scriptsize\bfseries MUS-07~--~Could}
         {\tiny Là người dùng, tôi muốn tìm bài hát theo tên, nghệ sĩ hoặc album, để tới được nội dung mình muốn nhanh hơn là lướt.}
       \end{block}
     \end{column}
@@ -1264,7 +1264,7 @@
     \draw[-{Latex}, brandteal!60] (s1) -- (s2);
     \draw[-{Latex}, brandteal!60] (s2) -- (s3);
     \draw[-{Latex}, brandteal!60] (s3) -- (s4);
-    \draw[-{Latex}, brandteal!60] (s4) -- (s5);
+    \draw[-{Latex}, brandteal!60] (s4.east) -- ++(0.85,0) |- (s5.east);
     \draw[-{Latex}, brandteal!60] (s5) -- (s6);
     \draw[-{Latex}, brandteal!60] (s6) -- (s7);
     \draw[-{Latex}, brandteal!60] (s7) -- (s8);
@@ -1383,21 +1383,21 @@
     \begin{column}{0.46\textwidth}
       \begin{tikzpicture}[scale=0.75]
         \node[draw=brandteal!60, rounded corners=3pt, fill=brandteal!8, font=\tiny\bfseries, minimum width=2.4cm] (nav) at (0,0) {Thanh tab chính (5)};
-        \node[draw=brandteal!60, rounded corners=2pt, fill=brandteal!5, font=\tiny, minimum width=1.4cm] (home) at (-1.8,-1.0) {Home};
-        \node[draw=brandteal!60, rounded corners=2pt, fill=brandteal!5, font=\tiny, minimum width=1.4cm] (video) at (-0.6,-1.0) {Video};
-        \node[draw=brandteal!60, rounded corners=2pt, fill=brandteal!5, font=\tiny, minimum width=1.4cm] (music) at (0.6,-1.0) {Music};
-        \node[draw=brandteal!60, rounded corners=2pt, fill=brandteal!5, font=\tiny, minimum width=1.4cm] (news) at (1.8,-1.0) {News};
+        \node[draw=brandteal!60, rounded corners=2pt, fill=brandteal!5, font=\tiny, minimum width=0.85cm] (home) at (-3.1,-1.0) {Home};
+        \node[draw=brandteal!60, rounded corners=2pt, fill=brandteal!5, font=\tiny, minimum width=0.85cm] (video) at (-1.55,-1.0) {Video};
+        \node[draw=brandteal!60, rounded corners=2pt, fill=brandteal!5, font=\tiny, minimum width=0.85cm] (music) at (0,-1.0) {Music};
+        \node[draw=brandteal!60, rounded corners=2pt, fill=brandteal!5, font=\tiny, minimum width=0.85cm] (news) at (1.55,-1.0) {News};
+        \node[draw=brandgray!40, rounded corners=2pt, fill=brandgray!5, font=\tiny, minimum width=0.85cm] (games) at (3.1,-1.0) {Games};
         \draw[-{Latex}, brandteal!50] (nav) -- (home);
         \draw[-{Latex}, brandteal!50] (nav) -- (video);
         \draw[-{Latex}, brandteal!50] (nav) -- (music);
         \draw[-{Latex}, brandteal!50] (nav) -- (news);
-        \node[draw=brandgray!40, rounded corners=2pt, fill=brandgray!5, font=\tiny, minimum width=1.4cm] (games) at (0,-2.0) {Games};
-        \draw[-{Latex}, brandgray!50] (nav.south) -- ++(0,-0.3) -| (games.north);
-        \node[draw=brandgray!40, rounded corners=2pt, fill=brandgray!5, font=\tiny, text width=1.2cm, align=center] (detail) at (-1.2,-3.1) {Màn chi tiết};
-        \node[draw=brandgray!40, rounded corners=2pt, fill=brandgray!5, font=\tiny, text width=1.2cm, align=center] (play) at (1.2,-3.1) {Màn chơi};
-        \draw[-{Latex}, brandgray!50] (home.south) -- ++(0,-0.3) -| (detail.north);
-        \draw[-{Latex}, brandgray!50] (games) -- (play);
-        \node[font=\tiny, text=brandgray] at (-1.2,-1.6) {\textit{danh mục / feed}};
+        \draw[-{Latex}, brandgray!50] (nav) -- (games);
+        \node[draw=brandgray!40, rounded corners=2pt, fill=brandgray!5, font=\tiny, text width=1.2cm, align=center] (detail) at (-2.4,-2.6) {Màn chi tiết};
+        \node[draw=brandgray!40, rounded corners=2pt, fill=brandgray!5, font=\tiny, text width=1.2cm, align=center] (play) at (2.4,-2.6) {Màn chơi};
+        \draw[-{Latex}, brandgray!50] (home.south) -- ++(0,-0.33) -| (detail.north);
+        \draw[-{Latex}, brandgray!50] (games.south) -- ++(0,-0.33) -| (play.north);
+        \node[font=\tiny, text=brandgray] at (0,-1.75) {\textit{danh mục / feed}};
       \end{tikzpicture}
     \end{column}
   \end{columns}
@@ -1415,7 +1415,7 @@
 % ============================================================
 \section{Design System}
 % ============================================================
-\begin{frame}{Design System (1/4)~--~Token màu theo vai trò}
+\begin{frame}{Design System (1/5)~--~Token màu theo vai trò}
   \begin{columns}
     \begin{column}{0.55\textwidth}
       {\small\textbf{Nguyên tắc: token theo vai trò, không hardcode}}\vspace{1mm}
@@ -1433,80 +1433,77 @@
       \begin{tikzpicture}[scale=0.82]
         % Light mode column
         \node[font=\tiny\bfseries, text=brandgray] at (0,3.6) {Light};
-        \fill[fill=teal!80!black, rounded corners=2pt] (-0.5,3.0) rectangle (0.5,3.4);
+        \fill[fill=teal!80!black, rounded corners=2pt] (-0.68,3.0) rectangle (0.68,3.4);
         \node[font=\tiny, text=white] at (0,3.2) {primary};
-        \node[font=\tiny, text=brandgray, anchor=west] at (0.6,3.2) {006B5F};
-        \fill[fill=teal!40, rounded corners=2pt] (-0.5,2.4) rectangle (0.5,2.8);
+        \node[font=\tiny, text=brandgray, anchor=west] at (0.78,3.2) {006B5F};
+        \fill[fill=teal!40, rounded corners=2pt] (-0.68,2.4) rectangle (0.68,2.8);
         \node[font=\tiny, text=black] at (0,2.6) {pContainer};
-        \node[font=\tiny, text=brandgray, anchor=west] at (0.6,2.6) {9EF2DF};
-        \fill[fill=gray!30, rounded corners=2pt] (-0.5,1.8) rectangle (0.5,2.2);
+        \node[font=\tiny, text=brandgray, anchor=west] at (0.78,2.6) {9EF2DF};
+        \fill[fill=gray!30, rounded corners=2pt] (-0.68,1.8) rectangle (0.68,2.2);
         \node[font=\tiny, text=black] at (0,2.0) {surface};
-        \node[font=\tiny, text=brandgray, anchor=west] at (0.6,2.0) {F5FBF7};
+        \node[font=\tiny, text=brandgray, anchor=west] at (0.78,2.0) {F5FBF7};
         % Dark mode column
         \node[font=\tiny\bfseries, text=brandgray] at (0,1.4) {Dark};
-        \fill[fill=teal!50, rounded corners=2pt] (-0.5,0.8) rectangle (0.5,1.2);
+        \fill[fill=teal!50, rounded corners=2pt] (-0.68,0.8) rectangle (0.68,1.2);
         \node[font=\tiny, text=black] at (0,1.0) {primary};
-        \node[font=\tiny, text=brandgray, anchor=west] at (0.6,1.0) {82D5C3};
-        \fill[fill=teal!80!black, rounded corners=2pt] (-0.5,0.2) rectangle (0.5,0.6);
+        \node[font=\tiny, text=brandgray, anchor=west] at (0.78,1.0) {82D5C3};
+        \fill[fill=teal!80!black, rounded corners=2pt] (-0.68,0.2) rectangle (0.68,0.6);
         \node[font=\tiny, text=white] at (0,0.4) {pContainer};
-        \node[font=\tiny, text=brandgray, anchor=west] at (0.6,0.4) {005045};
-        \fill[fill=black!80, rounded corners=2pt] (-0.5,-0.4) rectangle (0.5,0.0);
+        \node[font=\tiny, text=brandgray, anchor=west] at (0.78,0.4) {005045};
+        \fill[fill=black!80, rounded corners=2pt] (-0.68,-0.4) rectangle (0.68,0.0);
         \node[font=\tiny, text=white] at (0,-0.2) {surface};
-        \node[font=\tiny, text=brandgray, anchor=west] at (0.6,-0.2) {0F1512};
-        % Arrow between modes
-        \draw[-{Latex}, brandteal!60] (1.8,3.2) -- (1.8,1.0) node[midway, right, font=\tiny, text=brandgray] {đổi giá trị};
-        \draw[-{Latex}, brandteal!60] (1.8,1.0) -- (1.8,3.2) node[midway, left, font=\tiny, text=brandgray] {cùng vai trò};
+        \node[font=\tiny, text=brandgray, anchor=west] at (0.78,-0.2) {0F1512};
+        % Mũi tên hai chiều Light <-> Dark: cùng vai trò, đổi giá trị
+        \draw[-{Latex}, brandteal!60] (1.95,3.2) -- (1.95,1.0);
+        \draw[-{Latex}, brandteal!60] (1.95,1.0) -- (1.95,3.2);
       \end{tikzpicture}\vspace{2mm}
-      {\tiny\textbf{Dark mode:} theo hệ thống mặc định; ghi đè thủ công (Sáng / Tối / Theo hệ thống) trong Cài đặt $\rightarrow$ F-COM-13}
+      {\tiny\textbf{Dark mode:} cùng một vai trò, hai bộ giá trị; theo hệ thống mặc định, ghi đè thủ công (Sáng / Tối / Theo hệ thống) trong Cài đặt $\rightarrow$ F-COM-13}
     \end{column}
   \end{columns}
 \end{frame}
 
-\begin{frame}{Design System (2/4)~--~Bảng token chi tiết}
+\begin{frame}{Design System (2/5)~--~Bảng token chi tiết}
   \begin{columns}
     \begin{column}{0.48\textwidth}
       {\scriptsize\textbf{Màu chính \& nhấn}}\vspace{1mm}
       {\tiny
       \begin{itemize}\itemsep4pt
-        \item \colorbox[HTML]{006B5F}{\rule{8pt}{8pt}}\colorbox[HTML]{82D5C3}{\rule{8pt}{8pt}} \texttt{primary} 006B5F / 82D5C3 \newline Nút chính; tab đang chọn; icon bài hát; chữ ``Đang phát''
-        \item \colorbox[HTML]{9EF2DF}{\rule{8pt}{8pt}}\colorbox[HTML]{005045}{\rule{8pt}{8pt}} \texttt{pContainer} 9EF2DF / 005045 \newline Nền icon ContentCard; ô quiz đúng; huy hiệu; nhiệm vụ xong
-        \item \colorbox[HTML]{526460}{\rule{8pt}{8pt}}\colorbox[HTML]{BACCC5}{\rule{8pt}{8pt}} \texttt{secondary} 526460 / BACCC5 \newline Icon onboarding; màu phụ logo
-        \item \colorbox[HTML]{66587B}{\rule{8pt}{8pt}}\colorbox[HTML]{D1BFE7}{\rule{8pt}{8pt}} \texttt{tertiary} 66587B / D1BFE7 \newline Icon streak; nhãn đề xuất
-        \item \colorbox[HTML]{EDDCFF}{\rule{8pt}{8pt}}\colorbox[HTML]{4E4261}{\rule{8pt}{8pt}} \texttt{tContainer} EDDCFF / 4E4261 \newline Chip chuỗi ngày; card thú cưng
-        \item \colorbox[HTML]{BA1A1A}{\rule{8pt}{8pt}}\colorbox[HTML]{FFB4AB}{\rule{8pt}{8pt}} \texttt{error} BA1A1A / FFB4AB \newline Lỗi phát; quiz sai; icon yêu thích (tim đỏ)
+        \item \textcolor[HTML]{006B5F}{\rule[-2.5pt]{13pt}{13pt}}\,\textcolor[HTML]{82D5C3}{\rule[-2.5pt]{13pt}{13pt}} \texttt{primary} 006B5F / 82D5C3 \newline Nút chính; tab đang chọn; icon bài hát; chữ ``Đang phát''
+        \item \textcolor[HTML]{9EF2DF}{\rule[-2.5pt]{13pt}{13pt}}\,\textcolor[HTML]{005045}{\rule[-2.5pt]{13pt}{13pt}} \texttt{pContainer} 9EF2DF / 005045 \newline Nền icon ContentCard; ô quiz đúng; huy hiệu; nhiệm vụ xong
+        \item \textcolor[HTML]{526460}{\rule[-2.5pt]{13pt}{13pt}}\,\textcolor[HTML]{BACCC5}{\rule[-2.5pt]{13pt}{13pt}} \texttt{secondary} 526460 / BACCC5 \newline Icon onboarding; màu phụ logo
+        \item \textcolor[HTML]{66587B}{\rule[-2.5pt]{13pt}{13pt}}\,\textcolor[HTML]{D1BFE7}{\rule[-2.5pt]{13pt}{13pt}} \texttt{tertiary} 66587B / D1BFE7 \newline Icon streak; nhãn ``Đã xem đến''
+        \item \textcolor[HTML]{EDDCFF}{\rule[-2.5pt]{13pt}{13pt}}\,\textcolor[HTML]{4E4261}{\rule[-2.5pt]{13pt}{13pt}} \texttt{tContainer} EDDCFF / 4E4261 \newline Chip chuỗi ngày; card thú cưng
+        \item \textcolor[HTML]{BA1A1A}{\rule[-2.5pt]{13pt}{13pt}}\,\textcolor[HTML]{FFB4AB}{\rule[-2.5pt]{13pt}{13pt}} \texttt{error} BA1A1A / FFB4AB \newline Lỗi phát; quiz sai; icon yêu thích (tim đỏ)
       \end{itemize}}
     \end{column}
     \begin{column}{0.48\textwidth}
       {\scriptsize\textbf{Nền, bề mặt \& viền}}\vspace{1mm}
       {\tiny
       \begin{itemize}\itemsep4pt
-        \item \colorbox[HTML]{F5FBF7}{\rule{8pt}{8pt}}\colorbox[HTML]{0F1512}{\rule{8pt}{8pt}} \texttt{background} F5FBF7 / 0F1512 \newline Nền mọi màn hình; chữ chính
-        \item \colorbox[HTML]{F5FBF7}{\rule{8pt}{8pt}}\colorbox[HTML]{0F1512}{\rule{8pt}{8pt}} \texttt{surface} (same as bg) \newline Nền card đang kéo (queue)
-        \item \colorbox[HTML]{DBE5DF}{\rule{8pt}{8pt}}\colorbox[HTML]{3F4945}{\rule{8pt}{8pt}} \texttt{surfVariant} DBE5DF / 3F4945 \newline Nền ô 2048; ô Beat Tiles; avatar chưa chọn
-        \item \colorbox[HTML]{E3EAE5}{\rule{8pt}{8pt}}\colorbox[HTML]{252B28}{\rule{8pt}{8pt}} \texttt{surfContainerHigh} \newline Nền card menu quiz; ô input
-        \item \colorbox[HTML]{6F7974}{\rule{8pt}{8pt}}\colorbox[HTML]{89938D}{\rule{8pt}{8pt}} \texttt{outline} 6F7974 / 89938D \newline Icon radio chưa chọn; vạch TrackCard
+        \item \textcolor[HTML]{F5FBF7}{\rule[-2.5pt]{13pt}{13pt}}\,\textcolor[HTML]{0F1512}{\rule[-2.5pt]{13pt}{13pt}} \texttt{background} F5FBF7 / 0F1512 \newline Nền mọi màn hình
+        \item \textcolor[HTML]{F5FBF7}{\rule[-2.5pt]{13pt}{13pt}}\,\textcolor[HTML]{0F1512}{\rule[-2.5pt]{13pt}{13pt}} \texttt{surface} (same as bg) \newline Nền card đang kéo (queue)
+        \item \textcolor[HTML]{DBE5DF}{\rule[-2.5pt]{13pt}{13pt}}\,\textcolor[HTML]{3F4945}{\rule[-2.5pt]{13pt}{13pt}} \texttt{surfVariant} DBE5DF / 3F4945 \newline Ô làn Beat Tiles; avatar chưa chọn
+        \item \textcolor[HTML]{E3EAE5}{\rule[-2.5pt]{13pt}{13pt}}\,\textcolor[HTML]{252B28}{\rule[-2.5pt]{13pt}{13pt}} \texttt{surfContainerHigh} \newline Nền thẻ nổi: banner nhiệm vụ, khung đăng nhập
+        \item \textcolor[HTML]{6F7974}{\rule[-2.5pt]{13pt}{13pt}}\,\textcolor[HTML]{89938D}{\rule[-2.5pt]{13pt}{13pt}} \texttt{outline} 6F7974 / 89938D \newline Icon radio chưa chọn; vạch TrackCard
       \end{itemize}}\vspace{2mm}
-      {\tiny\color{brandgray} Mọi cặp đạt WCAG AA ($\geq$ 4,5:1). \texttt{outline} 4,29:1 (viền, chuẩn 3:1).}
     \end{column}
   \end{columns}
 \end{frame}
 
-\begin{frame}{Design System (3/4)~--~Typography \& Component}
+\begin{frame}{Design System (3/5)~--~Typography: thang chữ 5 mức}
   \begin{columns}
-    \begin{column}{0.48\textwidth}
-      {\small\textbf{Typography}}\vspace{1mm}
-      {\tiny
-      \begin{tabular}{@{}lll@{}}
-        \toprule
-        \textbf{Mức} & \textbf{Ví dụ} & \textbf{Dùng ở} \\
-        \midrule
-        display & 57sp & Splash logo \\
-        headline & 24--28sp & Tiêu đề màn \\
-        title & 14--16sp & Tiêu đề card, tab \\
-        body & 14sp & Nội dung, mô tả \\
-        label & 11--12sp & Chip, nhãn phụ \\
-        \bottomrule
-      \end{tabular}}\vspace{2mm}
+    \begin{column}{0.58\textwidth}
+      {\tiny\color{brandgray} display $\cdot$ 57sp $\cdot$ splash logo}\\[1pt]
+      {\fontsize{22}{25}\selectfont\bfseries OneSpace}\\[7pt]
+      {\tiny\color{brandgray} headline $\cdot$ 24--28sp $\cdot$ tiêu đề màn}\\[1pt]
+      {\fontsize{14.5}{17}\selectfont\bfseries Thư viện}\\[6pt]
+      {\tiny\color{brandgray} title $\cdot$ 14--16sp $\cdot$ tiêu đề card, tab}\\[1pt]
+      {\fontsize{11}{13}\selectfont Nắng sớm}\\[6pt]
+      {\tiny\color{brandgray} body $\cdot$ 14sp $\cdot$ nội dung, mô tả}\\[1pt]
+      {\fontsize{9}{11}\selectfont Nhóm Lo-fi $\cdot$ 9:19}\\[6pt]
+      {\tiny\color{brandgray} label $\cdot$ 11--14sp $\cdot$ chip, nhãn phụ, badge}\\[2pt]
+      \colorbox[HTML]{D6E7E1}{\textcolor[HTML]{10201C}{\fontsize{7.5}{9.5}\selectfont~Tất cả~}}\;\;
+      {\fontsize{7.5}{9.5}\selectfont\textcolor[HTML]{006B5F}{Đang phát}}\\[9pt]
       {\tiny
       \begin{itemize}\itemsep2pt
         \item Nguyên thang M3, không font riêng
@@ -1514,21 +1511,65 @@
         \item Trình đọc bài: riêng 2 nút A$-$/A$+$ (0,8x--1,6x, bước 15\%)
       \end{itemize}}
     \end{column}
-    \begin{column}{0.48\textwidth}
-      {\small\textbf{Component: 3 nhóm chức năng}}\vspace{1mm}
-      {\small\textbf{1. Input control}}\vspace{1mm}
-      {\tiny Ô OTP / mật khẩu; thanh trượt (tốc độ 0,5--2x, âm lượng); chip chất lượng Auto/1080p/720p/360p; ô tick ``Không hỏi lại''}\vspace{2mm}
-      {\small\textbf{2. Navigation}}\vspace{1mm}
-      {\tiny 5 tab Bottom Nav; vuốt ngang đổi phân hệ; nút Quay lại; bottom sheet}\vspace{2mm}
-      {\small\textbf{3. Information / Container}}\vspace{1mm}
-      {\tiny ContentCard (thẻ 4 phân hệ); skeleton feed; snackbar; Modal Bottom Sheet (xác nhận, hàng đợi, chọn khung avatar)}\vspace{2mm}
-      {\small\textbf{Thư viện dùng chung}}\vspace{1mm}
-      {\tiny FeaturePage; SectionTitle; ContentCard; CatalogContent; SkeletonFeed; EmptyState --- định nghĩa trong module design system}
+    \begin{column}{0.38\textwidth}
+      \centering
+      \includegraphics[height=175pt]{figures/app/music-library-extracted.png}\\[3pt]
+      {\tiny\color{brandgray} Màn hình thật: tiêu đề màn, chip lọc, card bài hát, mục ``Từ video'' --- các mức chữ cùng làm việc}
     \end{column}
   \end{columns}
 \end{frame}
 
-\begin{frame}{Design System (4/4)~--~Accessibility}
+\begin{frame}{Design System (4/5)~--~Component}
+  \noindent\begin{minipage}{\textwidth}
+    {\tiny\color{brandgray} Ba nhóm chức năng --- ảnh chụp từ ứng dụng OneSpace}
+  \end{minipage}\vspace{2mm}
+
+  \begin{columns}
+    \begin{column}{0.31\textwidth}
+      \centering
+      {\small\textbf{1. Input control}}\\[1.5mm]
+      \includegraphics[height=92pt]{figures/app/video-speed-menu.png}\\[1.5mm]
+      {\tiny\color{brandgray} Bảng cài đặt trình phát}\\[1mm]
+      {\tiny
+      \begin{itemize}\itemsep2pt
+        \item Ô OTP / mật khẩu
+        \item Thanh trượt: tốc độ 0,5--2x, âm lượng
+        \item Chip chất lượng: Auto / 1080p / 720p / 360p
+        \item Ô tick ``Không hỏi lại''
+      \end{itemize}}
+    \end{column}
+    \begin{column}{0.31\textwidth}
+      \centering
+      {\small\textbf{2. Navigation}}\\[1.5mm]
+      \includegraphics[height=92pt]{figures/app/home-light.png}\\[1.5mm]
+      {\tiny\color{brandgray} Màn Home --- thanh tab dưới đáy}\\[1mm]
+      {\tiny
+      \begin{itemize}\itemsep2pt
+        \item Bottom Nav 5 tab
+        \item Vuốt ngang đổi phân hệ
+        \item Nút Quay lại
+        \item Kéo dock nhạc lên mở hàng đợi
+      \end{itemize}}
+    \end{column}
+    \begin{column}{0.31\textwidth}
+      \centering
+      {\small\textbf{3. Information / Container}}\\[1.5mm]
+      \includegraphics[height=92pt]{figures/app/video-feed-cards.png}\\[1.5mm]
+      {\tiny\color{brandgray} Feed Video --- thẻ nội dung dùng chung}\\[1mm]
+      {\tiny
+      \begin{itemize}\itemsep2pt
+        \item ContentCard (thẻ 4 phân hệ)
+        \item Skeleton feed khi tải
+        \item Snackbar thông báo
+        \item Modal Bottom Sheet (hàng đợi, chọn khung)
+      \end{itemize}}
+    \end{column}
+  \end{columns}
+  \vspace{1.5mm}
+  {\tiny\textbf{Thư viện dùng chung} (module \texttt{design system}): \texttt{FeaturePage} $\cdot$ \texttt{SectionTitle} $\cdot$ \texttt{ContentCard} $\cdot$ \texttt{CatalogContent} $\cdot$ \texttt{SkeletonFeed} $\cdot$ \texttt{EmptyState}}
+\end{frame}
+
+\begin{frame}{Design System (5/5)~--~Accessibility}
   \begin{columns}
     \begin{column}{0.48\textwidth}
       {\small\textbf{Vùng chạm $\geq$ 48$\times$48 dp}}\vspace{1mm}
@@ -1589,13 +1630,13 @@
     \draw[arrow] (trg) -- (rul);
     \draw[arrow] (rul) -- (fdb);
     \draw[arrow] (fdb) -- (lp);
-    \draw[arrow, bend right=30] (lp.south) to[out=-90,in=-90] (trg.south);
+    \draw[arrow] (lp.west) -- ++(-8.1,0) -- ++(0,3.2) -- (0,0.98) -- (trg.north);
   \end{tikzpicture}
   \end{center}
   \vfill
   {\small\textbf{Ví dụ: Dock mini player}}\vspace{1mm}
-  {\tiny
-  \begin{tabular}{@{}llll@{}}
+  {\tiny\setlength{\tabcolsep}{2pt}
+  \begin{tabular}{@{}p{2.2cm}p{3.5cm}p{3.4cm}p{3.7cm}@{}}
     \toprule
     \textbf{Trigger} & \textbf{Rules} & \textbf{Feedback} & \textbf{Loops} \\
     \midrule
@@ -1607,27 +1648,27 @@
 \begin{frame}{Micro-interactions (2/2)~--~12 tương tác đã cài}
   \begin{columns}
     \begin{column}{0.48\textwidth}
-      {\scriptsize\textbf{Tải \& điều hướng}}\vspace{1mm}
+      {\scriptsize\textbf{Tải và điều hướng}}\vspace{1mm}
       {\tiny
-      \begin{itemize}\itemsep3pt
-        \item \textbf{Skeleton:} 4 hàng khung + shimmer khi tải feed; dừng khi có dữ liệu
-        \item \textbf{Ripple:} vòng sóng lan từ điểm chạm; mặc định toàn hệ thống
-        \item \textbf{Vuốt ngang:} đổi phân hệ ở feed; tắt trong game
-        \item \textbf{Dock mini:} tên bài + phát/dừng + đóng; hiện mọi feed \& trình đọc
-        \item \textbf{Cửa sổ nổi:} video nhỏ ở góc + 3 nút; quay lại giữ vị trí
-        \item \textbf{Thẻ đang đọc:} nổi khi rời News; chạm = quay lại đúng chỗ
+      \begin{itemize}\itemsep2.5pt
+        \item \textbf{Skeleton feed:} vào feed khi dữ liệu đang tải, hiển thị bốn hàng khung xám kèm hiệu ứng shimmer; khung biến mất ngay khi có dữ liệu
+        \item \textbf{Ripple Material:} mọi nút, thẻ, tab phản hồi bằng vòng sóng lan từ điểm chạm; mặc định toàn hệ thống
+        \item \textbf{Vuốt ngang:} vuốt trái hoặc phải trên màn feed chuyển sang phân hệ kế bên, giữ nguyên trạng thái từng phân hệ; tắt trong game vì cử chỉ dành cho điều khiển ván chơi
+        \item \textbf{Dock mini player:} bài đang phát hiện một hàng dock ở đáy mọi màn (kể cả trình đọc bài), gồm tên bài, nút tạm dừng và nút đóng; chạm mở trình phát đầy đủ
+        \item \textbf{Cửa sổ nổi:} rời tab khi video đang phát, video thu nhỏ thành cửa sổ ở góc kèm nhãn ``Đang phát'' và ba nút Mở rộng, Tạm dừng, Đóng; quay lại trình phát giữ nguyên vị trí
+        \item \textbf{Thẻ đang đọc:} rời tab News khi đang đọc, bài thu nhỏ thành thẻ ``Đang đọc'' hiện ở đáy mọi tab; chạm vào thẻ quay lại đúng chỗ
       \end{itemize}}
     \end{column}
     \begin{column}{0.48\textwidth}
       {\scriptsize\textbf{Tương tác nội dung}}\vspace{1mm}
       {\tiny
-      \begin{itemize}\itemsep3pt
-        \item \textbf{Popup C1:} 2 lựa chọn + tick ``Không hỏi lại'' khi mở nhạc
-        \item \textbf{Popup C2:} 2 lựa chọn + tick khi mở video (nhạc đang phát)
-        \item \textbf{Trạng thái rỗng:} icon + thông điệp + nút hành động
-        \item \textbf{Mất mạng:} ``Không có kết nối'' + nút Thử lại; tự phục hồi
-        \item \textbf{2048:} vuốt gộp ô; điểm cao ghi lại
-        \item \textbf{Beat Tiles:} nốt rơi bốn làn; combo tăng; nhạc vẫn phát
+      \begin{itemize}\itemsep2.5pt
+        \item \textbf{Popup C1} (mở nhạc khi video đang phát): hộp thoại hai lựa chọn kèm ô tick ``Không hỏi lại''; không có nút bỏ qua, phải chọn một; đã tick thì lần sau áp dụng im lặng
+        \item \textbf{Popup C2} (mở video khi nhạc đang phát): hộp thoại hai lựa chọn kèm ô tick tương tự; tick để ghi nhớ lựa chọn
+        \item \textbf{Trạng thái rỗng:} danh mục không có nội dung hiển thị biểu tượng, thông điệp và nút ``Xem tin mới nhất''; không để màn hình trống không lối đi
+        \item \textbf{Mất mạng:} feed không tải được hiện ``Không có kết nối'' kèm nút ``Thử lại''; khi có mạng tự phục hồi
+        \item \textbf{Bàn chơi 2048:} ô cùng giá trị gộp nhau theo hướng vuốt, bàn chơi và điểm cập nhật tức thì sau mỗi nước; điểm cao nhất được ghi lại
+        \item \textbf{Beat Tiles:} nốt nhạc rơi bốn làn, chạm đúng ô khi nốt vào vùng sáng; điểm và combo tăng tức thì, nhạc vẫn phát; thắng ván cộng điểm vào ví dùng chung
       \end{itemize}}
     \end{column}
   \end{columns}
@@ -1670,7 +1711,7 @@
         \node[box, below=of domain] (pres) {Presentation: Compose};
         \draw[-{Latex}, brandteal, thick] (data) -- (domain);
         \draw[-{Latex}, brandteal, thick] (domain) -- (pres);
-        \node[font=\scriptsize, text=brandgray] at (0,-2.35) {Luồng dữ liệu một chiều (UDF)};
+        \node[font=\scriptsize, text=brandgray] at (0,-2.95) {Luồng dữ liệu một chiều (UDF)};
       \end{tikzpicture}
     \end{column}
   \end{columns}
@@ -1733,7 +1774,8 @@
   \begin{itemize}
     \item 3 lớp Presentation--Domain--Data + MVVM + UDF
     \item \textbf{Domain là Kotlin thuần}~--~không phụ thuộc Android, kiểm thử không cần emulator
-    \item \textbf{21 module Gradle}: app + domain + 7 feature + 4 data + 8 core
+    \item \textbf{23 module Gradle}: app + domain + 8 feature + 5 data + 8 core
+    \item \textbf{Room 6 bảng, schema v5}: video progress, watchlist, điểm, nhiệm vụ hằng ngày, âm thanh trích, nội dung tải
     \item Phối hợp phiên: SessionPolicy $\rightarrow$ SessionCoordinator $\rightarrow$ MediaPlaybackCoordinator (Media3)
     \item 1 Activity, 1 NavController~--~màn hình không giữ NavController
     \item Kiểm tra phụ thuộc \textbf{tự động} bằng tác vụ \texttt{verifyArchitecture}
@@ -1802,7 +1844,7 @@
   \begin{itemize}
     \item \textbf{Sản phẩm}: giải trí 4-trong-1 với 6 trụ USP, phạm vi MVP chốt với 7 quyết định sản phẩm
     \item \textbf{Tài liệu}: truy vết khép kín pain point $\rightarrow$ thị trường $\rightarrow$ Winning Zone $\rightarrow$ tính năng $\rightarrow$ user story $\rightarrow$ acceptance criteria
-    \item \textbf{Kỹ thuật}: kiến trúc 3 lớp + MVVM + UDF, 21 module, media engine dùng chung Media3
+    \item \textbf{Kỹ thuật}: kiến trúc 3 lớp + MVVM + UDF, 23 module, media engine dùng chung Media3
     \item \textbf{Nguyên mẫu}: đang hoàn thiện theo bảng MVP, ảnh chụp thật đã phủ 16/48 tính năng
     \item \textbf{Tiếp theo}: hoàn thiện Phần 5--6, heuristic evaluation, đo các chỉ số UX/SEC/BIZ
   \end{itemize}
