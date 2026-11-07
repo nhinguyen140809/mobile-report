@@ -1,0 +1,256 @@
+% ============================================================
+% CO3043 - Phát triển Ứng dụng trên Thiết bị Di động (HCMUT)
+% OneSpace — Ứng dụng giải trí tích hợp 4-trong-1 trên Android
+% Presentation - team: Pham Khanh Duy, Nguyen Tran Yen Nhi, Tang Hong Ai
+% Style: mirrors the DataWarehouse midterm deck (Madrid + BKTemplate)
+% Structure: 4 sections — Giới thiệu · Phạm vi sản phẩm · UI/UX · Kiến trúc kỹ thuật
+% ============================================================
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usefonttheme{structurebold}
+\usefonttheme[onlymath]{serif}
+
+\definecolor{BKTemplate}{rgb}{0.11765, 0.30588, 0.47451}
+\usecolortheme[named=BKTemplate]{structure}
+\setbeamercolor{title}{fg=BKTemplate,bg=}
+\usepackage{xcolor}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{navigation symbols}{}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{vntex}   % Vietnamese diacritics (T5 encoding), as in the team report
+\usepackage[english]{babel}
+\usepackage{lmodern}       % vector Type 1 fonts for T1 + T5: no bitmap glyphs
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{colortbl}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, shapes.geometric, calc, fit}
+\usepackage{hyperref}
+\renewcommand\UrlFont{\color{blue}\rmfamily}
+
+% Custom colors
+\definecolor{AccentGold}{HTML}{E8A838}
+\definecolor{BKDark}{HTML}{0D2B45}
+\definecolor{BKLight}{HTML}{2A6BA5}
+\definecolor{LightBG}{HTML}{F0F4F8}
+\definecolor{TextGray}{HTML}{5A6C7D}
+\definecolor{GreenOK}{HTML}{27AE60}
+\definecolor{RedNo}{HTML}{E74C3C}
+\definecolor{OrangeWarn}{HTML}{F39C12}
+
+%------------------------------------------------------------
+% Ký hiệu ma trận đối thủ
+%------------------------------------------------------------
+\newcommand{\cmark}{\textcolor{GreenOK}{\checkmark}}
+\newcommand{\pmark}{\textcolor{OrangeWarn}{$\triangle$}}
+\newcommand{\xmark}{\textcolor{TextGray}{$\times$}}
+
+%------------------------------------------------------------
+% Ô màu swatch cho bảng design token
+%------------------------------------------------------------
+\newcommand{\sw}[2]{\colorbox[HTML]{#1}{\textcolor[HTML]{#2}{\rule[-2.5pt]{13pt}{13pt}}}}
+
+%------------------------------------------------------------
+% Ảnh mockup. Một tính năng có thể có NHIỀU ảnh chụp, đánh số
+% liên tiếp: figures/app/<mã>-01.png, -02.png, ... (tối đa 6).
+% Thư mục tìm kiếm: presentation/figures/app rồi figures/app của
+% repo; chưa có ảnh nào thì vẽ khung placeholder.
+% \imgdir  — tiền tố thư mục chứa ảnh (rỗng hoặc ../)
+% \imgn    — số ảnh tìm thấy (đánh số liền kề từ 01)
+%------------------------------------------------------------
+\newcommand{\mockimg}[1]{%
+  \def\imgdir{}%
+  \IfFileExists{figures/app/#1-01.png}{}{%
+    \IfFileExists{../figures/app/#1-01.png}{\def\imgdir{../}}{}%
+  }%
+  \def\imgn{0}%
+  \IfFileExists{\imgdir figures/app/#1-01.png}{\def\imgn{1}}{}%
+  \ifnum\imgn>0 \IfFileExists{\imgdir figures/app/#1-02.png}{\def\imgn{2}}{}\fi
+  \ifnum\imgn>1 \IfFileExists{\imgdir figures/app/#1-03.png}{\def\imgn{3}}{}\fi
+  \ifnum\imgn>2 \IfFileExists{\imgdir figures/app/#1-04.png}{\def\imgn{4}}{}\fi
+  \ifnum\imgn>3 \IfFileExists{\imgdir figures/app/#1-05.png}{\def\imgn{5}}{}\fi
+  \ifnum\imgn>4 \IfFileExists{\imgdir figures/app/#1-06.png}{\def\imgn{6}}{}\fi
+  \ifnum\imgn=0
+    % Kiểu cũ: đúng một tệp <mã>.png
+    \IfFileExists{figures/app/#1.png}{%
+      \includegraphics[height=6.1cm]{figures/app/#1.png}%
+    }{%
+    \IfFileExists{../figures/app/#1.png}{%
+      \includegraphics[height=6.1cm]{../figures/app/#1.png}%
+    }{%
+      \begin{tikzpicture}
+        \node[draw=BKTemplate!60, dashed, thick, rounded corners=6pt, fill=LightBG,
+              minimum width=3.1cm, minimum height=5.2cm, align=center] {%
+          {\small\bfseries\color{BKTemplate} Mockup}\\[3pt]
+          {\scriptsize\ttfamily\color{TextGray} \imgdir figures/app/#1-01.png}};
+      \end{tikzpicture}%
+    }}%
+  \else
+    \ifcase\imgn
+    \or % 1 ảnh
+      \includegraphics[height=6.1cm]{\imgdir figures/app/#1-01.png}%
+    \or % 2 ảnh
+      \includegraphics[width=2.75cm]{\imgdir figures/app/#1-01.png}\hspace{0.25cm}%
+      \includegraphics[width=2.75cm]{\imgdir figures/app/#1-02.png}%
+    \or % 3 ảnh
+      \includegraphics[width=2.32cm]{\imgdir figures/app/#1-01.png}\hspace{0.2cm}%
+      \includegraphics[width=2.32cm]{\imgdir figures/app/#1-02.png}\hspace{0.2cm}%
+      \includegraphics[width=2.32cm]{\imgdir figures/app/#1-03.png}%
+    \or % 4 ảnh
+      \includegraphics[width=1.72cm]{\imgdir figures/app/#1-01.png}\hspace{0.12cm}%
+      \includegraphics[width=1.72cm]{\imgdir figures/app/#1-02.png}\hspace{0.12cm}%
+      \includegraphics[width=1.72cm]{\imgdir figures/app/#1-03.png}\hspace{0.12cm}%
+      \includegraphics[width=1.72cm]{\imgdir figures/app/#1-04.png}%
+    \or % 5 ảnh
+      \includegraphics[width=1.36cm]{\imgdir figures/app/#1-01.png}\hspace{0.1cm}%
+      \includegraphics[width=1.36cm]{\imgdir figures/app/#1-02.png}\hspace{0.1cm}%
+      \includegraphics[width=1.36cm]{\imgdir figures/app/#1-03.png}\hspace{0.1cm}%
+      \includegraphics[width=1.36cm]{\imgdir figures/app/#1-04.png}\hspace{0.1cm}%
+      \includegraphics[width=1.36cm]{\imgdir figures/app/#1-05.png}%
+    \or % 6 ảnh
+      \includegraphics[width=1.12cm]{\imgdir figures/app/#1-01.png}\hspace{0.08cm}%
+      \includegraphics[width=1.12cm]{\imgdir figures/app/#1-02.png}\hspace{0.08cm}%
+      \includegraphics[width=1.12cm]{\imgdir figures/app/#1-03.png}\hspace{0.08cm}%
+      \includegraphics[width=1.12cm]{\imgdir figures/app/#1-04.png}\hspace{0.08cm}%
+      \includegraphics[width=1.12cm]{\imgdir figures/app/#1-05.png}\hspace{0.08cm}%
+      \includegraphics[width=1.12cm]{\imgdir figures/app/#1-06.png}%
+    \fi
+  \fi
+}
+
+%------------------------------------------------------------
+% Bố cục slide mockup: cột trái là mã + mô tả, cột phải là ảnh
+% \mockbody{F-VID-01}{Tên tính năng}{mô tả}
+%------------------------------------------------------------
+\newcommand{\mockbody}[3]{%
+\begin{columns}[T]
+\begin{column}{0.46\textwidth}
+{\small\bfseries\color{BKTemplate} #1: #2}\\[2.5mm]
+#3
+\end{column}
+\begin{column}{0.50\textwidth}
+\centering
+\mockimg{#1}
+\end{column}
+\end{columns}}
+
+%------------------------------------------------------------
+% Reusable statistic card
+%------------------------------------------------------------
+\newcommand{\statcard}[3]{%
+\begin{tikzpicture}
+\node[draw=BKTemplate, line width=1pt, fill=LightBG, rounded corners=6pt,
+      minimum width=2.9cm, minimum height=2.55cm, align=center, inner sep=5pt] {%
+{\fontsize{32}{34}\selectfont\bfseries\color{BKTemplate}#1}\\[2pt]
+{\small\bfseries\color{BKDark}#2}\\[1pt]
+{\scriptsize\color{TextGray}#3}};
+\end{tikzpicture}}
+
+%------------------------------------------------------------
+\title[Phát triển Ứng dụng trên Thiết bị Di động]{OneSpace --- Ứng dụng giải trí tích hợp 4-trong-1 trên Android}
+
+\subtitle{CO3043 --- Phát triển Ứng dụng trên Thiết bị Di động · Bài tập lớn}
+
+\author[Khoa Khoa học và Kỹ thuật Máy tính]{Phạm Khánh Duy (2310510) \and Nguyễn Trần Yến Nhi (2312506) \and Tăng Hồng Ái (2310167)}
+
+\institute[]{Faculty of Computer Science and Engineering, HCMUT, VNU-HCM, Vietnam \and Advisor: TS.\ Phan Trần Minh Khuê}
+
+\date[CO3043 · Nov 2026]{November 2026}
+
+%------------------------------------------------------------
+% Section divider: TOC với section hiện tại highlight, các section khác mờ
+%------------------------------------------------------------
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Nội dung}
+    \tableofcontents[currentsection,hideallsubsections]
+  \end{frame}
+}
+%------------------------------------------------------------
+
+\begin{document}
+
+% ============================================================
+% TITLE SLIDE — nền riêng FrontBackground (logo ở trên và dưới,
+% khối chữ nằm giữa, chừa trống hai đầu)
+% ============================================================
+\setbeamertemplate{background canvas}{
+    \includegraphics[width=\paperwidth,height=\paperheight]{images/FrontBackground.pptx.pdf}
+}
+\begin{frame}[plain]
+% Logo nền chiếm khoảng 40pt trên đỉnh; khối chữ hạ xuống dưới nó,
+% mép dưới giữ nguyên (logo đáy bắt đầu ~234pt trên trang cao 255pt).
+\vspace*{1.6cm}
+\begin{center}
+{\small\color{BKDark} Bài tập lớn môn học:}\\[1.2mm]
+{\normalsize\bfseries\color{BKTemplate} Phát triển Ứng dụng trên Thiết bị Di động (CO3043)}\\[4mm]
+
+{\small\color{BKDark} Chủ đề}\\[1.5mm]
+{\Large\bfseries\color{BKTemplate} Ứng dụng giải trí đa phương tiện tích hợp}\\[1.2mm]
+{\Large\bfseries\color{BKTemplate} Video, Music, News và Games}\\[4mm]
+
+{\normalsize GVHD: TS.\ Phan Trần Minh Khuê}\\[4mm]
+
+{\normalsize
+\begin{tabular}{@{}l@{\hspace{2.5em}}l@{}}
+Phạm Khánh Duy & 2310510\\[1mm]
+Nguyễn Trần Yến Nhi & 2312506\\[1mm]
+Tăng Hồng Ái & 2310167\\
+\end{tabular}}
+\end{center}
+\vfill
+\end{frame}
+
+% Set background for all subsequent slides
+\setbeamertemplate{background canvas}{
+	\includegraphics[width=\paperwidth,height=\paperheight]{images/Background.pdf}
+}
+
+% ============================================================
+% OUTLINE
+% ============================================================
+\begin{frame}{Nội dung}
+\begin{enumerate}
+    \item \textbf{Giới thiệu} \hfill \textit{Bối cảnh thị trường, vấn đề, persona, đối thủ, SWOT, USP}
+    \item \textbf{Phạm vi sản phẩm} \hfill \textit{Tiêu chí chất lượng, 76 tính năng, ma trận chuyển, user stories}
+    \item \textbf{UI/UX thiết kế} \hfill \textit{Kiến trúc thông tin, luồng, mockup, design system, accessibility}
+    \item \textbf{Kiến trúc kỹ thuật} \hfill \textit{Tech stack, ba lớp, mô-đun, điều hướng, dữ liệu, TTS}
+\end{enumerate}
+\end{frame}
+
+% ============================================================
+% CONTENT
+% ============================================================
+\input{content/1-intro}
+\input{content/2-scope}
+\input{content/3-uiux}
+\input{content/4-arch}
+
+% ============================================================
+% THANK YOU
+% ============================================================
+\setbeamertemplate{footline}{}
+\begin{frame}
+    \centering
+    \vspace{0.3cm}
+    \textbf{\Huge{Cảm ơn thầy và các bạn}}\\
+    \vspace{0.55cm}
+
+    {\small Phạm Khánh Duy (2310510) \quad·\quad Nguyễn Trần Yến Nhi (2312506) \quad·\quad Tăng Hồng Ái (2310167)}\\
+    \vspace{0.25cm}
+    {\small CO3043 --- Phát triển Ứng dụng trên Thiết bị Di động \quad·\quad Bài tập lớn}\\
+    \vspace{0.15cm}
+    {\scriptsize \color{TextGray} Khoa Khoa học và Kỹ thuật Máy tính\\[0.5mm]
+    GVHD: TS.\ Phan Trần Minh Khuê}
+\end{frame}
+
+\end{document}

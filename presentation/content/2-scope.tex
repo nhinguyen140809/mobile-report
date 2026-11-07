@@ -1,0 +1,921 @@
+% ============================================================
+% SECTION 2 - PHẠM VI SẢN PHẨM
+% Tiêu chí chất lượng · Phân loại tính năng (75) · Ma trận chuyển
+% Quy tắc âm thanh · Gamification · User Stories · Mockup (ALL 75)
+% ============================================================
+\section{Phạm vi sản phẩm}
+
+% ------------------------------------------------------------
+\subsection{Tiêu chí chất lượng}
+% ------------------------------------------------------------
+\begin{frame}{Tiêu chí chất lượng}
+{\tiny\color{TextGray} Yêu cầu phi chức năng (NFR, non-functional requirements)~--~mỗi tiêu chí có ngưỡng đo được; đo trên máy Android tầm trung, RAM 4~GB, mạng 4G.}
+\par\vspace{0.8mm}
+\begin{center}\tiny
+\begin{tabular}{@{}p{1.0cm}p{3.1cm}p{8.4cm}@{}}
+\toprule
+\textbf{Mã} & \textbf{Tiêu chí} & \textbf{Ngưỡng đạt} \\
+\midrule
+UX-01 & Phản hồi thao tác & $\leq$ 100~ms (mốc phản ứng tức thì) \\
+UX-02 & Tải nội dung & $\leq$ 3 giây trên mạng 4G \\
+UX-03 & Khởi động lạnh & $\leq$ 2 giây; không lần đo nào $\geq$ 5 giây \\
+UX-04 & Bắt đầu phát & Video $\leq$ 2 giây, nhạc $\leq$ 1 giây \\
+UX-05 & Phát liên tục & $\leq$ 1 lần dừng tải / 10 phút; nhạc không dừng khi chuyển phân hệ \\
+UX-06 & Độ mượt & $\geq$ 95\% khung hình $<$ 16~ms; không frozen frame \\
+UX-07 & Độ ổn định & Crash $\leq$ 0,5\%, ANR $\leq$ 0,2\% (chặt hơn Android vitals) \\
+UX-08 & Số bước thao tác & $\leq$ 3 chạm tới nội dung; chuyển phân hệ 1 chạm \\
+UX-09 & Dễ dùng & Hoàn thành tác vụ $\geq$ 90\%; điểm SUS $\geq$ 70 \\
+UX-10 & Dung lượng & $\leq$ 50~MB tải về \\
+UX-11 & Pin & $\leq$ 5\% / 60 phút phát nhạc nền \\
+UX-12 & Accessibility & Vùng chạm $\geq$ 48dp; tương phản $\geq$ 4,5:1 (WCAG AA) \\
+UX-13 & Tương thích & Android 8.0+ (API 26), RAM $\geq$ 3~GB \\
+UX-14 & Ngôn ngữ & Tiếng Việt mặc định; chuyển ngôn ngữ tức thì \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Tiêu chí chất lượng}
+\begin{columns}[T]
+\begin{column}{0.52\textwidth}
+\centering
+{\scriptsize\bfseries Bảo mật (SEC)}\\[1mm]
+{\tiny\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{0.9cm}p{2.0cm}p{3.5cm}@{}}
+\toprule
+\textbf{Mã} & \textbf{Tiêu chí} & \textbf{Ngưỡng đạt} \\
+\midrule
+SEC-01 & Xác thực OTP & 6 chữ số, dùng 1 lần, hiệu lực 5 phút; gửi lại sau 60 giây \\
+SEC-02 & Lưu trữ an toàn & Token chỉ nằm trong Android Keystore \\
+SEC-03 & Truyền dữ liệu & 100\% request HTTPS, TLS 1.2 trở lên \\
+SEC-04 & Quyền truy cập & Xin đúng ngữ cảnh; từ chối vẫn dùng được phần còn lại \\
+SEC-05 & Đồng ý dữ liệu & Cá nhân hóa chỉ khi người dùng đồng ý \\
+SEC-06 & Xóa tài khoản & Xóa trong app và qua web; hoàn tất trong 20 ngày \\
+SEC-07 & Bản ghi giọng hát & Chấm trên thiết bị, xóa ngay sau khi chấm (v2) \\
+SEC-08 & Kiểm tra bảo mật & 0 lỗi mức High trước mỗi bản phát hành (MobSF) \\
+\bottomrule
+\end{tabular}}
+\end{column}
+\begin{column}{0.46\textwidth}
+\centering
+{\scriptsize\bfseries Kinh doanh (BIZ)}\\[1mm]
+{\tiny\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{0.9cm}p{2.0cm}p{3.0cm}@{}}
+\toprule
+\textbf{Mã} & \textbf{Tiêu chí} & \textbf{Ngưỡng đạt} \\
+\midrule
+BIZ-01 & Retention & D1/D7/D30 $\geq$ 16\%/4\%/2\% \\
+BIZ-02 & Gắn bó & DAU/MAU $\geq$ 20\% \\
+BIZ-03 & Dùng nhiều phân hệ & $\geq$ 40\% người dùng tuần \\
+BIZ-04 & Gamification & $\geq$ 30\% DAU hoàn thành $\geq$ 1 nhiệm vụ \\
+BIZ-05 & Chuyển đổi Premium & $\geq$ 2\% MAU sau 3 tháng \\
+BIZ-06 & Giới hạn quảng cáo & Không hiện khi mở/thoát/đang chơi \\
+\bottomrule
+\end{tabular}}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Tiêu chí chất lượng --- ngoại tuyến và ràng buộc mạng}
+\begin{center}
+{\tiny
+\begin{tabular}{@{}p{1.2cm}p{5.7cm}p{5.7cm}@{}}
+\toprule
+\textbf{Phân hệ} & \textbf{Khi mất mạng} & \textbf{Khi có mạng lại} \\
+\midrule
+Video & Đang phát dùng tiếp phần đã đệm; hết đệm thì thông báo chờ kèm nút ``Thử lại'', giữ nguyên vị trí & Người dùng bấm thử lại hoặc tiếp tục theo trạng thái lỗi thật \\
+Nhạc & Bài đã tải phát được offline; stream chỉ còn phần đệm & Khôi phục hàng đợi theo chính sách, không dựng engine mới \\
+Tin tức & Đọc bài đã lưu trong Room; thiếu cache thì hiện trạng thái rõ ràng & Làm mới từ mạng, ghi vào local rồi mới cập nhật giao diện \\
+Trò chơi & Ván cờ và logic cục bộ vẫn chơi được & Đồng bộ điểm theo ID phiên, không ghi đè bản local mới hơn \\
+\bottomrule
+\end{tabular}}
+\end{center}
+\vspace{1mm}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{exampleblock}{\scriptsize Ngân sách tài nguyên}
+{\tiny
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item Tối đa 1 decoder video; fullscreen và floating dùng chung engine
+\item Một engine âm thanh dùng chung, không dựng theo từng tab
+\item Chỉ game đang hiển thị chạy loop; rời game thì tạm dừng
+\item Data Saver: giảm chất lượng / prefetch khi có biến thể phù hợp
+\end{itemize}}
+\end{exampleblock}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{exampleblock}{\scriptsize Quyền truy cập}
+{\tiny
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item INTERNET, FOREGROUND\_SERVICE: khai báo lúc cài, không hỏi
+\item RECORD\_AUDIO: xin đúng lúc bấm ghi; từ chối vẫn dùng được phần còn lại
+\item Không xin quyền nào lúc mở app lần đầu
+\end{itemize}}
+\end{exampleblock}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ------------------------------------------------------------
+\subsection{Phân loại và ưu tiên tính năng}
+% ------------------------------------------------------------
+\begin{frame}{Phân loại và ưu tiên tính năng --- 76 tính năng ứng viên}
+\begin{columns}[T]
+\begin{column}{0.56\textwidth}
+\small
+\begin{itemize}\setlength{\itemsep}{2pt}
+\item \textbf{76 tính năng ứng viên}: Video 18 $\cdot$ Music 14 $\cdot$ News 10 $\cdot$ Games 13 $\cdot$ Dùng chung 21
+\item Mỗi tính năng chấm \textbf{Impact (1--5) $\times$ Effort (1--5)}
+\end{itemize}
+\end{column}
+\begin{column}{0.38\textwidth}
+\small
+\centering
+\begin{tabular}{@{}p{3.4cm}p{1.0cm}@{}}
+\toprule
+\textbf{Nhóm} & \textbf{Số} \\
+\midrule
+Quick Wins & 32 \\
+Major Projects & 27 \\
+Fill-ins & 14 \\
+Thankless & 3 \\
+\bottomrule
+\end{tabular}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ------------------------------------------------------------
+% 5 bảng tính năng theo phân hệ (FULL, không cắt xén)
+% ------------------------------------------------------------
+\begin{frame}{Phân loại tính năng: Phân hệ Video (18)}
+\begin{center}\tiny
+\begin{tabular}{@{}p{1.5cm}p{7.5cm}p{0.3cm}p{0.3cm}p{0.8cm}@{}}
+\toprule
+\textbf{Mã} & \textbf{Tính năng} & \textbf{I} & \textbf{E} & \textbf{Nhóm} \\
+\midrule
+\texttt{F-VID-01} & Xem video streaming cơ bản (player HLS/MP4) & 5 & 4 & MP \\
+\texttt{F-VID-02} & Feed ``Đề xuất'' theo sở thích & 4 & 3 & MP \\
+\texttt{F-VID-03} & Tìm kiếm video & 4 & 2 & QW \\
+\texttt{F-VID-04} & Danh sách xem sau (watchlist) & 3 & 1 & QW \\
+\texttt{F-VID-05} & Lịch sử xem và tiếp tục từ chỗ dừng & 3 & 1 & QW \\
+\texttt{F-VID-06} & Chọn chất lượng phát: Auto hoặc bản 1080p/720p/360p & 4 & 3 & MP \\
+\texttt{F-VID-07} & Tải video xem offline & 3 & 4 & TT \\
+\texttt{F-VID-08} & Picture-in-picture: video thu nhỏ góc màn hình khi rời trang & 5 & 3 & MP \\
+\texttt{F-VID-09} & Chế độ chỉ phát âm thanh của video (audio-only) & 3 & 2 & FI \\
+\texttt{F-VID-10} & Nhấn giữ video để trích thành tệp mp3 cho kho cá nhân & 5 & 4 & MP \\
+\texttt{F-VID-11} & Chia sẻ link video ra ngoài app & 2 & 1 & FI \\
+\texttt{F-VID-12} & Màn hồ sơ nghệ sĩ/kênh: bấm tên để xem mọi nội dung của họ & 3 & 2 & FI \\
+\texttt{F-VID-13} & Playlist video theo chủ đề & 3 & 2 & FI \\
+\texttt{F-VID-14} & Tua nhanh double-tap và đổi tốc độ phát & 4 & 1 & QW \\
+\texttt{F-VID-15} & Gợi ý ``chơi game liên quan video này'': thẻ game cuối video, câu hỏi soạn sẵn lúc đăng nội dung & 4 & 2 & QW \\
+\texttt{F-VID-16} & Toàn màn hình: nút ẩn system bars, player chiếm cả trang & 3 & 1 & QW \\
+\texttt{F-VID-17} & Điều khiển âm lượng: nút loa mute/unmute + thanh volume hệ thống & 3 & 2 & QW \\
+\texttt{F-VID-18} & Pinch-to-zoom cửa sổ nổi: 2 ngón thu phóng 0.5x--2x & 3 & 2 & FI \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vfill
+{\tiny\color{TextGray} QW = Quick Wins $\cdot$ MP = Major Projects $\cdot$ FI = Fill-ins $\cdot$ TT = Thankless}
+\end{frame}
+
+\begin{frame}{Phân loại tính năng: Phân hệ Nhạc (14)}
+\begin{center}\tiny
+\begin{tabular}{@{}p{1.5cm}p{7.5cm}p{0.3cm}p{0.3cm}p{0.8cm}@{}}
+\toprule
+\textbf{Mã} & \textbf{Tính năng} & \textbf{I} & \textbf{E} & \textbf{Nhóm} \\
+\midrule
+\texttt{F-MUS-01} & Player nhạc đầy đủ (phát / dừng / chuyển / tua / repeat / shuffle) & 5 & 3 & MP \\
+\texttt{F-MUS-02} & Mini player dock xuyên suốt mọi màn hình & 5 & 3 & MP \\
+\texttt{F-MUS-03} & Phát nhạc nền khi rời ứng dụng hoặc khoá màn hình & 5 & 4 & MP \\
+\texttt{F-MUS-04} & Tự tạo/sửa/xoá playlist & 4 & 2 & QW \\
+\texttt{F-MUS-05} & Hàng phát (queue): thêm tiếp theo, phát cuối, kéo sắp lại & 4 & 2 & QW \\
+\texttt{F-MUS-06} & Tìm kiếm nhạc (bài hát/nghệ sĩ/album) & 4 & 2 & QW \\
+\texttt{F-MUS-07} & Kho nhạc cá nhân chứa các tệp trích từ video & 4 & 3 & MP \\
+\texttt{F-MUS-08} & Gợi ý nhạc theo sở thích & 4 & 3 & MP \\
+\texttt{F-MUS-09} & ``Siêu playlist'' (meta-playlist) trộn nhạc và video & 4 & 3 & MP \\
+\texttt{F-MUS-10} & Xử lý audio focus: duck/pause khi có luồng âm thanh khác & 5 & 3 & MP \\
+\texttt{F-MUS-11} & Equalizer, hiệu chỉnh âm thanh & 2 & 3 & TT \\
+\texttt{F-MUS-12} & Tải bài hát offline & 3 & 4 & TT \\
+\texttt{F-MUS-13} & Tốc độ phát nhạc: x1/x1.5/x2/x0.5 trên dock và Home card & 3 & 1 & QW \\
+\texttt{F-MUS-14} & Lời bài hát: panel scroll trên Now Playing & 3 & 2 & FI \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vfill
+{\tiny\color{TextGray} QW = Quick Wins $\cdot$ MP = Major Projects $\cdot$ FI = Fill-ins $\cdot$ TT = Thankless}
+\end{frame}
+
+\begin{frame}{Phân loại tính năng: Phân hệ Tin tức (10)}
+\begin{center}\tiny
+\begin{tabular}{@{}p{1.5cm}p{7.5cm}p{0.3cm}p{0.3cm}p{0.8cm}@{}}
+\toprule
+\textbf{Mã} & \textbf{Tính năng} & \textbf{I} & \textbf{E} & \textbf{Nhóm} \\
+\midrule
+\texttt{F-NEWS-01} & Feed tin theo chuyên mục và sở thích & 5 & 3 & MP \\
+\texttt{F-NEWS-02} & Trình đọc sạch, đổi cỡ chữ & 4 & 2 & QW \\
+\texttt{F-NEWS-03} & Lưu bài đọc sau & 3 & 1 & QW \\
+\texttt{F-NEWS-04} & Tìm kiếm bài báo & 3 & 2 & FI \\
+\texttt{F-NEWS-05} & Chuyển bài báo thành audio (TTS)~--~``nghe tin'' & 5 & 4 & MP \\
+\texttt{F-NEWS-06} & Sắp xếp mới nhất / phổ biến & 3 & 1 & QW \\
+\texttt{F-NEWS-07} & Nghe nhạc khi đọc tin (dock vẫn phát) & 5 & 1 & QW \\
+\texttt{F-NEWS-08} & Quiz sinh ra từ bài báo đang đọc & 4 & 3 & MP \\
+\texttt{F-NEWS-09} & Gợi ý bài liên quan & 3 & 2 & FI \\
+\texttt{F-NEWS-10} & Bài đang đọc thu nhỏ thành thẻ nổi khi rời tab News & 5 & 3 & MP \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vfill
+{\tiny\color{TextGray} QW = Quick Wins $\cdot$ MP = Major Projects $\cdot$ FI = Fill-ins $\cdot$ TT = Thankless}
+\end{frame}
+
+\begin{frame}{Phân loại tính năng: Phân hệ Trò chơi (13)}
+\begin{center}\tiny
+\begin{tabular}{@{}p{1.5cm}p{7.5cm}p{0.3cm}p{0.3cm}p{0.8cm}@{}}
+\toprule
+\textbf{Mã} & \textbf{Tính năng} & \textbf{I} & \textbf{E} & \textbf{Nhóm} \\
+\midrule
+\texttt{F-GAME-01} & Hub minigame: danh sách, trạng thái mở khoá, phần thưởng & 4 & 2 & QW \\
+\texttt{F-GAME-02} & Game đoán bài hát & 5 & 3 & MP \\
+\texttt{F-GAME-03} & Quiz tin tức & 4 & 3 & MP \\
+\texttt{F-GAME-04} & Quiz kiến thức (kiểu Ai là triệu phú) & 3 & 2 & FI \\
+\texttt{F-GAME-05} & Snake -- rắn săn mồi & 3 & 1 & FI \\
+\texttt{F-GAME-06} & ``Beat tiles'' -- nốt nhạc rơi theo bài đang phát (kiểu piano tiles) & 4 & 2 & QW \\
+\texttt{F-GAME-07} & Bảng xếp hạng tuần/tháng & 4 & 3 & MP \\
+\texttt{F-GAME-08} & Chơi game ở nửa dưới màn hình, video chạy phía trên & 4 & 4 & MP \\
+\texttt{F-GAME-09} & Phần thưởng khi thắng minigame (điểm) & 5 & 2 & QW \\
+\texttt{F-GAME-10} & 2048 (ghép số) & 3 & 2 & FI \\
+\texttt{F-GAME-11} & Tic-Tac-Toe (caro 3$\times$3) & 3 & 1 & FI \\
+\texttt{F-GAME-12} & Thử thách hằng ngày: xoay vòng 6 game, thưởng 50+5$\times$streak + thức ăn pet & 4 & 2 & QW \\
+\texttt{F-GAME-13} & Âm thanh và hiệu ứng game: âm phản hồi thao tác, tự giảm khi có nhạc/video & 3 & 1 & QW \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vfill
+{\tiny\color{TextGray} QW = Quick Wins $\cdot$ MP = Major Projects $\cdot$ FI = Fill-ins $\cdot$ TT = Thankless}
+\end{frame}
+
+\begin{frame}{Phân loại tính năng: Dùng chung (21)}
+\begin{center}\tiny
+\begin{tabular}{@{}p{1.5cm}p{7.5cm}p{0.3cm}p{0.3cm}p{0.8cm}@{}}
+\toprule
+\textbf{Mã} & \textbf{Tính năng} & \textbf{I} & \textbf{E} & \textbf{Nhóm} \\
+\midrule
+\texttt{F-COM-01} & Đăng ký/đăng nhập một tài khoản cho cả 4 phân hệ & 5 & 3 & MP \\
+\texttt{F-COM-02} & Onboarding chọn sở thích lần đầu & 4 & 1 & QW \\
+\texttt{F-COM-03} & Hồ sơ cá nhân: avatar, khung ảnh theo thành tích & 3 & 2 & FI \\
+\texttt{F-COM-04} & Hệ điểm thưởng dùng chung (XP) & 5 & 2 & QW \\
+\texttt{F-COM-05} & Nhiệm vụ hằng ngày (3--5 nhiệm vụ) & 4 & 2 & QW \\
+\texttt{F-COM-06} & Chuỗi ngày liên tiếp (streak) & 4 & 1 & QW \\
+\texttt{F-COM-07} & Thú cưng ảo: nuôi bằng điểm, tiến hoá theo mốc & 4 & 3 & MP \\
+\texttt{F-COM-08} & Huy hiệu thành tựu & 3 & 2 & FI \\
+\texttt{F-COM-09} & Khung avatar độc quyền theo mốc thành tích & 3 & 1 & QW \\
+\texttt{F-COM-10} & Tổng kết tháng kiểu ``wrapped'', xuất thẻ chia sẻ & 4 & 3 & MP \\
+\texttt{F-COM-11} & Tìm kiếm xuyên nội dung (một ô tìm cho 4 phân hệ) & 4 & 3 & MP \\
+\texttt{F-COM-12} & Nhắc nhiệm vụ/streak hằng ngày & 3 & 1 & QW \\
+\texttt{F-COM-13} & Cài đặt: sáng/tối, ngôn ngữ, tiết kiệm dữ liệu & 4 & 2 & QW \\
+\texttt{F-COM-14} & Cửa sổ xác nhận khi hai luồng âm thanh xung đột & 5 & 2 & QW \\
+\texttt{F-COM-15} & Cửa hàng đổi quà bằng điểm (mở game, đồ pet, khung avatar) & 4 & 2 & QW \\
+\texttt{F-COM-16} & Chế độ ngoại tuyến cơ bản: tin đã lưu, trạng thái mất mạng & 3 & 3 & MP \\
+\texttt{F-COM-17} & Báo nội dung không phù hợp & 2 & 1 & FI \\
+\texttt{F-COM-18} & Chế độ khách dùng thử (không cần tài khoản) & 3 & 2 & QW \\
+\texttt{F-COM-19} & Karaoke/Record: ghi màn hình video (MediaProjection), countdown 3-2-1 & 4 & 4 & MP \\
+\texttt{F-COM-20} & Vuốt ngang đổi phân hệ (trừ Games) + hoàn tác đóng nhạc & 3 & 2 & QW \\
+\texttt{F-COM-21} & Ghi âm, hát karaoke cùng bài hát đang phát (bên Nhạc) & 4 & 3 & MP \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vfill
+{\tiny\color{TextGray} QW = Quick Wins $\cdot$ MP = Major Projects $\cdot$ FI = Fill-ins $\cdot$ TT = Thankless}
+\end{frame}
+
+% ------------------------------------------------------------
+\subsection{Sơ đồ use case}
+% ------------------------------------------------------------
+\begin{frame}{Sơ đồ use case tổng quan}
+\begin{center}
+\begin{tikzpicture}[
+  font=\tiny,
+  uc/.style={ellipse, draw=BKTemplate, thick, fill=white, inner sep=0.5pt, align=center},
+  act/.style={draw=black!70, thick},
+  lnk/.style={draw=black!35},
+  rel/.style={draw=black!65, dashed, thick, -{Latex[open, length=1.6mm]}}]
+  % ===== Ranh giới hệ thống =====
+  \draw[draw=BKTemplate!60, thick, rounded corners=4pt] (2.45,2.05) rectangle (14.3,7.05);
+  \node[font=\scriptsize\bfseries\color{BKTemplate}] at (8.35,7.2) {OneSpace};
+  % ===== Nhãn cụm =====
+  \node[font=\tiny\bfseries\color{TextGray}] at (3.55,6.82) {VIDEO};
+  \node[font=\tiny\bfseries\color{TextGray}] at (5.95,6.82) {NHẠC};
+  \node[font=\tiny\bfseries\color{TextGray}] at (8.35,6.82) {TIN TỨC};
+  \node[font=\tiny\bfseries\color{TextGray}] at (10.75,6.82) {TRÒ CHƠI};
+  \node[font=\tiny\bfseries\color{TextGray}] at (13.15,6.82) {THƯỞNG};
+  \node[font=\tiny\bfseries\color{TextGray}] at (8.9,3.32) {NỀN TẢNG \& DÙNG CHUNG};
+  % ===== Tác nhân =====
+  \draw[act] (1.0,4.98) circle (0.13);
+  \draw[act] (1.0,4.85) -- (1.0,4.48);
+  \draw[act] (0.83,4.68) -- (1.17,4.68);
+  \draw[act] (1.0,4.48) -- (0.85,4.26);
+  \draw[act] (1.0,4.48) -- (1.15,4.26);
+  \node[align=center, font=\tiny\bfseries] at (1.0,4.0) {Người\\dùng};
+  % ===== Association: tác nhân → 12 UC mục tiêu (vẽ trước, ellipse che sau) =====
+  \draw[lnk] (1.17,4.68) -- (3.55,6.15);
+  \draw[lnk] (1.17,4.68) -- (5.95,6.15);
+  \draw[lnk] (1.17,4.68) -- (8.35,6.15);
+  \draw[lnk] (1.17,4.68) -- (10.75,6.15);
+  \draw[lnk] (1.17,4.68) -- (13.15,6.15);
+  \draw[lnk] (1.17,4.68) -- (13.15,4.95);
+  \draw[lnk] (1.17,4.68) -- (13.15,3.75);
+  \draw[lnk] (1.17,4.68) -- (5.95,3.75);
+  \draw[lnk] (1.17,4.68) -- (4.3,2.65);
+  \draw[lnk] (1.17,4.68) -- (7.0,2.65);
+  \draw[lnk] (1.17,4.68) -- (9.7,2.65);
+  \draw[lnk] (1.17,4.68) -- (12.4,2.65);
+  % ===== Quan hệ then chốt: «extend» (biến thể → cơ sở) =====
+  \draw[rel] (3.55,4.52) -- (3.55,5.72);
+  \draw[rel] (5.95,4.52) -- (5.95,5.72);
+  \draw[rel] (5.35,5.15) -- (4.2,5.78);
+  % ===== UC mục tiêu (12) + biến thể then chốt (2) =====
+  \node[uc] at (3.55,6.15) {Xem video\\{\color{TextGray}(UC-02)}};
+  \node[uc] at (5.95,6.15) {Nghe nhạc\\{\color{TextGray}(UC-03)}};
+  \node[uc] at (8.35,6.15) {Đọc tin\\{\color{TextGray}(UC-04)}};
+  \node[uc] at (10.75,6.15) {Chơi minigame\\{\color{TextGray}(UC-05)}};
+  \node[uc] at (13.15,6.15) {Theo dõi tiến độ\\\& thành tích\\{\color{TextGray}(UC-06)}};
+  \node[uc] at (3.55,4.95) {Tiếp tục xem khi\\chuyển phân hệ\\{\color{TextGray}(X1)}};
+  \node[uc] at (5.95,4.95) {Xử lý xung đột\\âm thanh\\{\color{TextGray}(X0)}};
+  \node[uc] at (13.15,4.95) {Chăm sóc\\thú cưng\\{\color{TextGray}(UC-07)}};
+  \node[uc] at (5.95,3.75) {Ghi âm karaoke\\{\color{TextGray}(UC-12)}};
+  \node[uc] at (13.15,3.75) {Đổi quà\\{\color{TextGray}(UC-08)}};
+  \node[uc] at (4.3,2.65) {Vào ứng dụng \&\\chọn sở thích\\{\color{TextGray}(UC-01)}};
+  \node[uc] at (7.0,2.65) {Lưu nội dung\\để dùng sau\\{\color{TextGray}(UC-09)}};
+  \node[uc] at (9.7,2.65) {Tìm nội dung\\{\color{TextGray}(UC-10)}};
+  \node[uc] at (12.4,2.65) {Quản lý danh tính\\{\color{TextGray}(UC-11)}};
+  % ===== Legend =====
+  \draw[rel] (2.75,2.16) -- (3.5,2.16);
+  \node[font=\tiny, text=TextGray, anchor=west] at (3.6,2.16) {\guillemotleft extend\guillemotright{} = biến thể có điều kiện};
+\end{tikzpicture}
+\end{center}
+\vspace{0.3mm}
+{\tiny\color{TextGray} 76 tính năng $\rightarrow$ \textbf{12 UC mục tiêu} (động từ + danh từ), tách \textbf{8 «extend»} + \textbf{4 «include»} ở slide sau. Một tác nhân: chế độ khách/đăng nhập không đổi năng lực (hiện thực demo).}
+\end{frame}
+
+% ------------------------------------------------------------
+\subsection{Quan hệ giữa các use case}
+% ------------------------------------------------------------
+\begin{frame}{Quan hệ use case: «extend» và «include»}
+\begin{center}\tiny
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{0.65cm}p{3.1cm}p{1.35cm}p{3.4cm}p{4.1cm}@{}}
+\toprule
+\textbf{Mã} & \textbf{Use case} & \textbf{Loại} & \textbf{Cơ sở · điều kiện} & \textbf{Hiện thực} \\
+\midrule
+\multicolumn{5}{@{}l}{\itshape «extend» --- biến thể có điều kiện} \\
+X0 & Xử lý xung đột âm thanh & extend & UC-02, UC-03 · [2 luồng tiếng] & SessionPolicy; popup C1/C2 + rule nhớ \\
+X1 & Tiếp tục xem (thu nhỏ) & extend & UC-02 · [rời màn player, trừ Home/Games] & FloatingVideo trong shell, cùng engine \\
+X2 & Nghe âm thanh video & extend & UC-02 · [chọn tai nghe] & AudioOnlyState; lưu vị trí \\
+X3 & Quiz cuối video & extend & UC-02 · [video kết thúc, không playlist] & CTA trong player; cộng điểm \\
+X4 & Nghe tin TTS & extend & UC-04 · [bấm tai nghe] & TTS on-device (demo thu) \\
+X5 & Kiểm tra nhanh cuối bài & extend & UC-04 · [bài có quiz] & Quiz card; +15 điểm/câu \\
+X6 & Thử thách hằng ngày & extend & UC-05 · [có thử thách chưa xong] & 1 template/ngày; 50+5×streak \\
+X7 & Vừa chơi vừa xem video & extend & UC-05 · [video đang phát] & Chia 34/66; 2 game toàn màn \\
+X8 & Đọc nổi & extend & UC-04 · [rời reader khi đang mở bài] & Thẻ đọc nổi; ẩn trong game \\
+\midrule
+\multicolumn{5}{@{}l}{\itshape «include» --- hành vi bắt buộc dùng chung} \\
+I1 & Khôi phục vị trí xem & include & UC-02 · mỗi lần mở video & Room checkpoint 3 giây, lệch $\leq$ 2 giây \\
+I2 & Duy trì hàng đợi & include & UC-03 · khi phát & Engine queue + tự chuyển bài \\
+I3 & Ghi nhận điểm \& nhiệm vụ & include & UC-05 · sau khi kết thúc ván & Room; +20/nhiệm vụ; mở pet \\
+I4 & Xác thực OTP & include & UC-11 · khi đăng nhập OTP & Demo: mã 123456, hạn 5 phút \\
+\midrule
+\multicolumn{5}{@{}l}{\itshape Use case hỗ trợ} \\
+UC-13 & Tuỳ chỉnh cài đặt & supporting & --- (không include/extend) & 8 nhóm: giao diện, ngôn ngữ, âm thanh\ldots \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{0.8mm}
+{\tiny\color{TextGray} Mỗi quan hệ có điều kiện kích hoạt và bản ghi hiện thực tương ứng (file:line trong báo cáo).}
+\end{frame}
+
+% ------------------------------------------------------------
+\subsection{Đặc tả use case mẫu}
+% ------------------------------------------------------------
+\begin{frame}{Đặc tả use case mẫu --- Xem video (UC-02)}
+\begin{columns}[T]
+\begin{column}{0.46\textwidth}
+{\small\textbf{Thông tin chung}}\\[1.2mm]
+{\tiny
+\begin{tabular}{@{}p{1.9cm}p{4.6cm}@{}}
+\toprule
+\textbf{Thuộc tính} & \textbf{Nội dung} \\
+\midrule
+Mã / tính năng & UC-02 $\cdot$ F-VID-01, 08, 16--18 \\
+Tác nhân & Người dùng \\
+Tiên điều kiện & Đang ở feed Video; có kết nối \\
+Hậu điều kiện & Video phát đúng vị trí đã lưu; phiên giữ khi rời màn; đóng cửa sổ nổi thì lưu Xem sau \\
+Truy vết & US-VID-01, US-VID-02, US-CROSS-03; X0, X1, I1; sequence ``video $\rightarrow$ cửa sổ nổi'' \\
+\bottomrule
+\end{tabular}}
+\vspace{1.5mm}
+
+{\scriptsize\color{TextGray} Mẫu đặc tả áp dụng cho 12 UC mục tiêu; mỗi bước đều kiểm thử được (AC ở mục User Stories).}
+\end{column}
+\begin{column}{0.50\textwidth}
+{\small\textbf{Luồng chính}}\\[0.8mm]
+{\scriptsize
+\begin{enumerate}\setlength{\itemsep}{0.8pt}
+\item Chạm một video trong feed
+\item Nếu nhạc đang phát: popup 2 lựa chọn + tick nhớ rule (X0)
+\item Mở stream tại vị trí đã lưu (I1); phát trong $\leq$ 2 giây
+\item Điều khiển: dừng/tua 10s/tốc độ/chất lượng/âm lượng/toàn màn hình
+\item Rời màn player: cửa sổ nổi tiếp tục phát, cùng engine (X1)
+\item Chạm ``Mở rộng'': quay lại player đúng vị trí
+\end{enumerate}}
+\vspace{1mm}
+
+{\small\textbf{Luồng thay thế}}\\[0.8mm]
+{\scriptsize
+\begin{itemize}\setlength{\itemsep}{0.8pt}
+\item Đóng cửa sổ nổi: dừng video, lưu vị trí + thêm Xem sau
+\item Tab đích là Home: phát trong card feed, không cửa sổ nổi
+\item Video kết thúc: hiện quiz cuối video (X3); playlist hỗn hợp tự chuyển bài
+\end{itemize}}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ------------------------------------------------------------
+\subsection{Ma trận chuyển phân hệ}
+% ------------------------------------------------------------
+\begin{frame}{Ma trận chuyển phân hệ}
+\begin{center}
+\begin{tikzpicture}
+  % ----- Header cột -----
+  \fill[BKTemplate, rounded corners=2pt] (1.75,5.05) rectangle +(2.88,0.42);
+  \node[font=\scriptsize\bfseries, text=white] at (3.23,5.26) {Video};
+  \fill[BKTemplate, rounded corners=2pt] (4.8,5.05) rectangle +(2.88,0.42);
+  \node[font=\scriptsize\bfseries, text=white] at (6.28,5.26) {Music};
+  \fill[BKTemplate, rounded corners=2pt] (7.85,5.05) rectangle +(2.88,0.42);
+  \node[font=\scriptsize\bfseries, text=white] at (9.32,5.26) {News};
+  \fill[BKTemplate, rounded corners=2pt] (10.9,5.05) rectangle +(2.88,0.42);
+  \node[font=\scriptsize\bfseries, text=white] at (12.38,5.26) {Games};
+  % ----- Header hàng -----
+  \fill[BKTemplate, rounded corners=2pt] (0.05,3.9) rectangle +(1.6,1.05);
+  \node[font=\scriptsize\bfseries, text=white, rotate=90] at (0.85,4.43) {Video};
+  \fill[BKTemplate, rounded corners=2pt] (0.05,2.8) rectangle +(1.6,1.05);
+  \node[font=\scriptsize\bfseries, text=white, rotate=90] at (0.85,3.33) {Music};
+  \fill[BKTemplate, rounded corners=2pt] (0.05,1.7) rectangle +(1.6,1.05);
+  \node[font=\scriptsize\bfseries, text=white, rotate=90] at (0.85,2.23) {News};
+  \fill[BKTemplate, rounded corners=2pt] (0.05,0.6) rectangle +(1.6,1.05);
+  \node[font=\scriptsize\bfseries, text=white, rotate=90] at (0.85,1.13) {Games};
+  % ----- Đường chéo -----
+  \fill[TextGray!8, rounded corners=2pt] (1.75,3.9) rectangle +(2.88,1.05);
+  \node[font=\tiny, text=TextGray] at (3.19,4.43) {--};
+  \fill[TextGray!8, rounded corners=2pt] (4.8,2.8) rectangle +(2.88,1.05);
+  \node[font=\tiny, text=TextGray] at (6.24,3.33) {--};
+  \fill[TextGray!8, rounded corners=2pt] (7.85,1.7) rectangle +(2.88,1.05);
+  \node[font=\tiny, text=TextGray] at (9.29,2.23) {--};
+  \fill[TextGray!8, rounded corners=2pt] (10.9,0.6) rectangle +(2.88,1.05);
+  \node[font=\tiny, text=TextGray] at (12.34,1.13) {--};
+  % ----- Các ô chuyển -----
+  \draw[rounded corners=2pt, draw=TextGray!40, fill=white, thick] (4.8,3.9) rectangle +(2.88,1.05);
+  \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (4.90,4.82) {{\bfseries\textcolor{BKTemplate}{C1}} Video thu nhỏ nổi; hỏi 2 lựa chọn + tick ``Không hỏi lại''};
+  \draw[rounded corners=2pt, draw=TextGray!40, fill=white, thick] (7.85,3.9) rectangle +(2.88,1.05);
+  \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (7.95,4.82) {{\bfseries\textcolor{BKTemplate}{C3}} Video nổi nhãn ``Đang phát''; rời News hiện thẻ ``Đang đọc''};
+  \draw[rounded corners=2pt, draw=TextGray!40, fill=white, thick] (10.9,3.9) rectangle +(2.88,1.05);
+  \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (11.00,4.82) {{\bfseries\textcolor{BKTemplate}{C5}} Chia màn hai phần; video tua và dừng được};
+  \draw[rounded corners=2pt, draw=TextGray!40, fill=white, thick] (1.75,2.8) rectangle +(2.88,1.05);
+  \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (1.85,3.72) {{\bfseries\textcolor{BKTemplate}{C2}} Mở video: hỏi 2 lựa chọn + tick ``Không hỏi lại''};
+  \draw[rounded corners=2pt, draw=TextGray!40, fill=white, thick] (7.85,2.8) rectangle +(2.88,1.05);
+  \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (7.95,3.72) {{\bfseries\textcolor{BKTemplate}{C7}} Nhạc vẫn phát; dock hiện ở mọi tab kể cả trình đọc};
+  \draw[rounded corners=2pt, draw=TextGray!40, fill=white, thick] (10.9,2.8) rectangle +(2.88,1.05);
+  \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (11.00,3.72) {{\bfseries\textcolor{BKTemplate}{C9}} Nhạc vẫn phát; âm game tự giảm, không đè tiếng};
+  \draw[rounded corners=2pt, draw=TextGray!40, fill=white, thick] (1.75,1.7) rectangle +(2.88,1.05);
+  \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (1.85,2.62) {{\bfseries\textcolor{BKTemplate}{C4}} Thẻ ``Đang đọc'' nổi mọi tab (vào game ẩn); chạm quay đúng chỗ};
+  \draw[rounded corners=2pt, draw=TextGray!40, fill=white, thick] (4.8,1.7) rectangle +(2.88,1.05);
+  \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (4.90,2.62) {{\bfseries\textcolor{BKTemplate}{C8}} Thẻ ``Đang đọc'' nổi; quay lại bài bằng một chạm};
+  \draw[rounded corners=2pt, draw=TextGray!40, fill=white, thick] (10.9,1.7) rectangle +(2.88,1.05);
+  \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (11.00,2.62) {{\bfseries\textcolor{BKTemplate}{C11}} Thẻ ``Đang đọc'' nổi; game chạy bình thường};
+  \draw[rounded corners=2pt, draw=TextGray!40, fill=white, thick] (1.75,0.6) rectangle +(2.88,1.05);
+  \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (1.85,1.52) {{\bfseries\textcolor{BKTemplate}{C6}} Ván game tự tạm dừng, giữ ván dở};
+  \draw[rounded corners=2pt, draw=TextGray!40, fill=white, thick] (4.8,0.6) rectangle +(2.88,1.05);
+  \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (4.90,1.52) {{\bfseries\textcolor{BKTemplate}{C10}} Ván tạm dừng; quay lại, ván dở tự hiện lại};
+  \draw[rounded corners=2pt, draw=TextGray!40, fill=white, thick] (7.85,0.6) rectangle +(2.88,1.05);
+  \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (7.95,1.52) {{\bfseries\textcolor{BKTemplate}{C12}} Game tạm dừng, giữ ván dở; rời News thẻ đọc nổi};
+\end{tikzpicture}
+\end{center}
+\vspace{0.3mm}
+{\tiny\color{TextGray} Ngoài ma trận: C13~--~nhạc nhường TTS ``Nghe tin'' $\cdot$ C14~--~trích MP3 $\cdot$ C15~--~siêu playlist (case đặc biệt, một chiều).}
+\end{frame}
+
+% ------------------------------------------------------------
+\subsection{Quy tắc xử lý xung đột âm thanh}
+% ------------------------------------------------------------
+\begin{frame}{Quy tắc xử lý xung đột âm thanh}
+\begin{columns}[T]
+\begin{column}{0.54\textwidth}
+\footnotesize
+\begin{enumerate}\setlength{\itemsep}{4pt}
+\item \textbf{Cuộc gọi và báo thức} luôn cao nhất (audio focus của Android); mọi luồng của ứng dụng nhường ngay
+\item \textbf{Một nguồn tiếng chính duy nhất}: video mới phát làm nhạc nhường (C2), TTS làm nhạc nhường (C13), âm game tự giảm khi nhạc/video đang chạy (C9)
+\item \textbf{Ngoại lệ:} cặp video + nhạc được phát cùng lúc~--~hỏi người dùng (C1) vì cả hai đều là lựa chọn chủ động
+\item \textbf{Nhạc dock là luồng nền:} hiện trên mọi tab, nhường khi luồng chính cần tiếng, tiếp tục bằng một chạm
+\item \textbf{Không luồng vô hình:} mọi luồng thấy và điều khiển được từ dock mini player
+\end{enumerate}
+\end{column}
+\begin{column}{0.42\textwidth}
+\begin{block}{Gián đoạn từ bên ngoài}
+{\footnotesize
+\begin{itemize}\setlength{\itemsep}{2pt}
+\item \textbf{Cuộc gọi:} nhường $\leq$ 0,5~s; sau đó nhạc tự phát lại
+\item \textbf{Rút tai nghe:} nhạc và TTS dừng ngay, không phát loa
+\item \textbf{Mất mạng:} thử lại sau 5--15~s; game offline chơi tiếp
+\item \textbf{App bị đóng:} mở lại khôi phục đủ 4 vị trí trong 2~s
+\end{itemize}}
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ------------------------------------------------------------
+\subsection{Gamification: Vòng lặp giữ chân người dùng}
+% ------------------------------------------------------------
+\begin{frame}{Gamification: Vòng lặp giữ chân người dùng}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\footnotesize
+\begin{block}{Kiếm điểm}
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item Nhiệm vụ hằng ngày: \textbf{+20}
+\item Quiz cuối video: \textbf{20+5×(combo$-$1)}, max +50
+\item Quiz bài báo: \textbf{+15}/câu
+\item Quiz kiến thức: thang \textbf{5--60}
+\item 2048: score/20, chạm 2048 \textbf{+100}
+\item Thắng TTT: Dễ 10 / Vừa 20 / Khó 40
+\item Rắn: +2/mồi; Beat Tiles: score/2
+\item Đoán bài hát: +10; Trích MP3: +5
+\item Thử thách hằng ngày: \textbf{50+5×streak} (max 85)
+\end{itemize}
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\footnotesize
+\begin{block}{Tiêu điểm}
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item Cho thú cưng ăn: \textbf{$-$30}
+\item Mở khóa game: Snake 300, Beat Tiles 500
+\item Khung avatar: Đồng 200, Bạc 400, Vàng 800
+\item Phụ kiện pet: 50--100
+\end{itemize}
+\end{block}
+\vspace{2pt}
+\begin{block}{Tiến hoá thú cưng}
+\textbf{Trứng} (0đ, nở sau 3 nhiệm vụ) $\rightarrow$ \textbf{Bé cưng} (500đ, gà con vàng)\\
+$\rightarrow$ \textbf{Thiếu niên} (2.000đ) $\rightarrow$ \textbf{Trưởng thành} (5.000đ, vẹt)
+\end{block}
+\vspace{2pt}
+\begin{block}{Huy hiệu: 15}
+6 huy hiệu hồ sơ + 9 huy hiệu game, có progress bar
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ------------------------------------------------------------
+\subsection{User Stories}
+% ------------------------------------------------------------
+\begin{frame}{User Stories --- Khung yêu cầu chức năng}
+\small
+\begin{itemize}\setlength{\itemsep}{3pt}
+\item \textbf{45 user story} kèm acceptance criteria $=$ \textbf{yêu cầu chức năng}
+\item Mẫu: ``\textbf{Là} \textit{vai trò}, \textbf{tôi muốn} \textit{hành động}, \textbf{để} \textit{lợi ích}''
+\item Điều kiện kiểm tra: ``\textbf{Cho trước / Khi / Thì}''
+\item Mức ưu tiên \textbf{Must / Should / Could}; gắn mã tính năng
+\end{itemize}
+\end{frame}
+
+\begin{frame}{User story kèm Acceptance Criteria}
+\linespread{0.9}
+{\tiny\color{TextGray} Mỗi story kèm điều kiện kiểm tra mẫu ``\textbf{Cho trước / Khi / Thì}''~--~ba ví dụ tiêu biểu.}
+\vspace{1mm}
+
+{\scriptsize\bfseries\color{BKTemplate} US-VID-02}~~{\tiny Must (F-VID-08)}\\
+{\tiny Là người dùng đang xem video, tôi muốn video tự thu nhỏ về một góc màn hình khi tôi chuyển sang tab khác, để vừa xem vừa đọc tin hoặc làm việc khác.}\\
+{\tiny\textbf{Kiểm tra:} Cho trước video đang phát, khi chuyển sang tab bất kỳ khác, thì video chuyển thành cửa sổ nổi góc màn hình, tiếp tục phát, có ba nút Mở rộng, Tạm dừng và Đóng; chạm Mở rộng phóng to trở lại đúng vị trí.}
+
+\vspace{2mm}
+{\scriptsize\bfseries\color{BKTemplate} US-CROSS-05}~~{\tiny Must}\\
+{\tiny Là người dùng nhận cuộc gọi, tôi muốn mọi nội dung tự nhường và trở lại đúng chỗ sau cuộc gọi, để không phải tìm lại vị trí cũ.}\\
+{\tiny\textbf{Kiểm tra:} Mọi luồng tạm dừng trong 0,5 giây khi có cuộc gọi; sau đó: nhạc tự phát lại, video hiện nút ``Tiếp tục'' từ vị trí sai lệch tối đa 2 giây, game mở lại đúng ván dở; có tuỳ chọn tắt tự phát lại.}
+
+\vspace{2mm}
+{\scriptsize\bfseries\color{BKTemplate} US-GAME-02}~~{\tiny Must (F-GAME-02)}\\
+{\tiny Là người dùng, tôi muốn chơi game đoán bài hát từ thư viện, để thử thách thấy mình thuộc bài đến đâu.}\\
+{\tiny\textbf{Kiểm tra:} Mỗi ván 10 câu, nghe 5 giây rồi chọn 1 trong 4 đáp án; đúng +10 điểm, sai hiện đáp án; hết ván hiện tổng và cộng điểm hệ thống một lần.}
+
+\vfill
+{\tiny\color{TextGray} 45/45 story đều có điều kiện kiểm tra dạng này~--~bảng đầy đủ trong báo cáo.}
+\end{frame}
+
+% ===== User Stories: Video =====
+\begin{frame}{User Stories: Video (1/3)}
+\linespread{0.85}
+\begin{block}{\scriptsize\bfseries US-VID-01}~~Must \tiny(F-VID-01)
+{\scriptsize Là người dùng, tôi muốn chạm một video trong feed và xem ngay trong ứng dụng, để xem video không bị gián đoạn bởi việc chuyển app.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-VID-02}~~Must \tiny(F-VID-08)
+{\scriptsize Là người dùng đang xem video, tôi muốn video tự thu nhỏ về một góc màn hình khi tôi chuyển sang tab khác, để vừa xem vừa đọc tin hoặc làm việc khác.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-VID-03}~~Must \tiny(F-VID-14)
+{\scriptsize Là người dùng, tôi muốn tua nhanh bằng cú chạm đôi và đổi tốc độ phát, để bỏ qua đoạn không cần xem.}
+\end{block}
+\vspace{1pt}
+\end{frame}
+
+\begin{frame}{User Stories: Video (2/3)}
+\linespread{0.85}
+\begin{block}{\scriptsize\bfseries US-VID-04}~~Should \tiny(F-VID-02)
+{\scriptsize Là người dùng có sở thích riêng, tôi muốn feed video ưu tiên theo chuyên mục tôi chọn, để mở app là thấy nội dung mình muốn.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-VID-05}~~Should \tiny(F-VID-04, F-VID-05)
+{\scriptsize Là người dùng, tôi muốn lưu video để xem sau và quay lại đúng chỗ tôi dừng, để không mất dấu nội dung.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-VID-06}~~Should \tiny(F-VID-10)
+{\scriptsize Là người dùng, tôi muốn nhấn giữ một video để trích phần âm thanh thành tệp mp3 trong kho nhạc của tôi, để nghe được nội dung đó khi không tiện nhìn màn hình.}
+\end{block}
+\vspace{1pt}
+\end{frame}
+
+\begin{frame}{User Stories: Video (3/3)}
+\linespread{0.85}
+\begin{block}{\scriptsize\bfseries US-VID-07}~~Could \tiny(F-VID-15)
+{\scriptsize Là người dùng thích thử thách, tôi muốn có gợi ý "chơi game liên quan video này" ở cuối video, để giải trí chủ động sau khi xem.}
+\end{block}
+\vspace{1pt}
+\end{frame}
+
+% ===== User Stories: Nhạc =====
+\begin{frame}{User Stories: Nhạc (1/3)}
+\linespread{0.85}
+\begin{block}{\scriptsize\bfseries US-MUS-01}~~Must \tiny(F-MUS-01)
+{\scriptsize Là người dùng, tôi muốn chọn một bài từ thư viện và điều khiển phát đầy đủ, để nghe nhạc như ở một ứng dụng nhạc thực thụ.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-MUS-02}~~Must \tiny(F-MUS-02)
+{\scriptsize Là người dùng, tôi muốn bài nhạc đang phát hiện thành một dock mini ở mọi màn hình chính, để nghe nhạc trong khi dùng phân hệ khác.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-MUS-03}~~Must \tiny(F-COM-14, F-MUS-10)
+{\scriptsize Là người dùng, tôi muốn hệ thống hỏi rõ khi tôi mở một luồng âm thanh khác trong khi đang nghe nhạc, để âm thanh không tự giành nhau gây khó chịu.}
+\end{block}
+\vspace{1pt}
+\end{frame}
+
+\begin{frame}{User Stories: Nhạc (2/3)}
+\linespread{0.85}
+\begin{block}{\scriptsize\bfseries US-MUS-04}~~Must \tiny(F-MUS-04, F-MUS-05)
+{\scriptsize Là người dùng, tôi muốn tự tạo playlist và sắp hàng chờ phát, để nghe nhạc theo trình tự mình muốn.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-MUS-05}~~Should \tiny(F-MUS-07)
+{\scriptsize Là người dùng, tôi muốn kho nhạc cá nhân chứa các tệp tôi trích từ video, để quản lý tập trung tại một nơi.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-MUS-06}~~Could \tiny(F-MUS-03)
+{\scriptsize Là người dùng, tôi muốn nhạc tiếp tục phát khi tôi rời ứng dụng hoặc khoá màn hình, để nghe nhạc khi làm việc khác.}
+\end{block}
+\vspace{1pt}
+\end{frame}
+
+\begin{frame}{User Stories: Nhạc (3/3)}
+\linespread{0.85}
+\begin{block}{\scriptsize\bfseries US-MUS-07}~~Could \tiny(F-MUS-06)
+{\scriptsize Là người dùng, tôi muốn tìm bài hát theo tên, nghệ sĩ hoặc album, để tới được nội dung mình muốn nhanh hơn là lướt.}
+\end{block}
+\vspace{1pt}
+\end{frame}
+
+% ===== User Stories: Tin tức =====
+\begin{frame}{User Stories: Tin tức (1/2)}
+\linespread{0.85}
+\begin{block}{\scriptsize\bfseries US-NEWS-01}~~Must \tiny(F-NEWS-01)
+{\scriptsize Là người dùng, tôi muốn feed tin được sắp theo chuyên mục tôi quan tâm, để cập nhật tin nhanh và đủ.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-NEWS-02}~~Must \tiny(F-NEWS-02)
+{\scriptsize Là người dùng đọc lâu, tôi muốn trình đọc sạch và chỉnh cỡ chữ, để đọc không mỏi mắt.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-NEWS-03}~~Must \tiny(F-NEWS-07)
+{\scriptsize Là người dùng, tôi muốn vừa đọc bài báo vừa nghe nhạc nền, để không phải chọn giữa hai việc.}
+\end{block}
+\vspace{1pt}
+\end{frame}
+
+\begin{frame}{User Stories: Tin tức (2/2)}
+\linespread{0.85}
+\begin{block}{\scriptsize\bfseries US-NEWS-04}~~Should \tiny(F-NEWS-05)
+{\scriptsize Là người dùng trên đường đi, tôi muốn chuyển một bài báo thành bản audio, để tiếp tục "đọc" tin khi không nhìn được màn hình.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-NEWS-05}~~Should \tiny(F-NEWS-03)
+{\scriptsize Là người dùng, tôi muốn lưu bài đọc sau, để đọc đúng lúc mình rảnh.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-NEWS-06}~~Should \tiny(F-NEWS-08, F-GAME-03)
+{\scriptsize Là người dùng thích thử thách, tôi muốn một quiz 3 câu hỏi sinh từ bài báo tôi vừa đọc, để vừa đọc vừa chơi và nhận điểm.}
+\end{block}
+\vspace{1pt}
+\end{frame}
+
+% ===== User Stories: Trò chơi =====
+\begin{frame}{User Stories: Trò chơi (1/2)}
+\linespread{0.85}
+\begin{block}{\scriptsize\bfseries US-GAME-01}~~Must \tiny(F-GAME-01)
+{\scriptsize Là người dùng, tôi muốn một tab tập hợp các minigame và trạng thái mở khoá, để biết được chơi gì hôm nay.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-GAME-02}~~Must \tiny(F-GAME-02)
+{\scriptsize Là người dùng, tôi muốn chơi game đoán bài hát từ thư viện, để thử thách thấy mình thuộc bài đến đâu.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-GAME-03}~~Must \tiny(F-GAME-09)
+{\scriptsize Là người dùng, tôi muốn điểm thưởng tích lũy dùng chung cho toàn app, để mọi hoạt động đều có giá trị.}
+\end{block}
+\vspace{1pt}
+\end{frame}
+
+\begin{frame}{User Stories: Trò chơi (2/2)}
+\linespread{0.85}
+\begin{block}{\scriptsize\bfseries US-GAME-04}~~Could \tiny(F-GAME-08)
+{\scriptsize Là người dùng, tôi muốn vừa chơi game vừa xem video trên hai nửa màn hình, để giải trí song song trọn vẹn hai phân hệ.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-GAME-05}~~Could \tiny(F-GAME-07)
+{\scriptsize Là người dùng, tôi muốn bảng xếp hạng tuần, để có động lực cạnh tranh.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-GAME-06}~~Should \tiny(F-GAME-05/10)
+{\scriptsize Là người dùng, tôi muốn một game phổ biến, khởi động nhanh và không cần biết nội dung (Snake hoặc 2048), để có chỗ vui một phút chờ đợi mà vẫn góp được điểm.}
+\end{block}
+\vspace{1pt}
+\end{frame}
+
+% ===== User Stories: Dùng chung =====
+\begin{frame}{User Stories: Dùng chung (1/4)}
+\linespread{0.85}
+\begin{block}{\scriptsize\bfseries US-COM-01}~~Must \tiny(F-COM-01)
+{\scriptsize Là người dùng, tôi muốn đăng ký một tài khoản duy nhất cho cả 4 phân hệ, để không phải quản lý nhiều tài khoản.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-COM-02}~~Must \tiny(F-COM-02)
+{\scriptsize Là người dùng mới, tôi muốn chọn nhanh sở thích lần đầu mở app, để nội dung phù hợp với tôi từ đầu.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-COM-03}~~Must \tiny(F-COM-04, 05, 06)
+{\scriptsize Là người dùng, tôi muốn nhiệm vụ hằng ngày và chuỗi streak, để có lý do mở app mỗi ngày.}
+\end{block}
+\vspace{1pt}
+\end{frame}
+
+\begin{frame}{User Stories: Dùng chung (2/4)}
+\linespread{0.85}
+\begin{block}{\scriptsize\bfseries US-COM-04}~~Should \tiny(F-COM-07)
+{\scriptsize Là người dùng, tôi muốn một thú cưng ảo nuôi bằng điểm thưởng, để điểm kiếm được có mục tiêu để tiêu.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-COM-05}~~Should \tiny(F-COM-15, F-COM-09)
+{\scriptsize Là người dùng, tôi muốn đổi điểm lấy quà (mở game mới, đồ pet, khung avatar), để thời gian dành cho ứng dụng được trả lại bằng phần thưởng hữu hình.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-COM-06}~~Could \tiny(F-COM-10)
+{\scriptsize Là người dùng, tôi muốn tổng kết tháng kiểu "wrapped" để chia sẻ, để có nội dung độc đáo khoe lên mạng.}
+\end{block}
+\vspace{1pt}
+\end{frame}
+
+\begin{frame}{User Stories: Dùng chung (3/4)}
+\linespread{0.85}
+\begin{block}{\scriptsize\bfseries US-COM-07}~~Must \tiny(F-COM-13)
+{\scriptsize Là người dùng, tôi muốn cài đặt sáng/tối, ngôn ngữ và tiết kiệm dữ liệu, để app tôn trọng thiết bị và gói dữ liệu của tôi.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-COM-08}~~Should \tiny(F-COM-09)
+{\scriptsize Là người dùng, tôi muốn đổi khung avatar theo mốc thành tích tôi đạt được, để hồ sơ thể hiện được quá trình dùng của mình.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-COM-09}~~Could \tiny(F-COM-12)
+{\scriptsize Là người dùng dễ quên, tôi muốn một lời nhắc nhẹ lúc buổi tối nếu hôm nay chưa hoàn thành nhiệm vụ nào, để không đánh mất streak đang có.}
+\end{block}
+\vspace{1pt}
+\end{frame}
+
+\begin{frame}{User Stories: Dùng chung (4/4)}
+\linespread{0.85}
+\begin{block}{\scriptsize\bfseries US-COM-10}~~Should \tiny(F-COM-18)
+{\scriptsize Là người mới muốn thử, tôi muốn dùng thử một phiên không cần đăng ký, để quyết định đăng ký sau khi đã cảm nhận được ứng dụng.}
+\end{block}
+\vspace{1pt}
+\end{frame}
+
+% ===== User Stories: Liên phân hệ =====
+\begin{frame}{User Stories: Liên phân hệ (1/3)}
+\linespread{0.85}
+\begin{block}{\scriptsize\bfseries US-CROSS-01}~~Must \tiny(F-MUS-02)
+{\scriptsize Là người dùng, tôi muốn dock mini player xuất hiện ở mọi tab khi có nội dung đang phát, để luôn biết và điều khiển được đang nghe gì bất kể đang ở đâu.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-CROSS-02}~~Must \tiny(F-COM-14, F-MUS-10)
+{\scriptsize Là người dùng, tôi muốn được hỏi mỗi khi hai luồng âm thanh đánh nhau, và có nút để ngừng câu hỏi khi tôi chán, để sự kiểm soát nằm ở tôi.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-CROSS-03}~~Should \tiny(F-VID-08)
+{\scriptsize Là người dùng đang xem video, tôi muốn video theo tôi sang tab khác dưới dạng PIP, để không bỏ sót nội dung vì đổi việc.}
+\end{block}
+\vspace{1pt}
+\end{frame}
+
+\begin{frame}{User Stories: Liên phân hệ (2/3)}
+\linespread{0.85}
+\begin{block}{\scriptsize\bfseries US-CROSS-04}~~Could \tiny(F-GAME-08)
+{\scriptsize Là người dùng, tôi muốn vừa chơi game vừa theo dõi video trên hai nửa màn hình, để giải trí song song thật sự.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-CROSS-05}~~Must
+{\scriptsize Là người dùng nhận cuộc gọi, tôi muốn mọi nội dung tự nhường và trở lại đúng chỗ sau cuộc gọi, để không phải tìm lại vị trí cũ.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-CROSS-06}~~Must
+{\scriptsize Là người dùng dùng tai nghe, tôi muốn ứng dụng dừng âm thanh khi tôi rút tai nghe, để không phát ra loa ngoài ngoài ý muốn.}
+\end{block}
+\vspace{1pt}
+\end{frame}
+
+\begin{frame}{User Stories: Liên phân hệ (3/3)}
+\linespread{0.85}
+\begin{block}{\scriptsize\bfseries US-CROSS-07}~~Should \tiny(F-VID-05, F-COM-16)
+{\scriptsize Là người dùng, tôi muốn ứng dụng khôi phục đúng chỗ tôi dừng cả khi hệ điều hành đã từng hủy app, để phiên dùng của tôi không bị xóa sạch.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-CROSS-08}~~Should \tiny(F-NEWS-05)
+{\scriptsize Là người dùng đang nghe nhạc, tôi muốn bấm "Nghe tin" mà không bị cướp bài đang nghe, để hai việc nhập vào một hàng phát trơn tru.}
+\end{block}
+\vspace{1pt}
+\begin{block}{\scriptsize\bfseries US-CROSS-09}~~Could \tiny(F-MUS-09)
+{\scriptsize Là người dùng, tôi muốn một hàng phát trộn bài hát, tệp trích từ video và audio tin, để cả ba loại nội dung cùng chảy trong một trải nghiệm.}
+\end{block}
+\vspace{1pt}
+\end{frame}
+
+
+
+
+
+% ------------------------------------------------------------
+\subsection{Nguồn tiền}
+% ------------------------------------------------------------
+\begin{frame}{Nguồn tiền}
+\footnotesize
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{\scriptsize\bfseries Quảng cáo (AdMob) --- nguồn chính}
+{\tiny
+\begin{itemize}\setlength{\itemsep}{2pt}
+\item Native trong feed, gắn nhãn ``Quảng cáo''
+\item Interstitial sau khi hết ván game / làm xong quiz
+\item Rewarded: tự bấm xem để nhận điểm, lượt chơi, cứu streak
+\end{itemize}}
+\end{block}
+\begin{block}{\scriptsize\bfseries Vật phẩm trang trí (IAP)}
+{\tiny
+\begin{itemize}\setlength{\itemsep}{2pt}
+\item Khung avatar, trang phục thú cưng, theme màu
+\item Chỉ bán đồ trang trí~--~không bán điểm hay đồ giúp thắng game
+\end{itemize}}
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{block}{\scriptsize\bfseries Premium (thuê bao tháng)}
+{\tiny
+\begin{itemize}\setlength{\itemsep}{2pt}
+\item Không quảng cáo, tải nội dung offline
+\item Nghe tin TTS không giới hạn
+\item Khung avatar độc quyền mỗi tháng
+\end{itemize}}
+\end{block}
+\begin{block}{\scriptsize\bfseries Affiliate (phụ)}
+{\tiny
+\begin{itemize}\setlength{\itemsep}{2pt}
+\item Link mua hàng cuối bài tin theo chủ đề sản phẩm
+\item Hoa hồng theo đơn~--~thu nhập phụ
+\end{itemize}}
+\end{block}
+\end{column}
+\end{columns}
+\vspace{1.5mm}
+{\tiny\color{TextGray}\textbf{Phí Google khi có doanh thu:} Google Play giữ 15\% trên Premium và IAP; với tài khoản cá nhân, Google còn thu thêm 5\% VAT và khấu trừ 5\% thuế. AdMob không thu phí, nhưng phải tích đủ \$100 mới được rút.}
+\end{frame}
+
