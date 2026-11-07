@@ -1,0 +1,140 @@
+\subsection{Mô hình trạng thái}
+\label{sec:state-charts}
+
+Ba đối tượng có vòng đời phức tạp nhất của OneSpace được mô hình hoá bằng máy trạng thái: cách video hiển thị khi người dùng đổi phân hệ, vòng đời bộ phát nhạc, và quy tắc phân xử âm thanh được ghi nhớ. Với mỗi sơ đồ, bảng mô tả trạng thái và bảng kích thích đi kèm xác định rõ sự kiện, nguồn phát và hành động.
+
+\input{sections/4-technical-architecture/state-figures}
+
+\begingroup\small\renewcommand{\arraystretch}{1.12}\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.09\linewidth}>{\RaggedRight\arraybackslash}p{0.20\linewidth}>{\RaggedRight\arraybackslash}p{0.63\linewidth}}
+\caption{Mô tả trạng thái của video khi hiển thị}
+\label{tab:state-video}\\
+\toprule
+\textbf{Mã} & \textbf{Trạng thái} & \textbf{Mô tả và hành vi} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mã} & \textbf{Trạng thái} & \textbf{Mô tả và hành vi} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+S0 & Không hoạt động & Không có video được mở; engine ở trạng thái rỗi. \\
+S1 & Trong trình phát & Video phát toàn màn hình tại màn chi tiết; điều khiển đầy đủ. \\
+S2 & Cửa sổ nổi & Video thu nhỏ ở góc khi người dùng rời màn hình; vẫn phát, dùng chung engine. \\
+S3 & Chia đôi màn hình & Video chiếm dải trên, nội dung phân hệ chiếm phần dưới (X7). \\
+S4 & Tạm dừng & Giữ nguyên vị trí; có thể phát tiếp bất cứ lúc nào. \\
+S5 & Kết thúc & Video dừng hẳn; vị trí được lưu; tuỳ ngữ cảnh thì thêm vào Xem sau. \\
+\end{longtable}
+
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.24\linewidth}>{\RaggedRight\arraybackslash}p{0.16\linewidth}>{\RaggedRight\arraybackslash}p{0.17\linewidth}>{\RaggedRight\arraybackslash}p{0.35\linewidth}}
+\caption{Kích thích chuyển trạng thái — video khi hiển thị}
+\label{tab:state-video-stim}\\
+\toprule
+\textbf{Kích thích} & \textbf{Nguồn} & \textbf{Chuyển trạng thái} & \textbf{Hành động} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Kích thích} & \textbf{Nguồn} & \textbf{Chuyển trạng thái} & \textbf{Hành động} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Chạm thẻ video & Người dùng & S0 → S1 & Đọc checkpoint và mở stream tại vị trí đã lưu. \\
+Rời màn hình player & Điều hướng & S1 → S2 & Hiện cửa sổ nổi, tiếp tục phát. \\
+Mở rộng & Người dùng (cửa sổ nổi) & S2 → S1 & Về trình phát, giữ vị trí. \\
+Chọn chia đôi & Người dùng & S2 → S3 & Dồn video lên dải trên 34\%. \\
+Thu nhỏ & Người dùng & S3 → S2 & Trả video về cửa sổ nổi. \\
+Tạm dừng / phát tiếp & Người dùng & S1,S2 $\leftrightarrow$ S4 & Dừng hoặc tiếp tục phát. \\
+Đóng cửa sổ nổi & Người dùng & S2 → S5 & Dừng, lưu vị trí, thêm Xem sau. \\
+Video kết thúc & Player & S1,S2 → S5 & Hiện lời mời quiz nếu có (X3). \\
+Lỗi stream & Player & S1 → S4 & Thông báo và chờ thử lại 5--15 giây. \\
+\end{longtable}
+\endgroup
+
+\begingroup\small\renewcommand{\arraystretch}{1.12}\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.09\linewidth}>{\RaggedRight\arraybackslash}p{0.20\linewidth}>{\RaggedRight\arraybackslash}p{0.63\linewidth}}
+\caption{Mô tả trạng thái của bộ phát nhạc}
+\label{tab:state-music}\\
+\toprule
+\textbf{Mã} & \textbf{Trạng thái} & \textbf{Mô tả và hành vi} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mã} & \textbf{Trạng thái} & \textbf{Mô tả và hành vi} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+M0 & Rỗi & Chưa có bài nào được nạp. \\
+M1 & Đã nạp, chờ phát & Trạng thái sau khởi động lạnh: bài cuối được nạp ở 0:00, chưa phát. \\
+M2 & Đang phát & Nhạc phát; dock hiện trên mọi tab trừ Now Playing. \\
+M3 & Tạm dừng & Giữ vị trí; xảy ra khi người dùng dừng hoặc khi TTS bắt đầu. \\
+M4 & Kết thúc & Hàng đợi hết; chờ người dùng chọn bài mới. \\
+M5 & Lỗi & Không mở được stream; hàng đợi được giữ để thử lại. \\
+\end{longtable}
+
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.24\linewidth}>{\RaggedRight\arraybackslash}p{0.16\linewidth}>{\RaggedRight\arraybackslash}p{0.17\linewidth}>{\RaggedRight\arraybackslash}p{0.35\linewidth}}
+\caption{Kích thích chuyển trạng thái — bộ phát nhạc}
+\label{tab:state-music-stim}\\
+\toprule
+\textbf{Kích thích} & \textbf{Nguồn} & \textbf{Chuyển trạng thái} & \textbf{Hành động} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Kích thích} & \textbf{Nguồn} & \textbf{Chuyển trạng thái} & \textbf{Hành động} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Chọn bài & Người dùng & M0,M1 → M2 & Nạp hàng đợi, phát; phân xử âm thanh nếu video đang phát (X0). \\
+Khởi động lạnh & Hệ thống & → M1 & Nạp bài cuối ở 0:00, không tự phát. \\
+Tạm dừng & Người dùng & M2 → M3 & Dừng phát, giữ vị trí. \\
+Bắt đầu TTS & Người dùng (nghe tin) & M2 → M3 & Nhường luồng tiếng cho TTS. \\
+Phát tiếp trên dock & Người dùng & M3 → M2 & Tiếp tục từ chỗ dừng. \\
+Hết bài trong hàng đợi & Player & M2 → M2 & Tự chuyển bài kế tiếp. \\
+Hết hàng đợi & Player & M2 → M4 & Dừng; chờ chọn bài mới. \\
+Lỗi stream & Player & M2 → M5 & Thông báo lỗi, giữ hàng đợi. \\
+\end{longtable}
+\endgroup
+
+\begingroup\small\renewcommand{\arraystretch}{1.12}\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.09\linewidth}>{\RaggedRight\arraybackslash}p{0.20\linewidth}>{\RaggedRight\arraybackslash}p{0.63\linewidth}}
+\caption{Mô tả trạng thái của quy tắc xung đột âm thanh}
+\label{tab:state-rule}\\
+\toprule
+\textbf{Mã} & \textbf{Trạng thái} & \textbf{Mô tả và hành vi} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mã} & \textbf{Trạng thái} & \textbf{Mô tả và hành vi} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+R0 & Chưa có quy tắc & Mỗi lần xung đột đều hỏi người dùng (trạng thái mặc định). \\
+R1 & Ghi nhớ tắt tiếng video & Video tiếp tục hiển thị nhưng âm lượng bằng không khi xung đột. \\
+R2 & Ghi nhớ dừng video & Video dừng và lưu vị trí khi xung đột. \\
+R3 & Ưu tiên video & Không phát nhạc khi video đang phát; chỉ đặt được từ Cài đặt. \\
+\end{longtable}
+
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.24\linewidth}>{\RaggedRight\arraybackslash}p{0.16\linewidth}>{\RaggedRight\arraybackslash}p{0.17\linewidth}>{\RaggedRight\arraybackslash}p{0.35\linewidth}}
+\caption{Kích thích chuyển trạng thái — quy tắc xung đột âm thanh}
+\label{tab:state-rule-stim}\\
+\toprule
+\textbf{Kích thích} & \textbf{Nguồn} & \textbf{Chuyển trạng thái} & \textbf{Hành động} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Kích thích} & \textbf{Nguồn} & \textbf{Chuyển trạng thái} & \textbf{Hành động} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Chọn kèm tích “Không hỏi lại” & Người dùng (popup C1) & R0 → R1,R2 & Ghi quy tắc vào DataStore. \\
+Chọn không tích & Người dùng (popup C1) & R0 → R0 & Chỉ áp dụng cho lần đó. \\
+Đổi trong Cài đặt & Người dùng & R0..R3 → R1,R2,R3 & Cập nhật quy tắc đang lưu. \\
+Chọn “Luôn hỏi” & Người dùng (Cài đặt) & R1,R2,R3 → R0 & Xoá quy tắc đã lưu. \\
+\end{longtable}
+\endgroup
+

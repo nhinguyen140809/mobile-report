@@ -12,9 +12,9 @@ MVP của OneSpace gồm toàn bộ tính năng trong bảng~\ref{tab:mvp-scope-
     \textbf{Phân hệ} & \textbf{Tính năng trong MVP} \\
     \midrule
     Video & Xem video (F-VID-01); feed theo sở thích (F-VID-02); tìm kiếm (F-VID-03); PIP (F-VID-08); tua nhanh double-tap (F-VID-14); watchlist + tiếp tục từ chỗ dừng (F-VID-04, F-VID-05); chọn chất lượng Auto/1080p/720p/360p (F-VID-06); audio-only (F-VID-09); tải video tùy bản quyền (F-VID-07); trích mp3 (F-VID-10); chia sẻ link (F-VID-11); màn hồ sơ nghệ sĩ (F-VID-12); playlist video (F-VID-13); thẻ quiz cuối video (F-VID-15) \\
-    Music & Player đầy đủ (F-MUS-01); dock mini player (F-MUS-02); nhạc nền ngoài app (F-MUS-03); playlist + queue (F-MUS-04, F-MUS-05); tìm kiếm nhạc (F-MUS-06); kho nhạc cá nhân (F-MUS-07); gợi ý theo sở thích (F-MUS-08); audio focus (F-MUS-10); tải nhạc tùy bản quyền (F-MUS-12) \\
+    Music & Player đầy đủ (F-MUS-01); dock mini player (F-MUS-02); nhạc nền ngoài app (F-MUS-03); playlist + queue (F-MUS-04, F-MUS-05); tìm kiếm nhạc (F-MUS-06); kho nhạc cá nhân (F-MUS-07); gợi ý theo sở thích (F-MUS-08); siêu playlist (F-MUS-09); audio focus (F-MUS-10); tải nhạc tùy bản quyền (F-MUS-12) \\
     News & Feed theo sở thích (F-NEWS-01); trình đọc + đổi cỡ chữ (F-NEWS-02); tìm kiếm (F-NEWS-04); nghe tin TTS (F-NEWS-05); sắp xếp mới nhất/phổ biến (F-NEWS-06); nghe nhạc khi đọc (F-NEWS-07); quiz từ bài báo (F-NEWS-08); gợi ý bài liên quan (F-NEWS-09); thẻ nổi khi rời tab (F-NEWS-10) \\
-    Games & Hub minigame (F-GAME-01); đoán bài hát (F-GAME-02); quiz tin tức (F-GAME-03); Snake (F-GAME-12); bảng xếp hạng (F-GAME-06); game + video hai nửa màn (F-GAME-07); điểm thưởng khi thắng (F-GAME-08); Beat Tiles --- nốt nhạc rơi theo bài đang phát (F-GAME-13) \\
+    Games & Hub minigame (F-GAME-01); đoán bài hát (F-GAME-02); quiz tin tức (F-GAME-03); quiz kiến thức kiểu Ai là triệu phú (F-GAME-04); Snake (F-GAME-05); Beat Tiles --- nốt rơi theo BPM thật của bài đang phát (F-GAME-06); bảng xếp hạng (F-GAME-07); game + video hai nửa màn (F-GAME-08); điểm thưởng khi thắng (F-GAME-09); 2048 (F-GAME-10); Tic-Tac-Toe (F-GAME-11); thử thách hằng ngày (F-GAME-12); âm thanh và hiệu ứng game (F-GAME-13) \\
     Dùng chung & Tài khoản (F-COM-01); onboarding chọn sở thích (F-COM-02); hồ sơ + đổi avatar + khung (F-COM-03, F-COM-09); hệ điểm XP (F-COM-04); nhiệm vụ hằng ngày (F-COM-05); streak (F-COM-06); pet (F-COM-07); huy hiệu (F-COM-08); wrapped (F-COM-10); tìm kiếm xuyên nội dung (F-COM-11); nhắc nhiệm vụ (F-COM-12); cài đặt (F-COM-13); popup xung đột âm thanh (F-COM-14); cửa hàng đổi quà (F-COM-15); offline (F-COM-16); chế độ khách (F-COM-18) \\
     \bottomrule
 \end{tabularx}
@@ -25,8 +25,7 @@ MVP bao gồm đủ sáu trụ Winning Zone W1--W6: trụ W6 (wrapped~--~tổng 
 \textbf{Giai đoạn v2 (sau khi MVP hoàn tất).} Các tính năng còn lại chia theo lý do:
 
 \begin{itemize}
-    \item Rhythm game (F-GAME-04) và equalizer (F-MUS-11): giá trị thấp so với công sức.
-    \item Siêu playlist trộn nhạc, audio tin tức và video (F-MUS-09): đợi phản hồi từ người dùng thực tế trước khi làm.
+    \item Equalizer (F-MUS-11): giá trị thấp so với công sức.
     \item Thuật toán gợi ý học máy thật: MVP chỉ lọc theo sở thích khai báo.
     \item Thanh toán, gói Premium và quảng cáo: v1 phát hành miễn phí để đo hành vi người dùng.
 \end{itemize}
@@ -85,9 +84,9 @@ F-VID-08, F-COM-14, F-MUS-02 &
 Hỏi mỗi lần; tick Không hỏi lại để ghi nhớ \\
 \midrule
 C2 \newline B$\rightarrow$A \newline đang nghe nhạc, mở video &
-(1) Mở video khi nhạc đang phát: popup hai lựa chọn --- \textit{Tắt tiếng video, nhạc vẫn phát} hoặc \textit{Tắt tiếng nhạc, video có tiếng} --- kèm ô tick \textit{Không hỏi lại}; tick để ghi nhớ. \newline
-(2) Chọn tắt tiếng video: video mở có badge ``Tắt tiếng'', nhạc ở dock. \newline
-(3) Chọn tắt tiếng nhạc: video phát tiếng, nhạc tạm dừng ở dock, bấm Phát để nghe lại. &
+(1) Mở video khi nhạc đang phát: popup hai lựa chọn --- \textit{Tắt tiếng video} hoặc \textit{Dừng nhạc} --- kèm ô tick \textit{Không hỏi lại}; tick để ghi nhớ. \newline
+(2) Chọn tắt tiếng video: video mở có badge ``Tắt tiếng'', nhạc vẫn phát ở dock. \newline
+(3) Chọn dừng nhạc: video phát tiếng, nhạc dừng ở dock, bấm Phát để nghe lại. &
 F-VID-01, F-VID-09, F-MUS-02 &
 Luồng mới phát chiếm quyền; nhạc nhường thầm lặng \\
 \midrule
@@ -100,20 +99,21 @@ F-VID-08, F-NEWS-10 &
 PIP tự thu nhỏ khi rời tab; thẻ đọc nổi khi rời News \\
 \midrule
 C4 \newline C$\rightarrow$A \newline đang đọc tin, mở video &
-(1) Đang đọc bài, mở video từ tab Video: video phát; thẻ ``Đang đọc'' nổi ở mọi tab. \newline
+(1) Đang đọc bài, mở video từ tab Video: video phát; thẻ ``Đang đọc'' nổi ở mọi tab (trong màn chơi thẻ tự ẩn để không che bàn chơi). \newline
 (2) Chạm bất kỳ đâu trên thẻ: quay lại đúng chỗ đang đọc. &
 F-NEWS-10, F-VID-01 &
 Bài đọc dở không bao giờ mất \\
 \midrule
 C5 \newline A$\rightarrow$D \newline đang xem video, vào game &
 (1) Vào game khi video đang phát: video chiếm khoảng hai phần năm phía trên kèm hàng điều khiển (phát/dừng, thanh tua, thời gian), game chiếm phần còn lại và nhận đủ cảm ứng. \newline
-(2) Thoát game: video chạy tiếp; thoát video: game vẫn chạy. &
-F-GAME-07, F-VID-08 &
+(2) Chia màn không chỉ có ở Games: cửa sổ nổi video có nút chia đôi, ghim video lên đỉnh màn hình và đẩy nội dung xuống, dùng được ở mọi tab. \newline
+(3) Thoát game: video chạy tiếp; thoát video: game vẫn chạy. &
+F-GAME-08, F-VID-08 &
 Chia màn thay vì popup hỏi \\
 \midrule
 C6 \newline D$\rightarrow$A \newline đang trong game, mở video &
-(1) Rời game: ván tự tạm dừng và lưu điểm. \newline
-(2) Video phát; quay lại Games: chọn Tiếp tục ván dở. &
+(1) Rời game: ván tự tạm dừng, trạng thái và điểm số được giữ. \newline
+(2) Video phát; quay lại Games: ván dở tự hiện lại đúng trạng thái. &
 F-GAME (pause/restore) &
 Rời game luôn tạm dừng + lưu \\
 \midrule
@@ -131,19 +131,19 @@ F-MUS-01, F-NEWS-10 &
 Đọc dở vẫn kiểm soát được \\
 \midrule
 C9 \newline B$\rightarrow$D \newline đang nghe nhạc, vào game &
-(1) Nhạc vẫn phát trong game; game không phát âm thanh đè lên (một nguồn tiếng chính). \newline
+(1) Nhạc vẫn phát trong game; âm hiệu ứng game tự giảm còn khoảng 25\% để không đè nguồn tiếng chính (mức âm chỉnh được trong Cài đặt). \newline
 (2) Thắng ván: điểm cộng ngay, nhạc không ngắt. &
-F-MUS-02, F-GAME-08 &
-Game im tiếng khi nhạc phát \\
+F-MUS-02, F-GAME-09, F-GAME-13 &
+Âm game tự giảm khi nhạc phát \\
 \midrule
 C10 \newline D$\rightarrow$B \newline đang trong game, mở nhạc &
-(1) Rời game: ván tạm dừng, lưu điểm. \newline
-(2) Nhạc phát; quay lại game chọn Tiếp tục. &
+(1) Rời game: ván tạm dừng, trạng thái và điểm số được giữ. \newline
+(2) Nhạc phát; quay lại game, ván dở tự hiện lại. &
 F-MUS-01, F-GAME (pause/restore) &
 Rời game luôn tạm dừng + lưu \\
 \midrule
 C11 \newline C$\rightarrow$D \newline đang đọc tin, vào game &
-(1) Thẻ ``Đang đọc'' nổi; game chạy bình thường. \newline
+(1) Thẻ ``Đang đọc'' nổi (trong màn chơi thẻ tự ẩn để không che bàn chơi); game chạy bình thường. \newline
 (2) Quay lại bài qua thẻ. &
 F-NEWS-10, F-GAME-01 &
 Thẻ đọc nổi dùng chung mọi luồng \\
@@ -160,16 +160,16 @@ F-NEWS-05, F-MUS-10 &
 TTS là luồng nói chính \\
 \midrule
 C14 \newline trích MP3 \newline (A$\rightarrow$B) &
-(1) Nhấn giữ video $\rightarrow$ xác nhận \textit{Trích xuất} $\rightarrow$ bản ghi vào mục ``Từ video của bạn'' của kho Nhạc; phát như một bài nhạc thật, +5 XP lần đầu mỗi nội dung. \newline
-(2) Nhấn giữ bài báo: tương tự. &
+(1) Nhấn giữ video $\rightarrow$ xác nhận \textit{Trích xuất} $\rightarrow$ tạo file âm thanh thật (TTS \texttt{synthesizeToFile} từng đoạn rồi ghép WAV) $\rightarrow$ bản ghi vào mục ``Từ video của bạn'' của kho Nhạc; phát như một bài nhạc thật, +5 XP lần đầu mỗi video. \newline
+(2) Nhấn giữ bài báo: tương tự --- TTS tổng hợp thành file thật rồi ghép các đoạn lại. &
 F-VID-10, F-MUS-07 &
 Trích xuất dùng chung engine nhạc \\
 \midrule
 C15 \newline siêu playlist &
-(1) Trộn nhạc, audio tin và video trích vào cùng một hàng phát. \newline
-(2) Chuyển sang giai đoạn v2, xem mục các tính năng hoãn. &
+(1) Playlist là meta-playlist: chứa cả video lẫn bài hát, đếm kết hợp kiểu ``2 video $\cdot$ 3 bài hát''. \newline
+(2) Phát tuần tự đan xen --- hết video tự chuyển sang bài hát và ngược lại; tiêu đề màn ``Danh sách phát: X''; nút Quay lại trở về danh sách playlist. &
 F-MUS-09 &
-Sau MVP (v2) \\
+Trong MVP (v1) \\
 \midrule
 C16 \newline ba luồng cùng lúc &
 (1) Không hỗ trợ ở v1: giữ tối đa một nguồn tiếng chính và một PIP video. \newline
@@ -182,7 +182,7 @@ Tối đa 1 nguồn tiếng + 1 PIP ở v1 \\
 
 \begin{itemize}
     \item Cuộc gọi và báo thức luôn cao nhất (audio focus của Android); mọi luồng của ứng dụng nhường ngay.
-    \item Một nguồn tiếng chính tại một thời điểm: TTS làm nhạc tạm dừng (C13), game không phát âm thanh khi nhạc đang chạy (C9).
+    \item Một nguồn tiếng chính tại một thời điểm: TTS làm nhạc tạm dừng (C13), âm hiệu ứng game tự giảm còn khoảng 25\% khi nhạc hoặc video đang chạy (C9).
     \item Mở nhạc khi video đang phát: hỏi (C1); mở video khi nhạc đang phát: hỏi (C2) --- cả hai chiều đều hỏi.
     \item Nhạc dock là luồng nền: hiện trên mọi tab, nhường ngay khi luồng chính cần tiếng, tiếp tục bằng một chạm.
     \item Mọi luồng đều thấy và điều khiển được từ dock mini player trong ứng dụng.
@@ -191,11 +191,11 @@ Tối đa 1 nguồn tiếng + 1 PIP ở v1 \\
 \textbf{Gián đoạn từ bên ngoài.}
 
 \begin{itemize}
-    \item Cuộc gọi đến: mọi luồng tạm dừng trong tối đa 0,5 giây; sau cuộc gọi nhạc tự phát lại, video hiện nút ``Tiếp tục'', game hiện nút tiếp tục kèm đếm 3 giây.
+    \item Cuộc gọi đến: mọi luồng tạm dừng trong tối đa 0,5 giây; sau cuộc gọi nhạc tự phát lại, video hiện nút ``Tiếp tục'', game mở lại đúng ván dở.
     \item Rút tai nghe: nhạc và TTS dừng ngay (chuẩn Android), không phát loa ngoài; PIP video dừng kèm thông báo.
     \item Mất mạng khi đang xem video: khung hình đứng + tự thử lại sau 5--15 giây; tin đã tải đọc tiếp; game offline chơi tiếp, điểm lưu cục bộ rồi đồng bộ khi có mạng.
     \item Hệ điều hành đóng ứng dụng: mở lại khôi phục đủ 4 vị trí (bài nhạc, tin đang đọc, ván dở, video dở) trong 2 giây.
-    \item Người dùng thoát ứng dụng: nhạc tiếp tục nếu đã bật nhạc nền (F-MUS-03); video, TTS dừng; game tạm dừng và lưu.
+    \item Người dùng thoát ứng dụng: nhạc tiếp tục nếu đã bật nhạc nền (F-MUS-03); video, TTS dừng; game tạm dừng và giữ ván dở.
 \end{itemize}
 
 \textbf{Luồng lần đầu mở app.} Nếu người dùng mới không dùng được tính năng chính trong lần đầu thì mọi thiết kế phía sau vô nghĩa. Kịch bản:
@@ -228,14 +228,23 @@ Chỉ số: \textbf{tỉ lệ người mới dùng ít nhất 3 trong 5 tính n�
 \endhead
 \bottomrule
 \endfoot
-Thắng minigame: +10 & Cho thú cưng ăn: $-$30 (tối đa 2 bữa/ngày) \\
-Nhiệm vụ hằng ngày: +20 mỗi việc (60--100 điểm/ngày) & Mở khoá game: $-$300 đến $-$800 \\
-Quiz từ bài báo: +15 & Khung avatar: $-$200 đến $-$800 \\
-Lần đầu trong tuần trích mp3 / nghe tin: +20 (tối đa 2 lần/tuần) & Phụ kiện pet: $-$50 đến $-$200 \\
-Bonus streak: +50 (ngày 7), +150 (ngày 30) & (v2: đổi quà vật lý, voucher) \\
+Thắng minigame theo từng game (xem dưới) & Cho thú cưng ăn: $-$30 (một bữa mỗi ngày) \\
+Nhiệm vụ hằng ngày: +20 mỗi việc & Mở khoá game: $-$300 đến $-$500 \\
+Quiz cuối video: 20 + 5$\times$(combo$-$1), tối đa +50 & Khung avatar: $-$200 đến $-$800 \\
+Quiz từ bài báo: +15 mỗi câu đúng & Phụ kiện pet: $-$50 đến $-$100 \\
+Quiz kiến thức: thang 5--60 điểm mỗi ván & (v2: đổi quà vật lý, voucher) \\
+2048: điểm chia 20, chạm ô 2048 +100 &  \\
+Thắng Tic-Tac-Toe: Dễ +10 / Vừa +20 / Khó +40 &  \\
+Rắn săn mồi: +2 mỗi mồi &  \\
+Beat Tiles: điểm chia 2 &  \\
+Đoán bài hát: +10 mỗi câu đúng &  \\
+Trích MP3: +5 lần đầu mỗi video &  \\
+Thử thách hằng ngày: 50 + 5$\times$chuỗi ngày (tối đa 85) &  \\
 \end{longtable}
 
-Người chơi trung bình kiếm 60--100 điểm/ngày. Không bán điểm bằng tiền ở v1. Toàn bộ hệ số là hằng số cấu hình, chỉnh không cần build lại.
+Người chơi trung bình kiếm 110--150 điểm/ngày. Không bán điểm bằng tiền ở v1. Toàn bộ hệ số là hằng số cấu hình, chỉnh không cần build lại.
+
+\textbf{Thú cưng ảo.} Thú cưng tiến hoá qua bốn giai đoạn theo tổng điểm tích luỹ: \textbf{Trứng} (0đ, nở sau khi hoàn thành 3 nhiệm vụ) $\rightarrow$ \textbf{Bé cưng} (500đ, gà con vàng) $\rightarrow$ \textbf{Thiếu niên} (2.000đ) $\rightarrow$ \textbf{Trưởng thành} (5.000đ, vẹt).
 
 \textbf{Rủi ro và cách giảm thiểu.}
 

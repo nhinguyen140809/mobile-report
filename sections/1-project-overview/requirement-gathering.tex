@@ -1,0 +1,21 @@
+\subsection{Thu thập và phân tích yêu cầu}
+\label{sec:requirement-gathering}
+
+Yêu cầu của OneSpace được hình thành từ ba nguồn độc lập. Nguồn thứ nhất là số liệu thị trường có nguồn trích dẫn ở mục~\ref{sec:market-research}: quy mô người dùng, thị phần hệ điều hành và hành vi tiêu thụ nội dung theo từng phân hệ. Nguồn thứ hai là phân tích ứng dụng đối thủ, gồm ma trận tính năng tám cột và các hạn chế cụ thể của Mocha, YouTube, TikTok. Nguồn thứ ba là đánh giá của người dùng thật trên kho ứng dụng, được thu thập và đối chiếu theo bốn nhóm khó chịu mà phân tích đối thủ dự đoán.
+
+Nhóm quét 3.750 đánh giá trên App Store Việt Nam của tám ứng dụng giải trí (YouTube, TikTok, Zing MP3, Spotify, VnExpress, Báo Mới, Mocha, Zalo), giai đoạn 2021--2026, qua nguồn RSS đánh giá chính thức của Apple. Các trích dẫn dưới đây là nguyên văn, kèm số sao và ngày đăng:
+
+\begin{quote}
+\itshape
+``thường xuyên không thu nhỏ video để vừa xem vừa dùng app khác, phải pause play lại mới được'' --- YouTube, 1/5 sao, 03/11/2026~\cite{review-youtube-2026}.
+
+``hay dùng để nghe nhạc khi chơi ff \ldots\ cứ ra sảnh lại mất nhạc'' --- Zing MP3, 2/5 sao, 04/10/2026~\cite{review-zing-2026}.
+
+``phần mềm nặng tốn dung lượng, tốn pin dễ nóng máy \ldots\ càng đọc nhiều càng đầy bộ nhớ'' --- VnExpress, 1/5 sao, 17/06/2024~\cite{review-vnexpress}.
+
+``nó spam t liên tục khiến t mất ngủ và mất tập trung trầm trọng'' --- Zalo, 1/5 sao, 24/10/2026~\cite{review-zalo-2026}.
+\end{quote}
+
+Bốn trích dẫn khớp với bốn pain point ở mục~\ref{sec:problem-statement}: đứt gãy khi chuyển ứng dụng, mất trạng thái âm thanh, gánh nặng dung lượng/pin, và thông báo làm phiền. Cần nêu rõ giới hạn của phương pháp: đánh giá trên kho ứng dụng là mẫu tự chọn, không đại diện cho tỷ lệ người dùng; nhóm dùng chúng làm bằng chứng định tính về sự tồn tại của vấn đề, không suy rộng thành tần suất. Với pain ``thông báo quá tải'', bằng chứng được lấy từ Zalo, Mocha và VnExpress; đánh giá của YouTube, Facebook, TikTok chủ yếu phản ánh chiều ngược lại (thiếu hoặc chậm thông báo), nên không được dùng cho luận điểm này.
+
+Hai bước tiếp theo của quá trình thu thập được chuẩn bị nhưng chưa thực hiện trong phạm vi báo cáo: khảo sát bảng hỏi 20--30 người và phỏng vấn bán cấu trúc 6--8 người theo sáu chân dung. Bộ câu hỏi mười mục và hướng dẫn phỏng vấn ba mươi phút đã được soạn sẵn tại \texttt{presentation/evidence/khao-sat-template.md} và \texttt{phong-van-template.md}; kết quả thu được sẽ dùng để hiệu chỉnh sáu persona, vốn hiện là proto-persona xây dựng từ phân tích hành vi thay vì dữ liệu khảo sát (mục~\ref{sec:user-personas}).

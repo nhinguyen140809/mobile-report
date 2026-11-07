@@ -1,0 +1,145 @@
+\subsection{Mô hình dữ liệu và hợp đồng API}
+\label{sec:data-api}
+
+\subsubsection{ERD cục bộ (physical) --- Room schema v5}
+\label{sec:erd-room}
+
+Dữ liệu cục bộ của OneSpace nằm trong sáu bảng Room (schema v5). Bốn bảng tham chiếu nội dung qua mã (\texttt{videoId}, \texttt{contentId}) tới danh mục do repository cấp; đây là khóa ngoại \emph{logic}, không có ràng buộc FK vật lý vì danh mục không nằm trong CSDL quan hệ. Bảng~\ref{tab:erd-room} liệt kê đầy đủ trường và nhóm nghiệp vụ.
+
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.25\linewidth}>{\RaggedRight\arraybackslash}p{0.13\linewidth}>{\RaggedRight\arraybackslash}p{0.39\linewidth}>{\RaggedRight\arraybackslash}p{0.15\linewidth}}
+\caption{ERD physical --- sáu bảng Room (schema v5), khóa chính gạch chân}
+\label{tab:erd-room}\\
+\toprule
+\textbf{Bảng} & \textbf{Khóa chính} & \textbf{Trường chính} & \textbf{Nhóm nghiệp vụ} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Bảng} & \textbf{Khóa chính} & \textbf{Trường chính} & \textbf{Nhóm nghiệp vụ} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\texttt{video\_progress} & \underline{videoId} (FK logic) & title, positionMs (vị trí xem), updatedAt & Tương tác nội dung \\
+\texttt{watchlist} & \underline{videoId} (FK logic) & title, savedAt & Tương tác nội dung \\
+\texttt{downloaded\_content} & \underline{contentId} (FK logic) & type (video/nhạc/tin), title, subtitle, downloadedAt & Thư viện offline \\
+\texttt{extracted\_audio} & \underline{videoId} (FK logic) & title, creator, url, duration, extractedAt & Thư viện offline \\
+\texttt{point\_entries} & \underline{id} (tự tăng) & source, amount, timestamp & Gamification \\
+\texttt{daily\_missions} & \underline{id} & title, targetType, target, progress, completed, date & Gamification \\
+\end{longtable}
+\endgroup
+
+Ngoài Room, các thiết lập nhỏ và dữ liệu phiên nằm trong DataStore: phiên đăng nhập, cài đặt giao diện/âm thanh, bài tin đã lưu, playlists (JSON) và trạng thái game (streak, pet, shop). Tệp riêng của ứng dụng giữ các tệp âm thanh trích xuất và TTS đã tạo.
+
+\subsubsection{Mô hình dữ liệu backend (thiết kế giai đoạn remote)}
+\label{sec:erd-backend}
+
+Bảng~\ref{tab:erd-backend} mô tả mô hình dữ liệu phía máy chủ cho giai đoạn đồng bộ theo quyết định ADR-17: backend chưa được hiện thực, danh mục hiện do repository trong app cấp. Mô hình giữ đúng các thực thể cần cho endpoint ở mục~\ref{sec:api-contract}: người dùng, nội dung, danh sách phát, điểm, nhiệm vụ và tiến độ.
+
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.25\linewidth}>{\RaggedRight\arraybackslash}p{0.17\linewidth}>{\RaggedRight\arraybackslash}p{0.29\linewidth}>{\RaggedRight\arraybackslash}p{0.21\linewidth}}
+\caption{Mô hình dữ liệu backend (thiết kế, chưa hiện thực)}
+\label{tab:erd-backend}\\
+\toprule
+\textbf{Entity} & \textbf{Khóa chính} & \textbf{Trường chính} & \textbf{Quan hệ} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Entity} & \textbf{Khóa chính} & \textbf{Trường chính} & \textbf{Quan hệ} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+users & id & phone, name, avatar, created\_at & 1--n playlists, point\_entries, daily\_missions, progress \\
+content\_items & id & type (video/nhạc/tin), title, url, duration, published\_at & 1--n playlist\_items, progress \\
+playlists & id & user\_id, name, updated\_at & thuộc users; 1--n playlist\_items \\
+playlist\_items & (playlist\_id, item\_id) & position & thuộc playlists; trỏ content\_items \\
+point\_entries & id & user\_id, source, amount, created\_at & thuộc users (ledger điểm) \\
+daily\_missions & id & user\_id, title, target, progress, date & thuộc users \\
+progress & (user\_id, item\_id) & position\_ms, updated\_at & thuộc users + content\_items \\
+\end{longtable}
+\endgroup
+
+\subsubsection{Hợp đồng API (thiết kế giai đoạn remote)}
+\label{sec:api-contract}
+
+Hợp đồng API dùng REST trên HTTPS với JSON và token định danh (SEC-03). Bảng~\ref{tab:api-endpoints} nhóm endpoint theo tài nguyên: Catalog phục vụ ba loại nội dung, Auth phục vụ đăng nhập OTP, Me phục vụ dữ liệu cá nhân. App hiện dùng mock repository cùng giao diện, nên thay bằng client thật không đổi tầng UI.
+
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.1}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.26\linewidth}>{\RaggedRight\arraybackslash}p{0.26\linewidth}>{\RaggedRight\arraybackslash}p{0.33\linewidth}>{\RaggedRight\arraybackslash}p{0.07\linewidth}}
+\caption{Hợp đồng API --- endpoint chính, dữ liệu trả về và yêu cầu xác thực}
+\label{tab:api-endpoints}\\
+\toprule
+\textbf{Endpoint} & \textbf{Mục đích} & \textbf{Trả về chính} & \textbf{Auth} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Endpoint} & \textbf{Mục đích} & \textbf{Trả về chính} & \textbf{Auth} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\multicolumn{4}{l}{\itshape Nhóm Catalog} \\
+GET /catalog/videos & Danh mục video & id, title, creator, duration, url, thumbnail & Không \\
+GET /catalog/tracks & Danh mục nhạc & id, title, artist, album, duration, url & Không \\
+\multicolumn{4}{l}{\itshape Nhóm News} \\
+GET /news/articles & Danh sách tin & id, title, summary, source, publishedAt & Không \\
+GET /news/articles/\{id\} & Chi tiết bài & toàn văn, quiz, bài liên quan & Không \\
+\multicolumn{4}{l}{\itshape Nhóm Auth} \\
+POST /auth/otp & Gửi mã OTP & thời hạn 5 phút (SEC-01) & Không \\
+POST /auth/verify & Đổi OTP lấy token & token, hồ sơ người dùng & Không \\
+\multicolumn{4}{l}{\itshape Nhóm Me} \\
+GET /me/playlists & Playlist của tôi & id, tên, danh sách mục & Có \\
+POST /me/playlists & Tạo hoặc sửa playlist & playlist đã lưu & Có \\
+POST /me/points & Ghi điểm, cập nhật nhiệm vụ & số dư, nhiệm vụ hôm nay & Có \\
+\end{longtable}
+\endgroup
+
+Phản hồi danh mục dùng cấu trúc phân trang thống nhất; đoạn dưới là mẫu cho \texttt{GET /catalog/videos?page=1}:
+
+\begin{verbatim}
+{ "items": [
+    { "id": "v01", "title": "Giới thiệu OneSpace",
+      "creator": "Nhóm OneSpace", "duration": 213,
+      "url": "https://.../oceans.mp4",
+      "thumbnail": "https://.../v01.jpg" } ],
+  "page": 1, "hasMore": true }
+\end{verbatim}
+
+Bảng~\ref{tab:api-errors} quy định mã lỗi và cách app xử lý tương ứng. Các lỗi tầng phát và lỗi request hiện đã đi qua bộ chuyển trạng thái dùng chung (\texttt{ErrorState} kèm nút ``Thử lại''); connectivity chỉ là tín hiệu gợi ý, kết quả thao tác do lỗi thật quyết định.
+
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.1}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.08\linewidth}>{\RaggedRight\arraybackslash}p{0.34\linewidth}>{\RaggedRight\arraybackslash}p{0.44\linewidth}}
+\caption{Mã lỗi HTTP và cách ứng dụng xử lý}
+\label{tab:api-errors}\\
+\toprule
+\textbf{Mã} & \textbf{Ý nghĩa} & \textbf{App xử lý} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mã} & \textbf{Ý nghĩa} & \textbf{App xử lý} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+400 & Sai tham số & Thông báo, giữ dữ liệu cũ \\
+401 & Token hết hạn & Yêu cầu đăng nhập lại \\
+403 & Không có quyền & Ẩn hành động cần quyền \\
+404 & Không có nội dung & EmptyState + gợi ý thay thế \\
+409 & Xung đột phiên bản & Giữ bản mới hơn, đồng bộ lại \\
+429 & Quá nhiều request & Chờ rồi tự thử lại \\
+5xx & Lỗi server & ``Không tải được'' + Thử lại \\
+\end{longtable}
+\endgroup

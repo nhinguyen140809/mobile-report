@@ -1,0 +1,59 @@
+\subsection{Mô hình lớp}
+\label{sec:class-diagrams}
+
+Hai sơ đồ lớp dưới đây phản ánh đúng mã nguồn: lớp miền (domain) là Kotlin thuần và các contract mà tầng data hiện thực, còn lớp dữ liệu là sáu entity Room cùng các store của DataStore.
+
+\subsubsection{Sơ đồ lớp tầng domain và session}
+\label{sec:class-domain}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\scriptsize,
+  cls/.style={draw=black!70, align=left, inner sep=3pt},
+  rel/.style={draw=black!65, thick},
+  dep/.style={draw=black!60, thick, dashed, -{Latex[open, length=1.4mm]}}]
+  % nội dung model
+  \node[cls] (video) at (0,6.2) {\begin{tabular}{@{}l@{}}\textbf{Video}\\\hline id, title, creator\\durationSec, url\\thumbnailUrl\\\hline\end{tabular}};
+  \node[cls] (track) at (4.3,6.2) {\begin{tabular}{@{}l@{}}\textbf{Track}\\\hline id, title, artist\\durationSec, url\\lyrics?\\\hline\end{tabular}};
+  \node[cls] (article) at (8.6,6.2) {\begin{tabular}{@{}l@{}}\textbf{Article}\\\hline id, title, source\\summary, body\\publishedAt\\\hline\end{tabular}};
+  \node[cls] (playlist) at (0,3.4) {\begin{tabular}{@{}l@{}}\textbf{Playlist}\\\hline id, name\\createdAt\\\hline\end{tabular}};
+  \node[cls] (pitem) at (4.3,3.4) {\begin{tabular}{@{}l@{}}\textbf{PlaylistItem}\\\hline itemId\\kind (video/music/news)\\\hline\end{tabular}};
+  \node[cls] (rule) at (8.6,3.4) {\begin{tabular}{@{}l@{}}\textbf{\guillemotleft enumeration\guillemotright}\\\textbf{MediaConflictRule}\\\hline MUTE\_VIDEO\\PAUSE\_VIDEO\\KEEP\_VIDEO\\\hline\end{tabular}};
+  \node[cls] (policy) at (0,0.6) {\begin{tabular}{@{}l@{}}\textbf{SessionPolicy}\\\hline resolveMusicChoice(...)\\+ canResumeMusic(...)\\\hline\end{tabular}};
+  \node[cls] (port) at (4.3,0.6) {\begin{tabular}{@{}l@{}}\textbf{\guillemotleft interface\guillemotright}\\\textbf{MediaSessionPort}\\\hline playVideo()\\playMusic()\\pauseMusic()\\\hline\end{tabular}};
+  \node[cls] (repos) at (8.6,0.6) {\begin{tabular}{@{}l@{}}\textbf{\guillemotleft interface\guillemotright}\\\textbf{ContentRepositories}\\\hline VideoRepository\\MusicRepository\\NewsRepository\\\hline\end{tabular}};
+  % quan hệ
+  \draw[rel] (playlist.east) -- node[above]{1} node[below]{*} (pitem.west);
+  \draw[dep] (policy.east) -- node[above]{use} (port.west);
+  \draw[dep] (policy.north) -- (pitem.south);
+  \draw[dep] (playlist.south) -- (policy.north west);
+\end{tikzpicture}
+\caption{Sơ đồ lớp tầng domain: model nội dung, danh sách phát, policy phân xử âm thanh và các contract mà tầng data hiện thực.}
+\label{fig:class-domain}
+\end{figure}
+
+\subsubsection{Sơ đồ lớp tầng dữ liệu cục bộ}
+\label{sec:class-data}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\scriptsize,
+  cls/.style={draw=black!70, align=left, inner sep=3pt},
+  ent/.style={draw=black!70, align=left, inner sep=3pt, fill=gray!3},
+  rel/.style={draw=black!65, thick},
+  dep/.style={draw=black!60, thick, dashed, -{Latex[open, length=1.4mm]}}]
+  \node[cls] (db) at (3.2,7.0) {\begin{tabular}{@{}l@{}}\textbf{ContentDatabase}\\\hline version = 5\\6 DAO\\\hline\end{tabular}};
+  \node[ent] (e1) at (0,4.9) {\begin{tabular}{@{}l@{}}\textbf{video\_progress}\\\hline videoId (PK), title\\positionMs, updatedAt\\\hline\end{tabular}};
+  \node[ent] (e2) at (3.4,4.9) {\begin{tabular}{@{}l@{}}\textbf{watchlist}\\\hline videoId (PK), title\\savedAt\\\hline\end{tabular}};
+  \node[ent] (e3) at (6.8,4.9) {\begin{tabular}{@{}l@{}}\textbf{point\_entries}\\\hline id (PK), source\\amount, timestamp\\\hline\end{tabular}};
+  \node[ent] (e4) at (0,2.9) {\begin{tabular}{@{}l@{}}\textbf{daily\_missions}\\\hline id (PK), title\\target, progress, date\\\hline\end{tabular}};
+  \node[ent] (e5) at (3.4,2.9) {\begin{tabular}{@{}l@{}}\textbf{extracted\_audio}\\\hline videoId (PK), title\\url, duration\\\hline\end{tabular}};
+  \node[ent] (e6) at (6.8,2.9) {\begin{tabular}{@{}l@{}}\textbf{downloaded\_content}\\\hline contentId (PK), type\\title, downloadedAt\\\hline\end{tabular}};
+  \node[cls] (store) at (11.4,4.9) {\begin{tabular}{@{}l@{}}\textbf{DataStore}\\\hline SessionPreferencesStore\\LocalJsonStore (playlists)\\SavedArticlesStore\\\hline\end{tabular}};
+  % composition
+  \foreach \e in {e1,e2,e3,e4,e5,e6} { \draw[rel] (db.south) -- (\e.north); }
+  \draw[dep] (store.west) -- node[above]{impl} (e3.east);
+\end{tikzpicture}
+\caption{Sơ đồ lớp tầng dữ liệu cục bộ: ContentDatabase tổng hợp sáu entity Room (schema v5); DataStore giữ preferences, playlist JSON và bài đã lưu.}
+\label{fig:class-data}
+\end{figure}

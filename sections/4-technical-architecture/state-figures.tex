@@ -1,0 +1,68 @@
+% Ba hình máy trạng thái (thân bảng ở state-tables.tex)
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\footnotesize, state/.style={stnode, text width=2.5cm},
+  tr/.style={draw=black!60, -{Latex[length=1.6mm]}}]
+  \node[umlstart] (i0) at (-6.4,1.8) {};
+  \node[state] (s0) at (-6.4,0.2) {S0\\Không hoạt động};
+  \node[state] (s1) at (-1.2,0.2) {S1\\Trong trình phát};
+  \node[state] (s2) at (-1.2,-3.4) {S2\\Cửa sổ nổi};
+  \node[state] (s4) at (-6.4,-3.4) {S4\\Tạm dừng};
+  \node[state] (s3) at (4.0,-3.4) {S3\\Chia đôi};
+  \node[state] (s5) at (4.0,0.2) {S5\\Kết thúc};
+  \draw[tr] (i0) -- (s0);
+  \draw[tr] (s0) -- node[above, font=\scriptsize]{chạm thẻ video} (s1);
+  \draw[tr] (s1) -- node[right, font=\scriptsize]{rời màn hình} (s2);
+  \draw[tr] (s2) -- node[left, font=\scriptsize]{mở rộng} (s1);
+  \draw[tr] (s2) -- node[above, font=\scriptsize]{chọn chia đôi} (s3);
+  \draw[tr] (s3) -- node[below, font=\scriptsize]{thu nhỏ} (s2);
+  \draw[tr] (s1) -- node[above, font=\scriptsize]{tạm dừng / phát tiếp} (s4);
+  \draw[tr] (s2) -- node[right, font=\scriptsize]{đóng (lưu vị trí)} (s5);
+  \draw[tr] (s1.north) to[out=60, in=120] node[above, font=\scriptsize]{video kết thúc} (s5.north west);
+\end{tikzpicture}
+\caption{Máy trạng thái của video khi hiển thị (kèm bảng mô tả và kích thích bên dưới)}
+\label{fig:state-video}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\footnotesize, state/.style={stnode, text width=2.5cm},
+  tr/.style={draw=black!60, -{Latex[length=1.6mm]}}]
+  \node[umlstart] (i0) at (-6.9,-4.9) {};
+  \node[state] (m0) at (-5.4,-4.9) {M0\\Rỗi};
+  \node[state] (m1) at (-5.4,-1.9) {M1\\Đã nạp, chờ phát};
+  \node[state] (m2) at (0.2,-3.2) {M2\\Đang phát};
+  \node[state] (m3) at (5.2,-4.9) {M3\\Tạm dừng};
+  \node[state] (m4) at (5.2,-1.9) {M4\\Kết thúc};
+  \node[state] (m5) at (0.2,-0.2) {M5\\Lỗi};
+  \draw[tr] (i0) -- (m0);
+  \draw[tr] (m0) -- node[left, font=\scriptsize]{khởi động lạnh} (m1);
+  \draw[tr] (m1) -- node[right, font=\scriptsize]{phát trên dock} (m2);
+  \draw[tr] (m0) -- node[above, font=\scriptsize]{chọn bài} (m2);
+  \draw[tr] (m2) -- node[above, font=\scriptsize]{tạm dừng / TTS bắt đầu} (m3);
+  \draw[tr] (m3) -- node[below, font=\scriptsize]{phát tiếp} (m2);
+  \draw[tr] (m2) -- node[left, font=\scriptsize]{hết hàng đợi} (m4);
+  \draw[tr] (m2) -- node[right, font=\scriptsize]{lỗi stream} (m5);
+\end{tikzpicture}
+\caption{Máy trạng thái của bộ phát nhạc (M1 là trạng thái sau khởi động lạnh: nạp bài cuối ở 0:00, không tự phát)}
+\label{fig:state-music}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\footnotesize, state/.style={stnode, text width=3.1cm},
+  tr/.style={draw=black!60, -{Latex[length=1.6mm]}}]
+  \node[state] (r0) at (0,-1.6) {R0\\Chưa có quy tắc (hỏi mỗi lần)};
+  \node[state] (r1) at (-4.6,1.4) {R1\\Ghi nhớ tắt tiếng video};
+  \node[state] (r2) at (0,1.4) {R2\\Ghi nhớ dừng video};
+  \node[state] (r3) at (4.6,1.4) {R3\\Ưu tiên video (Cài đặt)};
+  \draw[tr] (r0.north west) to[out=150, in=230] node[left, font=\scriptsize]{tích “Không hỏi lại”} (r1.south);
+  \draw[tr] (r0) -- node[right, font=\scriptsize]{tích “Không hỏi lại”} (r2);
+  \draw[tr] (r0.north east) to[out=30, in=310] node[right, font=\scriptsize]{chọn trong Cài đặt} (r3.south);
+  \draw[tr] (r1) -- node[below, font=\scriptsize]{“Luôn hỏi”} (r0.west);
+  \draw[tr] (r2) -- node[right, font=\scriptsize]{“Luôn hỏi”} (r0.north east);
+  \draw[tr] (r3) -- node[below, font=\scriptsize]{“Luôn hỏi”} (r0.east);
+\end{tikzpicture}
+\caption{Máy trạng thái của quy tắc phân xử âm thanh được ghi nhớ (DataStore)}
+\label{fig:state-rule}
+\end{figure}

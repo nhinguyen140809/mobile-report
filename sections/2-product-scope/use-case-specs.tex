@@ -1,0 +1,344 @@
+\subsubsection{Đặc tả chi tiết các use case mục tiêu}
+
+Mỗi use case mục tiêu được đặc tả theo khuôn chín mục: tác nhân, mô tả, tiên/hậu điều kiện,
+sự kiện kích hoạt, luồng chuẩn, luồng thay thế và ngoại lệ. Các bảng dưới đây là nguồn cho
+ma trận truy vết (mục~\ref{sec:traceability}) và cho các sơ đồ activity, sequence ở các chương sau.
+
+
+\begingroup\small\renewcommand{\arraystretch}{1.15}\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.16\linewidth}>{\RaggedRight\arraybackslash}p{0.76\linewidth}}
+\caption{Đặc tả use case UC-01 --- Vào ứng dụng và chọn sở thích}
+\label{tab:spec-uc-01}\\
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Use case & Vào ứng dụng và chọn sở thích \\
+Tác nhân & Người dùng \\
+Mô tả & Người dùng mở ứng dụng lần đầu, xem ba màn giới thiệu giá trị, chọn tối thiểu ba chủ đề quan tâm hoặc bỏ qua; Home sau đó đề xuất nội dung theo lựa chọn. \\
+Tiên điều kiện & Ứng dụng vừa được cài và chưa hoàn tất onboarding. \\
+Hậu điều kiện & Sở thích được lưu vào DataStore; tab Home hiển thị đề xuất theo chủ đề đã chọn. \\
+Kích hoạt & Người dùng mở ứng dụng lần đầu tiên. \\
+Luồng chuẩn & 1. Ứng dụng kiểm tra trạng thái onboarding và hiển thị ba màn giới thiệu giá trị. 2. Người dùng vuốt qua các màn giới thiệu. 3. Hệ thống hiển thị lưới chủ đề của cả bốn phân hệ. 4. Người dùng chọn tối thiểu ba chủ đề hoặc bấm bỏ qua. 5. Hệ thống lưu lựa chọn và mở Home với đề xuất theo chủ đề. \\
+Luồng thay thế & 3a. Chọn chưa đủ ba chủ đề: nút “Bắt đầu” ở trạng thái khoá kèm nhắc cần chọn thêm. 4a. Bấm bỏ qua: hệ thống dùng danh sách chủ đề mặc định. \\
+Ngoại lệ & 5a. Không ghi được tùy chọn: ứng dụng dùng đề xuất mặc định cho phiên hiện tại và ghi lại cảnh báo. \\
+\end{longtable}
+\endgroup
+
+\begingroup\small\renewcommand{\arraystretch}{1.15}\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.16\linewidth}>{\RaggedRight\arraybackslash}p{0.76\linewidth}}
+\caption{Đặc tả use case UC-02 --- Xem video}
+\label{tab:spec-uc-02}\\
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Use case & Xem video \\
+Tác nhân & Người dùng \\
+Mô tả & Người dùng chọn một video trong feed, xem và điều khiển trình phát; khi rời màn hình, video chuyển thành cửa sổ nổi và tiếp tục phát. \\
+Tiên điều kiện & Ứng dụng đang mở feed Video; thiết bị có kết nối mạng. \\
+Hậu điều kiện & Video phát đúng vị trí đã lưu; trạng thái phiên được giữ khi chuyển phân hệ. \\
+Kích hoạt & Người dùng chạm một thẻ video trong feed. \\
+Luồng chuẩn & 1. Hệ thống đọc vị trí xem đã lưu (checkpoint mỗi 3 giây) của video. 2. Nếu nhạc đang phát, hệ thống hỏi hai lựa chọn kèm ô “Không hỏi lại” (X0). 3. Trình phát mở stream tại vị trí đã lưu và phát trong tối đa 2 giây. 4. Người dùng điều khiển dừng, tua, tốc độ, chất lượng, âm lượng, toàn màn hình. 5. Khi rời màn hình, video chuyển thành cửa sổ nổi và tiếp tục phát (X1). 6. Chạm “Mở rộng” đưa người dùng về trình phát đúng vị trí. \\
+Luồng thay thế & 4a. Đóng cửa sổ nổi: video dừng, vị trí được lưu và thêm vào Xem sau. 4b. Tab đích là Home: video phát trong card của feed, không mở cửa sổ nổi. 5a. Video kết thúc: hiện lời mời quiz cuối video (X3). \\
+Ngoại lệ & 3a. Lỗi mở stream: hiển thị “Không phát được video” kèm nút Thử lại, giữ nguyên vị trí. 3b. Mất mạng giữa chừng: khung hình dừng, hệ thống tự thử lại trong 5--15 giây. \\
+\end{longtable}
+\endgroup
+
+\begingroup\small\renewcommand{\arraystretch}{1.15}\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.16\linewidth}>{\RaggedRight\arraybackslash}p{0.76\linewidth}}
+\caption{Đặc tả use case UC-03 --- Nghe nhạc}
+\label{tab:spec-uc-03}\\
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Use case & Nghe nhạc \\
+Tác nhân & Người dùng \\
+Mô tả & Người dùng chọn bài từ thư viện, điều khiển phát đầy đủ; dock mini hiển thị trên mọi màn hình chính và hàng đợi được quản lý ngay trên trình phát. \\
+Tiên điều kiện & Ứng dụng đang mở feed Nhạc. \\
+Hậu điều kiện & Bài hát đang phát hoặc đã dừng; hàng đợi được cập nhật. \\
+Kích hoạt & Người dùng chạm một bài hát trong feed hoặc danh sách phát. \\
+Luồng chuẩn & 1. Hệ thống nạp bài hát và hàng đợi tương ứng. 2. Nếu video đang phát, hệ thống phân xử âm thanh theo quy tắc đã lưu hoặc hỏi (X0). 3. Bộ phát âm thanh bắt đầu phát; dock mini hiện trên mọi tab trừ màn Now Playing. 4. Người dùng điều khiển phát/dừng, chuyển bài, tua, tốc độ, thứ tự phát. 5. Mở rộng dock để quản lý hàng đợi: thêm, xoá, kéo đổi thứ tự. \\
+Luồng thay thế & 2a. Chưa có quy tắc: popup hai lựa chọn như UC-02 và ghi nhớ nếu được tích. 4a. Đóng dock: dừng phát, cho hoàn tác trong 4--10 giây. \\
+Ngoại lệ & 3a. Lỗi stream: hiển thị thông báo, giữ hàng đợi để thử lại. \\
+\end{longtable}
+\endgroup
+
+\begingroup\small\renewcommand{\arraystretch}{1.15}\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.16\linewidth}>{\RaggedRight\arraybackslash}p{0.76\linewidth}}
+\caption{Đặc tả use case UC-04 --- Đọc tin}
+\label{tab:spec-uc-04}\\
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Use case & Đọc tin \\
+Tác nhân & Người dùng \\
+Mô tả & Người dùng đọc bài trong trình đọc sạch, chỉnh cỡ chữ, lưu bài để đọc sau; có thể nghe thay vì đọc (X4) hoặc làm quiz cuối bài (X5). \\
+Tiên điều kiện & Ứng dụng đang mở feed Tin tức. \\
+Hậu điều kiện & Bài được đọc xong hoặc lưu lại; nhiệm vụ đọc được cập nhật. \\
+Kích hoạt & Người dùng chạm một bài trong feed. \\
+Luồng chuẩn & 1. Hệ thống mở trình đọc với tiêu đề, ảnh và nội dung. 2. Người dùng đọc và có thể tăng/giảm cỡ chữ (A$- $/A+). 3. Người dùng lưu bài hoặc bấm “Nghe tin” (X4). 4. Khi đọc hết hoặc ở lại 20 giây, nhiệm vụ đọc được tính một lần. 5. Hệ thống gợi ý “Kiểm tra nhanh” nếu bài có quiz (X5). \\
+Luồng thay thế & 3a. Bấm “Nghe tin”: nhạc tạm dừng nhường; audio phát có thanh tiến trình và nút dừng. 5a. Bài không có quiz: không hiện lời mời. \\
+Ngoại lệ & 1a. Bài không tải được: hiển thị trạng thái lỗi kèm nút Thử lại. \\
+\end{longtable}
+\endgroup
+
+\begingroup\small\renewcommand{\arraystretch}{1.15}\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.16\linewidth}>{\RaggedRight\arraybackslash}p{0.76\linewidth}}
+\caption{Đặc tả use case UC-05 --- Chơi minigame}
+\label{tab:spec-uc-05}\\
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Use case & Chơi minigame \\
+Tác nhân & Người dùng \\
+Mô tả & Người dùng chọn một trong sáu minigame, chơi theo luật của game; kết thúc ván được cộng điểm và cập nhật nhiệm vụ, thử thách hằng ngày. \\
+Tiên điều kiện & Ứng dụng đang mở tab Trò chơi. \\
+Hậu điều kiện & Điểm được cộng, kỷ lục và nhiệm vụ được cập nhật. \\
+Kích hoạt & Người dùng chọn một game trong hub. \\
+Luồng chuẩn & 1. Hệ thống kiểm tra trạng thái mở khoá của game. 2. Game khởi tạo ván mới theo luật riêng. 3. Người dùng chơi; game phát âm phản hồi và tự giảm khi có nhạc/video (F-GAME-13). 4. Khi ván kết thúc, hệ thống tính điểm và cộng XP theo luật của game. 5. Tiến độ nhiệm vụ “thắng một ván” và thử thách ngày được cập nhật. \\
+Luồng thay thế & 3a. Trong lúc chơi có video: game thường chia đôi màn hình (X7); hai game toàn màn yêu cầu đóng video. 5a. Hoàn thành thử thách ngày: cộng 50+5×streak và tặng một treat cho pet (X6). \\
+Ngoại lệ & 2a. Game đang khoá: hiển thị điều kiện mở khoá thay vì vào ván. \\
+\end{longtable}
+\endgroup
+
+\begingroup\small\renewcommand{\arraystretch}{1.15}\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.16\linewidth}>{\RaggedRight\arraybackslash}p{0.76\linewidth}}
+\caption{Đặc tả use case UC-06 --- Theo dõi tiến độ và thành tích}
+\label{tab:spec-uc-06}\\
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Use case & Theo dõi tiến độ và thành tích \\
+Tác nhân & Người dùng \\
+Mô tả & Người dùng xem tổng điểm, chuỗi ngày hoạt động, huy hiệu và tổng kết tháng của mình. \\
+Tiên điều kiện & Người dùng đã mở tab Tài khoản. \\
+Hậu điều kiện & Không thay đổi dữ liệu; chỉ đọc và hiển thị. \\
+Kích hoạt & Người dùng mở màn Tài khoản hoặc màn tổng kết. \\
+Luồng chuẩn & 1. Hệ thống đọc tổng điểm từ sổ điểm và chuỗi ngày từ DataStore. 2. Hiển thị huy hiệu đã mở và điều kiện của huy hiệu còn thiếu. 3. Hiển thị tổng kết tháng: loại nội dung, kỷ lục, thành tựu nổi bật. \\
+Luồng thay thế & 3a. Chưa đủ dữ liệu tháng: tổng kết dùng số liệu tích lũy từ đầu. \\
+Ngoại lệ & Không có. \\
+\end{longtable}
+\endgroup
+
+\begingroup\small\renewcommand{\arraystretch}{1.15}\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.16\linewidth}>{\RaggedRight\arraybackslash}p{0.76\linewidth}}
+\caption{Đặc tả use case UC-07 --- Chăm sóc thú cưng}
+\label{tab:spec-uc-07}\\
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Use case & Chăm sóc thú cưng \\
+Tác nhân & Người dùng \\
+Mô tả & Người dùng cho thú cưng ăn bằng điểm hoặc treat; thú cưng tiến hoá theo mốc điểm tổng. \\
+Tiên điều kiện & Người dùng đã có thú cưng (nở sau ba nhiệm vụ đầu). \\
+Hậu điều kiện & Thú cưng tăng tiến trình; điểm hoặc treat bị trừ. \\
+Kích hoạt & Người dùng chạm nút cho ăn trong hồ sơ. \\
+Luồng chuẩn & 1. Hệ thống kiểm tra giới hạn một lần cho ăn mỗi ngày. 2. Người dùng chọn trả bằng 30 điểm hoặc một treat. 3. Hệ thống trừ nguồn tương ứng và ghi nhận tiến trình. 4. Nếu đủ mốc, thú cưng chuyển giai đoạn kế tiếp (500/2.000/5.000 điểm). \\
+Luồng thay thế & 1a. Đã cho ăn hôm nay: nút bị khoá kèm thông báo. \\
+Ngoại lệ & 3a. Không đủ điểm và không có treat: hiển thị gợi ý kiếm thêm điểm. \\
+\end{longtable}
+\endgroup
+
+\begingroup\small\renewcommand{\arraystretch}{1.15}\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.16\linewidth}>{\RaggedRight\arraybackslash}p{0.76\linewidth}}
+\caption{Đặc tả use case UC-08 --- Đổi quà trong cửa hàng}
+\label{tab:spec-uc-08}\\
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Use case & Đổi quà trong cửa hàng \\
+Tác nhân & Người dùng \\
+Mô tả & Người dùng dùng điểm đổi vật phẩm: mở khoá game, phụ kiện thú cưng, khung avatar. \\
+Tiên điều kiện & Người dùng có số dư điểm lớn hơn hoặc bằng giá vật phẩm. \\
+Hậu điều kiện & Điểm bị trừ; vật phẩm được đánh dấu sở hữu và áp dụng ngay. \\
+Kích hoạt & Người dùng chọn một vật phẩm trong cửa hàng. \\
+Luồng chuẩn & 1. Hệ thống hiển thị danh sách vật phẩm kèm giá điểm. 2. Người dùng chọn mua một vật phẩm chưa sở hữu. 3. Hệ thống kiểm tra số dư và trừ điểm. 4. Vật phẩm được kích hoạt và đánh dấu “Đã có”. \\
+Luồng thay thế & 2a. Vật phẩm đã sở hữu: nút mua bị thay bằng nhãn “Đã có”. \\
+Ngoại lệ & 3a. Không đủ điểm: hiển thị số điểm còn thiếu. \\
+\end{longtable}
+\endgroup
+
+\begingroup\small\renewcommand{\arraystretch}{1.15}\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.16\linewidth}>{\RaggedRight\arraybackslash}p{0.76\linewidth}}
+\caption{Đặc tả use case UC-09 --- Lưu nội dung để dùng sau}
+\label{tab:spec-uc-09}\\
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Use case & Lưu nội dung để dùng sau \\
+Tác nhân & Người dùng \\
+Mô tả & Người dùng lưu video vào Xem sau, lưu bài báo để đọc sau, đánh dấu nội dung đã tải và xem lại trong các danh sách riêng. \\
+Tiên điều kiện & Nội dung đang mở ở màn chi tiết hoặc trình đọc. \\
+Hậu điều kiện & Nội dung xuất hiện trong danh sách tương ứng; bỏ lưu thì biến mất khỏi danh sách. \\
+Kích hoạt & Người dùng chạm biểu tượng lưu của một nội dung. \\
+Luồng chuẩn & 1. Hệ thống ghi nhận mã nội dung vào danh sách (Room hoặc DataStore). 2. Biểu tượng lưu đổi trạng thái. 3. Người dùng mở danh sách để xem lại các nội dung đã lưu. \\
+Luồng thay thế & 3a. Bỏ lưu: nội dung bị xoá khỏi danh sách, lịch sử xem vẫn giữ. \\
+Ngoại lệ & Không có. \\
+\end{longtable}
+\endgroup
+
+\begingroup\small\renewcommand{\arraystretch}{1.15}\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.16\linewidth}>{\RaggedRight\arraybackslash}p{0.76\linewidth}}
+\caption{Đặc tả use case UC-10 --- Tìm nội dung}
+\label{tab:spec-uc-10}\\
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Use case & Tìm nội dung \\
+Tác nhân & Người dùng \\
+Mô tả & Người dùng gõ từ khoá để tìm video, bài hát, bài báo và game trong phạm vi từng phần và xuyên nội dung từ Home. \\
+Tiên điều kiện & Người dùng đang ở màn danh sách (không ở trong trình phát hay trình đọc). \\
+Hậu điều kiện & Danh sách được lọc theo từ khoá; chạm kết quả mở nội dung. \\
+Kích hoạt & Người dùng chạm ô tìm kiếm và nhập từ khoá. \\
+Luồng chuẩn & 1. Hệ thống hiển thị ô tìm kiếm của phần hiện tại. 2. Người dùng nhập từ khoá; danh sách lọc ngay theo tiêu đề, tác giả hoặc chuyên mục. 3. Kết quả được sắp theo mức khớp (kênh khớp hiện trước với video). 4. Người dùng chạm kết quả để mở nội dung. \\
+Luồng thay thế & 2a. Không có kết quả: hiển thị “Không có nội dung phù hợp” kèm gợi ý liên quan. \\
+Ngoại lệ & Không có. \\
+\end{longtable}
+\endgroup
+
+\begingroup\small\renewcommand{\arraystretch}{1.15}\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.16\linewidth}>{\RaggedRight\arraybackslash}p{0.76\linewidth}}
+\caption{Đặc tả use case UC-11 --- Quản lý danh tính}
+\label{tab:spec-uc-11}\\
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Use case & Quản lý danh tính \\
+Tác nhân & Người dùng \\
+Mô tả & Người dùng tạo tài khoản hoặc đăng nhập bằng OTP demo, tiếp tục với tư cách khách, chuyển tài khoản hoặc đăng xuất. \\
+Tiên điều kiện & Ứng dụng đang ở màn xác thực hoặc màn Cài đặt. \\
+Hậu điều kiện & Phiên đăng nhập được tạo hoặc kết thúc; dữ liệu cục bộ được giữ nguyên khi đăng xuất. \\
+Kích hoạt & Người dùng chọn đăng nhập, dùng thử hoặc đăng xuất. \\
+Luồng chuẩn & 1. Hệ thống hiển thị màn xác thực với lựa chọn OTP, mật khẩu hoặc “Dùng thử”. 2. Người dùng nhập số điện thoại hoặc email và yêu cầu mã. 3. Hệ thống gửi mã OTP có hiệu lực 5 phút (I4). 4. Người dùng nhập mã; hệ thống tạo phiên và mở Main. 5. Khi đăng xuất, hệ thống kết thúc phiên và quay về màn xác thực. \\
+Luồng thay thế & 1a. Chọn “Dùng thử”: vào Main với cờ khách, mọi năng lực giữ nguyên. 4a. Mã sai: báo lỗi và cho nhập lại, tối đa năm lần rồi phải gửi lại mã. \\
+Ngoại lệ & 3a. Dịch vụ gửi mã không khả dụng: thông báo và giữ màn hình chờ. \\
+\end{longtable}
+\endgroup
+
+\begingroup\small\renewcommand{\arraystretch}{1.15}\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.16\linewidth}>{\RaggedRight\arraybackslash}p{0.76\linewidth}}
+\caption{Đặc tả use case X4 --- Nghe tin bằng TTS (biến thể của UC-04)}
+\label{tab:spec-x4}\\
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Use case & Nghe tin bằng TTS (biến thể của UC-04) \\
+Tác nhân & Người dùng; «system» TTS engine \\
+Mô tả & Người dùng nghe một bài báo thay vì đọc: hệ thống chuyển bài thành audio và phát theo đoạn, nhạc đang phát tự nhường. \\
+Tiên điều kiện & Bài báo đã mở trong trình đọc; engine TTS sẵn sàng. \\
+Hậu điều kiện & Audio kết thúc hoặc bị dừng; trạng thái nhạc trước đó được giữ nguyên. \\
+Kích hoạt & Người dùng chạm “Nghe tin” trên thanh công cụ trình đọc. \\
+Luồng chuẩn & 1. Hệ thống chuyển nội dung bài thành audio (có thanh tiến trình trong lúc chờ). 2. Nhạc đang phát tự tạm dừng nhường luồng tiếng (C13). 3. Audio phát theo đoạn; thanh tiến trình và nút dừng hiện trên trình đọc. 4. Người dùng nghe hết hoặc bấm dừng. 5. Nhạc phát lại từ chỗ dừng bằng một chạm trên dock. \\
+Luồng thay thế & 1a. Không có nhạc đang phát: bỏ qua bước 2. 4a. Rời trình đọc khi đang nghe: thẻ TTS nổi giữ điều khiển phát/dừng. \\
+Ngoại lệ & 1a. Tổng hợp lỗi: thông báo kèm nút Thử lại; nhạc tiếp tục bình thường. Ghi chú hiện thực: bản demo phát audio mẫu thay vì đọc toàn văn; hợp đồng hành vi theo US-NEWS-04. \\
+\end{longtable}
+\endgroup
+
+\begingroup\small\renewcommand{\arraystretch}{1.15}\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.16\linewidth}>{\RaggedRight\arraybackslash}p{0.76\linewidth}}
+\caption{Đặc tả use case UC-12 --- Ghi âm karaoke}
+\label{tab:spec-uc-12}\\
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mục} & \textbf{Nội dung} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Use case & Ghi âm karaoke \\
+Tác nhân & Người dùng \\
+Mô tả & Người dùng ghi giọng hát cùng bài đang phát, hoặc ghi màn hình video; bản ghi được lưu trong bộ nhớ riêng của ứng dụng. \\
+Tiên điều kiện & Có media đang phát; người dùng đã cấp quyền micro khi được hỏi. \\
+Hậu điều kiện & Tệp ghi âm được lưu trong thư mục riêng của ứng dụng. \\
+Kích hoạt & Người dùng chạm nút micro trên trình phát. \\
+Luồng chuẩn & 1. Hệ thống hiển thị lựa chọn: hát cùng bài (chỉ micro) hoặc ghi màn hình kèm micro. 2. Nếu chưa có quyền, hệ thống xin quyền micro đúng lúc này. 3. Đếm ngược 3--2--1 và bắt đầu ghi. 4. Người dùng dừng ghi; hệ thống lưu tệp và thông báo đường dẫn. \\
+Luồng thay thế & 2a. Người dùng từ chối quyền: quay lại trình phát, không ghi. \\
+Ngoại lệ & 4a. Lỗi ghi tệp: thông báo và giữ trình phát ở trạng thái ban đầu. \\
+\end{longtable}
+\endgroup

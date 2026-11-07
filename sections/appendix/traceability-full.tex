@@ -1,0 +1,98 @@
+% Phụ lục A — ma trận truy vết đầy đủ (sinh tự động từ feature-prioritization + user-stories)
+\section{Ma trận truy vết đầy đủ 76 yêu cầu}
+\label{app:trace-full}
+
+Bảng dưới đây nối từng yêu cầu (F-code) với use case tương ứng (Hình~\ref{fig:usecase}, Bảng~\ref{tab:uc-relations}), user story kèm acceptance criteria (Bảng~\ref{tab:user-stories}), ảnh mockup và mô-đun hiện thực. Cột Use case dùng nhãn mục tiêu (UC) hoặc biến thể (X); các yêu cầu điều hướng chung không gắn use case nghiệp vụ.
+
+\begingroup\small\renewcommand{\arraystretch}{1.12}\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.11\linewidth}>{\RaggedRight\arraybackslash}p{0.32\linewidth}>{\RaggedRight\arraybackslash}p{0.10\linewidth}>{\RaggedRight\arraybackslash}p{0.14\linewidth}>{\RaggedRight\arraybackslash}p{0.27\linewidth}}
+\caption{Ma trận truy vết đầy đủ: yêu cầu $\rightarrow$ use case $\rightarrow$ user story $\rightarrow$ ảnh $\rightarrow$ mô-đun}
+\label{tab:trace-full}\\
+\toprule
+\textbf{Mã} & \textbf{Tính năng} & \textbf{Use case} & \textbf{User story} & \textbf{Hiện thực} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mã} & \textbf{Tính năng} & \textbf{Use case} & \textbf{User story} & \textbf{Hiện thực} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\texttt{F-VID-01} & Xem video streaming cơ bản (player HLS/MP4) & UC-02 & US-VID-01 & feature/video + core/media \\
+\texttt{F-VID-02} & Feed ``Đề xuất'' theo sở thích & UC-02 & US-VID-04 & feature/video + core/media \\
+\texttt{F-VID-03} & Tìm kiếm video & UC-10 & --- & feature/video + core/media \\
+\texttt{F-VID-04} & Danh sách xem sau (watchlist) & UC-09 & --- & feature/video + core/media \\
+\texttt{F-VID-05} & Lịch sử xem và tiếp tục từ chỗ dừng & UC-02 & --- & feature/video + core/media \\
+\texttt{F-VID-06} & Chọn chất lượng phát: Auto hoặc bản 1080p/720p/360p & UC-02 & --- & feature/video + core/media \\
+\texttt{F-VID-07} & Tải video xem offline & UC-09 & --- & feature/video + core/media \\
+\texttt{F-VID-08} & Picture-in-picture: video thu nhỏ góc màn hình khi rời trang & X1 & US-VID-02, US-CROSS-03 & feature/video + core/media \\
+\texttt{F-VID-09} & Chế độ chỉ phát âm thanh của video (audio-only) & X2 & --- & feature/video + core/media \\
+\texttt{F-VID-10} & Nhấn giữ video để trích thành tệp mp3 cho kho cá nhân & UC-09 & US-VID-06 & feature/video + core/media \\
+\texttt{F-VID-11} & Chia sẻ link video ra ngoài app & UC-02 & --- & feature/video + core/media \\
+\texttt{F-VID-12} & Màn hồ sơ nghệ sĩ/kênh: bấm tên để xem mọi nội dung của họ & UC-02 & --- & feature/video + core/media \\
+\texttt{F-VID-13} & Playlist video theo chủ đề & UC-02 & --- & feature/video + core/media \\
+\texttt{F-VID-14} & Tua nhanh double-tap và đổi tốc độ phát & UC-02 & US-VID-03 & feature/video + core/media \\
+\texttt{F-VID-15} & Gợi ý ``chơi game liên quan video này'': thẻ game cuối video, câu hỏi soạn sẵn lúc đăng nội dung & UC-05 & US-VID-07 & feature/video + core/media \\
+\texttt{F-VID-16} & Toàn màn hình: nút ẩn system bars, player chiếm cả trang & UC-02 & --- & feature/video + core/media \\
+\texttt{F-VID-17} & Điều khiển âm lượng: nút loa mute/unmute + thanh volume hệ thống & UC-02 & --- & feature/video + core/media \\
+\texttt{F-VID-18} & Pinch-to-zoom cửa sổ nổi: 2 ngón thu phóng 0.5x--2x & UC-02 & --- & feature/video + core/media \\
+\texttt{F-MUS-01} & Player nhạc đầy đủ (phát / dừng / chuyển / tua / repeat / shuffle) & UC-03 & US-MUS-01 & feature/music + core/media \\
+\texttt{F-MUS-02} & Mini player dock xuyên suốt mọi màn hình & UC-03 & US-MUS-02, US-CROSS-01 & feature/music + core/media \\
+\texttt{F-MUS-03} & Phát nhạc nền khi rời ứng dụng hoặc khoá màn hình & UC-03 & US-MUS-06 & feature/music + core/media \\
+\texttt{F-MUS-04} & Tự tạo/sửa/xoá playlist & UC-03 & --- & feature/music + core/media \\
+\texttt{F-MUS-05} & Hàng phát (queue): thêm tiếp theo, phát cuối, kéo sắp lại & UC-03 & --- & feature/music + core/media \\
+\texttt{F-MUS-06} & Tìm kiếm nhạc (bài hát/nghệ sĩ/album) & UC-10 & US-MUS-07 & feature/music + core/media \\
+\texttt{F-MUS-07} & Kho nhạc cá nhân chứa các tệp trích từ video & UC-09 & US-MUS-05 & feature/music + core/media \\
+\texttt{F-MUS-08} & Gợi ý nhạc theo sở thích & UC-03 & --- & feature/music + core/media \\
+\texttt{F-MUS-09} & ``Siêu playlist'' (meta-playlist) trộn nhạc và video & UC-03 & US-CROSS-09 & feature/music + core/media \\
+\texttt{F-MUS-10} & Xử lý audio focus: duck/pause khi có luồng âm thanh khác & UC-03 & --- & feature/music + core/media \\
+\texttt{F-MUS-11} & Equalizer, hiệu chỉnh âm thanh & UC-03 & --- & feature/music + core/media \\
+\texttt{F-MUS-12} & Tải bài hát offline & UC-09 & --- & feature/music + core/media \\
+\texttt{F-MUS-13} & Tốc độ phát nhạc: x1/x1.5/x2/x0.5 trên dock và Home card & UC-03 & --- & feature/music + core/media \\
+\texttt{F-MUS-14} & Lời bài hát: panel scroll trên Now Playing & UC-03 & --- & feature/music + core/media \\
+\texttt{F-NEWS-01} & Feed tin theo chuyên mục và sở thích & UC-04 & US-NEWS-01 & feature/news \\
+\texttt{F-NEWS-02} & Trình đọc sạch, đổi cỡ chữ & UC-04 & US-NEWS-02 & feature/news \\
+\texttt{F-NEWS-03} & Lưu bài đọc sau & UC-09 & US-NEWS-05 & feature/news \\
+\texttt{F-NEWS-04} & Tìm kiếm bài báo & UC-10 & --- & feature/news \\
+\texttt{F-NEWS-05} & Chuyển bài báo thành audio (TTS)~--~``nghe tin'' & X4 & US-NEWS-04, US-CROSS-08 & feature/news + core/media \\
+\texttt{F-NEWS-06} & Sắp xếp mới nhất / phổ biến & UC-04 & --- & feature/news \\
+\texttt{F-NEWS-07} & Nghe nhạc khi đọc tin (dock vẫn phát) & UC-04 & US-NEWS-03 & feature/news \\
+\texttt{F-NEWS-08} & Quiz sinh ra từ bài báo đang đọc & X5 & --- & feature/news \\
+\texttt{F-NEWS-09} & Gợi ý bài liên quan & UC-04 & --- & feature/news \\
+\texttt{F-NEWS-10} & Bài đang đọc thu nhỏ thành thẻ nổi khi rời tab News & X8 & --- & app shell \\
+\texttt{F-GAME-01} & Hub minigame: danh sách, trạng thái mở khoá, phần thưởng & UC-05 & US-GAME-01 & feature/games + core/media \\
+\texttt{F-GAME-02} & Game đoán bài hát & UC-05 & US-GAME-02 & feature/games + core/media \\
+\texttt{F-GAME-03} & Quiz tin tức & UC-05 & --- & feature/games + core/media \\
+\texttt{F-GAME-04} & Quiz kiến thức (kiểu Ai là triệu phú) & UC-05 & --- & feature/games + core/media \\
+\texttt{F-GAME-05} & Snake -- rắn săn mồi & UC-05 & US-GAME-06 & feature/games + core/media \\
+\texttt{F-GAME-06} & ``Beat tiles'' -- nốt nhạc rơi theo bài đang phát (kiểu piano tiles) & UC-05 & --- & feature/games + core/media \\
+\texttt{F-GAME-07} & Bảng xếp hạng tuần/tháng & UC-06 & US-GAME-05 & feature/games \\
+\texttt{F-GAME-08} & Chơi game ở nửa dưới màn hình, video chạy phía trên & X7 & US-GAME-04, US-CROSS-04 & app shell \\
+\texttt{F-GAME-09} & Phần thưởng khi thắng minigame (điểm) & UC-05 & US-GAME-03 & feature/games + core/media \\
+\texttt{F-GAME-10} & 2048 (ghép số) & UC-05 & US-GAME-06 & feature/games + core/media \\
+\texttt{F-GAME-11} & Tic-Tac-Toe (caro 3$\times$3) & UC-05 & --- & feature/games + core/media \\
+\texttt{F-GAME-12} & Thử thách hằng ngày: xoay vòng 6 game, thưởng 50+5$\times$streak + thức ăn pet & X6 & --- & feature/games + data/games \\
+\texttt{F-GAME-13} & Âm thanh và hiệu ứng game: âm phản hồi thao tác (đặt ô, gộp, đúng/sai, thắng, hết ván) & UC-05 & --- & feature/games + core/media \\
+\texttt{F-COM-01} & Đăng ký/đăng nhập một tài khoản cho cả 4 phân hệ & UC-11 & US-COM-01 & feature/auth \\
+\texttt{F-COM-02} & Onboarding chọn sở thích lần đầu & UC-01 & US-COM-02 & feature/onboarding \\
+\texttt{F-COM-03} & Hồ sơ cá nhân: avatar, khung ảnh theo thành tích & UC-06 & --- & feature/account \\
+\texttt{F-COM-04} & Hệ điểm thưởng dùng chung (XP) & UC-06 & US-COM-03 & core/database \\
+\texttt{F-COM-05} & Nhiệm vụ hằng ngày (3--5 nhiệm vụ) & UC-06 & US-COM-03 & core/database \\
+\texttt{F-COM-06} & Chuỗi ngày liên tiếp (streak) & UC-06 & US-COM-03 & core/database \\
+\texttt{F-COM-07} & Thú cưng ảo: nuôi bằng điểm, tiến hoá theo mốc & UC-07 & US-COM-04 & data/games \\
+\texttt{F-COM-08} & Huy hiệu thành tựu & UC-06 & --- & feature/account \\
+\texttt{F-COM-09} & Khung avatar độc quyền theo mốc thành tích & UC-06 & US-COM-08 & feature/account \\
+\texttt{F-COM-10} & Tổng kết tháng kiểu ``wrapped'', xuất thẻ chia sẻ & UC-06 & US-COM-06 & feature/account \\
+\texttt{F-COM-11} & Tìm kiếm xuyên nội dung (một ô tìm cho 4 phân hệ) & UC-10 & --- & core/designsystem \\
+\texttt{F-COM-12} & Nhắc nhiệm vụ/streak hằng ngày & UC-06 & US-COM-09 & feature/account \\
+\texttt{F-COM-13} & Cài đặt: sáng/tối, ngôn ngữ, tiết kiệm dữ liệu & UC-13 & US-COM-07 & feature/account \\
+\texttt{F-COM-14} & Cửa sổ xác nhận khi hai luồng âm thanh xung đột & X0 & --- & domain + app \\
+\texttt{F-COM-15} & Cửa hàng đổi quà bằng điểm (mở game, đồ pet, khung avatar) & UC-08 & --- & feature/account \\
+\texttt{F-COM-16} & Chế độ ngoại tuyến cơ bản: tin đã lưu, trạng thái mất mạng & UC-09 & --- & core/database \\
+\texttt{F-COM-17} & Báo nội dung không phù hợp & UC-04 & --- & feature/news \\
+\texttt{F-COM-18} & Chế độ khách dùng thử (không cần tài khoản) & UC-11 & US-COM-10 & feature/auth \\
+\texttt{F-COM-19} & Karaoke/Record: ghi màn hình video (MediaProjection), countdown 3-2-1 & UC-12 & --- & app + core/media \\
+\texttt{F-COM-20} & Vuốt ngang đổi phân hệ (trừ Games) + hoàn tác đóng nhạc & Điều hướng & --- & app shell \\
+\texttt{F-COM-21} & Ghi âm, hát karaoke cùng bài hát đang phát (bên Nhạc) & UC-12 & --- & app + core/media \\
+\end{longtable}
+\endgroup

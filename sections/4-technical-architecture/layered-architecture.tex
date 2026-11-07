@@ -165,6 +165,7 @@ SessionCoordinator & Shared presentation adapter, Activity ViewModel & Nhận in
 OneSpaceAppState và root graph & app shell & Navigation và presentation của floating/dock theo destination \\
 MediaSessionPort & Domain contract & Lệnh playback và state quan sát được, không lộ ExoPlayer \\
 MediaPlayback\-Coordinator & Android infrastructure & Engine playback, playlist/queue đang chạy, trạng thái thực tế và thực thi effect \\
+GameSfx & Android infrastructure & Âm hiệu ứng game qua SoundPool riêng (F-GAME-13); đọc trạng thái phát từ MediaSessionPort và TTS để tự giảm mức âm, không xin audio focus \\
 Audio focus handler & Android infrastructure, phần triển khai tiếp & Cấp/nhường focus cho nguồn đang có tiếng, phản ứng interruption/noisy \\
 MusicPlaybackService & Android infrastructure, phần triển khai tiếp & Sở hữu audio player/session ngoài vòng đời Activity \\
 Repository implementations & Data & Persist/restore ID, progress, snapshot và preferences \\
@@ -182,7 +183,7 @@ SessionPolicy quyết định C1 và VideoStartPlan. SessionCoordinator áp dụ
 \paragraph{Một runtime queue.}
 MediaPlayback\-Coordinator sở hữu playlist Media3 và cung cấp queue trong MusicPlayback. Next/Previous từ UI chọn track bằng policy Domain trên queue này, không lấy catalog của feature ViewModel. Media3 tự chuyển bài theo cùng playlist, repeat-all cho baseline; thay track không thêm navigation entry. Catalog chỉ tạo queue khi người dùng bắt đầu một lựa chọn mới. Restore hiện vẫn chỉ chuẩn bị catalog/track đã nhớ ở trạng thái paused; durable queue snapshot là phần triển khai tiếp.
 
-Một video player và một audio player cho phép video mute cùng nhạc. Điều này không có nghĩa chỉ được tạo đúng một ExoPlayer cho cả hai loại nội dung. Khi chuyển fullscreen/floating, đổi surface và layout, không tạo lại video engine. Floating trong app khác Android system Picture-in-Picture; system PiP ngoài app được hoãn, không dùng hai tên này thay nhau.
+Một video player và một audio player cho phép video mute cùng nhạc. Điều này không có nghĩa chỉ được tạo đúng một ExoPlayer cho cả hai loại nội dung. Khi chuyển fullscreen/floating, đổi surface và layout, không tạo lại video engine. Floating trong app khác Android system Picture-in-Picture; system PiP ngoài app được hoãn, không dùng hai tên này thay nhau. Hiệu ứng âm thanh game không đi qua hai engine này: \texttt{GameSfx} phát các âm ngắn qua SoundPool (\texttt{USAGE\_ASSISTANCE\_SONIFICATION}), trước khi phát đọc trạng thái playing/audible của nhạc, video và TTS để tự giảm còn khoảng 25\% khi có luồng tiếng chính, với mức âm người dùng chỉnh được trong Cài đặt (F-GAME-13).
 
 \subsubsection{Lưu trữ, API và mở rộng}
 \label{sec:data-sync}

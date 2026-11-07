@@ -54,11 +54,11 @@ Process bị kill & Restore snapshot hợp lệ, mặc định paused & Không p
 \end{longtable}
 \endgroup
 
-Các chính sách trong bảng~\ref{tab:multitasking-matrix} là sự cụ thể hóa phạm vi kỹ thuật cho các kịch bản ở bảng~\ref{tab:switch-matrix}. C1 và C2 dùng một quy tắc chung trên thiết bị thay cho phương án ghi nhớ theo từng cặp nội dung. C3 và C5 sử dụng video nổi bên trong ứng dụng; cơ chế này khác Picture-in-Picture do hệ điều hành quản lý khi rời ứng dụng. Đối với C9 và C16, thiết kế giới hạn một nguồn tiếng chính và tắt âm trò chơi, thay cho phương án trộn tiếng hoặc giảm nhạc xuống một tỷ lệ cố định. Những lựa chọn này giới hạn độ phức tạp phân xử âm thanh và phù hợp với phạm vi nguyên mẫu; các mô tả rộng hơn tại mục~\ref{sec:mvp-scope} và các user story liên quan được xem là hướng mở rộng, chưa phải hành vi được kiến trúc này bảo đảm đầy đủ.
+Các chính sách trong bảng~\ref{tab:multitasking-matrix} là sự cụ thể hóa phạm vi kỹ thuật cho các kịch bản ở bảng~\ref{tab:switch-matrix}. C1 và C2 dùng một quy tắc chung trên thiết bị thay cho phương án ghi nhớ theo từng cặp nội dung. C3 và C5 sử dụng video nổi bên trong ứng dụng; cơ chế này khác Picture-in-Picture do hệ điều hành quản lý khi rời ứng dụng. Đối với C9 và C16, thiết kế giữ một nguồn tiếng chính: nhạc/video vẫn phát, còn hiệu ứng âm thanh game (F-GAME-13) đi qua một SoundPool riêng với mức âm thấp (khoảng 25\% khi có luồng tiếng chính) thay vì trộn tiếng hoặc giảm nhạc theo tỷ lệ. Những lựa chọn này giới hạn độ phức tạp phân xử âm thanh và phù hợp với phạm vi nguyên mẫu; các mô tả rộng hơn tại mục~\ref{sec:mvp-scope} và các user story liên quan được xem là hướng mở rộng, chưa phải hành vi được kiến trúc này bảo đảm đầy đủ.
 
 Trong số các kịch bản đặc biệt, C13 (đọc tin thành tiếng) chạy bằng engine TTS của hệ điều hành và tuân theo chính sách một nguồn tiếng chính; C14 (trích âm thanh) ghi bản trích vào thư viện nhạc và phát như một bài thường qua hàng phát nhạc. Chỉ C15 (hàng phát hỗn hợp) cần mô hình hàng phát mới và được hoãn sang giai đoạn v2.
 
-Không chốt duck 30\%, ba luồng có tiếng hoặc giới hạn phản hồi cuộc gọi 0,5 giây khi chưa có phép đo và implementation. Với game của baseline chọn mute SFX để giữ phạm vi audio rõ ràng. Các hiệu ứng/ducking sau này cần ADR bổ sung.
+Không chốt duck 30\% cho nhạc, ba luồng có tiếng hoặc giới hạn phản hồi cuộc gọi 0,5 giây khi chưa có phép đo và implementation. Hiệu ứng game dùng lớp riêng (\texttt{GameSfx} qua SoundPool, phối hợp theo \ref{sec:session-coordinator}): tự giảm còn 25\% khi có nhạc/video/TTS, mức chỉnh trong Cài đặt.
 
 \subsubsection{State owner và persistence}
 \label{sec:state-storage}
@@ -167,7 +167,7 @@ Hiện music player bật xử lý audio focus của Media3, video player không
 07 & Domain policy quyết định, shared session adapter điều phối, route executor điều hướng, media engine thực thi \\
 08 & Một video engine + một audio engine; một nguồn tiếng chính, không hỗ trợ ba luồng có tiếng \\
 09 & C1/C2 hỏi hai lựa chọn; ô ``Không hỏi lại'' ghi nhớ global trên thiết bị; reset ``Luôn hỏi'' ở Settings \\
-10 & Floating trong app; system PiP và ducking SFX hoãn cho ADR riêng \\
+10 & Floating trong app; system PiP hoãn cho ADR riêng; SFX game qua SoundPool riêng, tự giảm khi có luồng tiếng chính \\
 11 & Room/DataStore lưu data/snapshot, không lưu runtime Player/ViewModel \\
 12 & Music background cần MediaSessionService; WorkManager chỉ sync trì hoãn \\
 13 & News/game hướng local-first; catalog mock không được tính là offline-first đã hoàn tất \\
@@ -225,7 +225,7 @@ Các test nền tảng gồm: first launch, guest/login/logout, từng tab/detai
 \begin{enumerate}
 \item C1/C2 của baseline hỏi hai lựa chọn kèm ô ``Không hỏi lại''; quy tắc ghi nhớ global trên thiết bị, reset ``Luôn hỏi'' trong Settings (mục 4.4.2). Phương án nhớ theo từng cặp nội dung trong phạm vi sản phẩm ban đầu được thay thế bằng quyết định này.
 \item C3 và C5 dùng video nổi trong app, giữ cùng engine khi mở lại; thẻ ``Đang đọc'' (C4, C8) cũng là floating trong app; system PiP nằm ngoài baseline này.
-\item C9 và C16 được giới hạn bởi một nguồn tiếng chính và game mute; ducking hoặc ba luồng có tiếng cần quyết định và kiểm chứng bổ sung.
+\item C9 và C16 được giới hạn bởi một nguồn tiếng chính; SFX game (F-GAME-13) đã chạy qua lớp riêng, tự giảm còn khoảng 25\% khi có nhạc/video/TTS và chỉnh được trong Cài đặt; ba luồng có tiếng cần quyết định và kiểm chứng bổ sung.
 \item C13 và C14 đã chạy trong app (TTS cục bộ, trích âm thanh vào thư viện nhạc); C15 vẫn là yêu cầu sản phẩm chưa triển khai, queue nhạc hiện tại chưa chứng minh hàng phát hỗn hợp.
 \item Luồng UI gồm startup/auth/main graphs; app thực thi callbacks từ feature graphs, playback không phụ thuộc thay đổi destination.
 \item Offline Music chỉ được cam kết khi có pipeline download thật; dữ liệu mock hoặc buffer không thay thế tính năng tải đã hoãn.

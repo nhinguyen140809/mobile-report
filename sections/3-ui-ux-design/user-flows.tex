@@ -3,61 +3,15 @@
 
 Phần này đặc tả các luồng thao tác chính bằng sơ đồ, so le giữa \textit{định nghĩa hành vi đã chốt} ở ma trận case C1--C9 (bảng~\ref{tab:switch-matrix}) và \textit{ảnh chụp thật từ ứng dụng}. Mỗi luồng được truy vết về user story ở mục~\ref{sec:user-stories} và về kịch bản kiểm thử TC01--TC14 của nhóm.
 
-\textbf{Luồng phiên đầu tiên.} Đây là luồng quan trọng nhất vì quyết định người dùng có ``chạm'' được USP ngay lần đầu mở ứng dụng hay không. Hình~\ref{fig:flow-first-run} mô tả luồng này theo đúng các con số đã chốt ở mục~\ref{sec:mvp-scope}.
+\textbf{Luồng phiên đầu tiên.} Đây là luồng quan trọng nhất vì quyết định người dùng có ``chạm'' được USP ngay lần đầu mở ứng dụng hay không. Hình~\ref{fig:act-first-run} mô tả luồng này bằng sơ đồ hoạt động theo đúng các con số đã chốt ở mục~\ref{sec:mvp-scope}.
 
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[
-    font=\footnotesize,
-    stp/.style={draw=black!55, rounded corners=2pt, inner sep=4pt, minimum height=8mm, fill=gray!8, align=center, text width=3.0cm},
-    lnk/.style={draw=black!50, -{Latex[length=1.6mm]}}]
-    \node[stp] (a) at (0,0) {Mở app trong tối đa 2 giây};
-    \node[stp] (b) at (3.8,0) {Chọn tối thiểu 3 chủ đề};
-    \node[stp] (c) at (7.6,0) {Home hiện ``Đề xuất hôm nay''};
-    \node[stp] (d) at (11.4,0) {Chạm bài hát: dock mini hiện};
-    \node[stp] (e) at (0,-2.5) {Banner nhiệm vụ ngày đầu};
-    \node[stp] (f) at (3.8,-2.5) {Gợi ý ``đọc tin + nghe nhạc''};
-    \node[stp] (g) at (7.6,-2.5) {Hoàn thành 3 nhiệm vụ: trứng nở};
-    \node[stp] (h) at (11.4,-2.5) {Cuối phiên: streak = 1};
-    \draw[lnk] (a) -- (b);
-    \draw[lnk] (b) -- (c);
-    \draw[lnk] (c) -- (d);
-    \draw[lnk] (a.south) -- ++(0,-0.8) -| (e);
-    \draw[lnk] (e) -- (f);
-    \draw[lnk] (f) -- (g);
-    \draw[lnk] (g) -- (h);
-    \draw[lnk] (d.south) -- ++(0,-0.8) -| (e.north);
-\end{tikzpicture}
-\caption{Luồng phiên đầu tiên}
-\label{fig:flow-first-run}
-\end{figure}
+
 
 Luồng phiên đầu tiên tuân theo ba nguyên tắc của onboarding: \textbf{giá trị}~--~ba màn đầu chỉ giải thích OneSpace giải quyết được gì (một app thay bốn app chuyên biệt) thay vì khoe tính năng; \textbf{quyền riêng tư}~--~không xin quyền nào lúc mở lần đầu, mọi quyền chỉ hỏi đúng lúc người dùng dùng đến tính năng cần nó; và \textbf{tính liền mạch}~--~chọn chủ đề xong vào thẳng Home với đề xuất theo đúng chủ đề vừa chọn, không bắt đăng nhập trước khi thấy được sản phẩm (chế độ dùng thử luôn có).
 
-\textbf{Xung đột âm thanh (case C1).} Khi người dùng mở một bài nhạc trong lúc video đang phát, ứng dụng hỏi bằng popup hai lựa chọn (tắt tiếng video / dừng video) kèm ô tick ``Không hỏi lại''; lựa chọn áp dụng cho lần đó và lần xung đột sau vẫn hỏi~--~chỉ khi người dùng tích ``Không hỏi lại'' thì lựa chọn đang chọn được ghi nhớ, và đặt lại ``Luôn hỏi'' được trong Cài đặt. Hình~\ref{fig:flow-c1} là sơ đồ theo đúng định nghĩa đã chốt; Hình~\ref{fig:app-c1} là popup thật trên ứng dụng.
+\textbf{Xung đột âm thanh (case C1).} Khi người dùng mở một bài nhạc trong lúc video đang phát, ứng dụng hỏi bằng popup hai lựa chọn (tắt tiếng video / dừng video) kèm ô tick ``Không hỏi lại''; lựa chọn áp dụng cho lần đó và lần xung đột sau vẫn hỏi~--~chỉ khi người dùng tích ``Không hỏi lại'' thì lựa chọn đang chọn được ghi nhớ, và đặt lại ``Luôn hỏi'' được trong Cài đặt. Hình~\ref{fig:act-conflict} là sơ đồ hoạt động theo đúng định nghĩa đã chốt; Hình~\ref{fig:app-c1} là popup thật trên ứng dụng.
 
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[
-    font=\footnotesize,
-    stp/.style={draw=black!55, rounded corners=2pt, inner sep=4pt, minimum height=8mm, fill=gray!8, align=center, text width=2.8cm},
-    dec/.style={draw=black!55, rounded corners=10pt, inner sep=4pt, fill=gray!18, align=center, text width=2.5cm},
-    lnk/.style={draw=black!50, -{Latex[length=1.6mm]}}]
-    \node[stp] (v) at (0,0) {Video đang phát};
-    \node[stp] (m) at (3.5,0) {Người dùng mở bài nhạc};
-    \node[dec] (q) at (7.0,0) {Đã lưu quy tắc? (tick hoặc Cài đặt)};
-    \node[stp] (r) at (10.5,-0.0) {Áp dụng im lặng};
-    \node[stp] (p) at (7.0,-3.0) {Popup 2 lựa chọn + ô tick};
-    \node[stp] (s) at (8.7,-5.5) {Tick: ghi nhớ đúng lựa chọn này};
-    \draw[lnk] (v) -- (m);
-    \draw[lnk] (m) -- (q);
-    \draw[lnk] (q) -- node[above, font=\scriptsize]{có} (r);
-    \draw[lnk] (q.south) -- node[right, font=\scriptsize]{chưa} ++(0,-1.0) -| (p.north);
-    \draw[lnk] (p.south) -- ++(0,-1.0) -| (s.north);
-\end{tikzpicture}
-\caption{Luồng xử lý xung đột âm thanh (C1)}
-\label{fig:flow-c1}
-\end{figure}
+
 
 \begin{figure}[H]
 \centering
@@ -66,7 +20,7 @@ Luồng phiên đầu tiên tuân theo ba nguyên tắc của onboarding: \textb
 \label{fig:app-c1}
 \end{figure}
 
-\textbf{Video nổi khi rời tab (case C3).} Đang xem video mà chuyển sang tab khác, video tự thu nhỏ thành cửa sổ nổi (PIP) ở góc màn hình và tiếp tục phát theo chính sách âm thanh đã chọn ở C1; ba nút Mở rộng, Tạm dừng và Đóng nằm ngay trên cửa sổ; chạm Mở rộng để quay lại trình phát đầy đủ với sai lệch tối đa 2 giây. Hình~\ref{fig:app-pip} chụp cửa sổ nổi thật đang chạy trên tab News: cửa sổ hiển thị nhãn ``Đang phát'', kèm ba nút Mở rộng, Tạm dừng và Đóng.
+Hình~\ref{fig:app-pip} chụp cửa sổ nổi thật đang chạy trên tab News: cửa sổ hiển thị tên video cùng các nút điều khiển, trong đó có Mở rộng, Tạm dừng và Đóng.
 
 \begin{figure}[H]
 \centering
@@ -86,7 +40,7 @@ Luồng phiên đầu tiên tuân theo ba nguyên tắc của onboarding: \textb
 
 \textbf{Nghe nhạc khi đọc tin (case C7).} Đi tiếp chiều B$\rightarrow$C của C3, khi nhạc đang phát và người dùng sang tab News, dock mini player vẫn hiện trên feed và cả trong trình đọc bài để nhạc không bao giờ ``biến mất'' ngoài tầm điều khiển (Hình~\ref{fig:app-dock-reader}). Dock luôn hiển thị tên bài và nút tạm dừng; mở rộng dock ra trình phát đầy đủ cũng chỉ là một chạm.
 
-\textbf{Khôi phục trạng thái.} Mọi trạng thái tiêu thụ~--~bài nhạc đang phát, video nổi, ván chơi dở. SessionCoordinator lưu ngay khi thay đổi và khôi phục khi quay lại tab hoặc khi hệ điều hành hủy tiến trình rồi mở lại (truy vết bằng TC05, TC09, TC10). Điều này bảo đảm các luồng chuyển phân hệ ở trên không bị ``đặt lại về đầu'' bởi gián đoạn.
+\textbf{Khôi phục trạng thái.} Trong một phiên, SessionCoordinator giữ bài nhạc đang phát, video nổi và vị trí các màn hình khi người dùng chuyển tab. Khi tiến trình bị hệ điều hành hủy rồi mở lại, ứng dụng khôi phục tab cuối, bài nhạc cuối ở trạng thái dừng và danh sách phát; vị trí video trở lại khi người dùng mở lại đúng video đó nhờ checkpoint trong Room (Hình~\ref{fig:seq-restore}). Vị trí đọc tin, ván game dở qua process death và tự phát lại nhạc chưa được lưu, nằm trong danh sách kế hoạch; đây cũng là các dòng được đánh dấu trong bảng kiểm chứng kiến trúc.
 
 Bảng~\ref{tab:flow-trace} tổng hợp việc truy vết từng luồng tới case, user story và bằng chứng tương ứng.
 
@@ -98,12 +52,12 @@ Bảng~\ref{tab:flow-trace} tổng hợp việc truy vết từng luồng tới 
 \toprule
 \textbf{Luồng} & \textbf{Case} & \textbf{User story} & \textbf{Bằng chứng / kiểm thử} \\
 \midrule
-Phiên đầu tiên & -- & US-COM-02, US-COM-03 & Hình~\ref{fig:flow-first-run} \\
-Xung đột âm thanh & C1 & US-MUS-03, US-CROSS-02 & Hình~\ref{fig:flow-c1}, \ref{fig:app-c1}; TC02 \\
+Phiên đầu tiên & -- & US-COM-02, US-COM-03 & Hình~\ref{fig:act-first-run} \\
+Xung đột âm thanh & C1 & US-MUS-03, US-CROSS-02 & Hình~\ref{fig:act-conflict}, \ref{fig:app-c1}; TC02 \\
 Video nổi khi rời tab & C3 & US-VID-02, US-CROSS-03 & Hình~\ref{fig:app-pip}; TC01 \\
 Nghe nhạc khi đọc tin & C7 & US-NEWS-03, US-CROSS-01 & Hình~\ref{fig:app-dock-reader} \\
 Nhạc tiếp tục khi vào game & C9 & US-GAME-01 & Dock vẫn hiện trên tab Games; TC04 \\
-Khôi phục ván chơi & -- & US-CROSS-07 & TC05, TC10 \\
+Khôi phục phiên (tab, bài cuối, vị trí video) & -- & US-CROSS-07 & Hình~\ref{fig:seq-restore}; TC05, TC10 \\
 Mất mạng khi đọc tin / xem video & -- & US-CROSS-07 & mục~\ref{sec:wireframes-prototypes} \\
 \bottomrule
 \end{tabularx}

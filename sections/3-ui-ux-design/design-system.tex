@@ -6,7 +6,7 @@
 
 Design system của OneSpace được xây trên \textbf{Material 3}~\cite{material3} và tổ chức hoàn toàn theo \textit{token theo vai trò} (role-based): mã nguồn không-hardcode màu, mọi màn hình đều tham chiếu các vai trò màu của Material Theme (\texttt{primary}, \texttt{onSurface}, \texttt{surfaceContainer}, \ldots) được định nghĩa tập trung trong một tệp theme duy nhất của ứng dụng. Cách đặt tên theo vai trò này bảo đảm khi thay đổi bảng màu, toàn bộ giao diện cập nhật đồng loạt mà không cần sửa từng màn hình~--~đây cũng là câu trả lời cho câu hỏi tái sử dụng token khi lập trình: một token được khai báo một lần, dùng ở mọi nơi.
 
-Bảng màu theo định hướng thương hiệu \textit{teal trên nền xanh lục nhạt}: màu chính light là teal đậm, ở dark chuyển thành mint sáng; màu phụ là xanh lục xám; màu nhấn ba (tertiary) là tím lavender. Mọi vai trò đều được khai báo thành cặp \texttt{role/onRole} (chữ trên nền tương ứng) để component tự giữ tương phản đọc được ở cả hai chế độ. Bảng~\ref{tab:design-tokens} liệt kê các token tiêu biểu; giá trị hex lấy trực tiếp từ mã nguồn theme của ứng dụng.
+Bảng màu theo định hướng thương hiệu \textit{Blue Calm}, sinh tự động từ hạt màu (seed) \#3B82F6 bằng thuật toán Material Theme Builder (biến thể HCT Vibrant): màu chính light là xanh dương đậm đi đúng theo seed, ở dark chuyển thành xanh dương sáng; màu phụ là xám xanh dương; màu nhấn ba (tertiary) là tím mận (plum). Các bảng trung tính gần như không nhuốm màu nên nền đọc như trắng ngà và gần đen. Mọi vai trò đều được khai báo thành cặp \texttt{role/onRole} (chữ trên nền tương ứng) để component tự giữ tương phản đọc được ở cả hai chế độ. Bảng~\ref{tab:design-tokens} liệt kê các token tiêu biểu; giá trị hex lấy trực tiếp từ mã nguồn theme của ứng dụng.
 
 \begin{table}[H]
 \centering
@@ -17,17 +17,17 @@ Bảng màu theo định hướng thương hiệu \textit{teal trên nền xanh 
 \toprule
 \textbf{Vai trò (Light / Dark)} & \textbf{Màu} & \textbf{Dùng cho} \\
 \midrule
-primary / onPrimary \newline 006B5F / 82D5C3 & \sw{006B5F}{82D5C3} & Nút chính; tab đang chọn; icon bài hát; chữ ``Đang phát''; nút phát/dừng đang bật; logo OneSpace \\
-primaryContainer \newline 9EF2DF / 005045 & \sw{9EF2DF}{005045} & Nền icon trong ContentCard; ô quiz đúng; huy hiệu đã đạt; thẻ nhiệm vụ hoàn thành \\
-secondary / onSecondary \newline 526460 / BACCC5 & \sw{526460}{BACCC5} & Icon trong onboarding; màu phụ logo \\
-tertiary / onTertiary \newline 66587B / D1BFE7 & \sw{66587B}{D1BFE7} & Icon streak trên Home; nhãn ``Đã xem đến'' trên card video \\
-tertiaryContainer \newline ED DCFF / 4E4261 & \sw{EDDCFF}{4E4261} & Chip chuỗi ngày trên banner nhiệm vụ; card thú cưng \\
-error / onError \newline BA1A1A / FFB4AB & \sw{BA1A1A}{FFB4AB} & Thông báo lỗi phát; ô quiz sai; icon yêu thích (tim đỏ) \\
-background / onBackground \newline F5FBF7 / 0F1512 & \sw{F5FBF7}{0F1512} & Nền mọi màn hình; chữ chính \\
-surface / onSurface \newline F5FBF7 / 0F1512 & \sw{F5FBF7}{0F1512} & Nền card đang kéo (queue nhạc) \\
-surfaceVariant \newline DBE5DF / 3F4945 & \sw{DBE5DF}{3F4945} & Nền ô làn Beat Tiles; nền avatar chưa chọn \\
-surfaceContainer\allowbreak{}High \newline E3EAE5 / 252B28 & \sw{E3EAE5}{252B28} & Nền thẻ nổi (ElevatedCard): banner nhiệm vụ, khung đăng nhập \\
-outline \newline 6F7974 / 89938D & \sw{6F7974}{89938D} & Icon radio chưa chọn; vạch phân tách TrackCard \\
+primary / onPrimary \newline 0057BD / 85ADFF & \sw{0057BD}{85ADFF} & Nút chính; tab đang chọn; icon bài hát; chữ ``Đang phát''; nút phát/dừng đang bật; logo OneSpace \\
+primaryContainer \newline 6E9FFF / 6E9FFF & \sw{6E9FFF}{6E9FFF} & Nền icon trong ContentCard; ô quiz đúng; huy hiệu đã đạt; thẻ nhiệm vụ hoàn thành \\
+secondary / onSecondary \newline 555F71 / BDC7DC & \sw{555F71}{BDC7DC} & Icon trong onboarding; màu phụ logo \\
+tertiary / onTertiary \newline 78507F / E7B6EC & \sw{78507F}{E7B6EC} & Icon streak trên Home; nhãn ``Đã xem đến'' trên card video \\
+tertiaryContainer \newline FDD6FF / 5E3966 & \sw{FDD6FF}{5E3966} & Chip chuỗi ngày trên banner nhiệm vụ; card thú cưng \\
+error / onError \newline B31B25 / FF716C & \sw{B31B25}{FF716C} & Thông báo lỗi phát; ô quiz sai; icon yêu thích (tim đỏ) \\
+background / onBackground \newline FBF8FB / 131315 & \sw{FBF8FB}{131315} & Nền mọi màn hình; chữ chính \\
+surface / onSurface \newline FBF8FB / 131315 & \sw{FBF8FB}{131315} & Nền card đang kéo (queue nhạc) \\
+surfaceVariant \newline E3E2E7 / 333539 & \sw{E3E2E7}{333539} & Nền ô làn Beat Tiles; nền avatar chưa chọn \\
+surfaceContainer\allowbreak{}High \newline EAE7E9 / 2A2A2C & \sw{EAE7E9}{2A2A2C} & Nền thẻ nổi (ElevatedCard): banner nhiệm vụ, khung đăng nhập \\
+outline \newline 76777C / 909095 & \sw{76777C}{909095} & Icon radio chưa chọn; vạch phân tách TrackCard \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -36,7 +36,7 @@ Hai quyết định quan trọng về màu:
 
 \begin{itemize}
     \item \textbf{Chế độ tối đi theo hệ thống, có ghi đè thủ công.} Ứng dụng đọc chế độ tối của hệ điều hành làm mặc định (tương ứng F-COM-13); trong Cài đặt người dùng chọn được Sáng, Tối hoặc Theo hệ thống~--~tùy chọn này được lưu và áp dụng cho toàn bộ ứng dụng ở lần mở sau.
-    \item \textbf{Dynamic color tắt mặc định.} Android 12+ cho phép lấy màu theo hình nền của người dùng (dynamic color); ứng dụng hỗ trợ cơ chế này nhưng tắt mặc định để nhận diện thương hiệu teal ổn định trên mọi thiết bị, vì bảng màu là một phần nhận diện sản phẩm chứ không phải trang trí.
+    \item \textbf{Dynamic color tắt mặc định.} Android 12+ cho phép lấy màu theo hình nền của người dùng (dynamic color); ứng dụng hỗ trợ cơ chế này nhưng tắt mặc định để nhận diện thương hiệu Blue Calm ổn định trên mọi thiết bị, vì bảng màu là một phần nhận diện sản phẩm chứ không phải trang trí.
 \end{itemize}
 
 Hình~\ref{fig:design-modes} so sánh cùng ba màn hình ở hai chế độ: cùng một hệ vai trò token giữ bố cục nguyên vẹn, chỉ đổi giá trị màu.

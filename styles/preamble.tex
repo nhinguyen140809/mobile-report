@@ -48,7 +48,7 @@
 \usepackage{geometry}
 \usepackage{setspace}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta, positioning}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric}
 \usepackage{listings}
 % top/bottom are the margins of the body text. The header (logo, 9.5mm tall) sits headsep above the body
 % and the footer baseline footskip below it, so that both stay about 15mm away from the paper edge.
@@ -166,3 +166,35 @@ sensitive=false, morecomment=[l]{--}, morecomment=[s]{/*}{*/}, morestring=[b]', 
 \makeatother
 \input{styles/guide} % "Hướng dẫn viết" boxes in each subsection
 \input{styles/diagrams} % custom rating symbols and TikZ helpers
+
+%%%
+%%% Ảnh chụp ứng dụng theo mã tính năng. Ưu tiên ảnh mới chụp theo mã
+%%% F-XXX-NN-01.png (trong figures/app hoặc presentation/figures/app);
+%%% nếu chưa có thì dùng ảnh mô tả cũ.
+%%% \appfig{F-VID-01}{video-feed-cards.png}{width=0.22\textwidth}
+\newcommand{\appfig}[3]{%
+  \IfFileExists{figures/app/#1-01.png}{\includegraphics[#3]{figures/app/#1-01.png}}{%
+  \IfFileExists{presentation/figures/app/#1-01.png}{\includegraphics[#3]{presentation/figures/app/#1-01.png}}{%
+  \includegraphics[#3]{figures/app/#2}}}}
+
+% ============================================================
+% Kiểu TikZ dùng chung cho các sơ đồ UML trong báo cáo
+% (use case chi tiết, activity, state, component, class, deployment)
+% ============================================================
+\tikzset{
+  umlstart/.style={circle, fill=black, inner sep=0pt, minimum size=3.6mm},
+  umlend/.style={double, circle, draw=black, fill=white, inner sep=0pt,
+                 minimum size=4.6mm, double distance=1pt},
+  actnode/.style={draw=black!70, rounded corners=4pt, fill=gray!6,
+                  inner sep=3pt, minimum height=7mm, align=center},
+  decnode/.style={diamond, draw=black!70, aspect=1.9, fill=gray!12,
+                  align=center, inner sep=1pt},
+  mergenode/.style={diamond, draw=black!70, aspect=1.6, fill=white,
+                    inner sep=0pt, minimum width=3.5mm, minimum height=3.5mm},
+  umlline/.style={draw=black!60, -{Latex[length=1.6mm]}},
+  stnode/.style={draw=black!70, rounded corners=6pt, fill=gray!6,
+                 align=center, inner sep=3.5pt, minimum height=9mm},
+  clnode/.style={draw=black!70, align=left, inner sep=4pt, font=\footnotesize},
+  compnode/.style={draw=black!70, fill=gray!4, align=center, inner sep=4pt},
+  dep/.style={draw=black!60, thick, -{Latex[open, length=1.6mm]}}
+}

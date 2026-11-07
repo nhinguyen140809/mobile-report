@@ -1,0 +1,41 @@
+\subsection{Ma trận truy vết yêu cầu}
+\label{sec:traceability}
+
+Bảng~\ref{tab:trace-matrix} nối một dòng đại diện cho mỗi use case mục tiêu và các biến thể trọng yếu của mô hình ở mục~\ref{sec:use-case-model}: từ yêu cầu (F-code) qua use case, user story kèm acceptance criteria (mục~\ref{sec:user-stories}), màn hình minh hoạ (ảnh chụp trong mục~\ref{sec:wireframes-prototypes}) tới thành phần kiến trúc phụ trách (chương~\ref{sec:technical-architecture}). Ma trận đầy đủ cho cả 76 yêu cầu nằm ở Phụ lục~\ref{app:trace-full}.
+
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.13\linewidth}>{\RaggedRight\arraybackslash}p{0.09\linewidth}>{\RaggedRight\arraybackslash}p{0.17\linewidth}>{\RaggedRight\arraybackslash}p{0.09\linewidth}>{\RaggedRight\arraybackslash}p{0.22\linewidth}>{\RaggedRight\arraybackslash}p{0.16\linewidth}}
+\caption{Ma trận truy vết hợp nhất: yêu cầu $\rightarrow$ use case $\rightarrow$ user story $\rightarrow$ màn hình $\rightarrow$ thành phần kiến trúc}
+\label{tab:trace-matrix}\\
+\toprule
+\textbf{Yêu cầu} & \textbf{Use case} & \textbf{User story} & \textbf{Màn hình} & \textbf{Thành phần kiến trúc} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Yêu cầu} & \textbf{Use case} & \textbf{User story} & \textbf{Màn hình} & \textbf{Thành phần kiến trúc} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+F-COM-02 Onboarding chọn sở thích & UC-01 & US-COM-02 & Ảnh F-COM-02 & feature/onboarding \\
+F-VID-01 Xem video trong feed & UC-02 & US-VID-01 & Ảnh F-VID-01 & feature/video + core/media \\
+F-VID-08 Cửa sổ nổi giữ vị trí & X1 & US-VID-02, US-CROSS-03 & Ảnh F-VID-08 & app shell + core/session \\
+F-MUS-01 Trình phát nhạc đầy đủ & UC-03 & US-MUS-01 & Ảnh F-MUS-01 & feature/music + core/media \\
+F-NEWS-01 Feed tin theo chuyên mục & UC-04 & US-NEWS-01 & Ảnh F-NEWS-01 & feature/news \\
+F-GAME-01 Hub minigame và mở khoá & UC-05 & US-GAME-01 & Ảnh F-GAME-01 & feature/games \\
+F-GAME-09 Điểm thưởng dùng chung & I3 & US-GAME-03 & Ảnh F-GAME-09 & core/database + feature/games \\
+F-COM-04 Hệ điểm XP dùng chung & UC-06 & US-COM-03 & Ảnh F-COM-04 & core/database \\
+F-COM-07 Thú cưng ảo & UC-07 & US-COM-04 & Ảnh F-COM-07 & data/games + core/datastore \\
+F-COM-15 Cửa hàng đổi quà & UC-08 & US-COM-05 & Ảnh F-COM-15 & feature/account \\
+F-VID-04 Xem sau (watchlist) & UC-09 & US-VID-05 & Ảnh F-VID-04 & feature/video + core/database \\
+F-MUS-06 Tìm kiếm nhạc & UC-10 & US-MUS-07 & Ảnh F-MUS-06 & feature/music + core/designsystem \\
+F-COM-01 Tài khoản dùng chung & UC-11 & US-COM-01 & Ảnh F-COM-01 & feature/auth \\
+F-COM-21 Ghi âm karaoke & UC-12 & --- & Ảnh F-COM-21 & app + core/media \\
+F-COM-13 Cài đặt ứng dụng & UC-13 & US-COM-07 & Ảnh F-COM-13 & feature/account + core/datastore \\
+F-COM-14 Popup xung đột âm thanh & X0 & US-MUS-03, US-CROSS-02 & Ảnh F-COM-14 & domain (SessionPolicy) + app \\
+F-NEWS-05 Nghe tin bằng TTS & X4 & US-NEWS-04, US-CROSS-08 & Ảnh F-NEWS-05 & feature/news + core/media \\
+\end{longtable}
+\endgroup

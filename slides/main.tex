@@ -88,11 +88,11 @@
 \end{frame}
 
 \begin{frame}{Nội dung (1/2)}
-  \tableofcontents[sections={1-14}]
+  \tableofcontents[sections={1-13}]
 \end{frame}
 
 \begin{frame}{Nội dung (2/2)}
-  \tableofcontents[sections={15-27}]
+  \tableofcontents[sections={14-26}]
 \end{frame}
 
 % ============================================================
@@ -399,7 +399,7 @@
       \node[anchor=north west, text width=6.1cm, align=left, font=\tiny] at (0.3,2.28) {%
         \begin{itemize}\itemsep2pt
           \item[S1] Một tài khoản cho bốn phân hệ; nhạc không ngắt khi chuyển tab
-          \item[S2] Playlist trộn nhạc, video, tin; chuyển nội dung sang dạng nghe
+          \item[S2] Meta-playlist trộn nhạc + video; chuyển nội dung sang dạng nghe
           \item[S3] Minigame từ nội dung: đố tin, đoán bài hát, karaoke
           \item[S4] Gamification chung: nhiệm vụ, streak, thú ảo
         \end{itemize}};
@@ -488,7 +488,7 @@
         {\tiny\textbf{Mục tiêu:} chơi minigame đơn giản; nghe nhạc khi chơi game; chơi tiếp khi mất mạng; không mất tiến độ; hạn chế giật lag; tiết kiệm dữ liệu.}\par\vspace{0.3mm}
         {\tiny\textbf{Pain points:} máy chậm khi nhiều tác vụ; mạng không ổn định; game mất tiến độ khi app bị đóng; video HQ tốn dữ liệu; âm game xung đột nhạc nền.}\par\vspace{0.3mm}
         {\tiny\textbf{Hành vi:} chơi game giờ nghỉ; ưu tiên game nhẹ, ngắn; mở nhạc khi chơi; chọn chất lượng thấp để tiết kiệm data.}\par\vspace{0.3mm}
-        {\tiny\textbf{Tình huống:} đang nghe nhạc, vào Games mở 2048 $\rightarrow$ nhạc vẫn phát, âm thanh game giảm (C5); mạng ngắt nhưng game vẫn chạy offline; chuyển sang Tin đọc bài đã lưu, app tạm dừng game và lưu điểm; quay lại chọn Tiếp tục.}\par\vspace{0.3mm}
+        {\tiny\textbf{Tình huống:} đang nghe nhạc, vào Games mở 2048 $\rightarrow$ nhạc vẫn phát, âm game tự nhỏ nhường nhạc (C9); mạng ngắt nhưng game vẫn chạy offline; chuyển sang Tin đọc bài đã lưu, app tạm dừng game và giữ ván dở; quay lại, ván dở tự hiện lại.}\par\vspace{0.3mm}
         {\tiny\textbf{Luồng:} \textcolor{brandteal!60!black}{Music $\rightarrow$ Games $\rightarrow$ Tin $\rightarrow$ Resume game}~--~case C9}
       \end{block}
     \end{column}
@@ -623,7 +623,7 @@
     W1 & Xuyên phân hệ & Dock mini dùng chung 4 loại nội dung; một tài khoản; trạng thái giữ nguyên khi đổi tab \\
     W2 & Song song hoá & Nghe nhạc khi đọc tin; PIP video khi lướt; popup xác nhận khi xung đột âm thanh \\
     W3 & Converting & Nhấn giữ video $\rightarrow$ trích mp3; bài báo $\rightarrow$ audio ``nghe tin'' \\
-    W4 & Game gắn nội dung & Đoán bài hát từ kho nhạc; quiz từ bài báo đang đọc \\
+    W4 & Game gắn nội dung & Nghe 5 giây đoán bài hát từ playlist; quiz từ bài báo; Beat Tiles theo BPM thật của bài đang phát \\
     W5 & Gamification & Nhiệm vụ, streak, thú cưng, điểm thưởng dùng chung bốn phân hệ \\
     W6 & Tổng kết cá nhân & Thẻ tổng kết hoạt động trong tháng, xuất ảnh chia sẻ \\
     \bottomrule
@@ -703,11 +703,12 @@
 % ============================================================
 \section{Phân loại và ưu tiên tính năng}
 % ============================================================
-\begin{frame}{Phân loại và ưu tiên tính năng (1/4)}
+\begin{frame}{Phân loại và ưu tiên tính năng (1/5)}
   \begin{columns}
     \begin{column}{0.56\textwidth}
       \begin{itemize}\small
-        \item \textbf{69 tính năng ứng viên}: Video 15 $\cdot$ Music 12 $\cdot$ News 10 $\cdot$ Games 14 $\cdot$ Dùng chung 18
+        \item \textbf{76 tính năng ứng viên}: Video 18 $\cdot$ Music 14 $\cdot$ News 10 $\cdot$ Games 13 $\cdot$ Dùng chung 21
+        \item \textbf{Meta-playlist}~--~điểm nhấn mới: playlist chứa \textbf{cả video lẫn bài hát}; phát tuần tự~--~hết video tự chuyển sang bài hát và ngược lại; chi tiết ``Danh sách phát: X'' gộp tổng ``2 video $\cdot$ 3 bài hát'', quay lại về danh sách playlist
         \item Mỗi tính năng chấm \textbf{Impact (1--5) $\times$ Effort (1--5)}
         \item Ma trận $2\times2$ chia 4 nhóm ưu tiên
         \item \textbf{8 nền tảng kỹ thuật} làm trước: dock, media engine, quản lý xung đột âm thanh, PIP, state store, hệ điểm, converter, notification hub~--~nhiều tính năng phụ thuộc vào chúng
@@ -719,10 +720,10 @@
         \toprule
         \textbf{Nhóm} & \textbf{Số} \\
         \midrule
-        Quick Wins & 25 \\
-        Major Projects & 25 \\
+        Quick Wins & 32 \\
+        Major Projects & 26 \\
         Fill-ins & 15 \\
-        Thankless & 4 \\
+        Thankless & 3 \\
         \bottomrule
       \end{tabular}
     \end{column}
@@ -774,7 +775,7 @@
 \textbf{Mã} & \textbf{Tính năng} & \textbf{I} & \textbf{E} & \textbf{Nhóm} \\
 \midrule
 \texttt{F-VID-01} & Xem video streaming cơ bản (HLS/MP4) & 5 & 4 & MP \\
-\texttt{F-VID-02} & Feed ``Dành cho bạn'' theo sở thích & 4 & 3 & MP \\
+\texttt{F-VID-02} & Feed ``Đề xuất'' theo sở thích & 4 & 3 & MP \\
 \texttt{F-VID-03} & Tìm kiếm video & 4 & 2 & QW \\
 \texttt{F-VID-04} & Danh sách xem sau (watchlist) & 3 & 1 & QW \\
 \texttt{F-VID-05} & Lịch sử xem, tiếp tục từ chỗ dừng & 3 & 1 & QW \\
@@ -788,6 +789,9 @@
 \texttt{F-VID-13} & Playlist video theo chủ đề & 3 & 2 & FI \\
 \texttt{F-VID-14} & Tua nhanh double-tap, đổi tốc độ & 4 & 1 & QW \\
 \texttt{F-VID-15} & Thẻ game cuối video (quiz soạn sẵn) & 4 & 2 & QW [W4] \\
+\texttt{F-VID-16} & Fullscreen toggle & 3 & 1 & QW \\
+\texttt{F-VID-17} & Volume control (loa + thanh hệ thống) & 3 & 2 & QW \\
+\texttt{F-VID-18} & Pinch-to-zoom cửa sổ nổi & 3 & 2 & FI \\
 \bottomrule
 \end{tabular}
   \end{center}
@@ -810,10 +814,12 @@
 \texttt{F-MUS-06} & Tìm kiếm nhạc & 4 & 2 & QW \\
 \texttt{F-MUS-07} & Kho nhạc cá nhân chứa mp3 trích & 4 & 3 & MP [W3] \\
 \texttt{F-MUS-08} & Gợi ý nhạc theo sở thích & 4 & 3 & MP \\
-\texttt{F-MUS-09} & ``Siêu playlist'' trộn 3 loại nội dung & 4 & 3 & MP [W1 W2] \\
+\texttt{F-MUS-09} & Meta-playlist trộn video + bài hát, phát tuần tự tự chuyển tiếp & 4 & 3 & MP [W1 W2] \\
 \texttt{F-MUS-10} & Xử lý audio focus: duck / pause & 5 & 3 & MP [W2] \\
 \texttt{F-MUS-11} & Equalizer & 2 & 3 & TT \\
 \texttt{F-MUS-12} & Tải bài hát offline & 3 & 4 & TT \\
+\texttt{F-MUS-13} & Tốc độ phát nhạc (x1/x1.5/x2/x0.5) & 3 & 1 & QW \\
+\texttt{F-MUS-14} & Lời bài hát & 3 & 2 & FI \\
 \bottomrule
 \end{tabular}
     \end{center}\end{column}
@@ -848,19 +854,18 @@
 \textbf{Mã} & \textbf{Tính năng} & \textbf{I} & \textbf{E} & \textbf{Nhóm} \\
 \midrule
 \texttt{F-GAME-01} & Hub minigame: danh sách, mở khoá, thưởng & 4 & 2 & QW \\
-\texttt{F-GAME-02} & Game đoán bài hát & 5 & 3 & MP [W4] \\
+\texttt{F-GAME-02} & Đoán bài hát: nghe 5 giây, chọn từ playlist & 5 & 3 & MP [W4] \\
 \texttt{F-GAME-03} & Quiz tin tức & 4 & 3 & MP [W4] \\
-\texttt{F-GAME-04} & Rhythm game theo bài hát & 3 & 4 & TT \\
-\texttt{F-GAME-05} & Trivia tổng hợp & 3 & 2 & FI \\
-\texttt{F-GAME-06} & Bảng xếp hạng tuần / tháng & 4 & 3 & MP \\
-\texttt{F-GAME-07} & Game nửa dưới, video phía trên & 4 & 4 & MP [W2] \\
-\texttt{F-GAME-08} & Phần thưởng khi thắng (điểm) & 5 & 2 & QW [W5] \\
-\texttt{F-GAME-09} & Memory match từ hình nội dung & 2 & 2 & FI \\
-\texttt{F-GAME-10} & Đập chuột (whack-a-mole) & 3 & 2 & FI \\
-\texttt{F-GAME-11} & 2048 (ghép số) & 3 & 2 & FI \\
-\texttt{F-GAME-12} & Snake -- rắn săn mồi & 3 & 1 & FI \\
-\texttt{F-GAME-13} & ``Beat tiles'' theo bài đang phát & 4 & 2 & QW [W4] \\
-\texttt{F-GAME-14} & Bay xuyên vật cản (kiểu flappy) & 3 & 2 & FI \\
+\texttt{F-GAME-04} & Quiz kiến thức kiểu ``Ai là triệu phú'', thang 5--60 điểm & 4 & 2 & QW \\
+\texttt{F-GAME-05} & Bảng xếp hạng tuần / tháng & 4 & 3 & MP \\
+\texttt{F-GAME-06} & Shell split: video neo đỉnh, đẩy nội dung xuống (mọi tab) & 4 & 4 & MP [W2] \\
+\texttt{F-GAME-07} & Phần thưởng khi thắng (điểm) & 5 & 2 & QW [W5] \\
+\texttt{F-GAME-08} & 2048 (ghép số) & 3 & 2 & FI \\
+\texttt{F-GAME-09} & Tic-Tac-Toe (đấu máy 3 mức hoặc 2 người) & 3 & 1 & FI \\
+\texttt{F-GAME-10} & Snake -- rắn săn mồi & 3 & 1 & FI \\
+\texttt{F-GAME-11} & Beat Tiles (nốt rơi theo BPM thật của bài đang phát) & 4 & 2 & QW [W4] \\
+\texttt{F-GAME-12} & Thử thách hằng ngày & 4 & 2 & QW [W5] \\
+\texttt{F-GAME-13} & Âm thanh và hiệu ứng game: âm phản hồi thao tác, tự giảm khi có nhạc/video & 3 & 1 & QW \\
 \bottomrule
 \end{tabular}
     \end{center}\end{column}
@@ -887,6 +892,9 @@
 \texttt{F-COM-16} & Chế độ ngoại tuyến cơ bản & 3 & 3 & MP \\
 \texttt{F-COM-17} & Báo nội dung không phù hợp & 2 & 1 & FI \\
 \texttt{F-COM-18} & Chế độ khách dùng thử & 3 & 2 & QW \\
+\texttt{F-COM-19} & Karaoke/Record (ghi màn hình + âm thanh) & 4 & 4 & MP [W2 W3] \\
+\texttt{F-COM-20} & Vuốt đổi tab + hoàn tác đóng nhạc & 3 & 2 & QW \\
+\texttt{F-COM-21} & Làm lại hướng dẫn & 2 & 1 & FI \\
 \bottomrule
 \end{tabular}
     \end{center}\end{column}
@@ -926,35 +934,35 @@
     \fill[brandgray!8, rounded corners=2pt] (10.90,0.95) rectangle +(2.88,0.95);
     \node[font=\tiny, text=brandgray] at (12.38,1.42) {--};
     \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (4.80,3.95) rectangle +(2.88,0.95);
-    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (4.90,4.82) {{\bfseries\textcolor{brandteal!60!black}{C1}} Video thu thành cửa sổ nổi; hỏi 2 lựa chọn, tick ``Không hỏi lại'' để ghi nhớ};
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (4.90,4.82) {{\bfseries\textcolor{brandteal!60!black}{C1}} Video thu thành cửa sổ nổi; hỏi 2 lựa chọn (Tắt tiếng video / Dừng video), tick ``Không hỏi lại'' để ghi nhớ};
     \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (7.85,3.95) rectangle +(2.88,0.95);
     \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (7.95,4.82) {{\bfseries\textcolor{brandteal!60!black}{C3}} Video nổi có nhãn ``Đang phát''; rời News hiện thẻ ``Đang đọc''};
     \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (10.90,3.95) rectangle +(2.88,0.95);
-    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (11.00,4.82) {{\bfseries\textcolor{brandteal!60!black}{C5}} Chia màn hai phần năm trên, ba phần năm dưới; video tua và dừng được};
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (11.00,4.82) {{\bfseries\textcolor{brandteal!60!black}{C5}} Shell split: video neo đỉnh, đẩy nội dung xuống; bật từ nút cửa sổ nổi, dùng được mọi tab};
     \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (1.75,2.95) rectangle +(2.88,0.95);
-    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (1.85,3.82) {{\bfseries\textcolor{brandteal!60!black}{C2}} Mở video: hỏi 2 lựa chọn + tick ``Không hỏi lại''};
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (1.85,3.82) {{\bfseries\textcolor{brandteal!60!black}{C2}} Mở video: hỏi 2 lựa chọn (Tắt tiếng video / Dừng nhạc) + tick ``Không hỏi lại''};
     \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (7.85,2.95) rectangle +(2.88,0.95);
     \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (7.95,3.82) {{\bfseries\textcolor{brandteal!60!black}{C7}} Nhạc vẫn phát; dock hiện ở mọi tab, kể cả trình đọc bài};
     \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (10.90,2.95) rectangle +(2.88,0.95);
-    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (11.00,3.82) {{\bfseries\textcolor{brandteal!60!black}{C9}} Nhạc vẫn phát trong game; game không đè tiếng};
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (11.00,3.82) {{\bfseries\textcolor{brandteal!60!black}{C9}} Nhạc vẫn phát; âm game tự giảm, không đè tiếng};
     \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (1.75,1.95) rectangle +(2.88,0.95);
-    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (1.85,2.82) {{\bfseries\textcolor{brandteal!60!black}{C4}} Thẻ ``Đang đọc'' nổi mọi tab; chạm quay lại đúng chỗ};
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (1.85,2.82) {{\bfseries\textcolor{brandteal!60!black}{C4}} Thẻ ``Đang đọc'' nổi mọi tab (trong game ẩn); chạm quay lại đúng chỗ};
     \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (4.80,1.95) rectangle +(2.88,0.95);
     \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (4.90,2.82) {{\bfseries\textcolor{brandteal!60!black}{C8}} Thẻ ``Đang đọc'' nổi; quay lại bài bằng một chạm};
     \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (10.90,1.95) rectangle +(2.88,0.95);
     \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (11.00,2.82) {{\bfseries\textcolor{brandteal!60!black}{C11}} Thẻ ``Đang đọc'' nổi; game chạy bình thường};
     \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (1.75,0.95) rectangle +(2.88,0.95);
-    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (1.85,1.82) {{\bfseries\textcolor{brandteal!60!black}{C6}} Ván game tự tạm dừng và lưu điểm};
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (1.85,1.82) {{\bfseries\textcolor{brandteal!60!black}{C6}} Ván game tự tạm dừng, giữ ván dở};
     \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (4.80,0.95) rectangle +(2.88,0.95);
-    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (4.90,1.82) {{\bfseries\textcolor{brandteal!60!black}{C10}} Ván tạm dừng, lưu điểm; chọn ``Tiếp tục'' khi quay lại};
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (4.90,1.82) {{\bfseries\textcolor{brandteal!60!black}{C10}} Ván tạm dừng; quay lại, ván dở tự hiện lại};
     \draw[rounded corners=2pt, draw=brandgray!40, fill=brandpaper, thick] (7.85,0.95) rectangle +(2.88,0.95);
-    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (7.95,1.82) {{\bfseries\textcolor{brandteal!60!black}{C12}} Game tạm dừng, lưu điểm; thẻ đọc nổi khi rời News};
+    \node[anchor=north west, text width=2.68cm, align=left, font=\tiny] at (7.95,1.82) {{\bfseries\textcolor{brandteal!60!black}{C12}} Game tạm dừng, giữ ván dở; rời News thẻ đọc nổi};
     \draw[rounded corners=2pt, draw=brandteal!50, fill=brandteal!6, thick] (0.00,-0.15) rectangle +(3.35,1.0);
     \node[anchor=north west, text width=3.15cm, align=left, font=\tiny] at (0.10,0.72) {{\bfseries\textcolor{brandteal!60!black}{C13 Nghe tin}} TTS là luồng nói chính; nhạc đang phát tự nhường};
     \draw[rounded corners=2pt, draw=brandteal!50, fill=brandteal!6, thick] (3.45,-0.15) rectangle +(3.35,1.0);
-    \node[anchor=north west, text width=3.15cm, align=left, font=\tiny] at (3.55,0.72) {{\bfseries\textcolor{brandteal!60!black}{C14 Trích mp3}} Giữ video hoặc bài báo: vào kho Nhạc, cộng 5 XP lần đầu};
+    \node[anchor=north west, text width=3.15cm, align=left, font=\tiny] at (3.55,0.72) {{\bfseries\textcolor{brandteal!60!black}{C14 Trích mp3}} Giữ video/báo: tạo file âm thanh thật (TTS ghép WAV) vào kho Nhạc; +5 lần đầu mỗi video};
     \draw[rounded corners=2pt, draw=brandteal!50, fill=brandteal!6, thick] (6.90,-0.15) rectangle +(3.35,1.0);
-    \node[anchor=north west, text width=3.15cm, align=left, font=\tiny] at (7.00,0.72) {{\bfseries\textcolor{brandteal!60!black}{C15 Siêu playlist}} Trộn ba loại nội dung vào một hàng phát (v2)};
+    \node[anchor=north west, text width=3.15cm, align=left, font=\tiny] at (7.00,0.72) {{\bfseries\textcolor{brandteal!60!black}{C15 Meta-playlist}} Playlist trộn video + bài hát; hết video tự chuyển sang bài hát};
     \draw[rounded corners=2pt, draw=brandteal!50, fill=brandteal!6, thick] (10.35,-0.15) rectangle +(3.35,1.0);
     \node[anchor=north west, text width=3.15cm, align=left, font=\tiny] at (10.45,0.72) {{\bfseries\textcolor{brandteal!60!black}{C16 Ba luồng}} v1 giới hạn: một nguồn tiếng và một cửa sổ nổi};
   \end{tikzpicture}
@@ -995,7 +1003,7 @@
       {\tiny
       \begin{itemize}\itemsep2.5pt
         \item \textbf{Cuộc gọi, báo thức} ưu tiên cao nhất (audio focus Android); ứng dụng nhường ngay
-        \item \textbf{Một thời điểm chỉ một nguồn tiếng:} video làm nhạc nhường (C2), TTS làm nhạc nhường (C13), game im tiếng khi nhạc phát (C9)
+        \item \textbf{Một thời điểm chỉ một nguồn tiếng:} video làm nhạc nhường (C2), TTS làm nhạc nhường (C13), âm game tự giảm khi nhạc phát (C9)
         \item \textbf{Video và nhạc:} hỏi ở cả hai chiều (C1, C2), kèm ô tick ``Không hỏi lại''; vì cả hai đều là lựa chọn chủ động
         \item \textbf{Nhạc chạy nền} trên mọi tab; điều khiển lại bằng một chạm trên dock
         \item \textbf{Mọi luồng đều hiện} và điều khiển được trên dock mini player
@@ -1005,11 +1013,11 @@
       \begin{block}{\small Gián đoạn từ bên ngoài}
         {\tiny
         \begin{itemize}\itemsep1.5pt
-          \item \textbf{Cuộc gọi:} nhường trong 0,5~s; sau cuộc gọi nhạc phát lại, game mở lại bằng nút Tiếp tục
+          \item \textbf{Cuộc gọi:} nhường trong 0,5~s; sau cuộc gọi nhạc phát lại, game mở lại đúng ván dở
           \item \textbf{Rút tai nghe:} nhạc và TTS dừng ngay, không phát loa ngoài
           \item \textbf{Mất mạng:} thử lại sau 5--15~s; tin đã tải đọc tiếp; game offline chơi tiếp
           \item \textbf{App bị đóng:} mở lại khôi phục đủ 4 vị trí trong 2~s
-          \item \textbf{Thoát app:} nhạc tiếp tục; video, TTS dừng; game tạm dừng và lưu
+          \item \textbf{Thoát app:} nhạc tiếp tục; video, TTS dừng; game tạm dừng và giữ ván dở
         \end{itemize}}
       \end{block}
     \end{column}
@@ -1123,7 +1131,7 @@
         {\tiny Là người dùng, tôi muốn một tab tập hợp các minigame và trạng thái mở khoá, để biết được chơi gì hôm nay.}
       \end{block}
       \begin{block}{\scriptsize\bfseries GAME-02~--~Must}
-        {\tiny Là người dùng, tôi muốn chơi game đoán bài hát từ thư viện, để thử thách thấy mình thuộc bài đến đâu.}
+        {\tiny Là người dùng, tôi muốn nghe 5 giây một bài hát trong playlist rồi chọn đúng tên bài, để thử thách thấy mình thuộc bài đến đâu.}
       \end{block}
       \begin{block}{\scriptsize\bfseries GAME-03~--~Must}
         {\tiny Là người dùng, tôi muốn điểm thưởng tích lũy dùng chung cho toàn app, để mọi hoạt động đều có giá trị.}
@@ -1280,14 +1288,19 @@
     \begin{column}{0.48\textwidth}
       \begin{block}{\small Kiếm điểm}
         {\tiny
-        \begin{itemize}\itemsep2pt
-          \item Thắng minigame: \textbf{+10}
-          \item Nhiệm vụ hằng ngày: \textbf{+20}/việc (60--100 điểm/ngày)
-          \item Quiz từ bài báo: \textbf{+15}
-          \item Lần đầu trong tuần trích mp3 / nghe tin: \textbf{+20} (2 lần/tuần)
-          \item Bonus streak: \textbf{+50} (ngày 7), \textbf{+150} (ngày 30)
+        \begin{itemize}\itemsep1pt
+          \item Nhiệm vụ hằng ngày: \textbf{+20}/việc (3 việc)
+          \item Quiz cuối video: \textbf{20 + 5$\times$(combo$-$1)}, tối đa \textbf{+50}
+          \item Quiz bài báo: \textbf{+15}/câu $\cdot$ Đoán bài hát: \textbf{+10}/câu đúng
+          \item Quiz kiến thức: thang \textbf{5--60} điểm
+          \item 2048: \textbf{score/20}, chạm 2048 thêm \textbf{+100} $\cdot$ Rắn: \textbf{+2}/mồi
+          \item Thắng Tic-Tac-Toe (đấu máy): Dễ \textbf{+10} / Vừa \textbf{+20} / Khó \textbf{+40}
+          \item Beat Tiles: \textbf{score/2} $\cdot$ Trích MP3: \textbf{+5} (lần đầu mỗi video)
+          \item Thử thách hằng ngày: \textbf{50 + 5$\times$streak}, tối đa \textbf{85}
         \end{itemize}}
       \end{block}
+      \vspace{1mm}
+      {\tiny\textbf{Huy hiệu:} 15 tổng cộng~--~6 huy hiệu hồ sơ + 9 huy hiệu game}
     \end{column}
     \begin{column}{0.46\textwidth}
       \begin{alertblock}{\small Tiêu điểm}
@@ -1299,50 +1312,19 @@
           \item Phụ kiện pet: \textbf{$-$50 đến $-$200}
         \end{itemize}}
       \end{alertblock}
+      \vspace{1.5mm}
+      {\small\textbf{Tiến hoá thú cưng (4 giai đoạn)}}\vspace{1mm}
+      {\tiny
+      \begin{itemize}\itemsep1pt
+        \item \textbf{Trứng} (0 điểm) $\rightarrow$ nở khi hoàn thành 3 nhiệm vụ
+        \item \textbf{Bé cưng} (500 điểm): gà con vàng, thở, nhấp mắt
+        \item \textbf{Thiếu niên} (2.000 điểm): má hồng
+        \item \textbf{Trưởng thành} (5.000 điểm): con vẹt đầu đỏ, thân xanh
+      \end{itemize}}
       \vspace{1mm}
       {\tiny\color{brandgray} Không bán điểm bằng tiền ở v1; v2 mới xét đổi quà vật lý, voucher.}
     \end{column}
   \end{columns}
-\end{frame}
-
-% ============================================================
-\section{Gamification}
-% ============================================================
-\begin{frame}{Gamification~--~Vòng lặp giữ người dùng}
-  \begin{columns}
-    \begin{column}{0.48\textwidth}
-      {\small\textbf{Kiếm điểm (điểm thật trong app)}}\vspace{1mm}
-      {\tiny
-      \begin{itemize}\itemsep2.5pt
-        \item Thắng Tic-Tac-Toe: \textbf{+20}
-        \item Snake: \textbf{score $\times$ 2}
-        \item Beat Tiles: \textbf{score / 2}
-        \item Đoán bài hát: \textbf{+10}/câu đúng
-        \item Quiz từ bài báo: \textbf{+15}
-        \item Quiz cuối video: \textbf{+20}
-        \item Nhiệm vụ hằng ngày: \textbf{+20}/việc (3 việc)
-        \item Trích MP3 lần đầu: \textbf{+5}
-      \end{itemize}}
-    \end{column}
-    \begin{column}{0.48\textwidth}
-      {\small\textbf{Tiêu điểm (giá thật trong app)}}\vspace{1mm}
-      {\tiny
-      \begin{itemize}\itemsep2.5pt
-        \item Cho thú cưng ăn: \textbf{$-$30} (1 lần/ngày)
-        \item Phụ kiện pet: \textbf{$-$50} -- \textbf{$-$100}
-        \item Khung avatar: \textbf{$-$200} -- \textbf{$-$800}
-        \item Mở khoá game: \textbf{$-$300} -- \textbf{$-$500}
-      \end{itemize}}\vspace{2mm}
-      {\small\textbf{Tiến hoá thú cưng}}\vspace{1mm}
-      {\tiny
-      \begin{itemize}\itemsep2pt
-        \item Hoàn thành 3 nhiệm vụ/ngày $\rightarrow$ trứng nở
-        \item Cho ăn hằng ngày $\rightarrow$ lớn theo mốc
-      \end{itemize}}
-    \end{column}
-  \end{columns}
-  \vfill
-  {\tiny\color{brandgray} Điểm không mua bằng tiền ở v1; chỉ đổi được vật phẩm ảo trong app. Điểm cộng qua Room \texttt{point\_entries}, trừ có kiểm tra số dư âm.}
 \end{frame}
 
 % ============================================================
@@ -1668,7 +1650,7 @@
         \item \textbf{Trạng thái rỗng:} danh mục không có nội dung hiển thị biểu tượng, thông điệp và nút ``Xem tin mới nhất''; không để màn hình trống không lối đi
         \item \textbf{Mất mạng:} feed không tải được hiện ``Không có kết nối'' kèm nút ``Thử lại''; khi có mạng tự phục hồi
         \item \textbf{Bàn chơi 2048:} ô cùng giá trị gộp nhau theo hướng vuốt, bàn chơi và điểm cập nhật tức thì sau mỗi nước; điểm cao nhất được ghi lại
-        \item \textbf{Beat Tiles:} nốt nhạc rơi bốn làn, chạm đúng ô khi nốt vào vùng sáng; điểm và combo tăng tức thì, nhạc vẫn phát; thắng ván cộng điểm vào ví dùng chung
+        \item \textbf{Beat Tiles:} nốt nhạc rơi bốn làn, tốc độ theo \textbf{BPM thật} của bài đang phát (60.000/bpm); chạm đúng ô khi nốt vào vùng sáng; mở trực tiếp từ màn \textbf{Now Playing}; điểm và combo tăng tức thì; thắng ván cộng điểm vào ví dùng chung
       \end{itemize}}
     \end{column}
   \end{columns}

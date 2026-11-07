@@ -1,0 +1,275 @@
+\subsection{Mô hình use case và đặc tả chức năng}
+\label{sec:use-case-model}
+
+Phần~\ref{sec:feature-prioritization} liệt kê 76 tính năng ứng viên; con số này là danh sách chức năng, chưa phải mô hình yêu cầu. Một mô hình use case đúng phải trả lời câu hỏi \emph{người dùng đạt được gì trong một phiên làm việc}, nên các tính năng được gộp theo mục tiêu người dùng (user-goal level) thay vì tách mỗi tính năng thành một use case. Do số mục tiêu vẫn vượt quá sức đọc của một hình, mô hình được trình bày theo hai mức: Hình~\ref{fig:usecase} tóm tắt toàn hệ thống theo nhóm phân hệ, và các Hình~\ref{fig:uc-video}--\ref{fig:uc-platform} đi chi tiết từng nhóm với quan hệ \guillemotleft extend\guillemotright/\guillemotleft include\guillemotright. Cách phân hai mức này giữ cho mỗi hình vừa một trang nhưng không mất thông tin: mức tổng quan trả lời ``hệ thống làm được gì'', mức chi tiết trả lời ``làm theo trình tự nào, phụ thuộc vào đâu''.
+
+\subsubsection{Sơ đồ use case tổng quan toàn hệ thống}
+\label{sec:uc-overview}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  font=\footnotesize,
+  uc/.style={ellipse, draw=black!70, thick, fill=white, inner sep=0.5pt, align=center, text width=2.6cm, font=\scriptsize},
+  grp/.style={draw=black!45, rounded corners=5pt, fill=gray!4},
+  act/.style={draw=black!70, thick},
+  lnk/.style={draw=black!40}]
+  \draw[draw=black!60, thick, rounded corners=4pt] (1.55,3.0) rectangle (14.9,11.5);
+  \node[font=\small\bfseries] at (8.25,11.25) {OneSpace};
+  \node[grp, minimum width=3.6cm, minimum height=1.8cm] at (4.35,10.15) {};
+  \node[grp, minimum width=3.6cm, minimum height=1.8cm] at (8.35,10.15) {};
+  \node[grp, minimum width=3.6cm, minimum height=1.8cm] at (12.35,10.15) {};
+  \node[grp, minimum width=3.6cm, minimum height=6.0cm] at (4.35,6.05) {};
+  \node[grp, minimum width=3.6cm, minimum height=6.0cm] at (8.35,6.05) {};
+  \node[grp, minimum width=3.6cm, minimum height=6.0cm] at (12.35,6.05) {};
+  \node[font=\scriptsize\bfseries, text=black!55] at (4.35,10.78) {Video};
+  \node[font=\scriptsize\bfseries, text=black!55] at (8.35,10.78) {Tin tức};
+  \node[font=\scriptsize\bfseries, text=black!55] at (12.35,10.78) {Trò chơi};
+  \node[font=\scriptsize\bfseries, text=black!55] at (4.35,8.75) {Nhạc};
+  \node[font=\scriptsize\bfseries, text=black!55] at (8.35,8.75) {Thưởng};
+  \node[font=\scriptsize\bfseries, text=black!55] at (12.35,8.75) {Nền tảng \& dùng chung};
+  \draw[act] (0.75,7.55) circle (0.13);
+  \draw[act] (0.75,7.42) -- (0.75,7.05);
+  \draw[act] (0.58,7.25) -- (0.92,7.25);
+  \draw[act] (0.75,7.05) -- (0.60,6.81);
+  \draw[act] (0.75,7.05) -- (0.90,6.81);
+  \node[align=center, font=\footnotesize\bfseries] at (0.75,6.52) {Người\\dùng};
+  \draw[lnk] (0.92,7.25) -- (4.35,9.85);
+  \draw[lnk] (0.92,7.25) -- (8.35,9.85);
+  \draw[lnk] (0.92,7.25) -- (12.35,9.85);
+  \draw[lnk] (0.92,7.25) -- (4.35,7.55);
+  \draw[lnk] (0.92,7.25) -- (4.35,6.05);
+  \draw[lnk] (0.92,7.25) -- (8.35,7.85);
+  \draw[lnk] (0.92,7.25) -- (8.35,6.5);
+  \draw[lnk] (0.92,7.25) -- (8.35,5.15);
+  \draw[lnk] (0.92,7.25) -- (12.35,7.85);
+  \draw[lnk] (0.92,7.25) -- (12.35,6.5);
+  \draw[lnk] (0.92,7.25) -- (12.35,5.15);
+  \draw[lnk] (0.92,7.25) -- (12.35,3.8);
+  \node[uc] at (4.35,9.85) {Xem video\\(UC-02)};
+  \node[uc] at (8.35,9.85) {Đọc tin\\(UC-04)};
+  \node[uc] at (12.35,9.85) {Chơi minigame\\(UC-05)};
+  \node[uc] at (4.35,7.55) {Nghe nhạc\\(UC-03)};
+  \node[uc] at (4.35,6.05) {Ghi âm karaoke\\(UC-12)};
+  \node[uc] at (8.35,7.85) {Theo dõi tiến độ\\(UC-06)};
+  \node[uc] at (8.35,6.5) {Chăm sóc thú cưng\\(UC-07)};
+  \node[uc] at (8.35,5.15) {Đổi quà\\(UC-08)};
+  \node[uc] at (12.35,7.85) {Chọn sở thích\\(UC-01)};
+  \node[uc] at (12.35,6.5) {Lưu nội dung\\(UC-09)};
+  \node[uc] at (12.35,5.15) {Tìm nội dung\\(UC-10)};
+  \node[uc] at (12.35,3.8) {Quản lý danh tính\\(UC-11)};
+\end{tikzpicture}
+\caption{Sơ đồ use case tổng quan toàn hệ thống: 76 tính năng được gộp thành 12 use case mục tiêu, nhóm theo năm phân hệ và phần nền tảng; chi tiết quan hệ của từng nhóm ở các hình~\ref{fig:uc-video}--\ref{fig:uc-platform}.}
+\label{fig:usecase}
+\end{figure}
+
+Một quyết định mô hình hoá cần giải thích: chỉ có \textbf{một tác nhân người dùng}. Trong bản hiện thực, chế độ khách và tài khoản đăng nhập không chặn năng lực nào (mục~\ref{sec:uc-platform}); quản lý danh tính vì vậy là một use case (UC-11) chứ không phải cơ chế phân quyền. Các biến thể có điều kiện như thu nhỏ video hay phân xử âm thanh \emph{không} đứng ngang hàng với mục tiêu mà được đưa xuống mức chi tiết dưới dạng quan hệ \guillemotleft extend\guillemotright; các hành vi nền luôn chạy dùng \guillemotleft include\guillemotright.
+
+\subsubsection{Chi tiết phân hệ Video}
+\label{sec:uc-video}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\footnotesize,
+  uc/.style={ellipse, draw=black!70, thick, fill=white, align=center, inner sep=0.5pt, text width=2.6cm},
+  lnk/.style={draw=black!45},
+  rel/.style={draw=black!65, dashed, thick, -{Latex[open, length=1.6mm]}}]
+  \draw[draw=black!60, thick, rounded corners=4pt] (-5.7,-1.0) rectangle (7.3,5.6);
+  \node[font=\small\bfseries] at (0.95,5.3) {Phân hệ Video};
+  \draw[draw=black!70, thick] (-6.5,2.1) circle (0.13);
+  \draw[draw=black!70, thick] (-6.5,1.97) -- (-6.5,1.60);
+  \draw[draw=black!70, thick] (-6.67,1.80) -- (-6.33,1.80);
+  \draw[draw=black!70, thick] (-6.5,1.60) -- (-6.65,1.36);
+  \draw[draw=black!70, thick] (-6.5,1.60) -- (-6.35,1.36);
+  \node[align=center, font=\footnotesize\bfseries] at (-6.5,1.05) {Người\\dùng};
+  \draw[lnk] (-6.33,1.80) -- (0,2.15);
+  \node[uc] (u2) at (0,2.15) {Xem video\\(UC-02)};
+  \node[uc] (x1) at (-3.8,4.5) {Tiếp tục xem (X1)};
+  \node[uc] (x2) at (0,4.5) {Nghe audio (X2)};
+  \node[uc] (x3) at (3.8,4.5) {Quiz video (X3)};
+  \node[uc] (i1) at (3.8,-0.1) {Khôi phục vị trí\\(I1)};
+  \draw[rel] (x1) -- (u2);
+  \draw[rel] (x2) -- (u2);
+  \draw[rel] (x3) -- (u2);
+  \draw[rel] (u2) -- node[above right, font=\scriptsize]{\guillemotleft include\guillemotright} (i1);
+\end{tikzpicture}
+\caption{Use case phân hệ Video: UC-02 với ba biến thể có điều kiện (X1--X3) và hành vi nền bắt buộc I1. Điều kiện kích hoạt ở Bảng~\ref{tab:uc-relations}.}
+\label{fig:uc-video}
+\end{figure}
+
+\subsubsection{Chi tiết phân hệ Nhạc}
+\label{sec:uc-music}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\footnotesize,
+  uc/.style={ellipse, draw=black!70, thick, fill=white, align=center, inner sep=0.5pt, text width=2.6cm},
+  lnk/.style={draw=black!45},
+  rel/.style={draw=black!65, dashed, thick, -{Latex[open, length=1.6mm]}},
+  note/.style={draw=black!55, fill=gray!6, rounded corners=2pt, inner sep=2.5pt, align=center, font=\scriptsize}]
+  \draw[draw=black!60, thick, rounded corners=4pt] (-5.7,-1.0) rectangle (8.2,5.6);
+  \node[font=\small\bfseries] at (1.4,5.3) {Phân hệ Nhạc};
+  \draw[draw=black!70, thick] (-6.5,2.1) circle (0.13);
+  \draw[draw=black!70, thick] (-6.5,1.97) -- (-6.5,1.60);
+  \draw[draw=black!70, thick] (-6.67,1.80) -- (-6.33,1.80);
+  \draw[draw=black!70, thick] (-6.5,1.60) -- (-6.65,1.36);
+  \draw[draw=black!70, thick] (-6.5,1.60) -- (-6.35,1.36);
+  \node[align=center, font=\footnotesize\bfseries] at (-6.5,1.05) {Người\\dùng};
+  \draw[lnk] (-6.33,1.80) -- (0,2.15);
+  \draw[lnk] (-6.33,1.80) -- (5.2,2.15);
+  \node[uc] (u3) at (0,2.15) {Nghe nhạc\\(UC-03)};
+  \node[uc] (u12) at (5.2,2.15) {Ghi âm karaoke\\(UC-12)};
+  \node[uc] (x0) at (-2.4,4.5) {Xử lý xung đột (X0)};
+  \node[uc] (i2) at (2.6,-0.1) {Duy trì hàng đợi (I2)};
+  \draw[rel] (x0) -- (u3);
+  \draw[rel] (u3) -- node[above left, font=\scriptsize]{\guillemotleft include\guillemotright} (i2);
+  \node[note, text width=4.6cm] at (5.9,-1.7) {X0 cũng mở rộng UC-02 (phân hệ Video) với cùng điều kiện [hai luồng tiếng cùng phát]};
+\end{tikzpicture}
+\caption{Use case phân hệ Nhạc: UC-03 và UC-12 cùng tác nhân; X0 là biến thể dùng chung với phân hệ Video; I2 là hành vi nền của hàng đợi.}
+\label{fig:uc-music}
+\end{figure}
+
+\subsubsection{Chi tiết phân hệ Tin tức}
+\label{sec:uc-news}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\footnotesize,
+  uc/.style={ellipse, draw=black!70, thick, fill=white, align=center, inner sep=0.5pt, text width=2.6cm},
+  lnk/.style={draw=black!45},
+  rel/.style={draw=black!65, dashed, thick, -{Latex[open, length=1.6mm]}}]
+  \draw[draw=black!60, thick, rounded corners=4pt] (-5.7,-1.0) rectangle (5.9,5.6);
+  \node[font=\small\bfseries] at (0.3,5.3) {Phân hệ Tin tức};
+  \draw[draw=black!70, thick] (-6.5,2.1) circle (0.13);
+  \draw[draw=black!70, thick] (-6.5,1.97) -- (-6.5,1.60);
+  \draw[draw=black!70, thick] (-6.67,1.80) -- (-6.33,1.80);
+  \draw[draw=black!70, thick] (-6.5,1.60) -- (-6.65,1.36);
+  \draw[draw=black!70, thick] (-6.5,1.60) -- (-6.35,1.36);
+  \node[align=center, font=\footnotesize\bfseries] at (-6.5,1.05) {Người\\dùng};
+  \draw[lnk] (-6.33,1.80) -- (0,2.15);
+  \node[uc] (u4) at (0,2.15) {Đọc tin\\(UC-04)};
+  \node[uc] (x8) at (-3.8,4.5) {Đọc nổi (X8)};
+  \node[uc] (x5) at (0,4.5) {Quiz cuối bài (X5)};
+  \node[uc] (x4) at (3.8,4.5) {Nghe tin TTS (X4)};
+  \draw[rel] (x8) -- (u4);
+  \draw[rel] (x5) -- (u4);
+  \draw[rel] (x4) -- (u4);
+  \draw[draw=black!70, thick, fill=gray!5] (7.0,4.05) rectangle (9.6,4.9);
+  \node[align=center, font=\scriptsize] at (8.3,4.48) {\guillemotleft system\guillemotright\\TTS engine};
+  \draw[lnk] (3.8,4.5) -- (7.0,4.5);
+\end{tikzpicture}
+\caption{Use case phân hệ Tin tức: UC-04 với các biến thể X4, X5, X8; X4 có thêm tác nhân hệ thống TTS engine.}
+\label{fig:uc-news}
+\end{figure}
+
+\subsubsection{Chi tiết nhóm Trò chơi và Thưởng}
+\label{sec:uc-games}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\footnotesize,
+  uc/.style={ellipse, draw=black!70, thick, fill=white, align=center, inner sep=0.5pt, text width=2.6cm},
+  lnk/.style={draw=black!45},
+  rel/.style={draw=black!65, dashed, thick, -{Latex[open, length=1.6mm]}}]
+  \draw[draw=black!60, thick, rounded corners=4pt] (-5.7,-3.6) rectangle (7.5,5.6);
+  \node[font=\small\bfseries] at (1.05,5.3) {Phân hệ Trò chơi và Thưởng};
+  \node[font=\scriptsize\bfseries, text=black!55] at (-2.4,4.95) {Trò chơi};
+  \node[font=\scriptsize\bfseries, text=black!55] at (0.5,-0.95) {Thưởng};
+  \draw[draw=black!70, thick] (-6.5,1.0) circle (0.13);
+  \draw[draw=black!70, thick] (-6.5,0.87) -- (-6.5,0.50);
+  \draw[draw=black!70, thick] (-6.67,0.70) -- (-6.33,0.70);
+  \draw[draw=black!70, thick] (-6.5,0.50) -- (-6.65,0.26);
+  \draw[draw=black!70, thick] (-6.5,0.50) -- (-6.35,0.26);
+  \node[align=center, font=\footnotesize\bfseries] at (-6.5,-0.05) {Người\\dùng};
+  \draw[lnk] (-6.33,0.70) -- (0.3,2.5);
+  \draw[lnk] (-6.33,0.70) -- (-3.8,-1.85);
+  \draw[lnk] (-6.33,0.70) -- (0,-1.85);
+  \draw[lnk] (-6.33,0.70) -- (3.8,-1.85);
+  \node[uc] (u5) at (0.3,2.5) {Chơi minigame\\(UC-05)};
+  \node[uc] (x6) at (-2.6,4.5) {Thử thách (X6)};
+  \node[uc] (x7) at (2.6,4.5) {Chơi + xem (X7)};
+  \node[uc] (i3) at (4.4,0.7) {Ghi nhận điểm\\(I3)};
+  \node[uc] (u6) at (-3.8,-1.85) {Theo dõi tiến độ\\(UC-06)};
+  \node[uc] (u7) at (0,-1.85) {Chăm sóc thú cưng\\(UC-07)};
+  \node[uc] (u8) at (3.8,-1.85) {Đổi quà\\(UC-08)};
+  \draw[rel] (x6) -- (u5);
+  \draw[rel] (x7) -- (u5);
+  \draw[rel] (u5) -- node[midway, below right, font=\scriptsize]{\guillemotleft include\guillemotright} (i3);
+\end{tikzpicture}
+\caption{Use case nhóm Trò chơi và Thưởng: UC-05 với biến thể X6/X7 và hành vi nền I3; ba use case thưởng UC-06--UC-08 cùng tác nhân.}
+\label{fig:uc-games}
+\end{figure}
+
+\subsubsection{Chi tiết nhóm Nền tảng và dùng chung}
+\label{sec:uc-platform}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\footnotesize,
+  uc/.style={ellipse, draw=black!70, thick, fill=white, align=center, inner sep=0.5pt, text width=2.6cm},
+  lnk/.style={draw=black!45},
+  rel/.style={draw=black!65, dashed, thick, -{Latex[open, length=1.6mm]}},
+  note/.style={draw=black!55, fill=gray!6, rounded corners=2pt, inner sep=2.5pt, align=center, font=\scriptsize}]
+  \draw[draw=black!60, thick, rounded corners=4pt] (-5.7,-2.2) rectangle (7.5,5.6);
+  \node[font=\small\bfseries] at (1.05,5.3) {Nền tảng và dùng chung};
+  \draw[draw=black!70, thick] (-6.5,2.3) circle (0.13);
+  \draw[draw=black!70, thick] (-6.5,2.17) -- (-6.5,1.80);
+  \draw[draw=black!70, thick] (-6.67,2.00) -- (-6.33,2.00);
+  \draw[draw=black!70, thick] (-6.5,1.80) -- (-6.65,1.56);
+  \draw[draw=black!70, thick] (-6.5,1.80) -- (-6.35,1.56);
+  \node[align=center, font=\footnotesize\bfseries] at (-6.5,1.25) {Người\\dùng};
+  \draw[lnk] (-6.33,2.00) -- (-3.8,3.0);
+  \draw[lnk] (-6.33,2.00) -- (0,3.0);
+  \draw[lnk] (-6.33,2.00) -- (3.8,3.0);
+  \draw[lnk] (-6.33,2.00) -- (-3.8,0.15);
+  \draw[lnk] (-6.33,2.00) -- (3.8,0.15);
+  \node[uc] (u1) at (-3.8,3.0) {Chọn sở thích\\(UC-01)};
+  \node[uc] (u9) at (0,3.0) {Lưu nội dung\\(UC-09)};
+  \node[uc] (u10) at (3.8,3.0) {Tìm nội dung\\(UC-10)};
+  \node[uc] (u11) at (-3.8,0.15) {Quản lý danh tính\\(UC-11)};
+  \node[uc] (i4) at (0,0.15) {Xác thực OTP\\(I4)};
+  \node[uc] (u13) at (3.8,0.15) {Tuỳ chỉnh cài đặt\\(UC-13)};
+  \draw[rel] (u11) -- node[midway, below, font=\scriptsize]{\guillemotleft include\guillemotright} (i4);
+  \node[note, text width=4.6cm] at (3.9,-1.55) {UC-13 là use case hỗ trợ (không include/extend); I4 luôn chạy khi đăng nhập OTP};
+\end{tikzpicture}
+\caption{Use case nhóm Nền tảng và dùng chung: bốn mục tiêu UC-01/09/10/11, use case hỗ trợ UC-13 và hành vi bắt buộc I4.}
+\label{fig:uc-platform}
+\end{figure}
+
+\subsubsection{Bảng quan hệ và đặc tả chi tiết}
+\label{sec:uc-specs}
+
+\begingroup\small\setlength{\tabcolsep}{3pt}
+\begin{longtable}{>{\RaggedRight\arraybackslash}p{0.06\linewidth}>{\RaggedRight\arraybackslash}p{0.22\linewidth}>{\RaggedRight\arraybackslash}p{0.08\linewidth}>{\RaggedRight\arraybackslash}p{0.32\linewidth}>{\RaggedRight\arraybackslash}p{0.24\linewidth}}
+\caption{Quan hệ \guillemotleft extend\guillemotright{} và \guillemotleft include\guillemotright{} giữa các use case (điều kiện kích hoạt và nơi hiện thực)}
+\label{tab:uc-relations}\\
+\toprule
+\textbf{Mã} & \textbf{Use case} & \textbf{Loại} & \textbf{Cơ sở · điều kiện} & \textbf{Hiện thực} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Mã} & \textbf{Use case} & \textbf{Loại} & \textbf{Cơ sở · điều kiện} & \textbf{Hiện thực} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\multicolumn{5}{l}{\textbf{\guillemotleft extend\guillemotright{} --- biến thể có điều kiện}} \\
+X0 & Xử lý xung đột âm thanh & extend & UC-02, UC-03 · [hai luồng tiếng cùng phát] & SessionPolicy; popup C1/C2, ghi nhớ lựa chọn \\
+X1 & Tiếp tục xem (thu nhỏ) & extend & UC-02 · [rời màn player, trừ Home/Games] & FloatingVideo trong shell, dùng chung engine \\
+X2 & Nghe âm thanh video & extend & UC-02 · [chọn tai nghe] & AudioOnlyState; giữ vị trí phát \\
+X3 & Quiz cuối video & extend & UC-02 · [video kết thúc, không ở playlist] & CTA trong player; cộng điểm \\
+X4 & Nghe tin bằng TTS & extend & UC-04 · [bấm tai nghe] & TTS on-device; bản demo phát audio mẫu \\
+X5 & Kiểm tra nhanh cuối bài & extend & UC-04 · [bài có quiz] & Quiz card sau nội dung; +15 điểm/câu \\
+X6 & Thử thách hằng ngày & extend & UC-05 · [có thử thách chưa hoàn thành] & 1 template/ngày; 50+5$\times$streak \\
+X7 & Vừa chơi vừa xem video & extend & UC-05 · [video đang phát, game hỗ trợ] & Chia 34/66; hai game bắt buộc toàn màn \\
+X8 & Đọc nổi & extend & UC-04 · [rời reader khi đang mở bài] & Thẻ đọc nổi; ẩn trong màn chơi \\
+\midrule
+\multicolumn{5}{l}{\textbf{\guillemotleft include\guillemotright{} --- hành vi bắt buộc dùng chung}} \\
+I1 & Khôi phục vị trí xem & include & UC-02 · mỗi lần mở video & Room checkpoint 3 giây; lệch $\leq$ 2 giây \\
+I2 & Duy trì hàng đợi & include & UC-03 · khi phát & Engine queue + tự chuyển bài \\
+I3 & Ghi nhận điểm \& nhiệm vụ & include & UC-05 · sau khi kết thúc ván & Room; +20/nhiệm vụ; tiến hoá pet \\
+I4 & Xác thực OTP & include & UC-11 · khi đăng nhập OTP & Demo local: mã 123456, hạn 5 phút \\
+\end{longtable}
+\endgroup
+
+\input{sections/2-product-scope/use-case-specs}
