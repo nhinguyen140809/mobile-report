@@ -1,0 +1,446 @@
+[
+ {
+  "code": "F-VID-01",
+  "module": "Phân hệ Video",
+  "title": "Xem video streaming cơ bản (player HLS/MP4)",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-VID-02",
+  "module": "Phân hệ Video",
+  "title": "Feed ``Đề xuất'' theo sở thích",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-VID-03",
+  "module": "Phân hệ Video",
+  "title": "Tìm kiếm video",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-VID-04",
+  "module": "Phân hệ Video",
+  "title": "Danh sách xem sau (watchlist)",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-VID-05",
+  "module": "Phân hệ Video",
+  "title": "Lịch sử xem và tiếp tục từ chỗ dừng",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-VID-06",
+  "module": "Phân hệ Video",
+  "title": "Chọn chất lượng phát: Auto hoặc bản 1080p/720p/360p",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-VID-07",
+  "module": "Phân hệ Video",
+  "title": "Tải video xem offline",
+  "desc": "Tính năng thuộc nhóm Thankless"
+ },
+ {
+  "code": "F-VID-08",
+  "module": "Phân hệ Video",
+  "title": "Picture-in-picture: video thu nhỏ góc màn hình khi rời trang",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-VID-09",
+  "module": "Phân hệ Video",
+  "title": "Chế độ chỉ phát âm thanh của video (audio-only)",
+  "desc": "Tính năng thuộc nhóm Fill-ins"
+ },
+ {
+  "code": "F-VID-10",
+  "module": "Phân hệ Video",
+  "title": "Nhấn giữ video để trích thành tệp mp3 cho kho cá nhân",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-VID-11",
+  "module": "Phân hệ Video",
+  "title": "Chia sẻ link video ra ngoài app",
+  "desc": "Tính năng thuộc nhóm Fill-ins"
+ },
+ {
+  "code": "F-VID-12",
+  "module": "Phân hệ Video",
+  "title": "Màn hồ sơ nghệ sĩ/kênh: bấm tên để xem mọi nội dung của họ",
+  "desc": "Tính năng thuộc nhóm Fill-ins"
+ },
+ {
+  "code": "F-VID-13",
+  "module": "Phân hệ Video",
+  "title": "Playlist video theo chủ đề",
+  "desc": "Tính năng thuộc nhóm Fill-ins"
+ },
+ {
+  "code": "F-VID-14",
+  "module": "Phân hệ Video",
+  "title": "Tua nhanh double-tap và đổi tốc độ phát",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-VID-15",
+  "module": "Phân hệ Video",
+  "title": "Gợi ý ``chơi game liên quan video này'': thẻ game cuối video, câu hỏi soạn sẵn lúc đăng nội dung",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-VID-16",
+  "module": "Phân hệ Video",
+  "title": "Toàn màn hình: nút ẩn system bars, player chiếm cả trang",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-VID-17",
+  "module": "Phân hệ Video",
+  "title": "Điều khiển âm lượng: nút loa mute/unmute + thanh volume hệ thống",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-VID-18",
+  "module": "Phân hệ Video",
+  "title": "Pinch-to-zoom cửa sổ nổi: 2 ngón thu phóng 0.5x--2x",
+  "desc": "Tính năng thuộc nhóm Fill-ins"
+ },
+ {
+  "code": "F-MUS-01",
+  "module": "Phân hệ Nhạc",
+  "title": "Player nhạc đầy đủ (phát / dừng / chuyển / tua / repeat / shuffle)",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-MUS-02",
+  "module": "Phân hệ Nhạc",
+  "title": "Mini player dock xuyên suốt mọi màn hình",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-MUS-03",
+  "module": "Phân hệ Nhạc",
+  "title": "Phát nhạc nền khi rời ứng dụng hoặc khoá màn hình",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-MUS-04",
+  "module": "Phân hệ Nhạc",
+  "title": "Tự tạo/sửa/xoá playlist",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-MUS-05",
+  "module": "Phân hệ Nhạc",
+  "title": "Hàng phát (queue): thêm tiếp theo, phát cuối, kéo sắp lại",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-MUS-06",
+  "module": "Phân hệ Nhạc",
+  "title": "Tìm kiếm nhạc (bài hát/nghệ sĩ/album)",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-MUS-07",
+  "module": "Phân hệ Nhạc",
+  "title": "Kho nhạc cá nhân chứa các tệp trích từ video",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-MUS-08",
+  "module": "Phân hệ Nhạc",
+  "title": "Gợi ý nhạc theo sở thích",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-MUS-09",
+  "module": "Phân hệ Nhạc",
+  "title": "``Siêu playlist'' (meta-playlist) trộn nhạc và video",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-MUS-10",
+  "module": "Phân hệ Nhạc",
+  "title": "Xử lý audio focus: duck/pause khi có luồng âm thanh khác",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-MUS-12",
+  "module": "Phân hệ Nhạc",
+  "title": "Tải bài hát offline",
+  "desc": "Tính năng thuộc nhóm Thankless"
+ },
+ {
+  "code": "F-MUS-13",
+  "module": "Phân hệ Nhạc",
+  "title": "Tốc độ phát nhạc: x1/x1.5/x2/x0.5 trên dock và Home card",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-MUS-14",
+  "module": "Phân hệ Nhạc",
+  "title": "Lời bài hát: panel scroll trên Now Playing",
+  "desc": "Tính năng thuộc nhóm Fill-ins"
+ },
+ {
+  "code": "F-COM-01",
+  "module": "Dùng chung",
+  "title": "Đăng ký/đăng nhập một tài khoản cho cả 4 phân hệ",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-COM-02",
+  "module": "Dùng chung",
+  "title": "Onboarding chọn sở thích lần đầu",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-COM-03",
+  "module": "Dùng chung",
+  "title": "Hồ sơ cá nhân: avatar, khung ảnh theo thành tích",
+  "desc": "Tính năng thuộc nhóm Fill-ins"
+ },
+ {
+  "code": "F-COM-04",
+  "module": "Dùng chung",
+  "title": "Hệ điểm thưởng dùng chung (XP)",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-COM-05",
+  "module": "Dùng chung",
+  "title": "Nhiệm vụ hằng ngày (3--5 nhiệm vụ)",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-COM-06",
+  "module": "Dùng chung",
+  "title": "Chuỗi ngày liên tiếp (streak)",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-COM-07",
+  "module": "Dùng chung",
+  "title": "Thú cưng ảo: nuôi bằng điểm, tiến hoá theo mốc",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-COM-08",
+  "module": "Dùng chung",
+  "title": "Huy hiệu thành tựu",
+  "desc": "Tính năng thuộc nhóm Fill-ins"
+ },
+ {
+  "code": "F-COM-09",
+  "module": "Dùng chung",
+  "title": "Khung avatar độc quyền theo mốc thành tích",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-COM-10",
+  "module": "Dùng chung",
+  "title": "Tổng kết tháng kiểu ``wrapped'', xuất thẻ chia sẻ",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-COM-11",
+  "module": "Dùng chung",
+  "title": "Tìm kiếm xuyên nội dung (một ô tìm cho 4 phân hệ)",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-COM-12",
+  "module": "Dùng chung",
+  "title": "Nhắc nhiệm vụ/streak hằng ngày",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-COM-13",
+  "module": "Dùng chung",
+  "title": "Cài đặt: sáng/tối, ngôn ngữ, tiết kiệm dữ liệu",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-COM-14",
+  "module": "Dùng chung",
+  "title": "Cửa sổ xác nhận khi hai luồng âm thanh xung đột",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-COM-15",
+  "module": "Dùng chung",
+  "title": "Cửa hàng đổi quà bằng điểm (mở game, đồ pet, khung avatar)",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-COM-16",
+  "module": "Dùng chung",
+  "title": "Chế độ ngoại tuyến cơ bản: tin đã lưu, trạng thái mất mạng",
+  "desc": "Tính năng thuộc nhóm Major (hoãn tới gần cuối)"
+ },
+ {
+  "code": "F-COM-18",
+  "module": "Dùng chung",
+  "title": "Chế độ khách dùng thử (không cần tài khoản)",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-COM-19",
+  "module": "Dùng chung",
+  "title": "Karaoke/Record: ghi màn hình video (MediaProjection), countdown 3-2-1",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-COM-20",
+  "module": "Dùng chung",
+  "title": "Vuốt ngang đổi phân hệ (trừ Games) + hoàn tác đóng nhạc",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-COM-21",
+  "module": "Dùng chung",
+  "title": "Ghi âm, hát karaoke cùng bài hát đang phát (bên Nhạc)",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-NEWS-01",
+  "module": "Phân hệ Tin tức",
+  "title": "Feed tin theo chuyên mục và sở thích",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-NEWS-02",
+  "module": "Phân hệ Tin tức",
+  "title": "Trình đọc sạch, đổi cỡ chữ",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-NEWS-03",
+  "module": "Phân hệ Tin tức",
+  "title": "Lưu bài đọc sau",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-NEWS-04",
+  "module": "Phân hệ Tin tức",
+  "title": "Tìm kiếm bài báo",
+  "desc": "Tính năng thuộc nhóm Fill-ins"
+ },
+ {
+  "code": "F-NEWS-05",
+  "module": "Phân hệ Tin tức",
+  "title": "Chuyển bài báo thành audio (TTS)~--~``nghe tin''",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-NEWS-06",
+  "module": "Phân hệ Tin tức",
+  "title": "Sắp xếp mới nhất / phổ biến",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-NEWS-07",
+  "module": "Phân hệ Tin tức",
+  "title": "Nghe nhạc khi đọc tin (dock vẫn phát)",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-NEWS-08",
+  "module": "Phân hệ Tin tức",
+  "title": "Quiz sinh ra từ bài báo đang đọc",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-NEWS-09",
+  "module": "Phân hệ Tin tức",
+  "title": "Gợi ý bài liên quan",
+  "desc": "Tính năng thuộc nhóm Fill-ins"
+ },
+ {
+  "code": "F-NEWS-10",
+  "module": "Phân hệ Tin tức",
+  "title": "Bài đang đọc thu nhỏ thành thẻ nổi khi rời tab News",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-GAME-01",
+  "module": "Phân hệ Trò chơi",
+  "title": "Hub minigame: danh sách, trạng thái mở khoá, phần thưởng",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-GAME-02",
+  "module": "Phân hệ Trò chơi",
+  "title": "Game đoán bài hát",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-GAME-03",
+  "module": "Phân hệ Trò chơi",
+  "title": "Quiz tin tức",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-GAME-04",
+  "module": "Phân hệ Trò chơi",
+  "title": "Quiz kiến thức (kiểu Ai là triệu phú)",
+  "desc": "Tính năng thuộc nhóm Fill-ins"
+ },
+ {
+  "code": "F-GAME-05",
+  "module": "Phân hệ Trò chơi",
+  "title": "Snake -- rắn săn mồi",
+  "desc": "Tính năng thuộc nhóm Fill-ins"
+ },
+ {
+  "code": "F-GAME-06",
+  "module": "Phân hệ Trò chơi",
+  "title": "``Beat tiles'' -- nốt nhạc rơi theo bài đang phát (kiểu piano tiles)",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-GAME-07",
+  "module": "Phân hệ Trò chơi",
+  "title": "Bảng xếp hạng tuần/tháng",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-GAME-08",
+  "module": "Phân hệ Trò chơi",
+  "title": "Chơi game ở nửa dưới màn hình, video chạy phía trên",
+  "desc": "Tính năng thuộc nhóm Major Projects"
+ },
+ {
+  "code": "F-GAME-09",
+  "module": "Phân hệ Trò chơi",
+  "title": "Phần thưởng khi thắng minigame (điểm)",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-GAME-10",
+  "module": "Phân hệ Trò chơi",
+  "title": "2048 (ghép số)",
+  "desc": "Tính năng thuộc nhóm Fill-ins"
+ },
+ {
+  "code": "F-GAME-11",
+  "module": "Phân hệ Trò chơi",
+  "title": "Tic-Tac-Toe (caro 3$\\times$3)",
+  "desc": "Tính năng thuộc nhóm Fill-ins"
+ },
+ {
+  "code": "F-GAME-12",
+  "module": "Phân hệ Trò chơi",
+  "title": "Thử thách hằng ngày: xoay vòng 6 game, thưởng 50+5$\\times$streak + thức ăn pet",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ },
+ {
+  "code": "F-GAME-13",
+  "module": "Phân hệ Trò chơi",
+  "title": "Âm thanh và hiệu ứng game: âm phản hồi thao tác, tự giảm khi có nhạc/video",
+  "desc": "Tính năng thuộc nhóm Quick Wins"
+ }
+]
