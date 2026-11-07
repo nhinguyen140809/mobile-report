@@ -7,24 +7,24 @@ Mỗi use case mục tiêu được mô tả lại bằng một sơ đồ hoạt
 \centering
 \begin{tikzpicture}[font=\footnotesize]
 \node[umlstart] (n1) at (0,0) {};
-\node[actnode, text width=6.2cm] (n2) at (0,-1.05) {Mở màn hình Đăng nhập};
+\node[actnode, text width=6.2cm, minimum height=0.72cm] (n2) at (0,-1.09) {Mở màn hình Đăng nhập};
 \draw[umlline] (n1.south) -- (n2.north);
-\node[actnode, text width=6.2cm] (n3) at (0,-2.1) {Nhập số điện thoại hoặc email; yêu cầu gửi mã};
+\node[actnode, text width=6.2cm, minimum height=1.14cm] (n3) at (0,-2.57) {Nhập số điện thoại hoặc email; yêu cầu gửi mã};
 \draw[umlline] (n2.south) -- (n3.north);
-\node[actnode, text width=6.2cm] (n4) at (0,-3.1500000000000004) {Hệ thống gửi mã OTP (hiệu lực 5 phút)};
+\node[actnode, text width=6.2cm, minimum height=0.72cm] (n4) at (0,-4.05) {Hệ thống gửi mã OTP (hiệu lực 5 phút)};
 \draw[umlline] (n3.south) -- (n4.north);
-\node[decnode, text width=3.0cm] (n5) at (0,-4.7) {Mã đúng và còn hạn?};
+\node[decnode, text width=2.4cm, minimum width=3.4cm, minimum height=1.75cm] (n5) at (0,-5.83) {Mã đúng và còn hạn?};
 \draw[umlline] (n4.south) -- (n5.north);
-\node[actnode, text width=5.0cm] (n6) at (-4.95,-4.7) {Tạo phiên; mở Main};
+\node[actnode, text width=4.6cm, minimum height=0.72cm] (n6) at (-5.50,-6.20) {Tạo phiên; mở Main};
 \draw[umlline] (n5.west) -- node[above, font=\scriptsize, fill=white, inner sep=1pt]{Có} (n6.east);
-\node[actnode, text width=5.0cm] (n7) at (4.95,-4.7) {Báo lỗi; tăng số lần sai};
+\node[actnode, text width=4.6cm, minimum height=0.72cm] (n7) at (5.50,-6.20) {Báo lỗi; tăng số lần sai};
 \draw[umlline] (n5.east) -- node[above, font=\scriptsize, fill=white, inner sep=1pt]{Không} (n7.west);
-\node[mergenode] (n8) at (0,-6.93) {};
+\node[mergenode] (n8) at (0,-7.44) {};
 \draw[umlline] (n6.south) |- (n8.west);
 \draw[umlline] (n7.south) |- (n8.east);
-\node[actnode, text width=6.2cm] (n9) at (0,-7.9799999999999995) {Phiên đăng nhập hoàn tất; dữ liệu cục bộ giữ nguyên};
+\node[actnode, text width=6.2cm, minimum height=1.14cm] (n9) at (0,-8.74) {Phiên đăng nhập hoàn tất; dữ liệu cục bộ giữ nguyên};
 \draw[umlline] (n8.south) -- (n9.north);
-\node[umlend] (n10) at (0,-9.08) {};
+\node[umlend] (n10) at (0,-10.08) {};
 \draw[umlline] (n9.south) -- (n10.north);
 \end{tikzpicture}
 \caption{Activity diagram UC-11 --- đăng nhập bằng OTP}
@@ -35,24 +35,24 @@ Mỗi use case mục tiêu được mô tả lại bằng một sơ đồ hoạt
 \centering
 \begin{tikzpicture}[font=\footnotesize]
 \node[umlstart] (n1) at (0,0) {};
-\node[actnode, text width=6.2cm] (n2) at (0,-1.05) {Mở ứng dụng (chưa hoàn tất onboarding)};
+\node[actnode, text width=6.2cm, minimum height=0.72cm] (n2) at (0,-1.09) {Mở ứng dụng (chưa hoàn tất onboarding)};
 \draw[umlline] (n1.south) -- (n2.north);
-\node[actnode, text width=6.2cm] (n3) at (0,-2.1) {Ba màn giới thiệu giá trị};
+\node[actnode, text width=6.2cm, minimum height=0.72cm] (n3) at (0,-2.36) {Ba màn giới thiệu giá trị};
 \draw[umlline] (n2.south) -- (n3.north);
-\node[decnode, text width=3.0cm] (n4) at (0,-3.6500000000000004) {Bỏ qua chọn chủ đề?};
+\node[decnode, text width=2.4cm, minimum width=3.4cm, minimum height=1.75cm] (n4) at (0,-4.14) {Bỏ qua chọn chủ đề?};
 \draw[umlline] (n3.south) -- (n4.north);
-\node[actnode, text width=5.0cm] (n5) at (-4.95,-3.6500000000000004) {Vào Home với đề xuất mặc định};
+\node[actnode, text width=4.6cm, minimum height=1.14cm] (n5) at (-5.50,-4.71) {Vào Home với đề xuất mặc định};
 \draw[umlline] (n4.west) -- node[above, font=\scriptsize, fill=white, inner sep=1pt]{Có} (n5.east);
-\node[actnode, text width=5.0cm] (n6) at (4.95,-3.6500000000000004) {Chọn tối thiểu 3 chủ đề};
+\node[actnode, text width=4.6cm, minimum height=0.72cm] (n6) at (5.50,-4.50) {Chọn tối thiểu 3 chủ đề};
 \draw[umlline] (n4.east) -- node[above, font=\scriptsize, fill=white, inner sep=1pt]{Không} (n6.west);
-\node[mergenode] (n7) at (0,-5.880000000000001) {};
+\node[mergenode] (n7) at (0,-6.01) {};
 \draw[umlline] (n5.south) |- (n7.west);
 \draw[umlline] (n6.south) |- (n7.east);
-\node[actnode, text width=6.2cm] (n8) at (0,-6.930000000000001) {Lưu sở thích; Home đề xuất theo chủ đề};
+\node[actnode, text width=6.2cm, minimum height=0.72cm] (n8) at (0,-7.10) {Lưu sở thích; Home đề xuất theo chủ đề};
 \draw[umlline] (n7.south) -- (n8.north);
-\node[actnode, text width=6.2cm] (n9) at (0,-7.98) {Hiện dock demo và nhiệm vụ ngày đầu};
+\node[actnode, text width=6.2cm, minimum height=0.72cm] (n9) at (0,-8.37) {Hiện dock demo và nhiệm vụ ngày đầu};
 \draw[umlline] (n8.south) -- (n9.north);
-\node[umlend] (n10) at (0,-9.08) {};
+\node[umlend] (n10) at (0,-9.50) {};
 \draw[umlline] (n9.south) -- (n10.north);
 \end{tikzpicture}
 \caption{Activity diagram UC-01 --- phiên đầu tiên}
@@ -63,38 +63,40 @@ Mỗi use case mục tiêu được mô tả lại bằng một sơ đồ hoạt
 \centering
 \begin{tikzpicture}[font=\footnotesize]
 \node[umlstart] (n1) at (0,0) {};
-\node[actnode, text width=6.2cm] (n2) at (0,-1.05) {Chạm thẻ video trong feed};
+\node[actnode, text width=6.2cm, minimum height=0.72cm] (n2) at (0,-1.09) {Chạm thẻ video trong feed};
 \draw[umlline] (n1.south) -- (n2.north);
-\node[decnode, text width=3.0cm] (n3) at (0,-2.6) {Nhạc đang phát?};
+\node[decnode, text width=2.4cm, minimum width=3.4cm, minimum height=1.75cm] (n3) at (0,-2.88) {Nhạc đang phát?};
 \draw[umlline] (n2.south) -- (n3.north);
-\node[actnode, text width=5.0cm] (n4) at (-4.95,-2.6) {Popup C2: tắt tiếng video hoặc dừng nhạc};
+\node[actnode, text width=4.6cm, minimum height=1.14cm] (n4) at (-5.50,-3.44) {Popup C2: tắt tiếng video hoặc dừng nhạc};
 \draw[umlline] (n3.west) -- node[above, font=\scriptsize, fill=white, inner sep=1pt]{Có} (n4.east);
-\node[mergenode] (n5) at (0,-4.83) {};
+\node[mergenode] (n5) at (0,-4.74) {};
 \draw[umlline] (n4.south) |- (n5.west);
-\draw[umlline] (n3.east) -- ++(0.6,0) |- (n5.east);
-\node[actnode, text width=6.2cm] (n6) at (0,-5.88) {Mở stream tại vị trí đã lưu (checkpoint 3 giây)};
+\draw[umlline] (n3.east) -- ++(0.70,0) coordinate (rsn5);
+\node[font=\scriptsize, fill=white, inner sep=1pt, anchor=west] at ([xshift=0.72cm, yshift=0.20cm] n3.east) {Không};
+\draw[umlline] (rsn5) |- (n5.east);
+\node[actnode, text width=6.2cm, minimum height=1.14cm] (n6) at (0,-6.04) {Mở stream tại vị trí đã lưu (checkpoint 3 giây)};
 \draw[umlline] (n5.south) -- (n6.north);
-\node[actnode, text width=6.2cm] (n7) at (0,-6.93) {Phát video trong tối đa 2 giây};
+\node[actnode, text width=6.2cm, minimum height=0.72cm] (n7) at (0,-7.52) {Phát video trong tối đa 2 giây};
 \draw[umlline] (n6.south) -- (n7.north);
-\node[decnode, text width=3.0cm] (n8) at (0,-8.48) {Rời màn hình player?};
+\node[decnode, text width=2.4cm, minimum width=3.4cm, minimum height=1.75cm] (n8) at (0,-9.31) {Rời màn hình player?};
 \draw[umlline] (n7.south) -- (n8.north);
-\node[actnode, text width=5.0cm] (n9) at (-4.95,-8.48) {Cửa sổ nổi hiện; dùng chung engine};
+\node[actnode, text width=4.6cm, minimum height=1.14cm] (n9) at (-5.50,-9.88) {Cửa sổ nổi hiện; dùng chung engine};
 \draw[umlline] (n8.west) -- node[above, font=\scriptsize, fill=white, inner sep=1pt]{Có} (n9.east);
-\node[actnode, text width=5.0cm] (n10) at (4.95,-8.48) {Điều khiển trong player};
+\node[actnode, text width=4.6cm, minimum height=0.72cm] (n10) at (5.50,-9.67) {Điều khiển trong player};
 \draw[umlline] (n8.east) -- node[above, font=\scriptsize, fill=white, inner sep=1pt]{Không} (n10.west);
-\node[mergenode] (n11) at (0,-10.71) {};
+\node[mergenode] (n11) at (0,-11.18) {};
 \draw[umlline] (n9.south) |- (n11.west);
 \draw[umlline] (n10.south) |- (n11.east);
-\node[decnode, text width=3.0cm] (n12) at (0,-12.260000000000002) {Mở rộng hay đóng cửa sổ?};
+\node[decnode, text width=2.4cm, minimum width=3.4cm, minimum height=1.75cm] (n12) at (0,-12.79) {Mở rộng hay đóng cửa sổ?};
 \draw[umlline] (n11.south) -- (n12.north);
-\node[actnode, text width=5.0cm] (n13) at (-4.95,-12.260000000000002) {Về player đúng vị trí};
+\node[actnode, text width=4.6cm, minimum height=0.72cm] (n13) at (-5.50,-13.15) {Về player đúng vị trí};
 \draw[umlline] (n12.west) -- node[above, font=\scriptsize, fill=white, inner sep=1pt]{Mở rộng} (n13.east);
-\node[actnode, text width=5.0cm] (n14) at (4.95,-12.260000000000002) {Dừng; lưu vị trí; thêm Xem sau};
+\node[actnode, text width=4.6cm, minimum height=1.14cm] (n14) at (5.50,-13.36) {Dừng; lưu vị trí; thêm Xem sau};
 \draw[umlline] (n12.east) -- node[above, font=\scriptsize, fill=white, inner sep=1pt]{Đóng} (n14.west);
-\node[mergenode] (n15) at (0,-14.490000000000002) {};
+\node[mergenode] (n15) at (0,-14.66) {};
 \draw[umlline] (n13.south) |- (n15.west);
 \draw[umlline] (n14.south) |- (n15.east);
-\node[umlend] (n16) at (0,-15.590000000000002) {};
+\node[umlend] (n16) at (0,-15.61) {};
 \draw[umlline] (n15.south) -- (n16.north);
 \end{tikzpicture}
 \caption{Activity diagram UC-02 --- xem video và chuyển phân hệ}
@@ -105,29 +107,29 @@ Mỗi use case mục tiêu được mô tả lại bằng một sơ đồ hoạt
 \centering
 \begin{tikzpicture}[font=\footnotesize]
 \node[umlstart] (n1) at (0,0) {};
-\node[actnode, text width=6.2cm] (n2) at (0,-1.05) {Chọn bài hát trong feed};
+\node[actnode, text width=6.2cm, minimum height=0.72cm] (n2) at (0,-1.09) {Chọn bài hát trong feed};
 \draw[umlline] (n1.south) -- (n2.north);
-\node[decnode, text width=3.0cm] (n3) at (0,-2.6) {Video đang phát?};
+\node[decnode, text width=2.4cm, minimum width=3.4cm, minimum height=1.75cm] (n3) at (0,-2.88) {Video đang phát?};
 \draw[umlline] (n2.south) -- (n3.north);
-\node[actnode, text width=5.0cm] (n4) at (-4.95,-2.6) {Popup C1: tắt tiếng video hoặc dừng video};
+\node[actnode, text width=4.6cm, minimum height=1.14cm] (n4) at (-5.50,-3.44) {Popup C1: tắt tiếng video hoặc dừng video};
 \draw[umlline] (n3.west) -- node[above, font=\scriptsize, fill=white, inner sep=1pt]{Có} (n4.east);
-\node[actnode, text width=5.0cm] (n5) at (4.95,-2.6) {Không cần phân xử};
+\node[actnode, text width=4.6cm, minimum height=0.72cm] (n5) at (5.50,-3.23) {Không cần phân xử};
 \draw[umlline] (n3.east) -- node[above, font=\scriptsize, fill=white, inner sep=1pt]{Không} (n5.west);
-\node[mergenode] (n6) at (0,-4.83) {};
+\node[mergenode] (n6) at (0,-4.74) {};
 \draw[umlline] (n4.south) |- (n6.west);
 \draw[umlline] (n5.south) |- (n6.east);
-\node[actnode, text width=6.2cm] (n7) at (0,-5.88) {Phát nhạc; dock mini hiện trên mọi tab};
+\node[actnode, text width=6.2cm, minimum height=0.72cm] (n7) at (0,-5.83) {Phát nhạc; dock mini hiện trên mọi tab};
 \draw[umlline] (n6.south) -- (n7.north);
-\node[decnode, text width=3.0cm] (n8) at (0,-7.43) {Đóng dock?};
+\node[decnode, text width=2.4cm, minimum width=3.4cm, minimum height=1.75cm] (n8) at (0,-7.62) {Đóng dock?};
 \draw[umlline] (n7.south) -- (n8.north);
-\node[actnode, text width=5.0cm] (n9) at (-4.95,-7.43) {Dừng phát; hoàn tác trong 4--10 giây};
+\node[actnode, text width=4.6cm, minimum height=1.14cm] (n9) at (-5.50,-8.19) {Dừng phát; hoàn tác trong 4--10 giây};
 \draw[umlline] (n8.west) -- node[above, font=\scriptsize, fill=white, inner sep=1pt]{Có} (n9.east);
-\node[actnode, text width=5.0cm] (n10) at (4.95,-7.43) {Tiếp tục hàng đợi};
+\node[actnode, text width=4.6cm, minimum height=0.72cm] (n10) at (5.50,-7.98) {Tiếp tục hàng đợi};
 \draw[umlline] (n8.east) -- node[above, font=\scriptsize, fill=white, inner sep=1pt]{Không} (n10.west);
-\node[mergenode] (n11) at (0,-9.66) {};
+\node[mergenode] (n11) at (0,-9.49) {};
 \draw[umlline] (n9.south) |- (n11.west);
 \draw[umlline] (n10.south) |- (n11.east);
-\node[umlend] (n12) at (0,-10.76) {};
+\node[umlend] (n12) at (0,-10.44) {};
 \draw[umlline] (n11.south) -- (n12.north);
 \end{tikzpicture}
 \caption{Activity diagram UC-03/X0 --- nghe nhạc và phân xử âm thanh}
@@ -138,22 +140,22 @@ Mỗi use case mục tiêu được mô tả lại bằng một sơ đồ hoạt
 \centering
 \begin{tikzpicture}[font=\footnotesize]
 \node[umlstart] (n1) at (0,0) {};
-\node[actnode, text width=6.2cm] (n2) at (0,-1.05) {Chọn bài trong feed Tin tức};
+\node[actnode, text width=6.2cm, minimum height=0.72cm] (n2) at (0,-1.09) {Chọn bài trong feed Tin tức};
 \draw[umlline] (n1.south) -- (n2.north);
-\node[actnode, text width=6.2cm] (n3) at (0,-2.1) {Đọc trong trình đọc; chỉnh cỡ chữ A$- $/A+};
+\node[actnode, text width=6.2cm, minimum height=1.14cm] (n3) at (0,-2.57) {Đọc trong trình đọc; chỉnh cỡ chữ A$- $/A+};
 \draw[umlline] (n2.south) -- (n3.north);
-\node[decnode, text width=3.0cm] (n4) at (0,-3.6500000000000004) {Bấm “Nghe tin”?};
+\node[decnode, text width=2.4cm, minimum width=3.4cm, minimum height=1.75cm] (n4) at (0,-4.56) {Bấm “Nghe tin”?};
 \draw[umlline] (n3.south) -- (n4.north);
-\node[actnode, text width=5.0cm] (n5) at (-4.95,-3.6500000000000004) {Nhạc tạm dừng; audio phát có tiến trình};
+\node[actnode, text width=4.6cm, minimum height=1.14cm] (n5) at (-5.50,-5.13) {Nhạc tạm dừng; audio phát có tiến trình};
 \draw[umlline] (n4.west) -- node[above, font=\scriptsize, fill=white, inner sep=1pt]{Có} (n5.east);
-\node[actnode, text width=5.0cm] (n6) at (4.95,-3.6500000000000004) {Đọc tiếp; có thể lưu bài};
+\node[actnode, text width=4.6cm, minimum height=0.72cm] (n6) at (5.50,-4.92) {Đọc tiếp; có thể lưu bài};
 \draw[umlline] (n4.east) -- node[above, font=\scriptsize, fill=white, inner sep=1pt]{Không} (n6.west);
-\node[mergenode] (n7) at (0,-5.880000000000001) {};
+\node[mergenode] (n7) at (0,-6.43) {};
 \draw[umlline] (n5.south) |- (n7.west);
 \draw[umlline] (n6.south) |- (n7.east);
-\node[actnode, text width=6.2cm] (n8) at (0,-6.930000000000001) {Kết thúc bài; nhiệm vụ đọc được tính một lần};
+\node[actnode, text width=6.2cm, minimum height=1.14cm] (n8) at (0,-7.73) {Kết thúc bài; nhiệm vụ đọc được tính một lần};
 \draw[umlline] (n7.south) -- (n8.north);
-\node[umlend] (n9) at (0,-8.030000000000001) {};
+\node[umlend] (n9) at (0,-9.07) {};
 \draw[umlline] (n8.south) -- (n9.north);
 \end{tikzpicture}
 \caption{Activity diagram UC-04 --- đọc tin và nghe tin}
@@ -164,29 +166,31 @@ Mỗi use case mục tiêu được mô tả lại bằng một sơ đồ hoạt
 \centering
 \begin{tikzpicture}[font=\footnotesize]
 \node[umlstart] (n1) at (0,0) {};
-\node[actnode, text width=6.2cm] (n2) at (0,-1.05) {Mở tab Trò chơi};
+\node[actnode, text width=6.2cm, minimum height=0.72cm] (n2) at (0,-1.09) {Mở tab Trò chơi};
 \draw[umlline] (n1.south) -- (n2.north);
-\node[actnode, text width=6.2cm] (n3) at (0,-2.1) {Chọn game; hệ thống kiểm tra mở khoá};
+\node[actnode, text width=6.2cm, minimum height=0.72cm] (n3) at (0,-2.36) {Chọn game; hệ thống kiểm tra mở khoá};
 \draw[umlline] (n2.south) -- (n3.north);
-\node[actnode, text width=6.2cm] (n4) at (0,-3.1500000000000004) {Chơi ván theo luật của game};
+\node[actnode, text width=6.2cm, minimum height=0.72cm] (n4) at (0,-3.63) {Chơi ván theo luật của game};
 \draw[umlline] (n3.south) -- (n4.north);
-\node[decnode, text width=3.0cm] (n5) at (0,-4.7) {Ván kết thúc?};
+\node[decnode, text width=2.4cm, minimum width=3.4cm, minimum height=1.75cm] (n5) at (0,-5.41) {Ván kết thúc?};
 \draw[umlline] (n4.south) -- (n5.north);
-\node[actnode, text width=5.0cm] (n6) at (-4.95,-4.7) {Tính điểm; cộng XP; cập nhật nhiệm vụ};
+\node[actnode, text width=4.6cm, minimum height=1.14cm] (n6) at (-5.50,-5.98) {Tính điểm; cộng XP; cập nhật nhiệm vụ};
 \draw[umlline] (n5.west) -- node[above, font=\scriptsize, fill=white, inner sep=1pt]{Có} (n6.east);
-\node[actnode, text width=5.0cm] (n7) at (4.95,-4.7) {Tiếp tục chơi};
+\node[actnode, text width=4.6cm, minimum height=0.72cm] (n7) at (5.50,-5.77) {Tiếp tục chơi};
 \draw[umlline] (n5.east) -- node[above, font=\scriptsize, fill=white, inner sep=1pt]{Không} (n7.west);
-\node[mergenode] (n8) at (0,-6.93) {};
+\node[mergenode] (n8) at (0,-7.28) {};
 \draw[umlline] (n6.south) |- (n8.west);
 \draw[umlline] (n7.south) |- (n8.east);
-\node[decnode, text width=3.0cm] (n9) at (0,-8.48) {Hoàn thành thử thách ngày?};
+\node[decnode, text width=2.4cm, minimum width=3.4cm, minimum height=1.75cm] (n9) at (0,-8.89) {Hoàn thành thử thách ngày?};
 \draw[umlline] (n8.south) -- (n9.north);
-\node[actnode, text width=5.0cm] (n10) at (-4.95,-8.48) {+50+5×streak; tặng treat cho pet};
+\node[actnode, text width=4.6cm, minimum height=1.14cm] (n10) at (-5.50,-9.46) {+50+5×streak; tặng treat cho pet};
 \draw[umlline] (n9.west) -- node[above, font=\scriptsize, fill=white, inner sep=1pt]{Có} (n10.east);
-\node[mergenode] (n11) at (0,-10.71) {};
+\node[mergenode] (n11) at (0,-10.76) {};
 \draw[umlline] (n10.south) |- (n11.west);
-\draw[umlline] (n9.east) -- ++(0.6,0) |- (n11.east);
-\node[umlend] (n12) at (0,-11.81) {};
+\draw[umlline] (n9.east) -- ++(0.70,0) coordinate (rsn11);
+\node[font=\scriptsize, fill=white, inner sep=1pt, anchor=west] at ([xshift=0.72cm, yshift=0.20cm] n9.east) {Không};
+\draw[umlline] (rsn11) |- (n11.east);
+\node[umlend] (n12) at (0,-11.71) {};
 \draw[umlline] (n11.south) -- (n12.north);
 \end{tikzpicture}
 \caption{Activity diagram UC-05 --- chơi minigame và nhận điểm}

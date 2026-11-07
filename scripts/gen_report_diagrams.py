@@ -245,77 +245,101 @@ def activity_figure(act):
     L.append(r'\begin{figure}[H]')
     L.append(r'\centering')
     L.append(r'\begin{tikzpicture}[font=\footnotesize]')
-    y = 0.0
-    names = []
-    def node_name(i): return 'n%d' % i
     idx = [0]
     def newname():
         idx[0] += 1
-        return node_name(idx[0])
-    # start
+        return 'n%d' % idx[0]
+    def est_h(txt, width_cm):
+        cpl = max(8, int(width_cm / 0.16))
+        n = max(1, (len(txt) + cpl - 1) // cpl)
+        return n * 0.42 + 0.30
+    GAP = 0.55
     sn = newname()
     L.append(r'\node[umlstart] (%s) at (0,0) {};' % sn)
+    bottom = -0.18
     last = sn
-    cursor = 0.0
-    def place_action(x, cy, text, width=6.2):
-        nn = newname()
-        L.append(r'\node[actnode, text width=%scm] (%s) at (%s,%s) {%s};' % (width, nn, x, cy, text))
-        return nn
-    def edge(a, b, label=None, above=True):
-        if label:
-            L.append(r'\draw[umlline] (%s) -- node[%s, font=\scriptsize, fill=white, inner sep=1pt]{%s} (%s);' % (a, 'above' if above else 'below', label, b))
-        else:
-            L.append(r'\draw[umlline] (%s) -- (%s);' % (a, b))
+    guard = r'node[above, font=\scriptsize, fill=white, inner sep=1pt]'
     for item in act['items']:
         if item[0] == 'a':
-            cy = cursor - 1.05
-            nn = place_action(0, cy, item[1])
-            edge(last + '.south', nn + '.north')
-            last, cursor = nn, cy
+            txt = item[1]
+            h = est_h(txt, 6.2)
+            cy = bottom - GAP - h / 2.0
+            nn = newname()
+            L.append(r'\node[actnode, text width=6.2cm, minimum height=%.2fcm] (%s) at (0,%.2f) {%s};'
+                     % (h, nn, cy, txt))
+            L.append(r'\draw[umlline] (%s.south) -- (%s.north);' % (last, nn))
+            last, bottom = nn, cy - h / 2.0
         elif item[0] == 'd':
             _, q, gl, lchain, gr, rchain = item
-            cy = cursor - 1.55
+            DH = 1.75
+            cy = bottom - GAP - DH / 2.0
             qn = newname()
-            L.append(r'\node[decnode, text width=3.0cm] (%s) at (0,%s) {%s};' % (qn, cy, q))
-            edge(last + '.south', qn + '.north')
-            # branches
-            depth = max(len(lchain), len(rchain), 1)
-            left_end = None
-            right_end = None
-            for k, txt in enumerate(lchain):
-                cyk = cy - 1.05 * k
-                nn = place_action(-4.95, cyk, txt, width=5.0)
-                if k == 0:
-                    edge(qn + '.west', nn + '.east', gl)
-                else:
-                    edge(prev + '.south', nn + '.north')
-                prev = nn
-                left_end = nn
-            for k, txt in enumerate(rchain):
-                cyk = cy - 1.05 * k
-                nn = place_action(4.95, cyk, txt, width=5.0)
-                if k == 0:
-                    edge(qn + '.east', nn + '.west', gr)
-                else:
-                    edge(prev + '.south', nn + '.north')
-                prev = nn
-                right_end = nn
-            my = cy - 1.08 * depth - 1.15
+            L.append(r'\node[decnode, text width=2.4cm, minimum width=3.4cm, minimum height=%.2fcm] (%s) at (0,%.2f) {%s};'
+                     % (DH, qn, cy, q))
+            L.append(r'\draw[umlline] (%s.south) -- (%s.north);' % (last, qn))
+            def branch(chain, x, lab, side):
+                prev = None
+                top = cy
+                for k, txt in enumerate(chain):
+                    h = est_h(txt, 4.6)
+                    bcy = top - h / 2.0
+                    bn = newname()
+                    L.append(r'\node[actnode, text width=4.6cm, minimum height=%.2fcm] (%s) at (%.2f,%.2f) {%s};'
+                             % (h, bn, x, bcy, txt))
+                    if k == 0:
+                        if side == 'west':
+                            L.append(r'\draw[umlline] (%s.west) -- %s{%s} (%s.east);' % (qn, guard, lab, bn))
+                        else:
+                            L.append(r'\draw[umlline] (%s.east) -- %s{%s} (%s.west);' % (qn, guard, lab, bn))
+                    else:
+                        L.append(r'\draw[umlline] (%s.south) -- (%s.north);' % (prev, bn))
+                    prev = bn
+                    top = bcy - h / 2.0 - GAP
+                return prev
+            lprev = branch(lchain, -5.5, gl, 'west')
+            rprev = branch(rchain, 5.5, gr, 'east')
+            # đáy sâu nhất trong 3 phần
+            left_part = (lprev and None)
+            # tính bottom của từng phần đã lưu qua node anchors: đơn giản dùng cy - DH/2 và chain sâu
+            def chain_bottom(chain):
+                return cy - DH / 2.0 if not chain else cy - (sum([1.0]) )
+            # dùng vị trí thực: nếu có chain, đáy = node cuối .south; ta đã có prev name,
+            # lấy y qua TikZ coordinate không được -> ước lượng bằng est_h
+            lb = cy - DH / 2.0
+            if lchain:
+                top = cy
+                for txt in lchain:
+                    h = est_h(txt, 4.6)
+                    lb = top - h - GAP + GAP  # bottom box cuối
+                    top = top - h - GAP
+            rb = cy - DH / 2.0
+            if rchain:
+                top = cy
+                for txt in rchain:
+                    h = est_h(txt, 4.6)
+                    rb = top - h
+                    top = top - h - GAP
+            deep = min(lb, rb, cy - DH / 2.0)
+            my = deep - GAP - 0.18
             mn = newname()
-            L.append(r'\node[mergenode] (%s) at (0,%s) {};' % (mn, my))
-            if left_end:
-                L.append(r'\draw[umlline] (%s.south) |- (%s.west);' % (left_end, mn))
+            L.append(r'\node[mergenode] (%s) at (0,%.2f) {};' % (mn, my))
+            if lprev:
+                L.append(r'\draw[umlline] (%s.south) |- (%s.west);' % (lprev, mn))
             else:
-                L.append(r'\draw[umlline] (%s.west) -- ++(-0.6,0) |- (%s.west);' % (qn, mn))
-            if right_end:
-                L.append(r'\draw[umlline] (%s.south) |- (%s.east);' % (right_end, mn))
+                L.append(r'\draw[umlline] (%s.west) -- ++(-0.70,0) coordinate (ls%s);' % (qn, mn))
+                L.append(r'\node[font=\scriptsize, fill=white, inner sep=1pt, anchor=east] at ([xshift=-0.72cm, yshift=0.20cm] %s.west) {%s};' % (qn, gl))
+                L.append(r'\draw[umlline] (ls%s) |- (%s.west);' % (mn, mn))
+            if rprev:
+                L.append(r'\draw[umlline] (%s.south) |- (%s.east);' % (rprev, mn))
             else:
-                L.append(r'\draw[umlline] (%s.east) -- ++(0.6,0) |- (%s.east);' % (qn, mn))
-            last, cursor = mn, my
-    cy = cursor - 1.1
+                L.append(r'\draw[umlline] (%s.east) -- ++(0.70,0) coordinate (rs%s);' % (qn, mn))
+                L.append(r'\node[font=\scriptsize, fill=white, inner sep=1pt, anchor=west] at ([xshift=0.72cm, yshift=0.20cm] %s.east) {%s};' % (qn, gr))
+                L.append(r'\draw[umlline] (rs%s) |- (%s.east);' % (mn, mn))
+            last, bottom = mn, my - 0.18
+    ey = bottom - GAP - 0.22
     en = newname()
-    L.append(r'\node[umlend] (%s) at (0,%s) {};' % (en, cy))
-    edge(last + '.south', en + '.north')
+    L.append(r'\node[umlend] (%s) at (0,%.2f) {};' % (en, ey))
+    L.append(r'\draw[umlline] (%s.south) -- (%s.north);' % (last, en))
     L.append(r'\end{tikzpicture}')
     L.append(r'\caption{%s}' % act['caption'])
     L.append(r'\label{%s}' % act['label'])

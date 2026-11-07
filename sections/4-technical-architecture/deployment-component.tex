@@ -11,7 +11,7 @@ Hình~\ref{fig:deployment} trình bày góc nhìn triển khai (deployment view)
 \begin{tikzpicture}[font=\footnotesize,
   nodebox/.style={draw=black!75, thick, fill=gray!4, align=left, inner sep=5pt},
   artifact/.style={draw=black!60, fill=white, align=left, inner sep=3pt, font=\scriptsize},
-  comm/.style={draw=black!60, thick, -{Latex[length=1.6mm]}}]
+  comm/.style={draw=black!60, thick, -{Latex[width=2mm, length=2.4mm]}}]
   % ===== device =====
   \node[nodebox, minimum width=7.4cm, minimum height=6.6cm, anchor=north west] (phone) at (0,8.2) {};
   \node[font=\small\bfseries, anchor=north west] at (0.1,8.05) {\guillemotleft device\guillemotright{} Điện thoại Android (API 26+)};
@@ -35,12 +35,11 @@ Hình~\ref{fig:deployment} trình bày góc nhìn triển khai (deployment view)
   \node[nodebox, draw=black!55, dashed, minimum width=3.6cm, minimum height=1.4cm, anchor=north west, fill=gray!2] (rss) at (9.9,1.9) {};
   \node[font=\scriptsize, anchor=north west, align=center] at (10.35,1.75) {\guillemotleft external\guillemotright{} Máy chủ RSS\\VnExpress (dự kiến)};
   % ===== communication paths =====
-  \draw[comm] (7.55,6.6) -- node[above, font=\scriptsize]{HTTPS/JSON} (9.2,6.6);
-  \draw[comm] (7.55,4.4) -- node[above, font=\scriptsize]{HTTPS stream (Media3)} (9.2,4.4);
+  \draw[comm] (7.42,6.6) -- node[above, font=\scriptsize]{HTTPS/JSON} (9.2,6.6);
+  \draw[comm] (7.42,4.4) -- node[above, font=\scriptsize]{HTTPS stream (Media3)} (9.2,4.4);
   \draw[comm] (11.7,5.6) -- node[right, font=\scriptsize]{SQL} (11.7,4.6);
-  \draw[comm, dashed] (11.7,3.3) -- node[right, font=\scriptsize]{HTTPS (dự kiến)} (11.7,1.9);
-  \draw[comm, dashed] (9.2,2.6) -- (7.55,2.6);
-  \node[font=\scriptsize, anchor=south] at (8.4,2.7) {engine on-device};
+  \draw[comm, dashed] (11.7,2.0) -- node[right, font=\scriptsize]{HTTPS (dự kiến)} (11.7,1.9);
+  
 \end{tikzpicture}
 \caption{Deployment diagram: một artifact duy nhất trên thiết bị; máy chủ API, CSDL và kho media thuộc thiết kế giai đoạn remote.}
 \label{fig:deployment}
@@ -56,7 +55,7 @@ Hình~\ref{fig:components-overview} là góc nhìn component (development view):
 \begin{tikzpicture}[font=\footnotesize,
   comp/.style={draw=black!70, fill=gray!5, align=center, inner sep=3pt, minimum height=0.65cm},
   zone/.style={draw=black!40, rounded corners=5pt, inner sep=6pt},
-  dep/.style={draw=black!60, thick, -{Latex[open, length=1.5mm]}}]
+  dep/.style={draw=black!65, thick, -{Latex[open, width=2mm, length=2.4mm]}}]
   % zones
   \node[zone, minimum width=7.6cm, minimum height=4.05cm, anchor=north west] (zfeat) at (0,8.4) {};
   \node[font=\scriptsize\bfseries, text=black!55, anchor=north west] at (0.15,8.28) {Presentation --- feature/*};
@@ -84,8 +83,8 @@ Hình~\ref{fig:components-overview} là góc nhìn component (development view):
   \node[comp, anchor=north west] (cnet) at (0.3,2.9) {core/network};
   \node[comp, anchor=north west] (csync) at (4.45,2.9) {core/sync};
   % deps
-  \draw[dep] (7.75,7.45) -- (8.55,7.45);
-  \draw[dep] (6.0,4.65) -- (9.2,6.2);
+  \draw[dep] (7.62,7.45) -- (8.38,7.45);
+  \draw[dep] (7.66,4.68) -- (8.45,6.14);
 \end{tikzpicture}
 \caption{Component diagram tổng quan: mũi tên nét đứt thể hiện phụ thuộc ``use'' của feature vào domain và quan hệ ``impl'' của data với các contract domain; \texttt{core/network} và \texttt{core/sync} hiện là scaffold; các cạnh được kiểm tra tự động bằng \texttt{verifyArchitecture}.}
 \label{fig:components-overview}
@@ -98,7 +97,7 @@ Hình~\ref{fig:components-overview} là góc nhìn component (development view):
 \centering
 \begin{tikzpicture}[font=\scriptsize,
   comp/.style={draw=black!70, fill=gray!5, align=center, inner sep=2.5pt, minimum height=0.6cm},
-  dep/.style={draw=black!60, thick, -{Latex[open, length=1.4mm]}},
+  dep/.style={draw=black!65, thick, -{Latex[open, width=2mm, length=2.4mm]}},
   rowlab/.style={font=\scriptsize\bfseries, text=black!55, anchor=west}]
   % Video row
   \node[rowlab] at (0.2,7.88) {Video};

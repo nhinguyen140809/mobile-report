@@ -33,7 +33,7 @@ Data/infrastructure & Repository implementations, local/remote sources, Media3/s
 
 \begin{figure}[htbp]
 \centering
-\begin{tikzpicture}[node distance=12mm and 12mm, box/.style={draw,rounded corners,align=center,text width=43mm,minimum height=12mm,font=\small}, >=Stealth]
+\begin{tikzpicture}[node distance=12mm and 12mm, box/.style={draw,rounded corners,align=center,text width=43mm,minimum height=12mm,font=\small}, >={Latex[width=2mm, length=2.4mm]}, thick]
 \node[box] (app) {app\\Composition root};
 \node[box,below left=of app] (p) {Presentation\\UI, ViewModel, callbacks};
 \node[box,below right=of app] (i) {Data / infrastructure\\Repositories, Android adapters};
@@ -121,7 +121,7 @@ Feature graph không nhận NavController/NavHostController. Với catalog và a
 
 \begin{figure}[htbp]
 \centering
-\begin{tikzpicture}[node distance=9mm and 7mm, box/.style={draw,rounded corners,align=center,text width=37mm,minimum height=10mm,font=\small}, >=Stealth]
+\begin{tikzpicture}[node distance=9mm and 7mm, box/.style={draw,rounded corners,align=center,text width=37mm,minimum height=10mm,font=\small}, >={Latex[width=2mm, length=2.4mm]}, thick]
 \node[box] (s) {Native splash\\Đọc persisted startup state};
 \node[box,below=of s] (o) {Chưa onboarding\\Onboarding graph};
 \node[box,below=of o] (a) {Signed out\\Auth graph};
