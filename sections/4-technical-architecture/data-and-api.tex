@@ -56,7 +56,7 @@ Bảng~\ref{tab:erd-backend} mô tả mô hình dữ liệu phía máy chủ cho
 \endhead
 \bottomrule
 \endfoot
-users & id & phone, name, avatar, created\_at & 1--n playlists, point\_entries, daily\_missions, progress, sessions \\
+users & id & phone, email, password\_hash, name, avatar, created\_at & 1--n playlists, point\_entries, daily\_missions, progress, sessions \\
 sessions & id & user\_id, refresh\_token\_hash, expires\_at & thuộc users \\
 content\_items & id & type (video/nhạc/tin), title, url, duration, published\_at, \textbf{version} & 1--n playlist\_items, progress, quiz\_questions \\
 quiz\_questions & id & item\_id, question, options, answer\_index & thuộc content\_items \\
@@ -97,6 +97,7 @@ GET /news/articles & Danh sách tin & id, title, summary, source, publishedAt & 
 GET /news/articles/\{id\} & Chi tiết bài & toàn văn, quiz, bài liên quan & Không \\
 \multicolumn{4}{l}{\itshape Nhóm Xác thực} \\
 POST /auth/otp & Gửi mã OTP qua SMS & thời hạn 5 phút (SEC-01) & Không \\
+POST /auth/login & Đăng nhập bằng số điện thoại/email + mật khẩu & access token, refresh token, hồ sơ & Không \\
 POST /auth/verify & Đổi OTP lấy token & access token, refresh token, hồ sơ & Không \\
 POST /auth/refresh & Cấp lại access token & access token mới & Refresh \\
 POST /auth/logout & Thu hồi refresh token & 204 No Content & Có \\
