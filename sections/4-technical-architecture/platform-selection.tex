@@ -74,7 +74,7 @@ Không thêm dependency, empty service hoặc empty use case chỉ để bảng 
 \subsubsection{Lý giải lựa chọn công nghệ chính}
 \label{sec:tech-rationale}
 
-Năm nhóm công nghệ dưới đây là xương sống của bản nguyên mẫu. Mỗi mục nêu vấn đề cụ thể của OneSpace mà công nghệ giải quyết, phương án thay thế đã loại và nơi nó xuất hiện trong mã nguồn.
+Sáu nhóm công nghệ dưới đây là xương sống của bản nguyên mẫu. Mỗi mục nêu vấn đề cụ thể của OneSpace mà công nghệ giải quyết, phương án thay thế đã loại và nơi nó xuất hiện trong mã nguồn.
 
 \begingroup
 \small
@@ -97,6 +97,7 @@ Jetpack Compose + Material 3 & UI khai báo theo state: mỗi màn hình chỉ v
 Hilt & Dependency injection theo chuẩn Android: tái sử dụng cùng một engine media, repository và session coordinator cho mọi phân hệ; đổi hiện thực mock sang Room hoặc remote chỉ bằng cách thay module, không sửa ViewModel (dễ refactor); thay dependency giả trong unit test (dễ kiểm thử). & Khởi tạo thủ công/Service Locator: phụ thuộc ẩn, khó thay khi test; Koin: lỗi phát hiện lúc chạy thay vì lúc biên dịch & 16 \texttt{@HiltViewModel}; \texttt{@Module} tại \texttt{app}, \texttt{core/database}, \texttt{core/datastore}, \texttt{core/media} \\
 DataStore (Preferences) & Thay thế SharedPreferences: API bất đồng bộ dựa trên coroutines/Flow, không chặn main thread, ghi theo giao dịch nên không hỏng dữ liệu khi app bị huỷ giữa chừng. Phù hợp dữ liệu nhỏ dạng key--value: phiên đăng nhập, cài đặt, bài đã lưu, playlist, trạng thái game (streak, pet, shop). Dữ liệu có cấu trúc và cần truy vấn vẫn nằm trong Room. & SharedPreferences: đọc/ghi đồng bộ, dễ gây ANR, không báo lỗi ghi & \texttt{core/datastore}, \texttt{data/games}, \texttt{data/news} \\
 Retrofit + OkHttp & Khai báo API contract (mục~\ref{sec:api-contract}) thành interface Kotlin có kiểu, tự chuyển JSON bằng Kotlin Serialization. OkHttp cung cấp connection pool, cache HTTP, timeout và interceptor để gắn token, ghi log, retry, đúng các NFR về mạng yếu và bảo mật. & Ktor Client: đa nền tảng nhưng không cần vì chỉ làm Android; \texttt{HttpURLConnection}: phải tự viết parse, cache, retry & Đã chốt cho giai đoạn remote; module \texttt{core/network} đã tạo, chưa có client thật (bản hiện tại dùng repository mock) \\
+Navigation Compose & Điều hướng khai báo bằng Kotlin, route có kiểu (Kotlin Serialization) nên sai tham số bị bắt lúc biên dịch; mỗi feature tự khai báo graph lồng nhau, \texttt{app} chỉ ghép các graph (mục~\ref{sec:module-structure}); back stack và trạng thái màn hình được giữ qua xoay màn hình và process death. & Fragment + Navigation XML: không hợp với UI thuần Compose; tự quản back stack: dễ lỗi khi lồng tab & \texttt{app/AppNavigation}, graph trong từng \texttt{feature/*} \\
 Media3 (ExoPlayer, MediaSession) & Một thư viện thống nhất cho cả video và nhạc: ExoPlayer phát stream HLS/MP4, đổi chất lượng, tốc độ, nối hàng đợi; MediaSession đưa trạng thái phát ra notification, màn hình khoá, tai nghe Bluetooth và quản lý audio focus, cần cho phát nhạc nền và phân xử khi hai nội dung cùng phát. & ExoPlayer 2 độc lập (đã ngừng phát triển); \texttt{MediaPlayer}: thiếu streaming thích ứng và hàng đợi & \texttt{core/media} (ExoPlayer chạy thật); MediaSession qua \texttt{MediaSessionPort}, \texttt{MediaSessionService} cho phát nền là bước kế tiếp \\
 \end{longtable}
 \endgroup

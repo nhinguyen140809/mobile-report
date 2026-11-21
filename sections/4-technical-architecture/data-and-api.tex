@@ -37,14 +37,14 @@ Ngoài Room, các thiết lập nhỏ và dữ liệu phiên nằm trong DataSto
 \subsubsection{Mô hình dữ liệu backend (thiết kế giai đoạn remote)}
 \label{sec:erd-backend}
 
-Bảng~\ref{tab:erd-backend} mô tả mô hình dữ liệu phía máy chủ cho giai đoạn đồng bộ theo quyết định ADR-17: backend chưa được hiện thực, danh mục hiện do repository trong app cấp. Mô hình giữ đúng các thực thể cần cho endpoint ở mục~\ref{sec:api-contract}: người dùng, nội dung, danh sách phát, điểm, nhiệm vụ và tiến độ.
+Bảng~\ref{tab:erd-backend} mô tả mô hình dữ liệu phía máy chủ cho giai đoạn đồng bộ theo quyết định ADR-17: backend chưa được hiện thực, danh mục hiện do repository trong app cấp. Mô hình giữ đúng các thực thể cần cho endpoint ở mục~\ref{sec:api-contract}: người dùng, nội dung, danh sách phát, điểm, nhiệm vụ và tiến độ. Ba quyết định thiết kế phục vụ đồng bộ nhiều thiết bị: (i) các bản ghi người dùng sửa được (playlist, tiến độ, nhiệm vụ) mang cột \texttt{version} để server phát hiện ghi đè và trả \texttt{409}; (ii) \texttt{point\_entries} là sổ cái chỉ ghi thêm, mỗi sự kiện có \texttt{event\_id} duy nhất nên gửi lại khi mất mạng không cộng điểm hai lần, và số dư do server tính; (iii) \texttt{sessions} chỉ lưu băm của refresh token để thu hồi được khi đăng xuất.
 
 \begingroup
 \small
 \renewcommand{\arraystretch}{1.15}
 \setlength{\tabcolsep}{3pt}
 \begin{longtable}{>{\RaggedRight\arraybackslash}p{0.25\linewidth}>{\RaggedRight\arraybackslash}p{0.17\linewidth}>{\RaggedRight\arraybackslash}p{0.29\linewidth}>{\RaggedRight\arraybackslash}p{0.21\linewidth}}
-\caption{Mô hình dữ liệu backend (thiết kế, chưa hiện thực)}
+\caption{Mô hình dữ liệu backend (thiết kế, chưa hiện thực); cột in đậm phục vụ đồng bộ}
 \label{tab:erd-backend}\\
 \toprule
 \textbf{Entity} & \textbf{Khóa chính} & \textbf{Trường chính} & \textbf{Quan hệ} \\
@@ -56,13 +56,15 @@ Bảng~\ref{tab:erd-backend} mô tả mô hình dữ liệu phía máy chủ cho
 \endhead
 \bottomrule
 \endfoot
-users & id & phone, name, avatar, created\_at & 1--n playlists, point\_entries, daily\_missions, progress \\
-content\_items & id & type (video/nhạc/tin), title, url, duration, published\_at & 1--n playlist\_items, progress \\
-playlists & id & user\_id, name, updated\_at & thuộc users; 1--n playlist\_items \\
+users & id & phone, name, avatar, created\_at & 1--n playlists, point\_entries, daily\_missions, progress, sessions \\
+sessions & id & user\_id, refresh\_token\_hash, expires\_at & thuộc users \\
+content\_items & id & type (video/nhạc/tin), title, url, duration, published\_at, \textbf{version} & 1--n playlist\_items, progress, quiz\_questions \\
+quiz\_questions & id & item\_id, question, options, answer\_index & thuộc content\_items \\
+playlists & id & user\_id, name, \textbf{version}, updated\_at & thuộc users; 1--n playlist\_items \\
 playlist\_items & (playlist\_id, item\_id) & position & thuộc playlists; trỏ content\_items \\
-point\_entries & id & user\_id, source, amount, created\_at & thuộc users (ledger điểm) \\
-daily\_missions & id & user\_id, title, target, progress, date & thuộc users \\
-progress & (user\_id, item\_id) & position\_ms, updated\_at & thuộc users + content\_items \\
+point\_entries & id & user\_id, \textbf{event\_id} (unique), source, amount, created\_at & thuộc users (ledger điểm, server tính) \\
+daily\_missions & id & user\_id, title, target, progress, date, \textbf{version} & thuộc users \\
+progress & (user\_id, item\_id) & position\_ms, \textbf{version}, updated\_at & thuộc users + content\_items \\
 \end{longtable}
 \endgroup
 
@@ -88,19 +90,26 @@ Hợp đồng API dùng REST trên HTTPS với JSON và token định danh (SEC-
 \endhead
 \bottomrule
 \endfoot
-\multicolumn{4}{l}{\itshape Nhóm Catalog} \\
+\multicolumn{4}{l}{\itshape Nhóm Nội dung (công khai, phân trang \texttt{?page=\&limit=})} \\
 GET /catalog/videos & Danh mục video & id, title, creator, duration, url, thumbnail & Không \\
 GET /catalog/tracks & Danh mục nhạc & id, title, artist, album, duration, url & Không \\
-\multicolumn{4}{l}{\itshape Nhóm News} \\
 GET /news/articles & Danh sách tin & id, title, summary, source, publishedAt & Không \\
 GET /news/articles/\{id\} & Chi tiết bài & toàn văn, quiz, bài liên quan & Không \\
-\multicolumn{4}{l}{\itshape Nhóm Auth} \\
-POST /auth/otp & Gửi mã OTP & thời hạn 5 phút (SEC-01) & Không \\
-POST /auth/verify & Đổi OTP lấy token & token, hồ sơ người dùng & Không \\
-\multicolumn{4}{l}{\itshape Nhóm Me} \\
-GET /me/playlists & Playlist của tôi & id, tên, danh sách mục & Có \\
-POST /me/playlists & Tạo hoặc sửa playlist & playlist đã lưu & Có \\
-POST /me/points & Ghi điểm, cập nhật nhiệm vụ & số dư, nhiệm vụ hôm nay & Có \\
+\multicolumn{4}{l}{\itshape Nhóm Xác thực} \\
+POST /auth/otp & Gửi mã OTP qua SMS & thời hạn 5 phút (SEC-01) & Không \\
+POST /auth/verify & Đổi OTP lấy token & access token, refresh token, hồ sơ & Không \\
+POST /auth/refresh & Cấp lại access token & access token mới & Refresh \\
+POST /auth/logout & Thu hồi refresh token & 204 No Content & Có \\
+\multicolumn{4}{l}{\itshape Nhóm Dữ liệu cá nhân (cần \texttt{Authorization: Bearer})} \\
+GET /me/playlists & Playlist của tôi & id, name, items, version & Có \\
+POST /me/playlists & Tạo playlist & playlist đã lưu & Có \\
+PUT /me/playlists/\{id\} & Sửa playlist (kèm version) & playlist, version mới & Có \\
+DELETE /me/playlists/\{id\} & Xoá playlist & 204 No Content & Có \\
+GET /me/progress?since= & Tiến độ thay đổi từ mốc & danh sách itemId, positionMs, version & Có \\
+PUT /me/progress/\{itemId\} & Lưu vị trí xem/nghe & bản ghi tiến độ & Có \\
+GET /me/missions/today & Nhiệm vụ hôm nay & title, target, progress & Có \\
+POST /me/events & Sự kiện: xong ván, xong nhiệm vụ & điểm được cộng (theo eventId) & Có \\
+GET /me/points & Số dư và lịch sử điểm & balance, entries & Có \\
 \end{longtable}
 \endgroup
 
@@ -115,7 +124,25 @@ Phản hồi danh mục dùng cấu trúc phân trang thống nhất; đoạn d�
   "page": 1, "hasMore": true }
 \end{verbatim}
 
-Bảng~\ref{tab:api-errors} quy định mã lỗi và cách app xử lý tương ứng. Các lỗi tầng phát và lỗi request hiện đã đi qua bộ chuyển trạng thái dùng chung (\texttt{ErrorState} kèm nút ``Thử lại''); connectivity chỉ là tín hiệu gợi ý, kết quả thao tác do lỗi thật quyết định.
+Với tài nguyên người dùng sửa được, client gửi kèm \texttt{version} đang giữ để server phát hiện ghi đè. Ví dụ sửa playlist:
+
+\begin{verbatim}
+PUT /me/playlists/p07
+Authorization: Bearer <access_token>
+{ "name": "Nhạc học bài", "items": ["t03", "t11"], "version": 4 }
+
+-> 200 OK
+{ "id": "p07", "name": "Nhạc học bài",
+  "items": ["t03", "t11"], "version": 5,
+  "updatedAt": "2026-11-07T08:00:00Z" }
+
+-> 409 Conflict (mọi lỗi dùng cùng một dạng)
+{ "error": { "code": "VERSION_CONFLICT",
+    "message": "Playlist đã sửa ở máy khác",
+    "details": { "serverVersion": 6 } } }
+\end{verbatim}
+
+Mọi phản hồi lỗi dùng chung cấu trúc \texttt{error\{code, message, details\}}: \texttt{code} là mã máy đọc để app chọn cách xử lý, \texttt{message} là câu hiển thị được cho người dùng, \texttt{details} mang dữ liệu bổ sung (ở đây là version hiện tại trên server để app tải lại rồi áp thay đổi). Bảng~\ref{tab:api-errors} quy định mã lỗi và cách app xử lý tương ứng. Các lỗi tầng phát và lỗi request hiện đã đi qua bộ chuyển trạng thái dùng chung (\texttt{ErrorState} kèm nút ``Thử lại''); connectivity chỉ là tín hiệu gợi ý, kết quả thao tác do lỗi thật quyết định.
 
 \begingroup
 \small

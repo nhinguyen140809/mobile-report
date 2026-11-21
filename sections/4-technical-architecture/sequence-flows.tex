@@ -113,3 +113,47 @@ Hình~\ref{fig:seq-pip} mô tả chuỗi quyết định then chốt của trả
 \caption{Sequence diagram X1 --- cửa sổ nổi dùng chung engine với trình phát gốc; tab Home phát trong card feed thay vì mở cửa sổ nổi.}
 \label{fig:seq-pip}
 \end{figure}
+
+\subsubsection{Tải danh sách tin theo offline-first}
+\label{sec:seq-news-offline}
+
+Hình~\ref{fig:seq-news-offline} mô tả luồng đọc dữ liệu chuẩn mà các phân hệ dùng chung, lấy tab Tin làm ví dụ. Room là nguồn sự thật duy nhất của UI: ViewModel chỉ quan sát Flow từ repository, nên bản cache hiện ngay (đáp ứng UX-01) trong khi request mạng chạy song song. Kết quả mạng không trả thẳng cho UI mà được ghi vào Room, và Flow tự phát bản mới. Khi mất mạng hoặc server lỗi, UI giữ nguyên bản cache; chỉ khi cache rỗng mới chuyển sang \texttt{EmptyState}/\texttt{ErrorState} kèm nút ``Thử lại''.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[y=1.35cm,
+  font=\tiny,
+  ll/.style={draw=black!70, thick, rounded corners=2pt, fill=black!5, minimum width=1.9cm, minimum height=0.5cm, align=center},
+  msg/.style={-{Latex[width=2mm, length=2.4mm]}, thick},
+  ret/.style={-{Latex[width=2mm, length=2.4mm]}, thick, dashed},
+  note/.style={draw=black!55, fill=black!3, rounded corners=2pt, inner sep=2.5pt, align=left}]
+  \node[ll] (u)  at (0.9,7.0) {\bfseries Người dùng};
+  \node[ll] (ui) at (3.4,7.0) {Màn Tin (UI)};
+  \node[ll] (vm) at (5.9,7.0) {NewsViewModel};
+  \node[ll] (rp) at (8.4,7.0) {NewsRepository};
+  \node[ll] (db) at (10.9,7.0) {Room};
+  \node[ll] (api) at (13.4,7.0) {API server};
+  \foreach \n in {u,ui,vm,rp,db,api} \draw[dashed, black!50] (\n.south) -- ++(0,-5.9);
+  \draw[msg] (0.9,6.35) -- (3.4,6.35) node[midway, above]{1. Mở tab Tin};
+  \draw[msg] (3.4,5.95) -- (5.9,5.95) node[midway, above]{2. collect uiState};
+  \draw[msg] (5.9,5.55) -- (8.4,5.55) node[midway, above]{3. observeCatalog(): Flow};
+  \draw[msg] (8.4,5.15) -- (10.9,5.15) node[midway, above]{4. truy vấn cache};
+  \draw[ret] (10.9,4.75) -- (5.9,4.75) node[midway, above]{5. bản cache $\rightarrow$ UiState.Content (Loading nếu rỗng)};
+  \draw[msg] (8.4,4.3) -- (13.4,4.3) node[midway, above]{6. GET /news/articles?page=1};
+  % alt frame
+  \draw[black!60, thick] (7.9,3.95) rectangle (14.1,1.25);
+  \node[draw=black!60, fill=white, font=\tiny\bfseries, anchor=north west, inner sep=1.5pt] at (7.9,3.95) {alt};
+  \node[font=\tiny, anchor=north west] at (8.45,3.95) {[200 OK]};
+  \draw[ret] (13.4,3.5) -- (8.4,3.5) node[midway, above]{7. items, hasMore};
+  \draw[msg] (8.4,3.1) -- (10.9,3.1) node[midway, above]{8. upsert vào Room};
+  \draw[ret] (10.9,2.7) -- (5.9,2.7) node[midway, above]{9. Flow phát bản mới $\rightarrow$ UI cập nhật};
+  \draw[black!60, dashed] (7.9,2.3) -- (14.1,2.3);
+  \node[font=\tiny, anchor=north west] at (8.45,2.3) {[mất mạng / 5xx]};
+  \draw[ret] (8.4,1.6) -- (5.9,1.6) node[midway, above]{10. lỗi thật};
+  \node[note] at (2.8,1.6) {Giữ bản cache; cache rỗng $\rightarrow$\\EmptyState / ErrorState + ``Thử lại''};
+\end{tikzpicture}
+\caption{Sequence diagram tải danh sách tin theo offline-first: Room là nguồn sự thật của UI; kết quả mạng được ghi vào Room rồi mới tới UI.}
+\label{fig:seq-news-offline}
+\end{figure}
+
+Ở bản nguyên mẫu, \texttt{NewsRepository} đọc danh mục mock và bài đã lưu nằm trong DataStore; bước gọi API server (6--10) là thiết kế giai đoạn remote. Do repository giữ nguyên contract \texttt{observeCatalog(): Flow}, việc bổ sung client Retrofit không làm thay đổi ViewModel hay màn hình.

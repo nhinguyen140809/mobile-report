@@ -3,6 +3,49 @@
 
 Thiết kế áp dụng khuyến nghị kiến trúc Android, modularization và nested navigation graphs~\cite{android-architecture,android-modularization,android-navigation}.
 
+\subsubsection{Kiến trúc tổng thể: ứng dụng, backend và dịch vụ ngoài}
+\label{sec:system-context}
+
+Hình~\ref{fig:system-context} là góc nhìn mức container: ứng dụng Android là nơi duy nhất người dùng tương tác; mọi dữ liệu dùng chung (danh mục, tài khoản, điểm) đi qua API server, còn tệp video/nhạc được phát thẳng từ kho media qua CDN để API không phải chuyển tiếp luồng dữ liệu lớn. Các dịch vụ ngoài (RSS, SMS gateway) chỉ nói chuyện với API server, nên app không giữ khoá hay token của bên thứ ba (SEC-02). Hai thành phần chạy trên chính thiết bị là TTS engine (đọc bài, có thể thay bản on-device bằng dịch vụ cloud) và hệ thống Android (thông báo media, màn hình khoá, audio focus) mà app nói chuyện qua media session.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\scriptsize,
+  box/.style={draw=black!70, thick, rounded corners=3pt, fill=gray!8, align=center, inner sep=4pt},
+  ext/.style={draw=black!55, thick, dashed, rounded corners=3pt, fill=white, align=center, inner sep=4pt},
+  lnk/.style={draw=black!65, thick, -{Latex[width=2mm, length=2.4mm]}},
+  bi/.style={draw=black!65, thick, {Latex[width=2mm, length=2.4mm]}-{Latex[width=2mm, length=2.4mm]}},
+  lbl/.style={font=\tiny, fill=white, inner sep=1pt}]
+  \node[box, minimum width=4.6cm, minimum height=2.7cm] (app) at (0,0) {\textbf{\small Ứng dụng Android}\\[3pt]
+    Compose UI $\cdot$ ViewModel\\
+    Media3 player (dùng chung)\\
+    \textbf{MediaSessionService} (phát nền)\\
+    Room $\cdot$ DataStore $\cdot$ tệp riêng\\[2pt]
+    {\tiny feature: video $\cdot$ nhạc $\cdot$ tin $\cdot$ game $\cdot$ tài khoản}};
+  \node[box, minimum width=2.4cm] (tts) at (-1.6,3.1) {\textbf{TTS engine}\\{\tiny on-device / cloud}\\{\tiny module thay được}};
+  \node[box, minimum width=2.9cm] (sys) at (1.7,3.1) {\textbf{Hệ thống Android}\\{\tiny thông báo media}\\{\tiny màn hình khoá $\cdot$ audio focus}};
+  \node[box, minimum width=3.6cm] (api) at (6.4,1.3) {\textbf{API server} (thiết kế)\\REST $\cdot$ JSON $\cdot$ token};
+  \node[box, minimum width=3.6cm] (db) at (6.4,-0.6) {\textbf{CSDL quan hệ}\\{\tiny ví dụ PostgreSQL; chỉ API truy cập}};
+  \node[box, minimum width=3.6cm] (cdn) at (6.4,-2.5) {\textbf{Kho media + CDN}\\{\tiny object storage $\cdot$ video/nhạc}};
+  \node[ext, minimum width=2.3cm] (rss) at (11.0,3.0) {\textbf{RSS}\\VnExpress};
+  \node[ext, minimum width=2.3cm] (sms) at (11.0,1.3) {\textbf{SMS gateway}\\gửi OTP};
+  \node[ext, minimum width=2.3cm] (ed) at (11.0,-1.0) {\textbf{Nhóm biên soạn}\\upload nội dung};
+  \draw[bi] (tts.south) -- (tts.south |- app.north) node[lbl, midway]{đọc bài};
+  \draw[bi] (sys.south) -- (sys.south |- app.north) node[lbl, midway]{media session};
+  \draw[lnk] ([yshift=8pt]app.east) -- (api.west) node[lbl, midway, above=1pt]{HTTPS/JSON};
+  \draw[lnk] (cdn.west) -- ([yshift=-22pt]app.east) node[lbl, midway, below=1pt]{HTTPS stream (Media3)};
+  \draw[bi] (api.south) -- (db.north) node[lbl, midway, right=2pt]{SQL};
+  \draw[lnk] (rss.west) -- ([yshift=6pt]api.north east) node[lbl, midway, above]{nạp tin};
+  \draw[lnk] (api.east) -- (sms.west) node[lbl, midway, above]{gửi OTP};
+  \draw[lnk] (ed.west) -- ([yshift=-4pt]api.east) node[lbl, pos=0.45, above]{metadata};
+  \draw[lnk] (ed.south) |- (cdn.east) node[lbl, pos=0.75, below]{upload tệp};
+\end{tikzpicture}
+\caption{Kiến trúc tổng thể mức container: ứng dụng Android, backend (thiết kế giai đoạn remote) và các dịch vụ ngoài. Khung nét đứt là hệ thống bên ngoài.}
+\label{fig:system-context}
+\end{figure}
+
+Trong giai đoạn môn học, ứng dụng chạy theo hướng local-first: danh mục do repository trong app cung cấp (mock) và backend được hoãn theo ADR-17. Vì player chỉ nhận URL, chuyển sang nguồn thật chỉ là thay URL và hiện thực repository; UI và logic phát không đổi.
+
 \subsubsection{Layer và chiều phụ thuộc}
 \label{sec:three-layers}
 

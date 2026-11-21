@@ -15,7 +15,7 @@ Mỗi loại nội dung hiện đã có những ứng dụng phổ biến: YouTu
 Từ bối cảnh và các khó khăn trên, bài toán của đồ án được phát biểu như sau:
 
 \begin{quote}
-    Làm thế nào để thiết kế một ứng dụng Android hợp nhất bốn phân hệ Streaming Video, Listening to Music, Reading News và Playing Minigames trong một trải nghiệm liền mạch, và giá trị khác biệt nào khiến người dùng chọn ứng dụng này thay vì tiếp tục dùng các ứng dụng quen thuộc hiện tại?
+    Làm thế nào để thiết kế một ứng dụng Android hợp nhất bốn phân hệ Streaming Video, Listening to Music, Reading News và Playing Minigames trong một \textbf{trải nghiệm liền mạch}, với \textbf{một tài khoản} và \textbf{tốn ít tài nguyên} hơn bốn ứng dụng riêng lẻ, và giá trị khác biệt nào khiến người dùng chọn ứng dụng này thay vì tiếp tục dùng các ứng dụng quen thuộc hiện tại?
 \end{quote}
 
 Câu hỏi này được cụ thể hoá thành ba câu hỏi con: (i) kiến trúc nào giữ được trạng thái khi người dùng chuyển giữa các phân hệ; (ii) cơ chế nào cho phép dùng song song hai loại nội dung mà không xung đột; (iii) tính năng nào tạo giá trị khác biệt (USP) so với các giải pháp hiện có.
@@ -30,9 +30,11 @@ Trong phạm vi tài liệu này, ``trải nghiệm liền mạch'' (seamless ex
 
 Ngoài ba đặc tính trên, sản phẩm có một điểm khác biệt (USP) là \textbf{chuyển đổi hình thức nội dung (content converting)}: một video có thể được trích thành âm thanh cho kho nhạc cá nhân, một bài báo có thể được đọc thành bản audio, giúp cùng một nội dung theo được người dùng qua các ngữ cảnh sử dụng khác nhau.
 
+Tóm lại, giải pháp OneSpace dựa trên bốn trụ cột: \textbf{xuyên phân hệ} (một tài khoản, một dock và một playlist dùng chung cho cả bốn loại nội dung), \textbf{song song hoá} (dùng cùng lúc hai nội dung với cơ chế phân xử âm thanh), \textbf{định dạng linh hoạt} (video thành mp3, bài báo thành audio) và \textbf{gamification} (nhiệm vụ, streak, thú cưng ảo và điểm thưởng dùng chung cho bốn phân hệ).
+
 Hướng tích hợp này đi kèm đánh đổi: một ứng dụng ``tất cả trong một'' phức tạp hơn về phát triển, kiểm thử và quản lý tài nguyên so với bốn ứng dụng nhỏ riêng lẻ. Đổi lại, người dùng chỉ cần cài và đăng nhập một lần, và -- quan trọng nhất -- các loại nội dung có thể phối hợp với nhau, điều mà bốn ứng dụng riêng lẻ dùng cạnh nhau khó mang lại.
 
-Về phạm vi, trong khuôn khổ môn học nhóm chỉ phát triển cho nền tảng Android, vì đây là hệ điều hành chiếm thị phần lớn trên thiết bị di động tại Việt Nam và thuận tiện để phát hành lên Google Play. % TODO: bổ sung trích dẫn thị phần Android (ví dụ StatCounter)
+Về phạm vi, trong khuôn khổ môn học nhóm chỉ phát triển cho nền tảng Android, vì đây là hệ điều hành chiếm thị phần lớn trên thiết bị di động tại Việt Nam (59,77\% thị phần hệ điều hành di động tháng 9/2026~\cite{statcounter-vn}) và thuận tiện để phát hành lên Google Play. Ứng dụng được làm cho Android trước; iOS hoặc đa nền tảng chỉ cân nhắc sau khi bản Android đã kiểm chứng được giá trị.
 Nội dung trong ứng dụng chỉ lấy từ các nguồn có giấy phép mở hoặc có API và điều khoản cho phép sử dụng; ứng dụng không tải về hay trích xuất nội dung từ các nền tảng khác. Tính năng chuyển đổi hình thức nội dung vì vậy chỉ áp dụng cho các nguồn thuộc phạm vi này.
 
 So sánh chi tiết với các đối thủ được trình bày ở mục~\ref{sec:market-research}, và phân tích vì sao hướng tiếp cận này là vùng chiến thắng của sản phẩm được trình bày ở mục~\ref{sec:usp-winning-zone}.
