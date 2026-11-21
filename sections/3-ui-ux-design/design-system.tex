@@ -56,7 +56,9 @@ Hình~\ref{fig:design-modes} so sánh cùng ba màn hình ở hai chế độ: c
 \label{fig:design-modes}
 \end{figure}
 
-\textbf{Typography.} Ứng dụng dùng nguyên thang chữ mặc định của Material 3 (display, headline, title, body, label) mà không định nghĩa kiểu chữ riêng. Quyết định này có chủ đích: thang M3 đã được hiệu chỉnh theo chuẩn đọc của Android, và mọi cỡ chữ đều đặt theo đơn vị \texttt{sp} nên tự phóng to theo cài đặt cỡ chữ hệ thống (chi tiết ở mục~\ref{sec:accessibility}). Việc thay font thương hiệu riêng, nếu có, sẽ là một thay đổi token tập trung duy nhất ở tệp theme.
+\textbf{Typography.} Ứng dụng giữ nguyên \emph{thang} chữ của Material 3 (display, headline, title, body, label: cỡ chữ và vai trò không đổi) nhưng thay font bằng hai họ chữ đóng gói sẵn trong APK, không cần tải qua mạng: \textbf{Lexend} cho display, headline và titleLarge (đậm SemiBold), \textbf{Be Vietnam Pro} cho title nhỏ, body và label. Be Vietnam Pro được thiết kế cho dấu tiếng Việt nên các ký tự chồng dấu (ặ, ẫ, ỗ) không bị cắt; body được nới lineHeight (26/22/18\,sp) để đoạn tin dài dễ đọc. Mọi cỡ chữ đặt theo \texttt{sp} nên tự phóng to theo cài đặt cỡ chữ hệ thống (mục~\ref{sec:accessibility}). Toàn bộ khai báo nằm ở một tệp \texttt{Type.kt}; đổi font là thay đổi token tập trung.
+
+\textbf{Hình khối và màu mở rộng.} Mọi cấp bo góc của Material 3 (extraSmall đến extraLarge) dùng chung bán kính 12\,dp để card, sheet và nút có cùng ngôn ngữ hình khối. Ngoài các vai trò màu chuẩn, \texttt{ExtendedColors.kt} khai báo nhóm màu mà Material 3 không có vai trò tương ứng: dải gradient theo chủ đề nội dung (thiên nhiên, đời sống, công nghệ, \ldots), màu nhấn cho từng phân hệ (video, nhạc, tin, game), màu khung avatar (đồng, bạc, vàng) và màu trạng thái thành công; các màu này cũng có bộ sáng/tối riêng và feature module không tự khai báo màu.
 
 \textbf{Component library.} Bảng~\ref{tab:component-library} phân loại component của ứng dụng: lớp \textit{dùng chung} định nghĩa trong module design system và được cả bốn phân hệ tham chiếu (đây là phần ``thư viện'' thật sự của design system); lớp \textit{theo chuẩn Material 3} dùng trực tiếp component nền tảng; các màn đặc thù tự dựng từ hai lớp này.
 
@@ -75,6 +77,9 @@ Hình~\ref{fig:design-modes} so sánh cùng ba màn hình ở hai chế độ: c
 \texttt{CatalogContent} & Bộ chuyển trạng thái của mọi feed: đang tải $\rightarrow$ skeleton, lỗi/offline $\rightarrow$ thông điệp + thử lại, rỗng $\rightarrow$ thông điệp + nút hành động, có dữ liệu $\rightarrow$ nội dung. \\
 \texttt{SkeletonFeed} & Bốn hàng khung xám chạy hiệu ứng shimmer thay cho feed đang tải. \\
 \texttt{EmptyState} / \texttt{ErrorState} & Trạng thái rỗng (kèm nút hành động) và trạng thái lỗi (kèm ``Thử lại''). \\
+\texttt{AppCard} / \texttt{EmptyHint} & Khung card bo 12\,dp dùng chung và gợi ý rỗng gọn (icon + một dòng) trong danh sách con. \\
+\texttt{ScrubBar} & Thanh tiến độ kéo được dùng chung cho trình phát video, Now Playing, trình đọc tin (TTS), dock và cửa sổ nổi. \\
+\texttt{FloatingArticleCard} & Thẻ nổi đọc/nghe bài báo (TTS) khi người dùng rời trình đọc. \\
 \midrule
 \multicolumn{2}{l}{\textit{Theo chuẩn Material 3}} \\
 Bottom Navigation, ListItem, Switch, Button / OutlinedButton, Modal Bottom Sheet & Thanh 5 tab, hàng cài đặt, công tắc, nút, sheet xác nhận chế độ dùng thử. \\

@@ -12,8 +12,6 @@ Chương này trình bày cơ sở thiết kế kiến trúc cho các tình hu�
 
 Kiến trúc đề xuất sử dụng mô hình ba lớp Presentation--Domain--Data, kết hợp mô hình Model--View--ViewModel (MVVM) và luồng dữ liệu một chiều (Unidirectional Data Flow, UDF). Mã nguồn được tổ chức thành các mô-đun Gradle có trách nhiệm xác định; mô-đun ứng dụng đảm nhiệm khởi tạo và kết nối các thành phần. Đây là cách áp dụng các khuyến nghị Android vào nhu cầu của OneSpace, thay vì coi một cấu trúc mô-đun cụ thể là yêu cầu bắt buộc của nền tảng~\cite{android-architecture,android-modularization}.
 
-\textbf{Baseline kiến trúc thống nhất ngày 24/10/2026.} Phần 4.1--4.4 xác định kiến trúc đích; ma trận cuối tài liệu phân biệt phần đã có trong code và phần cần triển khai tiếp. Việc chốt kiến trúc không có nghĩa mọi chức năng đã hoàn thành.
-
 Phạm vi kiến trúc phục vụ CO3043: phân biệt môi trường mobile và desktop (L.O.1.1), giải thích luồng thực thi và vòng đời (L.O.1.2), thiết kế module với ranh giới rõ ràng (L.O.1.3), lựa chọn framework phù hợp (L.O.4.1). Không mở rộng sang microservices, nhiều nền tảng hoặc game engine khi chưa có nhu cầu trong bài.
 
 \begingroup

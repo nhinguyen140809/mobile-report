@@ -9,37 +9,46 @@ Hình~\ref{fig:deployment} trình bày góc nhìn triển khai (deployment view)
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[font=\footnotesize,
-  nodebox/.style={draw=black!75, thick, fill=gray!4, align=left, inner sep=5pt},
-  artifact/.style={draw=black!60, fill=white, align=left, inner sep=3pt, font=\scriptsize},
-  comm/.style={draw=black!60, thick, -{Latex[width=2mm, length=2.4mm]}}]
+  nodebox/.style={draw=black!75, thick, fill=gray!4, inner sep=8pt},
+  title/.style={font=\small\bfseries, anchor=north west, align=left},
+  artifact/.style={draw=black!60, fill=white, align=left, inner sep=4pt, font=\scriptsize},
+  comm/.style={draw=black!60, thick, -{Latex[width=2mm, length=2.4mm]}},
+  lbl/.style={font=\scriptsize, fill=white, inner sep=1.5pt}]
   % ===== device =====
-  \node[nodebox, minimum width=7.4cm, minimum height=6.6cm, anchor=north west] (phone) at (0,8.2) {};
-  \node[font=\small\bfseries, anchor=north west] at (0.1,8.05) {\guillemotleft device\guillemotright{} Điện thoại Android (API 26+)};
-  \node[artifact, minimum width=6.6cm, anchor=north west] (apk) at (0.35,7.0)
+  \node[title] (tphone) at (0,0) {\guillemotleft device\guillemotright\\Điện thoại Android (API 26+)};
+  \node[artifact, anchor=north west] (apk) at ([yshift=-0.35cm]tphone.south west)
     {\textbf{\guillemotleft artifact\guillemotright{} OneSpace.apk}\\[2pt]
-     \begin{tabular}{@{}l@{}}
      \textbullet{} Compose UI + ViewModel (feature/*)\\
      \textbullet{} Domain: contracts, SessionPolicy\\
      \textbullet{} Room 6 bảng + DataStore\\
-     \textbullet{} Media3: 1 engine video + 1 engine nhạc\\
-     \end{tabular}};
-  \node[artifact, minimum width=3.0cm, anchor=north west] (tts) at (0.35,3.9)
+     \textbullet{} Media3: 1 engine video + 1 engine nhạc};
+  \node[artifact, anchor=north west] (tts) at ([yshift=-0.45cm]apk.south west)
     {\textbf{\guillemotleft execution environment\guillemotright}\\\textbf{TTS engine}\\(on-device, demo audio mẫu)};
-  % ===== servers (thiết kế) =====
-  \node[nodebox, minimum width=5.0cm, minimum height=2.6cm, anchor=north west] (api) at (9.2,8.2) {};
-  \node[font=\small\bfseries, anchor=north west] at (9.3,8.05) {\guillemotleft server\guillemotright{} API server (thiết kế)};
-  \node[artifact, minimum width=4.4cm, anchor=north west] at (9.5,7.25) {\textbf{\guillemotleft artifact\guillemotright{} api (REST/JSON)}\\\textbullet{} /catalog, /news, /auth, /me};
-  \node[nodebox, minimum width=5.0cm, minimum height=2.6cm, anchor=north west] (db) at (9.2,4.6) {};
-  \node[font=\small\bfseries, anchor=north west] at (9.3,4.45) {\guillemotleft server\guillemotright{} CSDL + kho media};
-  \node[artifact, minimum width=4.4cm, anchor=north west] at (9.5,3.65) {\textbf{\guillemotleft artifact\guillemotright{} content store}\\\textbullet{} CSDL quan hệ\\\textbullet{} tệp media (stream)};
-  \node[nodebox, draw=black!55, dashed, minimum width=3.6cm, minimum height=1.4cm, anchor=north west, fill=gray!2] (rss) at (9.9,1.9) {};
-  \node[font=\scriptsize, anchor=north west, align=center] at (10.35,1.75) {\guillemotleft external\guillemotright{} Máy chủ RSS\\VnExpress (dự kiến)};
+  \begin{scope}[on background layer]
+    \node[nodebox, fit=(tphone)(apk)(tts)] (phone) {};
+  \end{scope}
+  % ===== API server =====
+  \node[title] (tapi) at (9.6,0) {\guillemotleft server\guillemotright\\API server (thiết kế)};
+  \node[artifact, anchor=north west] (apiart) at ([yshift=-0.35cm]tapi.south west)
+    {\textbf{\guillemotleft artifact\guillemotright{} api (REST/JSON)}\\\textbullet{} /catalog, /news, /auth, /me};
+  \begin{scope}[on background layer]
+    \node[nodebox, fit=(tapi)(apiart)] (api) {};
+  \end{scope}
+  % ===== DB + media =====
+  \node[title] (tdb) at (9.6,-3.6) {\guillemotleft server\guillemotright\\CSDL + kho media};
+  \node[artifact, anchor=north west] (dbart) at ([yshift=-0.35cm]tdb.south west)
+    {\textbf{\guillemotleft artifact\guillemotright{} content store}\\\textbullet{} CSDL quan hệ\\\textbullet{} tệp media (stream)};
+  \begin{scope}[on background layer]
+    \node[nodebox, fit=(tdb)(dbart)] (db) {};
+  \end{scope}
+  % ===== RSS =====
+  \node[draw=black!55, dashed, fill=gray!2, align=center, inner sep=6pt, font=\scriptsize, anchor=north] (rss) at ([yshift=-1.1cm]db.south)
+    {\guillemotleft external\guillemotright\\Máy chủ RSS VnExpress (dự kiến)};
   % ===== communication paths =====
-  \draw[comm] (7.42,6.6) -- node[above, font=\scriptsize]{HTTPS/JSON} (9.2,6.6);
-  \draw[comm] (7.42,4.4) -- node[above, font=\scriptsize]{HTTPS stream (Media3)} (9.2,4.4);
-  \draw[comm] (11.7,5.6) -- node[right, font=\scriptsize]{SQL} (11.7,4.6);
-  \draw[comm, dashed] (11.7,2.0) -- node[right, font=\scriptsize]{HTTPS (dự kiến)} (11.7,1.9);
-  
+  \draw[comm] (phone.east |- api.west) -- node[lbl, above=2pt, align=center]{HTTPS/JSON\\danh mục, tài khoản} (api.west);
+  \draw[comm] (db.west) -- node[lbl, above=2pt, align=center]{HTTPS stream\\(Media3)} (phone.east |- db.west);
+  \draw[comm] ([xshift=1.2cm]api.south west) -- node[lbl, right=3pt]{SQL} ([xshift=1.2cm]api.south west |- db.north);
+  \draw[comm, dashed] (rss.east) -- ++(0.7,0) |- node[lbl, pos=0.25, right=2pt, align=center]{HTTPS\\(dự kiến)} (api.east);
 \end{tikzpicture}
 \caption{Deployment diagram: một artifact duy nhất trên thiết bị; máy chủ API, CSDL và kho media thuộc thiết kế giai đoạn remote.}
 \label{fig:deployment}
@@ -53,38 +62,42 @@ Hình~\ref{fig:components-overview} là góc nhìn component (development view):
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[font=\footnotesize,
-  comp/.style={draw=black!70, fill=gray!5, align=center, inner sep=3pt, minimum height=0.65cm},
-  zone/.style={draw=black!40, rounded corners=5pt, inner sep=6pt},
-  dep/.style={draw=black!65, thick, -{Latex[open, width=2mm, length=2.4mm]}}]
-  % zones
-  \node[zone, minimum width=7.6cm, minimum height=4.05cm, anchor=north west] (zfeat) at (0,8.4) {};
-  \node[font=\scriptsize\bfseries, text=black!55, anchor=north west] at (0.15,8.28) {Presentation --- feature/*};
-  \node[comp, anchor=north west] (fvideo) at (0.3,7.85) {feature/video};
-  \node[comp, anchor=north west] (fmusic) at (2.65,7.85) {feature/music};
-  \node[comp, anchor=north west] (fnews) at (5.1,7.85) {feature/news};
-  \node[comp, anchor=north west] (fgames) at (0.3,7.0) {feature/games};
-  \node[comp, anchor=north west] (faccount) at (2.65,7.0) {feature/account};
-  \node[comp, anchor=north west] (fhome) at (5.1,7.0) {feature/home};
-  \node[comp, anchor=north west] (fauth) at (0.3,6.15) {feature/auth};
-  \node[comp, anchor=north west] (fonb) at (2.65,6.15) {feature/onboarding};
-  \node[comp, anchor=north west] (fcommon) at (0.3,5.3) {core/designsystem};
-  \node[zone, minimum width=4.6cm, minimum height=2.2cm, anchor=north west] (zdom) at (8.4,8.4) {};
-  \node[font=\scriptsize\bfseries, text=black!55, anchor=north west] at (8.55,8.28) {Domain};
-  \node[comp, anchor=north west] (dom) at (8.7,7.85) {domain (Kotlin thuần)};
-  \node[comp, anchor=north west] (core) at (8.7,7.05) {core/media · session};
-  \node[zone, minimum width=12.8cm, minimum height=1.8cm, anchor=north west] (zdata) at (0,4.6) {};
-  \node[font=\scriptsize\bfseries, text=black!55, anchor=north west] at (0.15,4.48) {Data và hạ tầng};
-  \node[comp, anchor=north west] (dvideo) at (0.3,4.0) {data/video};
-  \node[comp, anchor=north west] (dmusic) at (2.2,4.0) {data/music};
-  \node[comp, anchor=north west] (dnews) at (4.1,4.0) {data/news};
-  \node[comp, anchor=north west] (dgames) at (6.0,4.0) {data/games};
-  \node[comp, anchor=north west] (dauth) at (7.9,4.0) {data/auth};
-  \node[comp, anchor=north west] (cdb) at (9.8,4.0) {core/database · datastore};
-  \node[comp, anchor=north west] (cnet) at (0.3,2.9) {core/network};
-  \node[comp, anchor=north west] (csync) at (4.45,2.9) {core/sync};
+  comp/.style={draw=black!70, fill=gray!5, align=center, inner sep=3pt, minimum height=0.65cm, minimum width=3.0cm, font=\scriptsize},
+  zone/.style={draw=black!40, rounded corners=5pt, inner sep=8pt},
+  zlabel/.style={font=\scriptsize\bfseries, text=black!55, anchor=south west},
+  dep/.style={draw=black!65, thick, dashed, -{Latex[open, width=2mm, length=2.4mm]}},
+  lbl/.style={font=\scriptsize, fill=white, inner sep=1.5pt}]
+  % Presentation
+  \node[comp] (fvideo) at (0,0) {feature/video};
+  \node[comp] (fmusic) at (3.3,0) {feature/music};
+  \node[comp] (fnews) at (6.6,0) {feature/news};
+  \node[comp] (fgames) at (0,-0.95) {feature/games};
+  \node[comp] (faccount) at (3.3,-0.95) {feature/account};
+  \node[comp] (fhome) at (6.6,-0.95) {feature/home};
+  \node[comp] (fauth) at (0,-1.9) {feature/auth};
+  \node[comp] (fonb) at (3.3,-1.9) {feature/onboarding};
+  \node[comp] (fds) at (6.6,-1.9) {core/designsystem};
+  \node[zone, fit=(fvideo)(fds)(fnews)(fauth)] (zfeat) {};
+  \node[zlabel] at (zfeat.north west) {Presentation --- feature/*};
+  % Domain
+  \node[comp] (dom) at (13.2,-0.45) {domain (Kotlin thuần)};
+  \node[comp] (core) at (13.2,-1.4) {core/media $\cdot$ session};
+  \node[zone, fit=(dom)(core)] (zdom) {};
+  \node[zlabel] at (zdom.north west) {Domain và lõi phiên};
+  % Data
+  \node[comp] (dvideo) at (0,-4.1) {data/video};
+  \node[comp] (dmusic) at (3.3,-4.1) {data/music};
+  \node[comp] (dnews) at (6.6,-4.1) {data/news};
+  \node[comp] (dgames) at (0,-5.05) {data/games};
+  \node[comp] (dauth) at (3.3,-5.05) {data/auth};
+  \node[comp] (cdb) at (6.6,-5.05) {core/database\\datastore};
+  \node[comp] (cnet) at (9.9,-4.1) {core/network};
+  \node[comp] (csync) at (9.9,-5.05) {core/sync};
+  \node[zone, fit=(dvideo)(cdb)(cnet)(csync)] (zdata) {};
+  \node[zlabel] at (zdata.north west) {Data và hạ tầng};
   % deps
-  \draw[dep] (7.62,7.45) -- (8.38,7.45);
-  \draw[dep] (7.66,4.68) -- (8.45,6.14);
+  \draw[dep] (zfeat.east |- dom) -- node[lbl, above=2pt]{use} (zdom.west |- dom);
+  \draw[dep] (zdata.east |- cnet) -| node[lbl, pos=0.75, right=2pt]{impl} (zdom.south);
 \end{tikzpicture}
 \caption{Component diagram tổng quan: mũi tên nét đứt thể hiện phụ thuộc ``use'' của feature vào domain và quan hệ ``impl'' của data với các contract domain; \texttt{core/network} và \texttt{core/sync} hiện là scaffold; các cạnh được kiểm tra tự động bằng \texttt{verifyArchitecture}.}
 \label{fig:components-overview}
@@ -95,45 +108,45 @@ Hình~\ref{fig:components-overview} là góc nhìn component (development view):
 
 \begin{figure}[H]
 \centering
-\begin{tikzpicture}[font=\scriptsize,
+\begin{tikzpicture}[font=\scriptsize, y=1.35cm,
   comp/.style={draw=black!70, fill=gray!5, align=center, inner sep=2.5pt, minimum height=0.6cm},
   dep/.style={draw=black!65, thick, -{Latex[open, width=2mm, length=2.4mm]}},
   rowlab/.style={font=\scriptsize\bfseries, text=black!55, anchor=west}]
   % Video row
-  \node[rowlab] at (0.2,7.88) {Video};
+  \node[rowlab] at (0.2,7.95) {Video};
   \node[comp] (v1) at (1.6,7.4) {VideoScreen\\+ Player};
   \node[comp] (v2) at (5.0,7.4) {VideoViewModel};
   \node[comp] (v3) at (8.4,7.4) {VideoQuiz\\usecase};
   \node[comp] (v4) at (11.8,7.4) {VideoRepository\\\guillemotleft interface\guillemotright};
   \node[comp] (v5) at (15.0,7.4) {MockVideo\\Repository};
-  \draw[dep] (v1) -- (v2); \draw[dep] (v2) -- (v3); \draw[dep] (v3) -- (v4); \draw[dep] (v5) -- node[below]{impl} (v4);
-  \draw[gray!55, dashed] (-0.3,6.95) -- (15.6,6.95);
+  \draw[dep] (v1) -- (v2); \draw[dep] (v2) -- (v3); \draw[dep] (v3) -- (v4); \draw[dep] (v5) -- node[above, fill=white, inner sep=1pt]{impl} (v4);
+  \draw[gray!55, dashed] (-0.3,6.78) -- (15.6,6.78);
   % Music row
-  \node[rowlab] at (0.2,6.38) {Nhạc};
+  \node[rowlab] at (0.2,6.45) {Nhạc};
   \node[comp] (m1) at (1.6,5.9) {MusicScreen\\+ Dock};
   \node[comp] (m2) at (5.0,5.9) {MusicViewModel};
   \node[comp] (m3) at (8.4,5.9) {Playback\\Coordinator};
   \node[comp] (m4) at (11.8,5.9) {MusicRepository\\\guillemotleft interface\guillemotright};
   \node[comp] (m5) at (15.0,5.9) {MockMusic\\Repository};
-  \draw[dep] (m1) -- (m2); \draw[dep] (m2) -- (m3); \draw[dep] (m3) -- (m4); \draw[dep] (m5) -- node[below]{impl} (m4);
-  \draw[gray!55, dashed] (-0.3,5.45) -- (15.6,5.45);
+  \draw[dep] (m1) -- (m2); \draw[dep] (m2) -- (m3); \draw[dep] (m3) -- (m4); \draw[dep] (m5) -- node[above, fill=white, inner sep=1pt]{impl} (m4);
+  \draw[gray!55, dashed] (-0.3,5.28) -- (15.6,5.28);
   % News row
-  \node[rowlab] at (0.2,4.88) {Tin tức};
+  \node[rowlab] at (0.2,4.95) {Tin tức};
   \node[comp] (n1) at (1.6,4.4) {NewsScreen\\+ Reader};
   \node[comp] (n2) at (5.0,4.4) {NewsViewModel};
   \node[comp] (n3) at (8.4,4.4) {TtsEngine};
   \node[comp] (n4) at (11.8,4.4) {NewsRepository\\\guillemotleft interface\guillemotright};
   \node[comp] (n5) at (15.0,4.4) {MockNews\\Repository};
-  \draw[dep] (n1) -- (n2); \draw[dep] (n2) -- (n3); \draw[dep] (n2) -- (n4); \draw[dep] (n5) -- node[below]{impl} (n4);
-  \draw[gray!55, dashed] (-0.3,3.95) -- (15.6,3.95);
+  \draw[dep] (n1) -- (n2); \draw[dep] (n2) -- (n3); \draw[dep] (n2.south) -- ++(0,-0.16) -| (n4.south); \draw[dep] (n5) -- node[above, fill=white, inner sep=1pt]{impl} (n4);
+  \draw[gray!55, dashed] (-0.3,3.78) -- (15.6,3.78);
   % Games row
-  \node[rowlab] at (0.2,3.38) {Trò chơi};
+  \node[rowlab] at (0.2,3.45) {Trò chơi};
   \node[comp] (g1) at (1.6,2.9) {GamesScreen\\+ 6 game};
   \node[comp] (g2) at (5.0,2.9) {GameViewModels};
   \node[comp] (g3) at (8.4,2.9) {GameSfx};
   \node[comp] (g4) at (11.8,2.9) {Points/Missions\\Repository};
   \node[comp] (g5) at (15.0,2.9) {Room/Mock\\impl};
-  \draw[dep] (g1) -- (g2); \draw[dep] (g2) -- (g3); \draw[dep] (g2) -- (g4); \draw[dep] (g5) -- node[below]{impl} (g4);
+  \draw[dep] (g1) -- (g2); \draw[dep] (g2) -- (g3); \draw[dep] (g2.south) -- ++(0,-0.16) -| (g4.south); \draw[dep] (g5) -- node[above, fill=white, inner sep=1pt]{impl} (g4);
 \end{tikzpicture}
 \caption{Component diagram chi tiết bốn phân hệ: mỗi hàng là một pipeline screen $\rightarrow$ ViewModel $\rightarrow$ use case/engine $\rightarrow$ repository contract $\rightarrow$ hiện thực (mock hoặc Room).}
 \label{fig:components-modules}
