@@ -212,7 +212,7 @@ Call/noisy/audio focus cho cả video và nhạc & Một phần & Test hệ th�
 Data Saver/adaptive playback & Có toggle/track cap & Nguồn HLS/DASH hoặc multi-variant thật và đo lựa chọn track; MP4 đơn không đủ chứng minh \\
 Low RAM/Battery Saver/startup budget & Chưa chứng minh & Profiler/Perfetto và test trên cấu hình đã nêu; ghi số liệu thực \\
 C13 TTS, C14 trích MP3 & Đã chạy trong app bằng engine cục bộ & Test tích hợp với phát nhạc/tạm dừng nhường \\
-C15 hàng phát hỗn hợp & Hoãn sang v2 & Domain/data pipeline, UI và test tích hợp riêng; không tạo màn rỗng ở bước kiến trúc \\
+C15 hàng phát hỗn hợp & Có bản cơ bản: playlist đan xen video và bài hát & Phát một playlist trộn, kiểm tra thứ tự, lặp lại và chỉ một nguồn tiếng tại một thời điểm \\
 \end{longtable}
 \endgroup
 
@@ -226,7 +226,7 @@ Các test nền tảng gồm: first launch, guest/login/logout, từng tab/detai
 \item C1/C2 của baseline hỏi hai lựa chọn kèm ô ``Không hỏi lại''; quy tắc ghi nhớ global trên thiết bị, reset ``Luôn hỏi'' trong Settings (mục 4.4.2). Phương án nhớ theo từng cặp nội dung trong phạm vi sản phẩm ban đầu được thay thế bằng quyết định này.
 \item C3 và C5 dùng video nổi trong app, giữ cùng engine khi mở lại; thẻ ``Đang đọc'' (C4, C8) cũng là floating trong app; system PiP nằm ngoài baseline này.
 \item C9 và C16 được giới hạn bởi một nguồn tiếng chính; SFX game (F-GAME-13) đã chạy qua lớp riêng, tự giảm còn khoảng 25\% khi có nhạc/video/TTS và chỉnh được trong Cài đặt; ba luồng có tiếng cần quyết định và kiểm chứng bổ sung.
-\item C13 và C14 đã chạy trong app (TTS cục bộ, trích âm thanh vào thư viện nhạc); C15 vẫn là yêu cầu sản phẩm chưa triển khai, queue nhạc hiện tại chưa chứng minh hàng phát hỗn hợp.
+\item C13 và C14 đã chạy trong app (TTS cục bộ, trích âm thanh vào thư viện nhạc); C15 đã có bản cơ bản (playlist đan xen video và bài hát); hàng phát có thêm bài báo đọc bằng TTS là phần mở rộng của giai đoạn sau.
 \item Luồng UI gồm startup/auth/main graphs; app thực thi callbacks từ feature graphs, playback không phụ thuộc thay đổi destination.
 \item Offline Music chỉ được cam kết khi có pipeline download thật; dữ liệu mock hoặc buffer không thay thế tính năng tải đã hoãn.
 \item Ma trận kiểm chứng phân biệt thiết kế, implementation và số đo; UI demo không tự chứng minh service, process death hoặc performance.

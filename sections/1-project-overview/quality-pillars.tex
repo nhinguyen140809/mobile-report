@@ -91,7 +91,7 @@ Thanh toán cho gói Premium và vật phẩm được xử lý qua Google Play 
 \textbf{Xác thực bằng OTP.}
 Giới hạn gửi lại mã ở \texttt{SEC-01} vừa chống dò mã, vừa tránh việc hệ thống bị lợi dụng để gửi tin nhắn rác.
 Theo NIST, gửi mã qua mạng điện thoại (SMS, cuộc gọi) bị xếp vào nhóm hạn chế vì mã có thể bị chặn bắt hoặc bị chuyển đến kẻ tấn công khi số điện thoại bị chiếm đoạt, còn email không được dùng làm kênh gửi mã xác thực vì hộp thư có thể bị truy cập chỉ bằng mật khẩu~\cite{nist80063b4}.
-Vì vậy, ngoài OTP qua SMS, ứng dụng cung cấp thêm cách đăng nhập bằng tài khoản Google; email chỉ dùng để xác minh địa chỉ và khôi phục tài khoản.
+Vì vậy, ngoài OTP, ứng dụng cho đăng nhập bằng mật khẩu; đăng nhập bằng tài khoản Google là hướng mở rộng khi có cấu hình OAuth, chưa thuộc phạm vi bản demo. Trong bản demo không có cổng SMS thật: máy chủ giả lập áp dụng đúng luật SEC-01 (mã 6 chữ số, hiệu lực 5 phút, tối đa 5 lần sai) với một mã cố định.
 
 \textbf{Quyền truy cập.}
 Thời điểm xin quyền đặc biệt quan trọng vì trên Android, nếu người dùng từ chối cùng một quyền hai lần, hệ thống sẽ không hiện lại hộp thoại xin quyền đó nữa~\cite{android-permissions}.

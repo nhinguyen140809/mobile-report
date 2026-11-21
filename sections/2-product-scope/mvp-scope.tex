@@ -11,11 +11,11 @@ MVP của OneSpace gồm toàn bộ tính năng trong bảng~\ref{tab:mvp-scope-
     \toprule
     \textbf{Phân hệ} & \textbf{Tính năng trong MVP} \\
     \midrule
-    Video & Xem video (F-VID-01); feed theo sở thích (F-VID-02); tìm kiếm (F-VID-03); PIP (F-VID-08); tua nhanh double-tap (F-VID-14); watchlist + tiếp tục từ chỗ dừng (F-VID-04, F-VID-05); chọn chất lượng Auto/1080p/720p/360p (F-VID-06); audio-only (F-VID-09); tải video tùy bản quyền (F-VID-07); trích mp3 (F-VID-10); chia sẻ link (F-VID-11); màn hồ sơ nghệ sĩ (F-VID-12); playlist video (F-VID-13); thẻ quiz cuối video (F-VID-15) \\
-    Music & Player đầy đủ (F-MUS-01); dock mini player (F-MUS-02); nhạc nền ngoài app (F-MUS-03); playlist + queue (F-MUS-04, F-MUS-05); tìm kiếm nhạc (F-MUS-06); kho nhạc cá nhân (F-MUS-07); gợi ý theo sở thích (F-MUS-08); siêu playlist (F-MUS-09); audio focus (F-MUS-10); tải nhạc tùy bản quyền (F-MUS-12) \\
+    Video & Xem video (F-VID-01); feed theo sở thích (F-VID-02); tìm kiếm (F-VID-03); PIP (F-VID-08); tua nhanh double-tap (F-VID-14); watchlist + tiếp tục từ chỗ dừng (F-VID-04, F-VID-05); chọn chất lượng Auto hoặc giới hạn độ phân giải theo nguồn có sẵn (F-VID-06); audio-only (F-VID-09); tải video xem offline, chỉ với nội dung tự dựng (F-VID-07); trích mp3 (F-VID-10); chia sẻ link (F-VID-11); màn hồ sơ nghệ sĩ (F-VID-12); playlist video (F-VID-13); thẻ quiz cuối video (F-VID-15) \\
+    Music & Player đầy đủ (F-MUS-01); dock mini player (F-MUS-02); nhạc nền ngoài app (F-MUS-03); playlist + queue (F-MUS-04, F-MUS-05); tìm kiếm nhạc (F-MUS-06); kho nhạc cá nhân (F-MUS-07); gợi ý theo sở thích (F-MUS-08); siêu playlist (F-MUS-09); audio focus (F-MUS-10); tải nhạc nghe offline, chỉ với nội dung tự dựng (F-MUS-12) \\
     News & Feed theo sở thích (F-NEWS-01); trình đọc + đổi cỡ chữ (F-NEWS-02); tìm kiếm (F-NEWS-04); nghe tin TTS (F-NEWS-05); sắp xếp mới nhất/phổ biến (F-NEWS-06); nghe nhạc khi đọc (F-NEWS-07); quiz từ bài báo (F-NEWS-08); gợi ý bài liên quan (F-NEWS-09); thẻ nổi khi rời tab (F-NEWS-10) \\
     Games & Hub minigame (F-GAME-01); đoán bài hát (F-GAME-02); quiz tin tức (F-GAME-03); quiz kiến thức kiểu Ai là triệu phú (F-GAME-04); Snake (F-GAME-05); Beat Tiles --- nốt rơi theo BPM thật của bài đang phát (F-GAME-06); bảng xếp hạng (F-GAME-07); game + video hai nửa màn (F-GAME-08); điểm thưởng khi thắng (F-GAME-09); 2048 (F-GAME-10); Tic-Tac-Toe (F-GAME-11); thử thách hằng ngày (F-GAME-12); âm thanh và hiệu ứng game (F-GAME-13) \\
-    Dùng chung & Tài khoản (F-COM-01); onboarding chọn sở thích (F-COM-02); hồ sơ + đổi avatar + khung (F-COM-03, F-COM-09); hệ điểm XP (F-COM-04); nhiệm vụ hằng ngày (F-COM-05); streak (F-COM-06); pet (F-COM-07); huy hiệu (F-COM-08); wrapped (F-COM-10); tìm kiếm xuyên nội dung (F-COM-11); nhắc nhiệm vụ (F-COM-12); cài đặt (F-COM-13); popup xung đột âm thanh (F-COM-14); cửa hàng đổi quà (F-COM-15); offline (F-COM-16); chế độ khách (F-COM-18) \\
+    Dùng chung & Tài khoản (F-COM-01); onboarding chọn sở thích (F-COM-02); hồ sơ + đổi avatar + khung (F-COM-03, F-COM-09); hệ điểm XP (F-COM-04); nhiệm vụ hằng ngày (F-COM-05); streak (F-COM-06); pet (F-COM-07); huy hiệu (F-COM-08); wrapped (F-COM-10); tìm kiếm xuyên nội dung (F-COM-11); nhắc nhiệm vụ bằng một thông báo mỗi ngày (F-COM-12); cài đặt (F-COM-13); popup xung đột âm thanh (F-COM-14); cửa hàng đổi quà (F-COM-15); offline (F-COM-16); chế độ khách (F-COM-18) \\
     \bottomrule
 \end{tabularx}
 \end{table}
@@ -59,6 +59,8 @@ Thời gian phiên trung bình & Mức độ sử dụng tổng thể & $\geq$ 1
 \midrule
 Crash-free và thời gian mở app & Chất lượng kỹ thuật & Crash-free $\geq$ 99,5\%, mở app $\leq$ 2 giây (\texttt{UX-03}, \texttt{UX-07}) \\
 \end{longtable}
+
+Trong phạm vi môn học, ứng dụng không phát hành công khai nên các chỉ số hành vi ở bảng trên chỉ đo được trên một nhóm dùng thử nhỏ (bạn bè, lớp học). Các ngưỡng là mục tiêu tham khảo để đánh giá hướng sản phẩm, không phải điều kiện nghiệm thu của đồ án.
 
 \textbf{Hành vi khi chuyển giữa các phân hệ.} Bảng~\ref{tab:switch-matrix} định nghĩa điều gì xảy ra khi người dùng chuyển tab, bằng vuốt ngang hoặc chạm thanh tab. Ma trận phủ \textbf{đủ 12 chiều chuyển} giữa bốn phân hệ A--D (mỗi phân hệ sang ba phân hệ còn lại, hai chiều \textit{không đối xứng}: A$\rightarrow$B và B$\rightarrow$A hành xử khác nhau), cộng bốn case đặc biệt C13--C16. Cột cuối ghi quyết định ảnh hưởng đến khối lượng code của Phần~\ref{sec:ui-ux-design} và Phần~\ref{sec:technical-architecture}. Ký hiệu: A = Video, B = Music, C = News, D = Games.
 
@@ -191,10 +193,10 @@ Tối đa 1 nguồn tiếng + 1 PIP ở v1 \\
 \textbf{Gián đoạn từ bên ngoài.}
 
 \begin{itemize}
-    \item Cuộc gọi đến: mọi luồng tạm dừng trong tối đa 0,5 giây; sau cuộc gọi nhạc tự phát lại, video hiện nút ``Tiếp tục'', game mở lại đúng ván dở.
-    \item Rút tai nghe: nhạc và TTS dừng ngay (chuẩn Android), không phát loa ngoài; PIP video dừng kèm thông báo.
-    \item Mất mạng khi đang xem video: khung hình đứng + tự thử lại sau 5--15 giây; tin đã tải đọc tiếp; game offline chơi tiếp, điểm lưu cục bộ rồi đồng bộ khi có mạng.
-    \item Hệ điều hành đóng ứng dụng: mở lại khôi phục đủ 4 vị trí (bài nhạc, tin đang đọc, ván dở, video dở) trong 2 giây.
+    \item Cuộc gọi đến: nhạc tạm dừng theo audio focus của Android và tự phát lại sau cuộc gọi; video và TTS tạm dừng, người dùng bấm Phát để tiếp tục.
+    \item Rút tai nghe: nhạc dừng ngay (chuẩn Android ``becoming noisy''), không phát ra loa ngoài; video và TTS cũng dừng.
+    \item Mất mạng khi đang xem video: hiện thông báo lỗi kèm nút ``Thử lại''; tin đã tải vẫn đọc tiếp; minigame chạy offline, điểm lưu cục bộ (chưa đồng bộ lên server ở v1).
+    \item Hệ điều hành đóng ứng dụng: mở lại khôi phục bài nhạc cuối (ở trạng thái dừng), vị trí video dở và ván game dở; vị trí đọc tin là mục tiêu bổ sung nếu còn thời gian.
     \item Người dùng thoát ứng dụng: nhạc tiếp tục nếu đã bật nhạc nền (F-MUS-03); video, TTS dừng; game tạm dừng và giữ ván dở.
 \end{itemize}
 
